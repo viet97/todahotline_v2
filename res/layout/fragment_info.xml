@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/llabout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:weightSum="6">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="70dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/logolachong" />
+
+        <TextView
+            android:layout_below="@+id/logo"
+            android:id="@+id/tv_tenlienhe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lines="1"
+            android:text="Mọi thông tin chi tiết xin vui lòng liên hệ:"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_below="@+id/tv_tenlienhe"
+            android:id="@+id/tv_tenlienhe2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_diachi"
+            android:layout_below="@+id/tv_tenlienhe2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VPGD: Tầng 2, Tòa nhà Ngôi Sao, B15 Khu ĐTM Đại Kim, đường Nguyễn Cảnh Dị, phường Đại Kim, quận Hoàng Mai, Hà Nội"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_below="@+id/tv_diachi"
+            android:id="@+id/tv_dienthoai1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="phone"
+            android:textColor="@color/white"
+            android:textColorLink="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_below="@+id/tv_dienthoai1"
+            android:id="@+id/tv_dienthoai2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="phone"
+            android:textColor="@color/white"
+            android:textColorLink="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_below="@+id/tv_dienthoai2"
+            android:id="@+id/tv_hotline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="phone"
+            android:textColor="@color/white"
+            android:textColorLink="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_below="@+id/tv_hotline"
+            android:id="@+id/tv_cskh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="phone"
+            android:textColor="@color/white"
+            android:textColorLink="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_below="@+id/tv_cskh"
+            android:id="@+id/tv_website"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:textColor="@color/white"
+            android:textColorLink="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_below="@+id/tv_website"
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textColorLink="@color/white"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Phiên bản : 1.2.0.5 "
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/white"
+        android:textStyle="normal" />
+
+
+</RelativeLayout>

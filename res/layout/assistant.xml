@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:background="@drawable/bg"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<fragment
+		android:id="@+id/status"
+		android:name="org.linphone.StatusFragment"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		tools:layout="@layout/status"
+		/>
+
+	<include android:visibility="gone" layout="@layout/assistant_topbar" android:id="@+id/topbar" />
+
+	<LinearLayout
+		android:visibility="gone"
+		android:id="@+id/fragment_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="horizontal" />
+	<RelativeLayout
+		android:id="@+id/ll_login"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:orientation="vertical"
+		android:paddingLeft="40dp"
+		android:paddingRight="40dp"
+		android:paddingTop="16dp">
+
+		<LinearLayout
+			android:id="@+id/llPassold"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:src="@drawable/ic_lock_outline_black_24dp" />
+
+			<EditText
+				android:id="@+id/etPassold"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="20dp"
+				android:layout_weight="1"
+				android:hint="Mật khẩu cũ"
+				android:inputType="textPassword"
+				android:paddingTop="6dp"
+				android:singleLine="true"
+				android:textColor="@android:color/white"
+				android:textColorHint="@android:color/white" />
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/llPass"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/llPassold"
+			android:layout_marginTop="24dp"
+			android:orientation="horizontal">
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:src="@drawable/ic_lock_outline_black_24dp" />
+
+
+			<EditText
+				android:id="@+id/etPass"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="20dp"
+				android:layout_weight="1"
+				android:hint="Mật khẩu mới"
+				android:inputType="textPassword"
+				android:paddingTop="6dp"
+				android:textColor="@android:color/white"
+				android:textColorHint="@android:color/white" />
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/linearLayout13"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/llPass"
+			android:layout_marginTop="24dp"
+			android:orientation="horizontal">
+
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:src="@drawable/ic_lock_outline_black_24dp" />
+
+			<EditText
+				android:id="@+id/edPassVerify"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="20dp"
+				android:layout_weight="1"
+				android:hint="Mật khẩu xác nhận"
+				android:inputType="textPassword"
+				android:paddingTop="6dp"
+				android:textColor="@android:color/white"
+				android:textColorHint="@android:color/white" />
+
+		</LinearLayout>
+
+		<Button
+			android:id="@+id/btnChangePass"
+			android:layout_width="250dp"
+			android:layout_height="45dp"
+			android:layout_below="@+id/linearLayout13"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="32dp"
+			android:layout_marginTop="46dp"
+			android:background="@drawable/button_login"
+			android:text="Đổi mật khẩu"
+			android:textColor="@color/white" />
+
+	</RelativeLayout>
+
+</RelativeLayout>
