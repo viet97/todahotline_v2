@@ -31,12 +31,16 @@ import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCallLog;
 import org.linphone.core.LinphoneCallLog.CallStatus;
 import org.linphone.core.LinphoneCore;
+import org.linphone.database.DbContext;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +70,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 	private LinearLayout editList, topBar;
 	private boolean onlyDisplayMissedCalls, isEditMode;
 	private List<LinphoneCallLog> mLogs;
+	private String TAG = "HistoryListFragment";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -416,6 +421,27 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			return isSameDay(cal, yesterday);
 		}
 
+		public String getContactName(final String phoneNumber, Context context) {
+			Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+
+			String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+			String contactName = null;
+			Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+			if (cursor != null) {
+				if (cursor.moveToFirst()) {
+					contactName = cursor.getString(0);
+				}
+				cursor.close();
+			}
+			if (contactName == null) {
+				contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+			}
+
+			return contactName;
+		}
+
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			View view = null;
 			ViewHolder holder = null;
@@ -470,6 +496,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 				holder.callDirection.setImageResource(R.drawable.call_status_outgoing);
 			}
 
+
 			LinphoneContact c = ContactsManager.getInstance().findContactFromAddress(address);
 			if (c == null) c = ContactsManager.getInstance().findContactFromPhoneNumber(address.getUserName());
 			String displayName = null;
@@ -480,7 +507,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			} else {
 				holder.contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
 			}
-
+			displayName = getContactName(address.getUserName(), view.getContext());
 			if (displayName == null) {
 				holder.contact.setText(LinphoneUtils.getAddressDisplayName(sipUri));
 			} else {
@@ -541,9 +568,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 							}
 
 							LinphoneActivity.instance().setAddresGoToDialerAndCall(address.asStringUriOnly(), address.getDisplayName(), null);
-							Log.d("HistoryListFragment", "onClick: "+address.asStringUriOnly());
-							Log.d("HistoryListFragment", "onClick: "+address.getDisplayName());
-							}
+						}
 					}
 				});
 			}

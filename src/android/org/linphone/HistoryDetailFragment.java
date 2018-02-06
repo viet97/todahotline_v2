@@ -20,8 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 import android.app.Fragment;
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +35,7 @@ import android.widget.TextView;
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
+import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 
 public class HistoryDetailFragment extends Fragment implements OnClickListener {
@@ -41,6 +45,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 	private TextView contactName, contactAddress, time, date;
 	private String sipUri, displayName, pictureUri;
 	private LinphoneContact contact;
+	private String TAG = "HistoryDetailFragment";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +95,26 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		return view;
 	}
 
+	public String getContactName(final String phoneNumber, Context context) {
+		Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+
+		String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+		String contactName = null;
+		Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+		if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				contactName = cursor.getString(0);
+			}
+			cursor.close();
+		}
+		if (contactName == null) {
+			contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+		}
+
+		return contactName;
+	}
 	private void displayHistory(String status, String callTime, String callDate) {
 		if (status.equals(getResources().getString(R.string.missed))) {
 			callDirection.setImageResource(R.drawable.call_missed);
@@ -111,20 +136,24 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		}
 
 		if (lAddress != null) {
-			contactAddress.setText(lAddress.asStringUriOnly());
+			android.util.Log.d(TAG, "displayHistory: 114");
+			contactAddress.setText(lAddress.getUserName());
 			contact = ContactsManager.getInstance().findContactFromAddress(lAddress);
+			displayName = getContactName(lAddress.getUserName(), view.getContext());
 			if (contact != null) {
-				contactName.setText(contact.getFullName());
+				android.util.Log.d(TAG, "displayHistory: 119");
+				contactName.setText(displayName);
 				LinphoneUtils.setImagePictureFromUri(view.getContext(),contactPicture,contact.getPhotoUri(),contact.getThumbnailUri());
-				addToContacts.setVisibility(View.GONE);
+//				addToContacts.setVisibility(View.GONE);
 				goToContact.setVisibility(View.VISIBLE);
 			} else {
-				contactName.setText(displayName == null ? LinphoneUtils.getAddressDisplayName(sipUri) : displayName);
+				contactName.setText(displayName == null ? "" : displayName);
 				contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
-				addToContacts.setVisibility(View.VISIBLE);
+//				addToContacts.setVisibility(View.VISIBLE);
 				goToContact.setVisibility(View.GONE);
 			}
 		} else {
+			android.util.Log.d(TAG, "displayHistory: 132");
 			contactAddress.setText(sipUri);
 			contactName.setText(displayName == null ? LinphoneUtils.getAddressDisplayName(sipUri) : displayName);
 		}

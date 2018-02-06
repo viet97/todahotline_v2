@@ -24,6 +24,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -745,6 +746,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
+            holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
             holder.imgCall.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
