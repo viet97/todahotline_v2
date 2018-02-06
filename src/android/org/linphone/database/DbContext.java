@@ -2,6 +2,7 @@ package org.linphone.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,21 +42,25 @@ public class DbContext {
     }
 
     public HashMap<String, String> getListContactTodaName(Context context) {
-        DBlistContactTodaName = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
-        String listcontactTodaname = DBlistContactTodaName.getString("DBlistContactTodaName", null);
-        if (listcontactTodaname != null) {
-            this.listContactTodaName = gson.fromJson(listcontactTodaname, hashmapType);
+        if (context!=null) {
+            DBlistContactTodaName = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+            String listcontactTodaname = DBlistContactTodaName.getString("DBlistContactTodaName", null);
+            if (listcontactTodaname != null) {
+                this.listContactTodaName = gson.fromJson(listcontactTodaname, hashmapType);
+            }
         }
         return listContactTodaName;
     }
 
     public void setListContactTodaName(HashMap<String, String> listContactTodaName, Context context) {
-        DBlistContactTodaName = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
-        DBlistContactTodaNameEditor = DBlistContactTodaName.edit();
-        String contactTodaName = gson.toJson(listContactTodaName);
-        DBlistContactTodaNameEditor.putString("DBlistContactTodaName", contactTodaName);
-        DBlistContactTodaNameEditor.commit();
-        this.listContactTodaName = listContactTodaName;
+        if (context!=null) {
+            DBlistContactTodaName = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+            DBlistContactTodaNameEditor = DBlistContactTodaName.edit();
+            String contactTodaName = gson.toJson(listContactTodaName);
+            DBlistContactTodaNameEditor.putString("DBlistContactTodaName", contactTodaName);
+            DBlistContactTodaNameEditor.commit();
+            this.listContactTodaName = listContactTodaName;
+        }
     }
 
     public HashMap<String, String> getListContactTodaJob() {
@@ -67,60 +72,72 @@ public class DbContext {
     }
 
     public AboutRespon getAboutRespon(Context context) {
-        DBaboutRespon = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
-        String aboutResponStr = DBaboutRespon.getString("DBaboutRespon", null);
-        if (aboutResponStr != null) {
-            this.aboutRespon = gson.fromJson(aboutResponStr, AboutRespon.class);
+        if (context!=null) {
+            DBaboutRespon = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+            String aboutResponStr = DBaboutRespon.getString("DBaboutRespon", null);
+            if (aboutResponStr != null) {
+                this.aboutRespon = gson.fromJson(aboutResponStr, AboutRespon.class);
+            }
         }
         return aboutRespon;
     }
 
     public void setAboutRespon(AboutRespon aboutRespon, Context context) {
-        DBaboutRespon = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
-        DBaboutResponEditor = DBaboutRespon.edit();
-        String aboutResponStr = gson.toJson(aboutRespon);
-        DBaboutResponEditor.putString("DBaboutRespon", aboutResponStr);
-        DBaboutResponEditor.commit();
-        this.aboutRespon = aboutRespon;
+        if (context!=null) {
+            DBaboutRespon = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+            DBaboutResponEditor = DBaboutRespon.edit();
+            String aboutResponStr = gson.toJson(aboutRespon);
+            DBaboutResponEditor.putString("DBaboutRespon", aboutResponStr);
+            DBaboutResponEditor.commit();
+            this.aboutRespon = aboutRespon;
+        }
     }
     public static DbContext getInstance() {
         return instance;
     }
 
     public ContactResponse getContactResponse(Context context) {
-        DBcontactResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
-        String contactResponseStr = DBcontactResponse.getString("DBcontactResponse", null);
-        if (contactResponseStr != null) {
-            this.contactResponse = gson.fromJson(contactResponseStr, ContactResponse.class);
+        if (context!=null) {
+            DBcontactResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+            String contactResponseStr = DBcontactResponse.getString("DBcontactResponse", null);
+            if (contactResponseStr != null) {
+                this.contactResponse = gson.fromJson(contactResponseStr, ContactResponse.class);
+            }
         }
         return contactResponse;
     }
 
     public void setContactResponse(ContactResponse contactResponse, Context context) {
-        DBcontactResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
-        DBcontactResponseEditor = DBcontactResponse.edit();
-        String contactResponseStr = gson.toJson(contactResponse);
-        DBcontactResponseEditor.putString("DBcontactResponse", contactResponseStr);
-        DBcontactResponseEditor.commit();
-        this.contactResponse = contactResponse;
+        if (context!=null) {
+            Log.d("DBContext", "setContactResponse: " + context);
+            DBcontactResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+            DBcontactResponseEditor = DBcontactResponse.edit();
+            String contactResponseStr = gson.toJson(contactResponse);
+            DBcontactResponseEditor.putString("DBcontactResponse", contactResponseStr);
+            DBcontactResponseEditor.commit();
+            this.contactResponse = contactResponse;
+        }
     }
 
     public LoginRespon getLoginRespon(Context context) {
-
-        DBloginResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
-        String loginResponseStr = DBloginResponse.getString("DBloginResponse", null);
-        if (loginResponseStr != null) {
-            this.loginRespon = gson.fromJson(loginResponseStr, LoginRespon.class);
+        if (context!=null) {
+            DBloginResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+            String loginResponseStr = DBloginResponse.getString("DBloginResponse", null);
+            if (loginResponseStr != null) {
+                this.loginRespon = gson.fromJson(loginResponseStr, LoginRespon.class);
+            }
         }
         return loginRespon;
     }
 
     public void setLoginRespon(LoginRespon loginRespon, Context context) {
-        DBloginResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
-        DBloginResponseEditor = DBloginResponse.edit();
-        String loginResponseStr = gson.toJson(loginRespon);
-        DBloginResponseEditor.putString("DBloginResponse", loginResponseStr);
-        DBloginResponseEditor.commit();
-        this.loginRespon = loginRespon;
+        if (context!=null) {
+            DBloginResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+            DBloginResponseEditor = DBloginResponse.edit();
+            String loginResponseStr = gson.toJson(loginRespon);
+            DBloginResponseEditor.putString("DBloginResponse", loginResponseStr);
+            DBloginResponseEditor.commit();
+            this.loginRespon = loginRespon;
+        }
     }
 }

@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/colorH"
+	android:background="@drawable/bg"
 	android:orientation="vertical" >
 
 	<LinearLayout
 		android:id="@+id/top_bar"
 		android:orientation="horizontal"
-		android:background="@color/colorF"
 		android:layout_width="match_parent"
 		android:layout_height="60dp">
 
@@ -20,7 +19,6 @@
 			<ImageView
 				android:id="@+id/all_contacts"
 				android:src="@drawable/contacts_all"
-				android:background="@drawable/toolbar_button"
 				android:contentDescription="@string/content_description_all_contacts"
 				android:padding="15dp"
 				android:layout_width="match_parent"
@@ -42,7 +40,6 @@
 			<ImageView
 				android:id="@+id/linphone_contacts"
 				android:src="@drawable/contacts_sip"
-				android:background="@drawable/toolbar_button"
 				android:contentDescription="@string/content_description_linphone_contacts"
 				android:gravity="center"
 				android:padding="15dp"
@@ -64,6 +61,7 @@
 			android:layout_weight="0.2"/>
 
 		<ImageView
+			android:visibility="gone"
 			android:id="@+id/newContact"
 			android:src="@drawable/contact_add"
 			android:background="@drawable/toolbar_button"
@@ -74,6 +72,7 @@
 			android:padding="15dp"/>
 
 		<ImageView
+			android:visibility="gone"
 			android:id="@+id/edit"
 			android:src="@drawable/edit_list_button"
 			android:background="@drawable/toolbar_button"
@@ -91,7 +90,7 @@
 		android:layout_height="wrap_content"
 		android:layout_margin="10dp">
 
-		<EditText
+		<org.linphone.layoutXML.ExtendedEditText
             android:contentDescription="@string/content_description_search_contact"
 			android:textCursorDrawable="@null"
 			android:id="@+id/searchField"
@@ -123,7 +122,6 @@
 			android:id="@+id/contactsList"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:divider="@color/colorE"
 			android:fastScrollEnabled="true"
 			android:fastScrollAlwaysVisible="true"
 			android:dividerHeight="1dp" />

@@ -26,15 +26,18 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.linphone.core.CallDirection;
+import org.linphone.core.LinphoneAccountCreator;
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCallLog;
 import org.linphone.core.LinphoneCallLog.CallStatus;
+import org.linphone.core.LinphoneCore;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -536,8 +539,11 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 							} else {
 								address = log.getTo();
 							}
+
 							LinphoneActivity.instance().setAddresGoToDialerAndCall(address.asStringUriOnly(), address.getDisplayName(), null);
-						}
+							Log.d("HistoryListFragment", "onClick: "+address.asStringUriOnly());
+							Log.d("HistoryListFragment", "onClick: "+address.getDisplayName());
+							}
 					}
 				});
 			}

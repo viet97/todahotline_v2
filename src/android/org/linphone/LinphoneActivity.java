@@ -749,20 +749,24 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 		resetSelection();
 
 		if (id == R.id.history) {
+			hideStatusBar();
 			changeCurrentFragment(FragmentsAvailable.HISTORY_LIST, null);
 			history_selected.setVisibility(View.VISIBLE);
 			LinphoneManager.getLc().resetMissedCallsCount();
 			displayMissedCalls(0);
 		} else if (id == R.id.contacts) {
+			hideStatusBar();
 			changeCurrentFragment(FragmentsAvailable.CONTACTS_LIST, null);
 			contacts_selected.setVisibility(View.VISIBLE);
 		} else if (id == R.id.dialer) {
 			changeCurrentFragment(FragmentsAvailable.DIALER, null);
 			dialer_selected.setVisibility(View.VISIBLE);
 		} else if (id == R.id.chat) {
+			hideStatusBar();
 			changeCurrentFragment(FragmentsAvailable.ABOUT, null);
 			chat_selected.setVisibility(View.VISIBLE);
 		} else if (id == R.id.cancel){
+
 			hideTopBar();
 			displayDialer();
 		}
@@ -794,12 +798,17 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
 		switch (menuToSelect) {
 		case HISTORY_LIST:
+			hideStatusBar();
+			break;
 		case HISTORY_DETAIL:
 			history_selected.setVisibility(View.VISIBLE);
+			hideStatusBar();
 			break;
 		case CONTACTS_LIST:
 			case CONTACT_DETAIL:
+				hideStatusBar();
 			case CONTACT_EDITOR:
+				hideStatusBar();
 			contacts_selected.setVisibility(View.VISIBLE);
 			break;
 		case DIALER:
@@ -1686,13 +1695,13 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 			status.setImageResource(getStatusIconResource(proxy.getState()));
 			status.setVisibility(View.VISIBLE);
 
-			defaultAccount.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					LinphoneActivity.instance().displayAccountSettings(LinphonePreferences.instance().getDefaultAccountIndex());
-					openOrCloseSideMenu(false);
-				}
-			});
+//			defaultAccount.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View view) {
+//					LinphoneActivity.instance().displayAccountSettings(LinphonePreferences.instance().getDefaultAccountIndex());
+//					openOrCloseSideMenu(false);
+//				}
+//			});
 		}
 	}
 

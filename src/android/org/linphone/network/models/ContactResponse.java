@@ -49,7 +49,12 @@ public class ContactResponse {
         public void setDsdanhba(ArrayList<DSDanhBa> dsdanhba) {
             this.dsdanhba = dsdanhba;
         }
+        public void addDsdsba(ArrayList<DSDanhBa> dsdanhba){
+            for (DSDanhBa ds : dsdanhba) {
+                this.dsdanhba.add(ds);
+            }
 
+        }
     public static class DSDanhBa {
             @SerializedName("iddanhba")
             private String iddanhba;

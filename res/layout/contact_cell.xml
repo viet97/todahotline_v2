@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-	android:background="@color/colorH"
-    android:orientation="vertical">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/layout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:gravity="center_vertical"
+	android:orientation="vertical">
 
 	<LinearLayout
 		android:id="@+id/separator"
+		android:background="@color/white"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical">
@@ -21,7 +22,6 @@
 			android:gravity="center" />
 
 		<ImageView
-			android:background="@color/colorE"
 			android:layout_width="match_parent"
 			android:layout_height="1dp"/>
 
@@ -29,7 +29,7 @@
 
 	<RelativeLayout
 		android:layout_width="match_parent"
-		android:layout_height="40dp"
+		android:layout_height="wrap_content"
 		android:layout_margin="5dp"
 		android:gravity="center_vertical">
 
@@ -37,9 +37,11 @@
 			android:id="@+id/avatar_layout"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
-			android:gravity="center">
+			android:gravity="center"
+			android:layout_centerVertical="true">
 
 			<ImageView
+				android:visibility="gone"
 				android:id="@+id/contact_picture"
 				android:src="@drawable/avatar"
 				android:contentDescription="@string/content_description_contact_picture"
@@ -51,7 +53,7 @@
 
 			<ImageView
 				android:id="@+id/mask"
-				android:src="@drawable/avatar_mask"
+				android:src="@drawable/info_icon_medium"
 				android:layout_width="35dp"
 				android:layout_height="35dp"
 				android:adjustViewBounds="true"
@@ -96,34 +98,59 @@
 			android:scaleType="centerInside"
 			android:src="@drawable/linphone_user" />
 
-		<RelativeLayout
-		    android:layout_width="wrap_content"
+		<LinearLayout
+			android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_toRightOf="@id/avatar_layout"
 		    android:layout_centerVertical="true"
-			android:layout_toLeftOf="@id/friendLinphone"
-		    android:layout_marginLeft="10dp">
-
-			<TextView
-			    android:id="@+id/name"
-				style="@style/font6"
-				android:lines="1"
-				android:ellipsize="end"
-				android:maxLines="1"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:layout_alignParentTop="true"/>
+			android:layout_toLeftOf="@+id/secondary_action_icon"
+		    android:layout_marginLeft="10dp"
+			android:orientation="vertical"
+			android:weightSum="10">
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="5"
+				android:orientation="horizontal">
+				<TextView
+					android:id="@+id/name"
+					style="@style/font6"
+					android:textColor="@color/white"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentTop="true"/>
+			</LinearLayout>
 
 			<TextView
 			    android:id="@+id/contactOrganization"
 				style="@style/font9"
 				android:maxLines="1"
+				android:textColor="@color/white"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+			    android:layout_alignBottom="@+id/name"/>
+			<TextView
+			    android:id="@+id/address"
+				style="@style/font9"
+				android:textColor="@color/white"
+				android:maxLines="1"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 			    android:layout_alignParentBottom="true"/>
 
-		</RelativeLayout>
+		</LinearLayout>
 
+		<ImageButton
+			android:padding="8dp"
+			android:layout_centerVertical="true"
+			android:id="@+id/secondary_action_icon"
+			android:layout_width="52dp"
+			android:layout_height="match_parent"
+			android:contentDescription="@string/call"
+			android:scaleType="center"
+			android:layout_alignParentRight="true"
+            android:background="@drawable/transparent"
+            android:src="@drawable/ic_ab_dialer_holo_dark" />
 	</RelativeLayout>
 
 </LinearLayout>

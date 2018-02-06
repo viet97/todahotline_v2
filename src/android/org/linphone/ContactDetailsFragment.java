@@ -25,6 +25,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,7 +48,9 @@ public class ContactDetailsFragment extends Fragment implements OnClickListener 
 		public void onClick(View v) {
 			if (LinphoneActivity.isInstanciated()) {
 				LinphoneActivity.instance().setAddresGoToDialerAndCall(v.getTag().toString(), contact.getFullName(), contact.getPhotoUri());
-			}
+				Log.d("ContactDetailsFragment", "onClick: "+v.getTag().toString());
+				Log.d("ContactDetailsFragment", "onClick: "+contact.getFullName());
+				}
 		}
 	};
 

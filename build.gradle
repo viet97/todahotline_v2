@@ -38,6 +38,7 @@ allprojects {
 apply plugin: 'com.android.application'
 
 dependencies {
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:+') {
         exclude module: 'support-annotations'
     }
@@ -47,6 +48,8 @@ dependencies {
         compile fileTree(include: 'gcm.jar', dir: 'libs')
         compile 'com.android.support:support-v4:+'
     }
+    compile project(':actionbarsherlock')
+    compile 'com.android.support:percent:27.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.google.code.gson:gson:2.1.0'
@@ -142,6 +145,12 @@ android {
             // Exclude some useless files
             packagingOptions {
                 excludes = excludePackage
+            }
+            packagingOptions {
+                exclude 'META-INF/README'
+            }
+            packagingOptions {
+                exclude 'README'
             }
         }
 
