@@ -284,7 +284,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 }
             });
         } catch (Exception e) {
-
+            Log.d(TAG, "onCreateView: "+e);
         }
         return view;
     }
@@ -1024,7 +1024,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder.organization.setVisibility(View.GONE);
             } else {
                 try {
-                    holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
+                    if(DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")
+                            && DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()!=null)
+                    {
+                        holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
+                    }
                     holder.name.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getTenlienhe());
                     holder.address.setVisibility(View.VISIBLE);
                     holder.address.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getSodienthoai());

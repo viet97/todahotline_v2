@@ -31,7 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:lines="1"
-            android:text="Mọi thông tin chi tiết xin vui lòng liên hệ:"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
@@ -49,7 +48,6 @@
             android:layout_below="@+id/tv_tenlienhe2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="VPGD: Tầng 2, Tòa nhà Ngôi Sao, B15 Khu ĐTM Đại Kim, đường Nguyễn Cảnh Dị, phường Đại Kim, quận Hoàng Mai, Hà Nội"
             android:textColor="@color/white"
             android:textSize="15sp" />
 

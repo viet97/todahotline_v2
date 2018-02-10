@@ -180,6 +180,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         //This must be done before calling super.onCreate().
         super.onCreate(savedInstanceState);
         android.util.Log.d(TAG, "onCreate: ");
+
         if (getResources().getBoolean(R.bool.orientation_portrait_only)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -1633,7 +1634,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         if (getResources().getBoolean(R.bool.enable_in_app_purchase)) {
             sideMenuItems.add(getResources().getString(R.string.inapp));
         }
-        sideMenuItems.add(getResources().getString(R.string.menu_about));
+//        sideMenuItems.add(getResources().getString(R.string.menu_about));
         sideMenuContent = (RelativeLayout) findViewById(R.id.side_menu_content);
         sideMenuItemList = (ListView) findViewById(R.id.item_list);
         menu = (ImageView) findViewById(R.id.side_menu_button);
