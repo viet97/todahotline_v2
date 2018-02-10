@@ -1,6 +1,7 @@
 package org.linphone.myactivity;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
@@ -24,6 +25,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -161,7 +163,7 @@ public class LoginActivity extends Activity {
                     contactResponse = response.body();
                     if (contactResponse.getStatus()) {
                         ArrayList<ContactResponse.DSDanhBa> listDB = contactResponse.getDsdanhba();
-                        DbContext.getInstance().setContactResponse(contactResponse, LoginActivity.this);
+//                        DbContext.getInstance().setContactResponse(contactResponse, LoginActivity.this);
                         HashMap<String, String> itemContactName = new HashMap<String, String>();
                         HashMap<String, String> itemContactJob = new HashMap<String, String>();
                         for (ContactResponse.DSDanhBa ds : listDB) {
@@ -179,18 +181,22 @@ public class LoginActivity extends Activity {
                         android.util.Log.d("CheckContact", "onResponse: ");
                         listContactTodaEditor.putString("listContactTodaName", listContactTodaHashMapStringName);
                         listContactTodaEditor.putString("listContactTodaJob", listContactTodaHashMapStringJob);
-                        listContactTodaEditor.commit();
+                        listContactTodaEditor.apply();
                     } else {
                         listContactTodaEditor.clear();
-                        listContactTodaEditor.commit();
+                        listContactTodaEditor.apply();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ContactResponse> call, Throwable t) {
-                    Toast.makeText(LoginActivity.this,
-                            "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
-                            Toast.LENGTH_SHORT).show();
+                    try {
+                        Toast.makeText(LoginActivity.this,
+                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                Toast.LENGTH_SHORT).show();
+                    }catch (Exception e){
+
+                    }
                 }
 
             });
@@ -201,6 +207,7 @@ public class LoginActivity extends Activity {
 
     @Override
     protected void onResume() {
+        android.util.Log.d(TAG, "onResume: "+LinphonePreferences.instance().getAccountCount());
         if (!LinphoneService.isReady()) {
             startService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
         }
@@ -212,6 +219,7 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         mPrefs = LinphonePreferences.instance();
         try {
+            this.requestWindowFeature(Window.FEATURE_NO_TITLE);
             super.onCreate(savedInstanceState);
             internalIpEditor = getSharedPreferences("server", MODE_PRIVATE).edit();
             setContentView(R.layout.activity_login);
@@ -399,8 +407,6 @@ public class LoginActivity extends Activity {
         if (!config.getString(PREF_URLCONFIG, "").equals("")) {
             dialogLogin = ProgressDialog.show(LoginActivity.this, "", "Đăng nhập...", true, false);
             Handler handler = new Handler();
-            android.util.Log.d(TAG, "loginAct: " + NetContext.getInstance().getBASE_URL());
-            android.util.Log.d("Login", "loginAct: dang nhap");
             handler.postDelayed(new Runnable() {
 
                 @Override
@@ -411,10 +417,10 @@ public class LoginActivity extends Activity {
                         loginEditor.putString("username", et_username.getText().toString());
                         loginEditor.putString("password", et_password.getText().toString());
                         loginEditor.putString("server", et_idct.getText().toString());
-                        loginEditor.commit();
+                        loginEditor.apply();
                     } else {
                         loginEditor.clear();
-                        loginEditor.commit();
+                        loginEditor.apply();
                     }
 
                     if (!isNetworkAvailable(getBaseContext())) {
@@ -463,10 +469,10 @@ public class LoginActivity extends Activity {
                                         loginEditor.putString(KEY_USERID, userid);
                                         loginEditor.putString(KEY_SESSION, sessionkey);
                                         loginEditor.putString(KEY_DISPLAY_NAME, displayname);
-                                        loginEditor.commit();
+                                        loginEditor.apply();
                                         autoLoginEditor = autoLogin.edit();
                                         autoLoginEditor.putBoolean("AutoLogin", false);
-                                        autoLoginEditor.commit();
+                                        autoLoginEditor.apply();
 
 //                                        ChangePassFragment.currentPass = et_password.getText().toString();
                                         String userRespon = loginRespon.getData().getUsertoda();
@@ -562,7 +568,7 @@ public class LoginActivity extends Activity {
                                 android.util.Log.d(TAG, "onFailure: ");
                                 autoLoginEditor = autoLogin.edit();
                                 autoLoginEditor.putBoolean("AutoLogin", false);
-                                autoLoginEditor.commit();
+                                autoLoginEditor.apply();
                                 if (dialogLogin.isShowing())
                                     dialogLogin.cancel();
                             }
@@ -609,14 +615,21 @@ public class LoginActivity extends Activity {
         super.onDestroy();
         android.util.Log.d(TAG, "onDestroy: ");
         try {
+            stopService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
+            ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+            am.killBackgroundProcesses(getString(R.string.sync_account_type));
+            android.os.Process.killProcess(android.os.Process.myPid());
             if (dialogLogin != null && dialogLogin.isShowing())
                 dialogLogin.cancel();
         } catch (Exception e) {
 
         }
     }
-    public void saveCreatedAccount(String username, String userid, String password, String displayname, String ha1, String prefix, String domain, LinphoneAddress.TransportType transport) {
 
+    public void saveCreatedAccount(String username, String userid, String password, String displayname, String ha1, String prefix, String domain, LinphoneAddress.TransportType transport) {
+//        while(!LinphoneService.isReady()){
+//            android.util.Log.d(TAG, "saveCreatedAccount: "+LinphoneService.isReady());
+//        }
         username = LinphoneUtils.getDisplayableUsernameFromAddress(username);
         domain = LinphoneUtils.getDisplayableUsernameFromAddress(domain);
 

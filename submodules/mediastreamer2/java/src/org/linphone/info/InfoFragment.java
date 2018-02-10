@@ -67,50 +67,91 @@ public class InfoFragment extends Fragment {
         return view;
     }
     public void setDataNotEmpty(AboutRespon aboutRespon){
-        if (aboutRespon.getData().getTenlienhe().length()!=0) {
-            tenlienhe.setText(aboutRespon.getData().getTenlienhe());
-            tenlienhe.setVisibility(View.VISIBLE);
+        try {
+            if (aboutRespon.getData().getTenlienhe().length()!=0) {
+                tenlienhe.setText(aboutRespon.getData().getTenlienhe());
+                tenlienhe.setVisibility(View.VISIBLE);
+            }
+            else tenlienhe.setVisibility(View.GONE);
+        }catch (Exception e){
+
         }
-        else tenlienhe.setVisibility(View.GONE);
-        if (aboutRespon.getData().getDiachi().length()!=0) {
-            diachi.setText(aboutRespon.getData().getDiachi());
-            diachi.setVisibility(View.VISIBLE);
+
+        try {
+            if (aboutRespon.getData().getDiachi().length()!=0) {
+                diachi.setText(aboutRespon.getData().getDiachi());
+                diachi.setVisibility(View.VISIBLE);
+            }
+            else diachi.setVisibility(View.GONE);
+        }catch (Exception e){
+
         }
-        else diachi.setVisibility(View.GONE);
-        if (aboutRespon.getData().getEmail().length()!=0) {
-            email.setText(aboutRespon.getData().getEmail());
-            email.setVisibility(View.VISIBLE);
+
+        try {
+            if (aboutRespon.getData().getEmail().length()!=0) {
+                email.setText(aboutRespon.getData().getEmail());
+                email.setVisibility(View.VISIBLE);
+            }
+            else email.setVisibility(View.GONE);
+        }catch (Exception e){
+
         }
-        else email.setVisibility(View.GONE);
-        if (aboutRespon.getData().getHotline().length()!=0) {
-            hotline.setText(aboutRespon.getData().getHotline());
-            hotline.setVisibility(View.VISIBLE);
-            StringUltils.getInstance().removeUnderlines((Spannable) hotline.getText());
+
+        try {
+            if (aboutRespon.getData().getHotline().length()!=0) {
+                hotline.setText(aboutRespon.getData().getHotline());
+                hotline.setVisibility(View.VISIBLE);
+                StringUltils.getInstance().removeUnderlines((Spannable) hotline.getText());
+            }
+            else hotline.setVisibility(View.GONE);
+        }catch (Exception e){
+
         }
-        else hotline.setVisibility(View.GONE);
-        if (aboutRespon.getData().getDienthoai1().length()!=0) {
-            dienthoai1.setText(aboutRespon.getData().getDienthoai1());
-            dienthoai1.setVisibility(View.VISIBLE);
-            StringUltils.getInstance().removeUnderlines((Spannable) hotline.getText());
+
+        try {
+            if (aboutRespon.getData().getDienthoai1().length()!=0) {
+                dienthoai1.setText(aboutRespon.getData().getDienthoai1());
+                dienthoai1.setVisibility(View.VISIBLE);
+                StringUltils.getInstance().removeUnderlines((Spannable) hotline.getText());
+            }
+            else dienthoai1.setVisibility(View.GONE);
+        }catch (Exception e){
+
         }
-        else dienthoai1.setVisibility(View.GONE);
-        if (aboutRespon.getData().getDienthoai2().length()!=0) {
-            dienthoai2.setText(aboutRespon.getData().getDienthoai2());
-            dienthoai2.setVisibility(View.VISIBLE);
-            StringUltils.getInstance().removeUnderlines((Spannable) hotline.getText());
+
+        try {
+            if (aboutRespon.getData().getDienthoai2().length()!=0) {
+                dienthoai2.setText(aboutRespon.getData().getDienthoai2());
+                dienthoai2.setVisibility(View.VISIBLE);
+                StringUltils.getInstance().removeUnderlines((Spannable) hotline.getText());
+            }
+            else dienthoai2.setVisibility(View.GONE);
+        }catch (Exception e){
+
         }
-        else dienthoai2.setVisibility(View.GONE);
-        if (aboutRespon.getData().getCskh().length()!=0) {
-            cskh.setText(aboutRespon.getData().getCskh());
-            cskh.setVisibility(View.VISIBLE);
+
+        try {
+
+            if (aboutRespon.getData().getCskh().length()!=0) {
+                cskh.setText(aboutRespon.getData().getCskh());
+                cskh.setVisibility(View.VISIBLE);
+            }
+            else cskh.setVisibility(View.GONE);
+        }catch (Exception e){
+
         }
-        else cskh.setVisibility(View.GONE);
-        if (aboutRespon.getData().getWebsite().length()!=0) {
-            website.setText(aboutRespon.getData().getWebsite());
-            website.setVisibility(View.VISIBLE);
-            StringUltils.getInstance().removeUnderlines((Spannable) hotline.getText());
+
+        try {
+            if (aboutRespon.getData().getWebsite().length()!=0) {
+                website.setText(aboutRespon.getData().getWebsite());
+                website.setVisibility(View.VISIBLE);
+                StringUltils.getInstance().removeUnderlines((Spannable) hotline.getText());
+            }
+            else website.setVisibility(View.GONE);
+        }catch (Exception e){
+
         }
-        else website.setVisibility(View.GONE);
+
     }
 
     public String getURLAbout() {
@@ -128,8 +169,13 @@ public class InfoFragment extends Fragment {
 
                     AboutRespon aboutRespon = response.body();
                     if (aboutRespon.getStatus()) {
-                        DbContext.getInstance().setAboutRespon(aboutRespon, getActivity());
-                        setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
+                        try {
+                            DbContext.getInstance().setAboutRespon(aboutRespon, getActivity());
+                            setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
+                        }catch (Exception e){
+
+                        }
+
                     } else {
                         Toast.makeText(getActivity(), "Lấy thông tin thất bại!", Toast.LENGTH_LONG).show();
                     }
