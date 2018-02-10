@@ -195,7 +195,7 @@
 					android:layout_height="match_parent">
 
 					<ImageView
-						android:src="@drawable/footer_chat"
+						android:src="@drawable/info"
 						android:contentDescription="@string/content_description_chat"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"

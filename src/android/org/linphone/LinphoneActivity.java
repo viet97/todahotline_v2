@@ -131,7 +131,9 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private static final int PERMISSIONS_RECORD_AUDIO_ECHO_CANCELLER = 209;
     private static final int PERMISSIONS_READ_EXTERNAL_STORAGE_DEVICE_RINGTONE = 210;
     private static final int PERMISSIONS_RECORD_AUDIO_ECHO_TESTER = 211;
-
+    private static final int ONLY_CALL = 2;
+    private static final int ONLY_TAKECALL = 1;
+    private static final int CALL_AND_TAKECALL = 3;
     private static LinphoneActivity instance;
 
     private StatusFragment statusFragment;
@@ -223,10 +225,26 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
         initButtons();
         initSideMenu();
+        try {
+            if (DbContext.getInstance().getLoginRespon(this).getData().getDsquyen().get(0).getIdcauhinh() != ONLY_TAKECALL) {
+               dialer.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
 
+        }
         currentFragment = FragmentsAvailable.EMPTY;
         if (savedInstanceState == null) {
-            changeCurrentFragment(FragmentsAvailable.DIALER, getIntent().getExtras());
+            try {
+                if (DbContext.getInstance().getLoginRespon(this).getData().getDsquyen().get(0).getIdcauhinh() != ONLY_TAKECALL) {
+                    dialer.setVisibility(View.VISIBLE);
+                    changeCurrentFragment(FragmentsAvailable.DIALER, getIntent().getExtras());
+                }else {
+                    changeCurrentFragment(FragmentsAvailable.HISTORY_LIST, getIntent().getExtras());
+                    dialer.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+
+            }
         } else {
             currentFragment = (FragmentsAvailable) savedInstanceState.getSerializable("currentFragment");
         }
