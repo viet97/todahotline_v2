@@ -28,12 +28,20 @@ import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCoreListenerBase;
 import org.linphone.core.Reason;
+import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -48,8 +56,8 @@ import android.widget.Toast;
 
 public class CallOutgoingActivity extends LinphoneGenericActivity implements OnClickListener{
 	private static CallOutgoingActivity instance;
-
-	private TextView name, number;
+    public String TAG = "CallOutgoingActivity";
+    private TextView name, number;
 	private ImageView contactPicture, micro, speaker, hangUp;
 	private LinphoneCall mCall;
 	private LinphoneCoreListenerBase mListener;
@@ -97,15 +105,21 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 			@Override
 			public void callState(LinphoneCore lc, LinphoneCall call, LinphoneCall.State state, String message) {
 				if (call == mCall && State.Connected == state) {
-					if (!LinphoneActivity.isInstanciated()) {
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(500, 10));
+                    } else {
+                        ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(500);
+                    }
+                    android.util.Log.d(TAG, "callState12345: connected ");
+                    if (!LinphoneActivity.isInstanciated()) {
 						return;
 					}
 					LinphoneActivity.instance().startIncallActivity(mCall);
 					finish();
 					return;
 				} else if (state == State.Error) {
-					// Convert LinphoneCore message for internalization
-					if (call.getErrorInfo().getReason() == Reason.Declined) {
+                    // Convert LinphoneCore message 	for internalization
+                    if (call.getErrorInfo().getReason() == Reason.Declined) {
 						displayCustomToast(getString(R.string.error_call_declined), Toast.LENGTH_SHORT);
 						decline();
 					} else if (call.getErrorInfo().getReason() == Reason.NotFound) {
@@ -118,8 +132,10 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 						displayCustomToast(getString(R.string.error_user_busy), Toast.LENGTH_SHORT);
 						decline();
 					} else if (message != null) {
-						displayCustomToast(getString(R.string.error_unknown) + " - " + message, Toast.LENGTH_SHORT);
-						decline();
+                        LinphoneAddress address = mCall.getRemoteAddress();
+
+                        displayCustomToast(address.getUserName() + " offline", Toast.LENGTH_SHORT);
+                        decline();
 					}
 				}else if (state == State.CallEnd) {
 					// Convert LinphoneCore message for internalization
@@ -137,6 +153,31 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 		};
 		instance = this;
 	}
+
+    public String getContactName(final String phoneNumber, Context context) {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+        String contactName = null;
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                contactName = cursor.getString(0);
+            }
+            cursor.close();
+        }
+        if (contactName == null) {
+            try {
+                contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+            } catch (Exception e) {
+
+            }
+        }
+
+        return contactName;
+    }
 
 	@Override
 	protected void onResume() {
@@ -177,14 +218,15 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 
 		LinphoneAddress address = mCall.getRemoteAddress();
 		LinphoneContact contact = ContactsManager.getInstance().findContactFromAddress(address);
-		if (contact != null) {
+        String displayName = getContactName(address.getUserName(), this);
+        if (contact != null) {
 			LinphoneUtils.setImagePictureFromUri(this, contactPicture, contact.getPhotoUri(), contact.getThumbnailUri());
-			name.setText(contact.getFullName());
-		} else {
-			name.setText(LinphoneUtils.getAddressDisplayName(address));
-		}
-		number.setText(address.asStringUriOnly());
-	}
+            name.setText(displayName == null ? "" : displayName);
+        } else {
+            name.setText(displayName == null ? "" : displayName);
+        }
+        number.setText(address.getUserName());
+    }
 
 	@Override
 	protected void onStart() {

@@ -30,12 +30,17 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.TextView;
 
+import static android.content.ContentValues.TAG;
+
 public class Compatibility {
-	public static void CreateChannel(Context context) {
+    public static String TAG = "Compatibility";
+
+    public static void CreateChannel(Context context) {
 		if (Version.sdkAboveOrEqual(Version.API26_O_80)) {
 			ApiTwentySixPlus.CreateChannel(context);
 		}
@@ -89,13 +94,17 @@ public class Compatibility {
 
 	public static Notification createNotification(Context context, String title, String message, int icon, int iconLevel, Bitmap largeIcon, PendingIntent intent, boolean isOngoingEvent,int priority) {
 		if (Version.sdkAboveOrEqual(Version.API26_O_80)) {
-			return ApiTwentySixPlus.createNotification(context, title, message, icon, iconLevel, largeIcon, intent, isOngoingEvent,priority);
+            Log.d(TAG, "createNotification: API26_O_80");
+            return ApiTwentySixPlus.createNotification(context, title, message, icon, iconLevel, largeIcon, intent, isOngoingEvent,priority);
 		} else if (Version.sdkAboveOrEqual(Version.API21_LOLLIPOP_50)) {
-			return ApiTwentyOnePlus.createNotification(context, title, message, icon, iconLevel, largeIcon, intent, isOngoingEvent,priority);
+            Log.d(TAG, "createNotification: API21_LOLLIPOP_50");
+            return ApiTwentyOnePlus.createNotification(context, title, message, icon, iconLevel, largeIcon, intent, isOngoingEvent,priority);
 		} else if (Version.sdkAboveOrEqual(Version.API16_JELLY_BEAN_41)) {
-			return ApiSixteenPlus.createNotification(context, title, message, icon, iconLevel, largeIcon, intent, isOngoingEvent,priority);
+            Log.d(TAG, "createNotification: API16_JELLY_BEAN_41");
+            return ApiSixteenPlus.createNotification(context, title, message, icon, iconLevel, largeIcon, intent, isOngoingEvent,priority);
 		} else {
-			return ApiElevenPlus.createNotification(context, title, message, icon, iconLevel, largeIcon, intent, isOngoingEvent);
+            Log.d(TAG, "createNotification: ");
+            return ApiElevenPlus.createNotification(context, title, message, icon, iconLevel, largeIcon, intent, isOngoingEvent);
 		}
 	}
 

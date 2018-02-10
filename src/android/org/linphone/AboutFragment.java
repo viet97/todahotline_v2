@@ -187,8 +187,13 @@ public class AboutFragment extends Fragment implements OnClickListener {
 
 					AboutRespon aboutRespon = response.body();
 					if (aboutRespon.getStatus()) {
-						DbContext.getInstance().setAboutRespon(aboutRespon, getActivity());
-						setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
+                        try {
+                            DbContext.getInstance().setAboutRespon(aboutRespon, getActivity());
+                            setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
+                        } catch (Exception e) {
+
+                        }
+
 					} else {
 						Toast.makeText(getActivity(), "Lấy thông tin thất bại!", Toast.LENGTH_LONG).show();
 					}
@@ -196,9 +201,14 @@ public class AboutFragment extends Fragment implements OnClickListener {
 
 				@Override
 				public void onFailure(Call<AboutRespon> call, Throwable t) {
-					Toast.makeText(getActivity(), "Lỗi! Không thể kết nối tới máy chủ, vui lòng thử lại sau.", Toast.LENGTH_LONG).show();
-					android.util.Log.d("LoggerInterceptor", "onFailure: " + t.toString());
-					android.util.Log.d("LoggerInterceptor", "onFailure: " + call.toString());
+                    try {
+                        Toast.makeText(getActivity(), "Lỗi! Không thể kết nối tới máy chủ, vui lòng thử lại sau.", Toast.LENGTH_LONG).show();
+                        android.util.Log.d("LoggerInterceptor", "onFailure: " + t.toString());
+                        android.util.Log.d("LoggerInterceptor", "onFailure: " + call.toString());
+                    } catch (Exception e) {
+
+                    }
+
 				}
 			});
 		} catch (Exception e) {

@@ -79,11 +79,12 @@ import static org.linphone.FragmentsAvailable.CONTACTS_LIST;
 public class ContactsListFragment extends Fragment implements OnClickListener, OnItemClickListener, ContactsUpdatedListener {
     private LayoutInflater mInflater;
     private ListView contactsList;
-    private TextView noSipContact, noContact;
-    private ImageView allContacts, linphoneContacts, newContact, edit, selectAll, deselectAll, delete, cancel;
+    private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
+    private ImageView newContact, edit, selectAll, deselectAll, delete, cancel;
+
     private boolean isEditMode, isSearchMode;
-    public static boolean onlyDisplayLinphoneContacts;
-    private View allContactsSelected, linphoneContactsSelected;
+    public static int onlyDisplayLinphoneContacts;
+    private View allContactsSelected, linphoneContactsSelected, cusContactSelected;
     private LinearLayout editList, topbar;
     private int lastKnownPosition;
     private boolean editOnClick = false, editConsumed = false, onlyDisplayChatAddress = false;
@@ -116,7 +117,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     TextWatcher twToda = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            if (timer != null)
+                timer.cancel();
         }
 
         @Override
@@ -138,8 +140,14 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             @Override
                             public void run() {
                                 dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tìm kiếm...", true, false);
-                                String urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&timkiem=" + editable.toString();
+                                String urlContact;
+                                if (onlyDisplayLinphoneContacts == 1)
+                                    urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                                            + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                                else
+                                    urlContact = "AppDanhBaKhachHang.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                                            + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                                android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
                                 Service service = NetContext.getInstance().create(Service.class);
                                 service.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
                                     @Override
@@ -153,7 +161,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                         contactResponse = response.body();
                                         if (contactResponse.getStatus()) {
                                             ArrayList<ContactResponse.DSDanhBa> listDB = contactResponse.getDsdanhba();
-                                            DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+                                            try {
+                                                DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+                                            } catch (Exception e) {
+
+                                            }
 
                                             ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
                                         }
@@ -183,89 +195,97 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         mInflater = inflater;
         View view = inflater.inflate(R.layout.contacts_list, container, false);
-
-        Log.d(TAG, "onCreateView: onCreate");
-        page = 1;
-        searchText = "";
-        if (getArguments() != null) {
-            editOnClick = getArguments().getBoolean("EditOnClick");
-            sipAddressToAdd = getArguments().getString("SipAddress");
-            if (getArguments().getString("DisplayName") != null)
-                displayName = getArguments().getString("DisplayName");
-            onlyDisplayChatAddress = getArguments().getBoolean("ChatAddressOnly");
-        }
-        getContactToda();
-        noSipContact = (TextView) view.findViewById(R.id.noSipContact);
-        noContact = (TextView) view.findViewById(R.id.noContact);
-
-        contactsList = (ListView) view.findViewById(R.id.contactsList);
-        contactsList.setOnItemClickListener(this);
-
-        allContacts = (ImageView) view.findViewById(R.id.all_contacts);
-        allContacts.setOnClickListener(this);
-
-        linphoneContacts = (ImageView) view.findViewById(R.id.linphone_contacts);
-        linphoneContacts.setOnClickListener(this);
-
-        allContactsSelected = view.findViewById(R.id.all_contacts_select);
-        linphoneContactsSelected = view.findViewById(R.id.linphone_contacts_select);
-
-        newContact = (ImageView) view.findViewById(R.id.newContact);
-        newContact.setOnClickListener(this);
-        newContact.setEnabled(LinphoneManager.getLc().getCallsNb() == 0);
-
-        allContacts.setEnabled(onlyDisplayLinphoneContacts);
-        linphoneContacts.setEnabled(!allContacts.isEnabled());
-
-        selectAll = (ImageView) view.findViewById(R.id.select_all);
-        selectAll.setOnClickListener(this);
-
-        deselectAll = (ImageView) view.findViewById(R.id.deselect_all);
-        deselectAll.setOnClickListener(this);
-
-        delete = (ImageView) view.findViewById(R.id.delete);
-        delete.setOnClickListener(this);
-
-        editList = (LinearLayout) view.findViewById(R.id.edit_list);
-        topbar = (LinearLayout) view.findViewById(R.id.top_bar);
-
-        cancel = (ImageView) view.findViewById(R.id.cancel);
-        cancel.setOnClickListener(this);
-
-        edit = (ImageView) view.findViewById(R.id.edit);
-        edit.setOnClickListener(this);
-
-        clearSearchField = (ImageView) view.findViewById(R.id.clearSearchField);
-        clearSearchField.setOnClickListener(this);
-
-        searchField = view.findViewById(R.id.searchField);
-        searchField.clearTextChangedListeners();
-        searchField.addTextChangedListener(twLocal);
-        contactsFetchInProgress = (ProgressBar) view.findViewById(R.id.contactsFetchInProgress);
-        contactsFetchInProgress.setVisibility(View.VISIBLE);
-        contactsList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
+        try {
+            Log.d(TAG, "onCreateView: onCreate");
+            page = 1;
+            searchText = "";
+            if (getArguments() != null) {
+                editOnClick = getArguments().getBoolean("EditOnClick");
+                sipAddressToAdd = getArguments().getString("SipAddress");
+                if (getArguments().getString("DisplayName") != null)
+                    displayName = getArguments().getString("DisplayName");
+                onlyDisplayChatAddress = getArguments().getBoolean("ChatAddressOnly");
             }
+//            getContactToda();
+            noSipContact = (TextView) view.findViewById(R.id.noSipContact);
+            noContact = (TextView) view.findViewById(R.id.noContact);
 
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                int lastItem = i1 + i;
-                Log.d(TAG, "onScroll: lastItem la " + lastItem);
-                Log.d(TAG, "onScroll: i2 la " + i2);
-                if (lastItem == i2) {
-                    if (prelast != lastItem) {
-                        Log.d(TAG, "onScroll: last");
-                        prelast = lastItem;
-                        getContactToda();
-                    }
+            contactsList = (ListView) view.findViewById(R.id.contactsList);
+            contactsList.setOnItemClickListener(this);
+
+            allContacts = view.findViewById(R.id.all_contacts);
+            allContacts.setOnClickListener(this);
+
+            linphoneContacts = (view.findViewById(R.id.linphone_contacts));
+            linphoneContacts.setOnClickListener(this);
+
+            cusContacts = view.findViewById(R.id.cus_contacts);
+            cusContacts.setOnClickListener(this);
+
+            allContactsSelected = view.findViewById(R.id.all_contacts_select);
+            linphoneContactsSelected = view.findViewById(R.id.linphone_contacts_select);
+            cusContactSelected = view.findViewById(R.id.cus_contacts_select);
+
+            newContact = (ImageView) view.findViewById(R.id.newContact);
+            newContact.setOnClickListener(this);
+            newContact.setEnabled(LinphoneManager.getLc().getCallsNb() == 0);
+
+            allContacts.setEnabled(true);
+            linphoneContacts.setEnabled(!allContacts.isEnabled());
+
+            selectAll = (ImageView) view.findViewById(R.id.select_all);
+            selectAll.setOnClickListener(this);
+
+            deselectAll = (ImageView) view.findViewById(R.id.deselect_all);
+            deselectAll.setOnClickListener(this);
+
+            delete = (ImageView) view.findViewById(R.id.delete);
+            delete.setOnClickListener(this);
+
+            editList = (LinearLayout) view.findViewById(R.id.edit_list);
+            topbar = (LinearLayout) view.findViewById(R.id.top_bar);
+
+            cancel = (ImageView) view.findViewById(R.id.cancel);
+            cancel.setOnClickListener(this);
+
+            edit = (ImageView) view.findViewById(R.id.edit);
+            edit.setOnClickListener(this);
+
+            clearSearchField = (ImageView) view.findViewById(R.id.clearSearchField);
+            clearSearchField.setOnClickListener(this);
+
+            searchField = view.findViewById(R.id.searchField);
+            searchField.clearTextChangedListeners();
+            searchField.addTextChangedListener(twLocal);
+            contactsFetchInProgress = (ProgressBar) view.findViewById(R.id.contactsFetchInProgress);
+            contactsFetchInProgress.setVisibility(View.VISIBLE);
+            contactsList.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView absListView, int i) {
+
                 }
 
-            }
-        });
+                @Override
+                public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                    int lastItem = i1 + i;
+                    Log.d(TAG, "onScroll: lastItem la " + lastItem);
+                    Log.d(TAG, "onScroll: i2 la " + i2);
+                    if (lastItem == i2) {
+                        if (prelast != lastItem) {
+                            Log.d(TAG, "onScroll: last");
+                            prelast = lastItem;
+//                        getConta try {    ctToda();
+                        }
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+
+        }
         return view;
     }
 
@@ -292,9 +312,15 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
     public void getContactToda() {
         try {
+
             Service contactService = NetContext.instance.create(Service.class);
-            String urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                    + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+            String urlContact;
+            if (onlyDisplayLinphoneContacts == 1)
+                urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+            else
+                urlContact = "AppDanhBaKhachHang.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
             android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
             contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
                 @Override
@@ -305,29 +331,42 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         Log.d(TAG, "onResponse: " + page);
                         if (page == 1) {
                             Log.d(TAG, "onResponse:" + DbContext.getInstance());
-                            DbContext.getInstance().setContactResponse(contactResponse, getActivity());
-                        } else {
+                            try {
+                                DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+                            } catch (Exception e) {
 
-                            ContactResponse currentContactResponse = DbContext.getInstance().getContactResponse(getActivity());
-                            ArrayList<ContactResponse.DSDanhBa> dsDanhBas = currentContactResponse.getDsdanhba();
-                            for (ContactResponse.DSDanhBa ds : contactResponse.getDsdanhba()) {
-                                dsDanhBas.add(ds);
                             }
-                            currentContactResponse.setDsdanhba(dsDanhBas);
-                            DbContext.getInstance().setContactResponse(currentContactResponse, getActivity());
+
+                        } else {
+                            try {
+                                ContactResponse currentContactResponse = DbContext.getInstance().getContactResponse(getActivity());
+                                ArrayList<ContactResponse.DSDanhBa> dsDanhBas = currentContactResponse.getDsdanhba();
+                                for (ContactResponse.DSDanhBa ds : contactResponse.getDsdanhba()) {
+                                    dsDanhBas.add(ds);
+                                }
+                                currentContactResponse.setDsdanhba(dsDanhBas);
+                                DbContext.getInstance().setContactResponse(currentContactResponse, getActivity());
+                            } catch (Exception e) {
+
+                            }
+
                         }
 
                         ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
 
-                        page++;
+//                        page++;
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ContactResponse> call, Throwable t) {
-                    Toast.makeText(getActivity(),
-                            "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
-                            Toast.LENGTH_SHORT).show();
+                    try {
+                        Toast.makeText(getActivity(),
+                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+
+                    }
                 }
 
             });
@@ -416,23 +455,184 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
             searchField.setText("");
-            onlyDisplayLinphoneContacts = false;
+            onlyDisplayLinphoneContacts = 0;
             allContactsSelected.setVisibility(View.VISIBLE);
             allContacts.setEnabled(false);
+            allContacts.setTextColor(Color.parseColor("#ffa645"));
+            linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
+            cusContacts.setTextColor(Color.parseColor("#ffffff"));
             linphoneContacts.setEnabled(true);
+            cusContacts.setEnabled(true);
+            cusContactSelected.setVisibility(View.INVISIBLE);
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
 
         } else if (id == R.id.linphone_contacts) {
-            Log.d(TAG, "onClick: 405");
             searchField.setText("");
+            searchText = "";
+            try {
+                dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tải...", true, false);
+                Service contactService = NetContext.instance.create(Service.class);
+                String urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
+                contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
+                    @Override
+                    public void onResponse(Call<ContactResponse> call, Response<ContactResponse> response) {
+                        ContactResponse contactResponse = new ContactResponse();
+                        contactResponse = response.body();
+                        try {
+                            dialogSearch.cancel();
+                        } catch (Exception e) {
+
+                        }
+                        if (contactResponse.getStatus()) {
+                            Log.d(TAG, "onResponse: " + page);
+                            if (page == 1) {
+
+                                Log.d(TAG, "onResponse:" + DbContext.getInstance());
+                                try {
+                                    DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+                                } catch (Exception e) {
+
+                                }
+
+                            } else {
+                                try {
+                                    ContactResponse currentContactResponse = DbContext.getInstance().getContactResponse(getActivity());
+                                    ArrayList<ContactResponse.DSDanhBa> dsDanhBas = currentContactResponse.getDsdanhba();
+                                    for (ContactResponse.DSDanhBa ds : contactResponse.getDsdanhba()) {
+                                        dsDanhBas.add(ds);
+                                    }
+                                    currentContactResponse.setDsdanhba(dsDanhBas);
+                                    DbContext.getInstance().setContactResponse(currentContactResponse, getActivity());
+                                } catch (Exception e) {
+
+                                }
+
+                            }
+
+                            ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
+
+//                        page++;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ContactResponse> call, Throwable t) {
+                        try {
+                            dialogSearch.cancel();
+                        } catch (Exception e) {
+
+                        }
+                        try {
+                            Toast.makeText(getActivity(),
+                                    "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                    Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+                });
+            } catch (Exception e) {
+                android.util.Log.d(TAG, "Exception: " + e);
+            }
+            allContacts.setTextColor(Color.parseColor("#ffffff"));
+            linphoneContacts.setTextColor(Color.parseColor("#ffa645"));
+            cusContacts.setTextColor(Color.parseColor("#ffffff"));
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twToda);
             allContactsSelected.setVisibility(View.INVISIBLE);
             linphoneContactsSelected.setVisibility(View.VISIBLE);
             linphoneContacts.setEnabled(false);
             allContacts.setEnabled(true);
-            onlyDisplayLinphoneContacts = true;
+            cusContacts.setEnabled(true);
+            cusContactSelected.setVisibility(View.INVISIBLE);
+            onlyDisplayLinphoneContacts = 1;
 
+        } else if (id == R.id.cus_contacts) {
+            searchField.setText("");
+            searchText = "";
+            try {
+                dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tải...", true, false);
+                Service contactService = NetContext.instance.create(Service.class);
+                String urlContact = "AppDanhBaKhachHang.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
+                contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
+                    @Override
+                    public void onResponse(Call<ContactResponse> call, Response<ContactResponse> response) {
+                        ContactResponse contactResponse = new ContactResponse();
+                        contactResponse = response.body();
+                        try {
+                            dialogSearch.cancel();
+                        } catch (Exception e) {
+
+                        }
+                        if (contactResponse.getStatus()) {
+                            Log.d(TAG, "onResponse: " + page);
+                            if (page == 1) {
+
+                                Log.d(TAG, "onResponse:" + DbContext.getInstance());
+                                try {
+                                    DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+                                } catch (Exception e) {
+
+                                }
+
+                            } else {
+                                try {
+                                    ContactResponse currentContactResponse = DbContext.getInstance().getContactResponse(getActivity());
+                                    ArrayList<ContactResponse.DSDanhBa> dsDanhBas = currentContactResponse.getDsdanhba();
+                                    for (ContactResponse.DSDanhBa ds : contactResponse.getDsdanhba()) {
+                                        dsDanhBas.add(ds);
+                                    }
+                                    currentContactResponse.setDsdanhba(dsDanhBas);
+                                    DbContext.getInstance().setContactResponse(currentContactResponse, getActivity());
+                                } catch (Exception e) {
+
+                                }
+
+                            }
+
+                            ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
+
+//                        page++;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ContactResponse> call, Throwable t) {
+                        try {
+                            dialogSearch.cancel();
+                        } catch (Exception e) {
+
+                        }
+                        try {
+                            Toast.makeText(getActivity(),
+                                    "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                    Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+                });
+            } catch (Exception e) {
+                android.util.Log.d(TAG, "Exception: " + e);
+            }
+            allContacts.setTextColor(Color.parseColor("#ffffff"));
+            linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
+            cusContacts.setTextColor(Color.parseColor("#ffa645"));
+            searchField.clearTextChangedListeners();
+            searchField.addTextChangedListener(twToda);
+            allContactsSelected.setVisibility(View.INVISIBLE);
+            linphoneContactsSelected.setVisibility(View.INVISIBLE);
+            cusContacts.setEnabled(false);
+            cusContactSelected.setVisibility(View.VISIBLE);
+            linphoneContacts.setEnabled(true);
+            allContacts.setEnabled(true);
+            onlyDisplayLinphoneContacts = 2;
         }
 
         if (isEditMode) {
@@ -541,10 +741,18 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         ContactsListAdapter adapter;
         contactsList.setFastScrollEnabled(false);
         contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-        if (!onlyDisplayLinphoneContacts)
-            adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts());
-        else
-            adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
+        switch (onlyDisplayLinphoneContacts) {
+            case 0:
+                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts());
+                break;
+            case 1:
+                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
+                break;
+            default:
+                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
+                break;
+        }
+
         contactsList.setAdapter(adapter);
         edit.setEnabled(true);
 //		if (onlyDisplayLinphoneContacts) {
@@ -565,20 +773,46 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         if (adapter.getCount() > 0) {
             contactsFetchInProgress.setVisibility(View.GONE);
         }
-        ContactsManager.getInstance().setLinphoneContactsPrefered(onlyDisplayLinphoneContacts);
+        if (onlyDisplayLinphoneContacts == 0) {
+            ContactsManager.getInstance().setLinphoneContactsPrefered(false);
+        } else {
+            ContactsManager.getInstance().setLinphoneContactsPrefered(true);
+        }
+
     }
 
     private void changeContactsToggle() {
-        if (onlyDisplayLinphoneContacts) {
+        if (onlyDisplayLinphoneContacts == 0) {
+            allContacts.setEnabled(false);
+            allContactsSelected.setVisibility(View.VISIBLE);
+            linphoneContacts.setEnabled(true);
+            cusContacts.setEnabled(true);
+            linphoneContactsSelected.setVisibility(View.INVISIBLE);
+            cusContactSelected.setVisibility(View.INVISIBLE);
+            allContacts.setTextColor(Color.parseColor("#ffa645"));
+            linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
+            cusContacts.setTextColor(Color.parseColor("#ffffff"));
+
+        } else if (onlyDisplayLinphoneContacts == 1) {
+            allContacts.setTextColor(Color.parseColor("#ffffff"));
+            linphoneContacts.setTextColor(Color.parseColor("#ffa645"));
+            cusContacts.setTextColor(Color.parseColor("#ffffff"));
             allContacts.setEnabled(true);
             allContactsSelected.setVisibility(View.INVISIBLE);
             linphoneContacts.setEnabled(false);
             linphoneContactsSelected.setVisibility(View.VISIBLE);
-        } else {
-            allContacts.setEnabled(false);
-            allContactsSelected.setVisibility(View.VISIBLE);
+            cusContacts.setEnabled(true);
+            cusContactSelected.setVisibility(View.INVISIBLE);
+        } else if (onlyDisplayLinphoneContacts == 2) {
+            allContacts.setTextColor(Color.parseColor("#ffffff"));
+            linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
+            cusContacts.setTextColor(Color.parseColor("#ffa645"));
+            allContacts.setEnabled(true);
+            allContactsSelected.setVisibility(View.INVISIBLE);
             linphoneContacts.setEnabled(true);
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
+            cusContacts.setEnabled(false);
+            cusContactSelected.setVisibility(View.VISIBLE);
         }
     }
 
@@ -612,7 +846,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         if (LinphoneActivity.isInstanciated()) {
             LinphoneActivity.instance().selectMenu(FragmentsAvailable.CONTACTS_LIST);
             LinphoneActivity.instance().hideTabBar(false);
-            onlyDisplayLinphoneContacts = ContactsManager.getInstance().isLinphoneContactsPrefered();
         }
         changeContactsToggle();
         invalidate();
@@ -719,14 +952,35 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
 
         public int getCount() {
-            if (!ContactsListFragment.onlyDisplayLinphoneContacts)
-                return contacts.size();
-            else return DbContext.getInstance().getContactResponse(context).getDsdanhba().size();
+            switch (ContactsListFragment.onlyDisplayLinphoneContacts) {
+                case 0:
+                    return contacts.size();
+
+                case 1:
+                    try {
+                        return DbContext.getInstance().getContactResponse(context).getDsdanhba().size();
+                    } catch (Exception e) {
+                        return 0;
+                    }
+                default:
+                    try {
+                        return DbContext.getInstance().getContactResponse(context).getDsdanhba().size();
+                    } catch (Exception e) {
+                        return 0;
+                    }
+
+            }
+
         }
 
         public Object getItem(int position) {
             if (position >= getCount()) return null;
-            return contacts.get(position);
+            try {
+                return contacts.get(position);
+            } catch (Exception e) {
+                return null;
+            }
+
         }
 
         public long getItemId(int position) {
@@ -746,40 +1000,54 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
-            holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
             holder.imgCall.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!ContactsListFragment.onlyDisplayLinphoneContacts) {
+                    if (onlyDisplayLinphoneContacts == 0) {
                         String uri = "sip:" + contacts.get(position).getNumbersOrAddresses().get(0).getValue() + "@" + LinphonePreferences.instance().getAccountDomain(0);
                         LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, contacts.get(position).getFullName(), null);
                     } else {
-                        ContactResponse.DSDanhBa to = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
-                        String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                        LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
+                        try {
+                            ContactResponse.DSDanhBa to = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
+                            String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                            LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
+                        } catch (Exception e) {
+
+                        }
+
                     }
                 }
             });
-            if (!ContactsListFragment.onlyDisplayLinphoneContacts) {
+            if (onlyDisplayLinphoneContacts == 0) {
                 holder.name.setText(contact.getFullName());
                 holder.address.setVisibility(View.GONE);
                 holder.organization.setVisibility(View.GONE);
             } else {
-                holder.name.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getTenlienhe());
-                holder.address.setVisibility(View.VISIBLE);
-                holder.address.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getSodienthoai());
-                holder.organization.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getJob());
+                try {
+                    holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
+                    holder.name.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getTenlienhe());
+                    holder.address.setVisibility(View.VISIBLE);
+                    holder.address.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getSodienthoai());
+                    holder.organization.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getJob());
+                } catch (Exception e) {
+
+                }
+
             }
             if (!isSearchMode) {
                 if (getPositionForSection(getSectionForPosition(position)) != position) {
                     holder.separator.setVisibility(View.GONE);
                 } else {
-                    holder.separator.setVisibility(View.VISIBLE);
+                    holder.separator.setVisibility(View.GONE);
                     String fullName = "";
-                    if (!ContactsListFragment.onlyDisplayLinphoneContacts)
+                    if (onlyDisplayLinphoneContacts == 0)
                         fullName = contact.getFullName();
                     else
-                        fullName = DbContext.getInstance().getContactResponse(context).getDsdanhba().get(position).getTenlienhe();
+                        try {
+                            fullName = DbContext.getInstance().getContactResponse(context).getDsdanhba().get(position).getTenlienhe();
+                        } catch (Exception e) {
+
+                        }
                     if (fullName != null && !fullName.isEmpty()) {
                         holder.separatorText.setVisibility(View.GONE);
                     }

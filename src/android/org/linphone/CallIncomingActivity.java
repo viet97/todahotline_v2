@@ -20,9 +20,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -39,6 +43,7 @@ import org.linphone.core.LinphoneCall.State;
 import org.linphone.core.LinphoneCallParams;
 import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCoreListenerBase;
+import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.ui.LinphoneSliders.LinphoneSliderTriggered;
 
@@ -226,14 +231,39 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
 		LinphoneContact contact = ContactsManager.getInstance().findContactFromAddress(address);
 		if (contact != null) {
 			LinphoneUtils.setImagePictureFromUri(this, contactPicture, contact.getPhotoUri(), contact.getThumbnailUri());
-			name.setText(contact.getFullName());
-		} else {
-			name.setText(LinphoneUtils.getAddressDisplayName(address));
-		}
-		number.setText(address.asStringUriOnly());
-	}
+            name.setText(getContactName(address.getUserName(), this));
+        } else {
+            name.setText(getContactName(address.getUserName(), this));
+        }
+        number.setText(address.getUserName());
+    }
 
-	@Override
+    public String getContactName(final String phoneNumber, Context context) {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+        String contactName = null;
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                contactName = cursor.getString(0);
+            }
+            cursor.close();
+        }
+        if (contactName == null) {
+            try {
+                contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+            } catch (Exception e) {
+
+            }
+        }
+
+        return contactName;
+    }
+
+    @Override
 	protected void onStart() {
 		super.onStart();
 		checkAndRequestCallPermissions();

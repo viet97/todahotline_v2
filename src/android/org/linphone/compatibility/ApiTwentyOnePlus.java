@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 /*
@@ -31,8 +32,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 @TargetApi(21)
 public class ApiTwentyOnePlus {
+    public static String TAG = "ApiTwentyOnePlus";
 
-	@SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
 	public static Notification createMessageNotification(Context context,
 			int msgCount, String msgSender, String msg, Bitmap contactIcon,
 			PendingIntent intent) {
@@ -89,19 +91,20 @@ public class ApiTwentyOnePlus {
 		Notification notif;
 
 		if (largeIcon != null) {
-			notif = new Notification.Builder(context)
+            Log.d(TAG, "createNotification:largeIcon != null " + icon);
+            notif = new Notification.Builder(context)
 		        .setContentTitle(title)
 		        .setContentText(message)
-		        .setSmallIcon(icon, level)
-		        .setLargeIcon(largeIcon)
+                    .setSmallIcon(icon)
+                    .setLargeIcon(largeIcon)
 		        .setContentIntent(intent)
 				.setCategory(Notification.CATEGORY_SERVICE)
-				.setVisibility(Notification.VISIBILITY_SECRET)
-				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
-						context.getResources().getInteger(R.integer.notification_ms_on),
-						context.getResources().getInteger(R.integer.notification_ms_off))
-				.setPriority(priority)
-		        .build();
+//				.setVisibility(Notification.VISIBILITY_SECRET)
+//				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
+//						context.getResources().getInteger(R.integer.notification_ms_on),
+//						context.getResources().getInteger(R.integer.notification_ms_off))
+//				.setPriority(priority)
+                    .build();
 		} else {
 			notif = new Notification.Builder(context)
 		        .setContentTitle(title)
@@ -109,12 +112,12 @@ public class ApiTwentyOnePlus {
 		        .setSmallIcon(icon, level)
 		        .setContentIntent(intent)
 				.setCategory(Notification.CATEGORY_SERVICE)
-				.setVisibility(Notification.VISIBILITY_SECRET)
-				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
-						context.getResources().getInteger(R.integer.notification_ms_on),
-						context.getResources().getInteger(R.integer.notification_ms_off))
-				.setPriority(priority)
-		        .build();
+//				.setVisibility(Notification.VISIBILITY_SECRET)
+//				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
+//						context.getResources().getInteger(R.integer.notification_ms_on),
+//						context.getResources().getInteger(R.integer.notification_ms_off))
+//				.setPriority(priority)
+                    .build();
 		}
 
 		return notif;

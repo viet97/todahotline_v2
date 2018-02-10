@@ -101,6 +101,7 @@
 		android:orientation="horizontal" >
 
 		<ImageView
+            android:visibility="gone"
 			android:id="@+id/micro"
 			android:src="@drawable/micro_default"
 			android:background="@drawable/button_background"

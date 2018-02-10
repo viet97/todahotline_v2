@@ -436,7 +436,12 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 				cursor.close();
 			}
 			if (contactName == null) {
-				contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+                try {
+                    contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+                } catch (Exception e) {
+
+                }
+
 			}
 
 			return contactName;

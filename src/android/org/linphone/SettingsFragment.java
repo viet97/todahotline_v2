@@ -1294,8 +1294,8 @@ public class SettingsFragment extends PreferencesListFragment {
 				boolean value = (Boolean) newValue;
 				mPrefs.setServiceNotificationVisibility(value);
 				if (value) {
-					LinphoneService.instance().showServiceNotification();
-				} else {
+//					LinphoneService.instance().showServiceNotification();
+                } else {
 					LinphoneService.instance().hideServiceNotification();
 				}
 				return true;

@@ -122,9 +122,9 @@ public class ApiTwentySixPlus {
 					.setLargeIcon(largeIcon)
 					.setContentIntent(intent)
 					.setCategory(Notification.CATEGORY_SERVICE)
-					.setVisibility(Notification.VISIBILITY_SECRET)
-					.setPriority(priority)
-					.build();
+//					.setVisibility(Notification.VISIBILITY_SECRET)
+//					.setPriority(priority)
+                    .build();
 		} else {
 			notif = new Notification.Builder(context, context.getString(R.string.notification_service_channel_id))
 					.setContentTitle(title)
@@ -132,9 +132,9 @@ public class ApiTwentySixPlus {
 					.setSmallIcon(icon, level)
 					.setContentIntent(intent)
 					.setCategory(Notification.CATEGORY_SERVICE)
-					.setVisibility(Notification.VISIBILITY_SECRET)
-					.setPriority(priority)
-					.build();
+//					.setVisibility(Notification.VISIBILITY_SECRET)
+//					.setPriority(priority)
+                    .build();
 		}
 
 		return notif;

@@ -2,6 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:state_enabled="false"
 		  android:drawable="@drawable/menu_disabled" />
-	<item
-		android:drawable="@drawable/menu" />
+	<item android:drawable="@drawable/sidemenu" />
 </selector>

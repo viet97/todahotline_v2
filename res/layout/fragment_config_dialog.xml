@@ -12,6 +12,7 @@
         android:textColor="@color/white" />
 
     <EditText
+        android:layout_marginTop="16dp"
         android:textColor="@color/white"
         android:id="@+id/et_config"
         android:layout_width="match_parent"

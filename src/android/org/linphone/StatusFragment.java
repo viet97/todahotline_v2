@@ -98,15 +98,15 @@ public class StatusFragment extends Fragment {
 					statusText.setText(getStatusIconText(state));
 				}
 
-				try {
-					statusText.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							lc.refreshRegisters();
-						}
-					});
-				} catch (IllegalStateException ise) {}
-			}
+//				try {
+//					statusText.setOnClickListener(new OnClickListener() {
+//						@Override
+//						public void onClick(View v) {
+//							lc.refreshRegisters();
+//						}
+//					});
+//				} catch (IllegalStateException ise) {}
+            }
 
 			@Override
 			public void notifyReceived(LinphoneCore lc, LinphoneEvent ev, String eventName, LinphoneContent content) {

@@ -26,7 +26,11 @@ public class ContactResponse {
         @SerializedName("dsdanhba")
         private ArrayList<DSDanhBa> dsdanhba;
 
-        public boolean getStatus() {
+    public ContactResponse() {
+        this.dsdanhba = new ArrayList<>();
+    }
+
+    public boolean getStatus() {
             return status;
         }
 

@@ -27,6 +27,7 @@ import org.linphone.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import android.widget.LinearLayout;
 
 public class Numpad extends LinearLayout implements AddressAware {
 
+	private final String TAG = "Numpad";
 	private boolean mPlayDtmf;
 	public void setPlayDtmf(boolean sendDtmf) {
 		this.mPlayDtmf = sendDtmf;
@@ -52,7 +54,11 @@ public class Numpad extends LinearLayout implements AddressAware {
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Numpad);
         mPlayDtmf = 1 == a.getInt(org.linphone.R.styleable.Numpad_play_dtmf, 1);
         a.recycle();
-		LayoutInflater.from(context).inflate(R.layout.numpad, this);
+		Log.d(TAG, "NumpadTablet: " + context.getResources().getBoolean(R.bool.isTablet));
+		if (context.getResources().getBoolean(R.bool.isTablet))
+			LayoutInflater.from(context).inflate(R.layout.numpad_table, this);
+		else
+			LayoutInflater.from(context).inflate(R.layout.numpad, this);
 		setLongClickable(true);
 	}
 

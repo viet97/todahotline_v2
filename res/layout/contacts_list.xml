@@ -16,13 +16,21 @@
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">
 
-			<ImageView
+			<TextView
 				android:id="@+id/all_contacts"
-				android:src="@drawable/contacts_all"
-				android:contentDescription="@string/content_description_all_contacts"
+				android:textColor="@color/white"
+				android:text="Trên máy"
 				android:padding="15dp"
+				android:gravity="center"
 				android:layout_width="match_parent"
-				android:layout_height="match_parent"/>
+				android:layout_height="match_parent" />
+			<!--<ImageView-->
+			<!--android:id="@+id/all_contacts"-->
+			<!--android:src="@drawable/contacts_all"-->
+			<!--android:contentDescription="@string/content_description_all_contacts"-->
+			<!--android:padding="15dp"-->
+			<!--android:layout_width="match_parent"-->
+			<!--android:layout_height="match_parent"/>-->
 
 			<View
 				android:id="@+id/all_contacts_select"
@@ -37,14 +45,22 @@
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">
 
-			<ImageView
+			<TextView
 				android:id="@+id/linphone_contacts"
-				android:src="@drawable/contacts_sip"
-				android:contentDescription="@string/content_description_linphone_contacts"
-				android:gravity="center"
+				android:textColor="@color/white"
+				android:text="Nội bộ"
 				android:padding="15dp"
+				android:gravity="center"
 				android:layout_width="match_parent"
-				android:layout_height="match_parent"/>
+				android:layout_height="match_parent" />
+			<!--<ImageView-->
+			<!--android:id="@+id/linphone_contacts"-->
+			<!--android:src="@drawable/contacts_sip"-->
+			<!--android:contentDescription="@string/content_description_linphone_contacts"-->
+			<!--android:gravity="center"-->
+			<!--android:padding="15dp"-->
+			<!--android:layout_width="match_parent"-->
+			<!--android:layout_height="match_parent"/>-->
 
 			<View
 				android:id="@+id/linphone_contacts_select"
@@ -55,10 +71,36 @@
 				android:layout_alignParentBottom="true"/>
 		</RelativeLayout>
 
-		<View
+		<RelativeLayout
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
-			android:layout_weight="0.2"/>
+			android:layout_weight="0.2">
+
+			<TextView
+				android:id="@+id/cus_contacts"
+				android:textColor="@color/white"
+				android:text="Khách hàng"
+				android:padding="15dp"
+				android:gravity="center"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent" />
+			<!--<ImageView-->
+			<!--android:id="@+id/cus_contacts"-->
+			<!--android:src="@drawable/contacts_all"-->
+			<!--android:contentDescription="@string/content_description_all_contacts"-->
+			<!--android:padding="15dp"-->
+			<!--android:layout_width="match_parent"-->
+			<!--android:layout_height="match_parent"/>-->
+
+			<View
+				android:id="@+id/cus_contacts_select"
+				android:background="@color/colorA"
+				android:layout_width="match_parent"
+				android:layout_height="5dp"
+				android:visibility="gone"
+				android:layout_alignParentBottom="true" />
+		</RelativeLayout>
+
 
 		<ImageView
 			android:visibility="gone"

@@ -7,6 +7,11 @@
 	android:gravity="center_vertical"
 	android:orientation="vertical">
 
+    <TextView
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
 	<LinearLayout
 		android:id="@+id/separator"
 		android:background="@color/white"
@@ -152,5 +157,4 @@
             android:background="@drawable/transparent"
             android:src="@drawable/ic_ab_dialer_holo_dark" />
 	</RelativeLayout>
-
 </LinearLayout>

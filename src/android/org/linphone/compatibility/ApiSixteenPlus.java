@@ -88,8 +88,8 @@ public class ApiSixteenPlus {
 	        .setLargeIcon(largeIcon)
 	        .setContentIntent(intent)
 	        .setWhen(System.currentTimeMillis())
-	        .setPriority(priority)
-	        .build();
+//	        .setPriority(priority)
+                    .build();
 		} else {
 			notif = new Notification.Builder(context)
 	        .setContentTitle(title)
@@ -97,8 +97,8 @@ public class ApiSixteenPlus {
 	        .setSmallIcon(icon, level)
 	        .setContentIntent(intent)
 	        .setWhen(System.currentTimeMillis())
-	        .setPriority(priority)
-	        .build();
+//	        .setPriority(priority)
+                    .build();
 		}
 		if (isOngoingEvent) {
 			notif.flags |= Notification.FLAG_ONGOING_EVENT;

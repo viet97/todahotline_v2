@@ -3,12 +3,12 @@
 
     <!-- Custom -->
     <string name="app_name">Toda Phone</string>
-    <string name="service_name">Linphone Service</string>
+    <string name="service_name">Toda Phone</string>
     <string name="addressbook_label">Linphone</string>
     <string name="notification_title">Linphone</string>
     <string name="wait_dialog_text">Starting up</string>
     <string name="notification_registered">%s registered</string>
-    <string name="notification_register_failure">%s failed to register</string>
+    <string name="notification_register_failure">%s mất kết nối</string>
     <string name="tunnel_host"></string>
     <string name="about_version">Linphone Android %s</string>
     <string name="about_liblinphone_version">Linphone Core %s</string>
@@ -146,14 +146,14 @@
     <string name="inapp_notification_account_expire">The subscription period expires on %s</string>
 
     <!-- Dailer -->
-    <string name="address_bar_hint">Enter a number or an address</string>
+    <string name="address_bar_hint"></string>
 
     <!-- History -->
-    <string name="no_call_history">No call in your history</string>
+    <string name="no_call_history">Không có cuộc gọi nào</string>
     <string name="no_missed_call_history">No missed call in your history</string>
     <string name="delete_history_log">Do you want to delete selected call log?</string>
-    <string name="today">Today</string>
-    <string name="yesterday">Yesterday</string>
+    <string name="today">Hôm nay</string>
+    <string name="yesterday">Hôm qua</string>
 
     <!-- Contacts -->
     <string name="no_contact">No contact in your address book.</string>
@@ -205,8 +205,8 @@
     <string name="quit">Đăng xuất</string>
 
     <!-- Call -->
-    <string name="incoming_call">incoming call</string>
-    <string name="outgoing_call">outgoing call</string>
+    <string name="incoming_call">Cuộc gọi đến</string>
+    <string name="outgoing_call">Cuộc gọi đi</string>
     <string name="add_video_dialog">Your caller would like to turn on video</string>
     <string name="no_current_call">No active call</string>
     <string name="call_paused_by_remote">Your caller paused the call</string>
@@ -245,20 +245,20 @@
     <string name="incall_notif_video">Video capturing call ongoing</string>
     <string name="notification_started">started</string>
     <string name="unread_messages">%i unread messages</string>
-    <string name="missed_calls_notif_title">Missed call</string>
-    <string name="missed_calls_notif_body">%i missed calls</string>
+    <string name="missed_calls_notif_title">Cuộc gọi nhỡ</string>
+    <string name="missed_calls_notif_body">%i cuộc gọi nhỡ</string>
 
     <!-- Errors -->
     <string name="skipable_error_service_not_ready">Warning: service is not ready</string>
     <string name="error">Error</string>
     <string name="warning_wrong_destination_address">Cannot build destination address from %s</string>
     <string name="error_unknown">Unknown error</string>
-    <string name="error_call_declined">Call declined</string>
-    <string name="error_user_busy">User busy</string>
+    <string name="error_call_declined">Kết thúc</string>
+    <string name="error_user_busy">Máy bận</string>
     <string name="error_user_not_found">User not found</string>
     <string name="error_incompatible_media">Incompatible media parameters</string>
     <string name="error_low_bandwidth">Your caller has low bandwidth, video cannot be started</string>
-    <string name="error_network_unreachable">Network is unreachable</string>
+    <string name="error_network_unreachable">Mất kết nối đến tổng đài</string>
     <string name="error_bad_credentials">Bad credentials</string>
     <string name="error_unauthorized">Unauthorized</string>
     <string name="error_io_error">Network error</string>

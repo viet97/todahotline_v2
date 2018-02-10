@@ -110,7 +110,12 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 			cursor.close();
 		}
 		if (contactName == null) {
-			contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+            try {
+                contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+            } catch (Exception e) {
+
+            }
+
 		}
 
 		return contactName;
@@ -126,7 +131,12 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 
 		time.setText(callTime == null ? "" : callTime);
 		Long longDate = Long.parseLong(callDate);
-		date.setText(LinphoneUtils.timestampToHumanDate(getActivity(),longDate,getString(R.string.history_detail_date_format)));
+        String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_detail_date_format));
+        if (datetime.length() > 0) {
+            datetime = datetime.substring(0, datetime.length() - 2);
+        }
+        android.util.Log.d(TAG, "displayHistory: " + datetime);
+        date.setText(datetime);
 
 		LinphoneAddress lAddress = null;
 		try {

@@ -247,65 +247,67 @@ private static AssistantActivity instance;
 							userService.doiMatKhau(getURLDoiMk()).enqueue(new Callback<VoidRespon>() {
 								@Override
 								public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
-									android.util.Log.d("DoiMatKhau", "onResponse: " + NetContext.getInstance().getBASE_URL());
-									VoidRespon voidRespon = response.body();
-									android.util.Log.d("DoiMatKhau", "onResponse123123: 12321321132321" + voidRespon.toString());
+                                    try {
+                                        VoidRespon voidRespon = response.body();
 
-									if (voidRespon.getStatus()) {
+                                        if (voidRespon.getStatus()) {
 //                                        logout.logout(0);
-										String logoutURL = KEY_FUNC_URL
-												+ "&idnhanvien=" + DbContext.getInstance().getLoginRespon(context).getData().getIdnhanvien()
-												+ "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
+                                            String logoutURL = KEY_FUNC_URL
+                                                    + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(context).getData().getIdnhanvien()
+                                                    + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
 
-										final Service service = NetContext.instance.create(Service.class);
-										service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
-											@Override
-											public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
+                                            final Service service = NetContext.instance.create(Service.class);
+                                            service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
+                                                @Override
+                                                public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
 
-												VoidRespon voidRespon = response.body();
-												boolean logOutResponse = voidRespon.getStatus();
-												if (!logOutResponse) {
-													android.util.Log.d(TAG, "onResponse: " + passold + currentPass);
-													Toast.makeText(AssistantActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
-												} else {
-													dialogLogin = ProgressDialog.show(AssistantActivity.this, "", "Đăng xuất...", true, false);
-													if (LoginActivity.ACCOUNT_ID > 0) {
-														android.util.Log.d("Xoa", "onResponse: Xoa");
-														LoginActivity.ACCOUNT_ID = 0;
+                                                    VoidRespon voidRespon = response.body();
+                                                    boolean logOutResponse = voidRespon.getStatus();
+                                                    if (!logOutResponse) {
+                                                        android.util.Log.d(TAG, "onResponse: " + passold + currentPass);
+                                                        Toast.makeText(AssistantActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        dialogLogin = ProgressDialog.show(AssistantActivity.this, "", "Đăng xuất...", true, false);
+                                                        if (LoginActivity.ACCOUNT_ID > 0) {
+                                                            android.util.Log.d("Xoa", "onResponse: Xoa");
+                                                            LoginActivity.ACCOUNT_ID = 0;
+                                                        }
+                                                        Toast.makeText(AssistantActivity.this, "Đổi mật khẩu thành công, bạn đã bị đăng xuất khỏi tài khoản.", Toast.LENGTH_SHORT).show();
+                                                        dialogLogin.cancel();
+                                                        if (getCurrentFocus() != null) {
+                                                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                                                            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                                        }
+                                                        SharedPreferences.Editor autoLoginEditor = AssistantActivity.this.getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
+                                                        autoLoginEditor.putBoolean("AutoLogin", false);
+                                                        autoLoginEditor.apply();
+                                                        LinphoneActivity.instance().quit();
+
 													}
-													Toast.makeText(AssistantActivity.this, "Đổi mật khẩu thành công, bạn đã bị đăng xuất khỏi tài khoản.", Toast.LENGTH_SHORT).show();
-													dialogLogin.cancel();
-													if (getCurrentFocus() != null) {
-														InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-														inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-													}
-													SharedPreferences.Editor autoLoginEditor = AssistantActivity.this.getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
-													autoLoginEditor.putBoolean("AutoLogin", false);
-													autoLoginEditor.apply();
-													LinphoneActivity.instance().quit();
+                                                }
 
-												}
-											}
+                                                @Override
+                                                public void onFailure(Call<VoidRespon> call, Throwable t) {
+                                                    dialogLogin.cancel();
+                                                    Toast.makeText(AssistantActivity.this,
+                                                            "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
 
-											@Override
-											public void onFailure(Call<VoidRespon> call, Throwable t) {
-												dialogLogin.cancel();
-												Toast.makeText(AssistantActivity.this,
-														"Không có kết nối internet,vui lòng bật wifi hoặc 3g",
-														Toast.LENGTH_SHORT).show();
-											}
+                                            });
 
-										});
-
-									} else {
-										if (!passold.equals(currentPass)) {
-											Toast.makeText(AssistantActivity.this, "Mật khẩu cũ không đúng. Vui lòng nhập lại.", Toast.LENGTH_SHORT).show();
 										} else {
-											if (!pass.equals(passveri)) {
-												Toast.makeText(AssistantActivity.this, "Mật khẩu xác nhận không đúng. Vui lòng nhập lại.", Toast.LENGTH_SHORT).show();
-											} else
-												Toast.makeText(AssistantActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
-										}
+                                            if (!passold.equals(currentPass)) {
+                                                Toast.makeText(AssistantActivity.this, "Mật khẩu cũ không đúng. Vui lòng nhập lại.", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                if (!pass.equals(passveri)) {
+                                                    Toast.makeText(AssistantActivity.this, "Mật khẩu xác nhận không đúng. Vui lòng nhập lại.", Toast.LENGTH_SHORT).show();
+                                                } else
+                                                    Toast.makeText(AssistantActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    } catch (Exception e) {
+
 									}
 								}
 

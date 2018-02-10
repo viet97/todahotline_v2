@@ -172,11 +172,7 @@ public final class LinphoneUtils {
 			cal.setTimeInMillis(timestamp);
 
 			SimpleDateFormat dateFormat;
-			if (isToday(cal)) {
-				dateFormat = new SimpleDateFormat(context.getResources().getString(R.string.today_date_format), Locale.getDefault());
-			} else {
-				dateFormat = new SimpleDateFormat(format, Locale.getDefault());
-			}
+            dateFormat = new SimpleDateFormat(format, Locale.getDefault());
 
 			return dateFormat.format(cal.getTime());
 		} catch (NumberFormatException nfe) {

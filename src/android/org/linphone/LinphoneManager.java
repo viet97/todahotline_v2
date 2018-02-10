@@ -49,6 +49,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -65,6 +66,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.preference.CheckBoxPreference;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.TelephonyManager;
@@ -109,6 +111,7 @@ import org.linphone.core.PublishState;
 import org.linphone.core.Reason;
 import org.linphone.core.SubscriptionState;
 import org.linphone.core.TunnelConfig;
+import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.mediastream.Version;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
@@ -192,6 +195,8 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
 	public String wizardLoginViewDomain = null;
 
 	private static List<LinphoneChatMessage.LinphoneChatMessageListener> simpleListeners = new ArrayList<LinphoneChatMessage.LinphoneChatMessageListener>();
+    private String TAG = "LinphoneManager";
+
 	public static void addListener(LinphoneChatMessage.LinphoneChatMessageListener listener) {
 		if (!simpleListeners.contains(listener)) {
 			simpleListeners.add(listener);
@@ -521,20 +526,45 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
 
 	public void newOutgoingCall(AddressType address) {
 		String to = address.getText().toString();
-		newOutgoingCall(to, address.getDisplayedName());
+        android.util.Log.d(TAG, "newOutgoingCall: " + to);
+        android.util.Log.d(TAG, "newOutgoingCall: " + address.getText().toString());
+        newOutgoingCall(to, address.getDisplayedName());
 	}
 
-	public void newOutgoingCall(String to, String displayName) {
+    public String getContactName(final String phoneNumber, Context context) {
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+
+        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+        String contactName = null;
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                contactName = cursor.getString(0);
+            }
+            cursor.close();
+        }
+        if (contactName == null) {
+            contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+        }
+
+        return contactName;
+    }
+
+    public void newOutgoingCall(String to, String displayName) {
 //		if (mLc.isIncall()) {
 //			listenerDispatcher.tryingNewOutgoingCallButAlreadyInCall();
 //			return;
 //		}
+
 		if (to == null) return;
 
 		// If to is only a username, try to find the contact to get an alias if existing
 		if (!to.startsWith("sip:") || !to.contains("@")) {
 			LinphoneContact contact = ContactsManager.getInstance().findContactFromPhoneNumber(to);
-			if (contact != null) {
+            android.util.Log.d(TAG, "newOutgoingCall: " + contact);
+            if (contact != null) {
 				String alias = contact.getPresenceModelForUri(to);
 				if (alias != null) {
 					to = alias;
@@ -557,9 +587,8 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
 			Log.e(e);
 			return;
 		}
-		lAddress.setDisplayName(displayName);
-
-		boolean isLowBandwidthConnection = !LinphoneUtils.isHighBandwidthConnection(LinphoneService.instance().getApplicationContext());
+        lAddress.setDisplayName(getContactName(lAddress.getUserName(), getContext()));
+        boolean isLowBandwidthConnection = !LinphoneUtils.isHighBandwidthConnection(LinphoneService.instance().getApplicationContext());
 
 		if (mLc.isNetworkReachable()) {
 			try {
@@ -586,10 +615,14 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
 		boolean useFrontCam = mPrefs.useFrontCam();
 
 		int camId = 0;
-		AndroidCamera[] cameras = AndroidCameraConfiguration.retrieveCameras();
-		for (AndroidCamera androidCamera : cameras) {
-			if (androidCamera.frontFacing == useFrontCam)
-				camId = androidCamera.id;
+        try {
+            AndroidCamera[] cameras = AndroidCameraConfiguration.retrieveCameras();
+            for (AndroidCamera androidCamera : cameras) {
+                if (androidCamera.frontFacing == useFrontCam)
+                    camId = androidCamera.id;
+            }
+        } catch (Exception e) {
+
 		}
 		LinphoneManager.getLc().setVideoDevice(camId);
 	}
