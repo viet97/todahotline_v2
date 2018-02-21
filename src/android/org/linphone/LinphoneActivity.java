@@ -371,10 +371,10 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 //            return;
 //        }
 
-        if (statusFragment != null && !statusFragment.isVisible()) {
-            statusFragment.getView().setVisibility(View.VISIBLE);
-        }
-        findViewById(R.id.status).setVisibility(View.VISIBLE);
+//        if (statusFragment != null && !statusFragment.isVisible()) {
+//            statusFragment.getView().setVisibility(View.VISIBLE);
+//        }
+//        findViewById(R.id.status).setVisibility(View.VISIBLE);
     }
 
     public void isNewProxyConfig() {
@@ -430,7 +430,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 fragment = new AccountPreferencesFragment();
                 break;
             case ABOUT:
-                fragment = new AboutFragment();
+                fragment = new Profile();
                 break;
             case EMPTY:
                 fragment = new EmptyFragment();
@@ -1735,7 +1735,11 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
             defaultAccount.setOnClickListener(null);
         } else {
-            address.setText(proxy.getAddress().asStringUriOnly().substring(4, 7));
+            try {
+                address.setText(DbContext.getInstance().getLoginRespon(this).getData().getSomayle());
+            }catch (Exception e){
+
+            }
             android.util.Log.d(TAG, "displayMainAccount: " + proxy.getAddress().asStringUriOnly());
             displayName.setText(LinphoneUtils.getAddressDisplayName(proxy.getAddress()));
             status.setImageResource(getStatusIconResource(proxy.getState()));
@@ -1746,7 +1750,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 //				public void onClick(View view) {
 //					LinphoneActivity.instance().displayAccountSettings(LinphonePreferences.instance().getDefaultAccountIndex());
 //					openOrCloseSideMenu(false);
-//				}
+ //				}
 //			});
         }
     }

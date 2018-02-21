@@ -31,15 +31,20 @@ import org.linphone.mediastream.Log;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.Image;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class Digit extends Button implements AddressAware {
+public class Digit extends ImageButton implements AddressAware {
 
 	private AddressText mAddress;
+	private String TAG="DigitNumber";
+
 	public void setAddressWidget(AddressText address) {
 		mAddress = address;
 	}
@@ -49,41 +54,52 @@ public class Digit extends Button implements AddressAware {
 		mPlayDtmf = play;
 	}
 
-	@Override
-	protected void onTextChanged(CharSequence text, int start, int before,
-			int after) {
-		super.onTextChanged(text, start, before, after);
 
-		if (text == null || text.length() < 1) {
-			return;
-		}
+	//	@Override
+//	protected void onTextChanged(CharSequence text, int start, int before,
+//								 int after) {
+//		android.util.Log.d(TAG, "onTextChanged: ");
+//		super.onTextChanged(text, start, before, after);
+//
+//		if (text == null || text.length() < 1) {
+//			return;
+//		}
+//
+//		DialKeyListener lListener = new DialKeyListener();
+//		setOnClickListener(lListener);
+//		setOnTouchListener(lListener);
+//
+//		if ("0+".equals(text)) {
+//			setOnLongClickListener(lListener);
+//		}
+//
+//		if ("1".equals(text)) {
+//			setOnLongClickListener(lListener);
+//		}
+//	}
 
-		DialKeyListener lListener = new DialKeyListener();
-		setOnClickListener(lListener);
-		setOnTouchListener(lListener);
 
-		if ("0+".equals(text)) {
-			setOnLongClickListener(lListener);
-		}
-
-		if ("1".equals(text)) {
-			setOnLongClickListener(lListener);
-		}
-	}
 
 	public Digit(Context context, AttributeSet attrs, int style) {
 		super(context, attrs, style);
 		setLongClickable(true);
+		android.util.Log.d(TAG, "Digit: 86");
 	}
 
 	public Digit(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setLongClickable(true);
+		DialKeyListener lListener = new DialKeyListener();
+		setOnClickListener(lListener);
+		setOnTouchListener(lListener);
+
+		android.util.Log.d(TAG, "Digit: 92");
 	}
 
 	public Digit(Context context) {
 		super(context);
 		setLongClickable(true);
+		android.util.Log.d(TAG, "Digit: 98");
 	}
 
 	private class DialKeyListener implements OnClickListener, OnTouchListener, OnLongClickListener {
@@ -91,7 +107,9 @@ public class Digit extends Button implements AddressAware {
 		boolean mIsDtmfStarted;
 
 		DialKeyListener() {
-			mKeyCode = Digit.this.getText().subSequence(0, 1).charAt(0);
+
+			mKeyCode = Digit.this.getContentDescription().charAt(0);
+			android.util.Log.d(TAG, "DialKeyListener: "+mKeyCode);
 		}
 
 		private boolean linphoneServiceReady() {
@@ -212,7 +230,7 @@ public class Digit extends Button implements AddressAware {
 				lBegin = mAddress.getEditableText().length();
 			}
 			if (lBegin >= 0) {
-			mAddress.getEditableText().insert(lBegin,"+");
+				mAddress.getEditableText().insert(lBegin,"+");
 			}
 			return true;
 		}

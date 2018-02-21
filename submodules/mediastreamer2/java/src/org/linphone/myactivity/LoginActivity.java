@@ -404,6 +404,7 @@ public class LoginActivity extends Activity {
     }
 
     public void loginAct() {
+
         if (!config.getString(PREF_URLCONFIG, "").equals("")) {
             dialogLogin = ProgressDialog.show(LoginActivity.this, "", "Đăng nhập...", true, false);
             Handler handler = new Handler();
@@ -780,7 +781,8 @@ public class LoginActivity extends Activity {
     /**
      * Apply default settings for a new account to check very basic coherence of settings and auto-modify settings missing
      *
-     * @param account
+     * @param
+     * account
      */
 
 

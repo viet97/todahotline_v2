@@ -131,6 +131,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             searchText = editable.toString();
             Log.d(TAG, "afterTextChanged: " + editable.toString());
             page = 1;
+            isLoaded = false;
             try {
                 timer = new Timer();
                 timer.schedule(new TimerTask() {
@@ -192,10 +193,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         }
     };
+    private boolean isLoaded = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        isLoaded = false;
         mInflater = inflater;
         View view = inflater.inflate(R.layout.contacts_list, container, false);
         try {
@@ -274,17 +276,17 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     Log.d(TAG, "onScroll: lastItem la " + lastItem);
                     Log.d(TAG, "onScroll: i2 la " + i2);
                     if (lastItem == i2) {
-                        if (prelast != lastItem) {
+                        if (prelast != lastItem && !isLoaded) {
                             Log.d(TAG, "onScroll: last");
                             prelast = lastItem;
-//                        getConta try {    ctToda();
+                            getContactToda();
                         }
                     }
 
                 }
             });
         } catch (Exception e) {
-            Log.d(TAG, "onCreateView: "+e);
+            Log.d(TAG, "onCreateView: " + e);
         }
         return view;
     }
@@ -353,8 +355,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         }
 
                         ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
-
-//                        page++;
+                        if (contactResponse.getNextpage() == 0) isLoaded = true;
+                        page++;
                     }
                 }
 
@@ -451,6 +453,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
 
         if (id == R.id.all_contacts) {
+            isLoaded = false;
             Log.d(TAG, "onClick: 394");
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
@@ -467,6 +470,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
 
         } else if (id == R.id.linphone_contacts) {
+            isLoaded = false;
             searchField.setText("");
             searchText = "";
             try {
@@ -512,8 +516,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             }
 
                             ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
-
-//                        page++;
+                            if (contactResponse.getNextpage() == 0) isLoaded = true;
+                            page++;
                         }
                     }
 
@@ -1004,7 +1008,12 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 @Override
                 public void onClick(View view) {
                     if (onlyDisplayLinphoneContacts == 0) {
-                        String uri = "sip:" + contacts.get(position).getNumbersOrAddresses().get(0).getValue() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                        String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
+                        Log.d(TAG, "onClick: " + phoneNumber);
+                        if (phoneNumber.substring(0, 2).equals("+84")) {
+                            phoneNumber = "0" + phoneNumber.substring(3);
+                        }
+                        String uri = "sip:" + phoneNumber + "@" + LinphonePreferences.instance().getAccountDomain(0);
                         LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, contacts.get(position).getFullName(), null);
                     } else {
                         try {
@@ -1024,9 +1033,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder.organization.setVisibility(View.GONE);
             } else {
                 try {
-                    if(DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")
-                            && DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()!=null)
-                    {
+                    if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")
+                            && DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau() != null) {
                         holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
                     }
                     holder.name.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getTenlienhe());

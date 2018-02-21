@@ -74,6 +74,7 @@
         android:layout_height="60dp">
 
 		<RelativeLayout
+			android:visibility="gone"
 			android:focusable="true"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

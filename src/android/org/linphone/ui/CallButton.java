@@ -31,6 +31,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -48,6 +49,10 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 	}
 
 	public void onClick(View v) {
+		AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
+		alphaAnimation.setFillAfter(true);
+		alphaAnimation.setDuration(100);
+		this.startAnimation(alphaAnimation);
 		try {
 			if (!LinphoneManager.getInstance().acceptCallIfIncomingPending()) {
 				if (mAddress.getText().length() > 0) {

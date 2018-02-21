@@ -20,56 +20,72 @@ public class ContactResponse {
 
 
     @SerializedName("status")
-        private boolean status;
-        @SerializedName("msg")
-        private String msg;
-        @SerializedName("dsdanhba")
-        private ArrayList<DSDanhBa> dsdanhba;
+    private boolean status;
+    @SerializedName("msg")
+    private String msg;
+    @SerializedName("nextpage")
+    private int nextpage;
+    @SerializedName("dsdanhba")
+    private ArrayList<DSDanhBa> dsdanhba;
 
     public ContactResponse() {
         this.dsdanhba = new ArrayList<>();
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public int getNextpage() {
+        return nextpage;
+    }
+
+    public void setNextpage(int nextpage) {
+        this.nextpage = nextpage;
+    }
+
     public boolean getStatus() {
-            return status;
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public ArrayList<DSDanhBa> getDsdanhba() {
+        return dsdanhba;
+    }
+
+    public void setDsdanhba(ArrayList<DSDanhBa> dsdanhba) {
+        this.dsdanhba = dsdanhba;
+    }
+
+    public void addDsdsba(ArrayList<DSDanhBa> dsdanhba) {
+        for (DSDanhBa ds : dsdanhba) {
+            this.dsdanhba.add(ds);
         }
 
-        public void setStatus(boolean status) {
-            this.status = status;
-        }
+    }
 
-        public String getMsg() {
-            return msg;
-        }
-
-        public void setMsg(String msg) {
-            this.msg = msg;
-        }
-
-        public ArrayList<DSDanhBa> getDsdanhba() {
-            return dsdanhba;
-        }
-
-        public void setDsdanhba(ArrayList<DSDanhBa> dsdanhba) {
-            this.dsdanhba = dsdanhba;
-        }
-        public void addDsdsba(ArrayList<DSDanhBa> dsdanhba){
-            for (DSDanhBa ds : dsdanhba) {
-                this.dsdanhba.add(ds);
-            }
-
-        }
     public static class DSDanhBa {
-            @SerializedName("iddanhba")
-            private String iddanhba;
-            @SerializedName("idqllh")
-            private String idqllh;
-            @SerializedName("idnhanvien")
-            private String idnhanvien;
-            @SerializedName("tenlienhe")
-            private String tenlienhe;
-            @SerializedName("sodienthoai")
-            private String sodienthoai;
+        @SerializedName("iddanhba")
+        private String iddanhba;
+        @SerializedName("idqllh")
+        private String idqllh;
+        @SerializedName("idnhanvien")
+        private String idnhanvien;
+        @SerializedName("tenlienhe")
+        private String tenlienhe;
+        @SerializedName("sodienthoai")
+        private String sodienthoai;
         @SerializedName("chucvu")
         private String job;
         @SerializedName("mamau")
