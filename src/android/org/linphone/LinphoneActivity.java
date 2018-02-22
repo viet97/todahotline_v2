@@ -1057,6 +1057,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         AddressType address = new AddressText(this, null);
         address.setDisplayedName(name);
         address.setText(number);
+        android.util.Log.d(TAG, "setAddresGoToDialerAndCall: 1060"+number);
         LinphoneManager.getInstance().newOutgoingCall(address);
     }
 

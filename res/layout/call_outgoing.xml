@@ -124,7 +124,7 @@
 		<ImageView
 			android:id="@+id/outgoing_hang_up"
 			android:src="@drawable/call_hangup"
-			android:background="@drawable/hangup"
+			android:background="@color/red"
 			android:contentDescription="@string/content_description_hang_up"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

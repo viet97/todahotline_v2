@@ -117,6 +117,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     TextWatcher twToda = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            page=1;
             if (timer != null)
                 timer.cancel();
         }
@@ -130,7 +131,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         public void afterTextChanged(final Editable editable) {
             searchText = editable.toString();
             Log.d(TAG, "afterTextChanged: " + editable.toString());
-            page = 1;
+
             isLoaded = false;
             try {
                 timer = new Timer();
@@ -201,7 +202,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         mInflater = inflater;
         View view = inflater.inflate(R.layout.contacts_list, container, false);
         try {
-            Log.d(TAG, "onCreateView: onCreate");
             page = 1;
             searchText = "";
             if (getArguments() != null) {
@@ -453,6 +453,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
 
         if (id == R.id.all_contacts) {
+            page=1;
             isLoaded = false;
             Log.d(TAG, "onClick: 394");
             searchField.clearTextChangedListeners();
@@ -461,7 +462,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             onlyDisplayLinphoneContacts = 0;
             allContactsSelected.setVisibility(View.VISIBLE);
             allContacts.setEnabled(false);
-            allContacts.setTextColor(Color.parseColor("#ffa645"));
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
             cusContacts.setTextColor(Color.parseColor("#ffffff"));
             linphoneContacts.setEnabled(true);
@@ -470,6 +470,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
 
         } else if (id == R.id.linphone_contacts) {
+            page=1;
             isLoaded = false;
             searchField.setText("");
             searchText = "";
@@ -542,7 +543,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 android.util.Log.d(TAG, "Exception: " + e);
             }
             allContacts.setTextColor(Color.parseColor("#ffffff"));
-            linphoneContacts.setTextColor(Color.parseColor("#ffa645"));
+
             cusContacts.setTextColor(Color.parseColor("#ffffff"));
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twToda);
@@ -627,7 +628,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             }
             allContacts.setTextColor(Color.parseColor("#ffffff"));
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
-            cusContacts.setTextColor(Color.parseColor("#ffa645"));
+
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twToda);
             allContactsSelected.setVisibility(View.INVISIBLE);
@@ -770,7 +771,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 //			contactsList.setAdapter(adapter);
 //			edit.setEnabled(true);
 //		}
-        contactsList.setFastScrollEnabled(true);
+//        contactsList.setFastScrollEnabled(true);
         adapter.notifyDataSetInvalidated();
 
 
@@ -793,13 +794,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             cusContacts.setEnabled(true);
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             cusContactSelected.setVisibility(View.INVISIBLE);
-            allContacts.setTextColor(Color.parseColor("#ffa645"));
+
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
             cusContacts.setTextColor(Color.parseColor("#ffffff"));
 
         } else if (onlyDisplayLinphoneContacts == 1) {
             allContacts.setTextColor(Color.parseColor("#ffffff"));
-            linphoneContacts.setTextColor(Color.parseColor("#ffa645"));
+
             cusContacts.setTextColor(Color.parseColor("#ffffff"));
             allContacts.setEnabled(true);
             allContactsSelected.setVisibility(View.INVISIBLE);
@@ -810,7 +811,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         } else if (onlyDisplayLinphoneContacts == 2) {
             allContacts.setTextColor(Color.parseColor("#ffffff"));
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
-            cusContacts.setTextColor(Color.parseColor("#ffa645"));
             allContacts.setEnabled(true);
             allContactsSelected.setVisibility(View.INVISIBLE);
             linphoneContacts.setEnabled(true);
@@ -874,7 +874,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 //			} else {
 //				adapter.updateDataSet(ContactsManager.getInstance().getContacts());
 //			}
-            contactsList.setFastScrollEnabled(true);
+//            contactsList.setFastScrollEnabled(true);
             contactsFetchInProgress.setVisibility(View.GONE);
         }
     }
@@ -1009,8 +1009,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 public void onClick(View view) {
                     if (onlyDisplayLinphoneContacts == 0) {
                         String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
-                        Log.d(TAG, "onClick: " + phoneNumber);
-                        if (phoneNumber.substring(0, 2).equals("+84")) {
+                        if (phoneNumber.contains("+84")) {
                             phoneNumber = "0" + phoneNumber.substring(3);
                         }
                         String uri = "sip:" + phoneNumber + "@" + LinphonePreferences.instance().getAccountDomain(0);

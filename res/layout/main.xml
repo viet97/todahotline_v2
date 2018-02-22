@@ -76,6 +76,7 @@
 				android:id="@+id/footer"
 				android:layout_width="match_parent"
 				android:layout_height="60dp"
+				android:background="@drawable/bg"
 				android:layout_alignParentBottom="true"
 				android:orientation="horizontal">
 
@@ -96,7 +97,7 @@
 
 					<View
 						android:id="@+id/history_select"
-						android:background="@color/colorA"
+						android:background="@color/white"
 						android:layout_width="match_parent"
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"
@@ -131,7 +132,7 @@
 
 					<View
 						android:id="@+id/contacts_select"
-						android:background="@color/colorA"
+						android:background="@color/white"
 						android:layout_width="match_parent"
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"
@@ -155,7 +156,7 @@
 
 					<View
 						android:id="@+id/dialer_select"
-						android:background="@color/colorA"
+						android:background="@color/white"
 						android:layout_width="match_parent"
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"/>
@@ -170,7 +171,7 @@
 					android:layout_height="match_parent">
 
 					<ImageView
-						android:src="@drawable/footer_info"
+						android:src="@drawable/footer_setting"
 						android:contentDescription="@string/content_description_chat_button"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
@@ -179,7 +180,7 @@
 
 					<View
 						android:id="@+id/chat_select"
-						android:background="@color/colorA"
+						android:background="@color/white"
 						android:layout_width="match_parent"
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"

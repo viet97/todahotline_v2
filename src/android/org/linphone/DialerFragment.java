@@ -61,6 +61,7 @@ public class DialerFragment extends Fragment {
 		erase.setAddressWidget(mAddress);
 
 		mCall = (CallButton) view.findViewById(R.id.call);
+
 		mCall.setAddressWidget(mAddress);
 		if (LinphoneActivity.isInstanciated() && LinphoneManager.getLcIfManagerNotDestroyedOrNull() != null && LinphoneManager.getLcIfManagerNotDestroyedOrNull().getCallsNb() > 0) {
 			if (isCallTransferOngoing) {

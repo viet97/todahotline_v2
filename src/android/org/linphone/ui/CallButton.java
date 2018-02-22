@@ -29,6 +29,7 @@ import org.linphone.core.LinphoneProxyConfig;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
@@ -38,12 +39,15 @@ import android.widget.Toast;
 public class CallButton extends ImageView implements OnClickListener, AddressAware {
 
 	private AddressText mAddress;
+	private String TAG="CallButton";
+
 	public void setAddressWidget(AddressText a) { mAddress = a; }
 
 	public void setExternalClickListener(OnClickListener e) { setOnClickListener(e); }
 	public void resetClickListener() { setOnClickListener(this); }
 
 	public CallButton(Context context, AttributeSet attrs) {
+
 		super(context, attrs);
 		setOnClickListener(this);
 	}
@@ -51,14 +55,27 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 	public void onClick(View v) {
 		AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
 		alphaAnimation.setFillAfter(true);
-		alphaAnimation.setDuration(100);
+		alphaAnimation.setDuration(10);
 		this.startAnimation(alphaAnimation);
+		Log.d(TAG, "onClickAddress: "+mAddress.getText().toString());
+		AddressText add = new AddressText(getContext(),null) ;
+		add.setText(mAddress.getText());
+		String phoneNumber = add.getText().toString();
+		if (phoneNumber.contains("+84")) {
+			phoneNumber = "0" + phoneNumber.substring(3);
+			add.setText(phoneNumber);
+			Log.d(TAG, "onClickAddress: "+add.getText().toString());
+		}
+
 		try {
 			if (!LinphoneManager.getInstance().acceptCallIfIncomingPending()) {
-				if (mAddress.getText().length() > 0) {
-					LinphoneManager.getInstance().newOutgoingCall(mAddress);
+				Log.d(TAG, "onClick: 69");
+				if (add.getText().length() > 0) {
+					LinphoneManager.getInstance().newOutgoingCall(add);
 				} else {
+
 					if (LinphonePreferences.instance().isBisFeatureEnabled()) {
+						Log.d(TAG, "onClick: 75");
 						LinphoneCallLog[] logs = LinphoneManager.getLc().getCallLogs();
 						LinphoneCallLog log = null;
 						for (LinphoneCallLog l : logs) {
@@ -70,11 +87,13 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 						if (log == null) {
 							return;
 						}
-
+						Log.d(TAG, "onClick: 87");
 						LinphoneProxyConfig lpc = LinphoneManager.getLc().getDefaultProxyConfig();
 						if (lpc != null && log.getTo().getDomain().equals(lpc.getDomain())) {
+							Log.d(TAG, "onClick: 90");
 							mAddress.setText(log.getTo().getUserName());
 						} else {
+							Log.d(TAG, "onClick: 93");
 							mAddress.setText(log.getTo().asStringUriOnly());
 						}
 						mAddress.setSelection(mAddress.getText().toString().length());
@@ -89,6 +108,7 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 	}
 
 	protected void onWrongDestinationAddress() {
+		Log.d(TAG, "onWrongDestinationAddress: ");
 		Toast.makeText(getContext()
 				,String.format(getResources().getString(R.string.warning_wrong_destination_address),mAddress.getText().toString())
 				,Toast.LENGTH_LONG).show();

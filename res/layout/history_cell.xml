@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:background="@color/colorH"
 	android:gravity="center_vertical"
 	android:orientation="vertical" >
 
@@ -15,6 +14,7 @@
 		<TextView
 			android:id="@+id/separator_text"
 			style="@style/font1"
+			android:textColor="@color/white"
 			android:layout_width="match_parent"
 			android:layout_height="40dp"
 			android:gravity="center"/>
@@ -35,7 +35,7 @@
 
 		<ImageView
 			android:id="@+id/detail"
-			android:src="@drawable/list_detail"
+			android:src="@drawable/detailcallog"
 			android:contentDescription="@string/content_description_detail"
 			android:layout_width="wrap_content"
 			android:layout_height="match_parent"
@@ -78,20 +78,20 @@
 					android:layout_alignParentLeft="true"
 					android:layout_marginLeft="5dp"/>
 
-				<ImageView
-					android:id="@+id/mask"
-					android:src="@drawable/avatar_mask"
-					android:layout_width="35dp"
-					android:layout_height="35dp"
-					android:adjustViewBounds="true"
-					android:layout_alignParentLeft="true"
-					android:layout_marginLeft="5dp"/>
+				<!--<ImageView-->
+					<!--android:id="@+id/mask"-->
+					<!--android:src="@drawable/avatar_mask"-->
+					<!--android:layout_width="35dp"-->
+					<!--android:layout_height="35dp"-->
+					<!--android:adjustViewBounds="true"-->
+					<!--android:layout_alignParentLeft="true"-->
+					<!--android:layout_marginLeft="5dp"/>-->
 
 			</RelativeLayout>
 
 			<ImageView
 				android:id="@+id/icon"
-				android:src="@drawable/call_status_incoming"
+				android:src="@drawable/received_call"
 				android:contentDescription="@string/content_description_call_direction"
 				android:padding="7dp"
 				android:layout_toRightOf="@id/avatar_layout"
@@ -106,6 +106,7 @@
 				android:lines="1"
 				android:ellipsize="end"
 				android:maxLines="1"
+				android:textColor="@color/white"
 				android:gravity="center_vertical"
 				android:layout_width="wrap_content"
 				android:layout_height="match_parent"

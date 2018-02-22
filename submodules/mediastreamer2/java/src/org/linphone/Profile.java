@@ -55,7 +55,7 @@ public class Profile extends Fragment {
             public void onClick(View view) {
                 AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
                 alphaAnimation.setFillAfter(true);
-                alphaAnimation.setDuration(100);//duration in millisecond
+                alphaAnimation.setDuration(10);//duration in millisecond
                 ll1.startAnimation(alphaAnimation);
                 startActivity(new Intent(getActivity(), InfoActivityMain.class));
             }
@@ -65,7 +65,7 @@ public class Profile extends Fragment {
             public void onClick(View view) {
                 AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
                 alphaAnimation.setFillAfter(true);
-                alphaAnimation.setDuration(100);//duration in millisecond
+                alphaAnimation.setDuration(10);//duration in millisecond
                 ll2.startAnimation(alphaAnimation);
                 startActivity(new Intent(getActivity(), AssistantActivity.class));
             }
@@ -75,7 +75,7 @@ public class Profile extends Fragment {
             public void onClick(View view) {
                 AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
                 alphaAnimation.setFillAfter(true);
-                alphaAnimation.setDuration(100);//duration in millisecond
+                alphaAnimation.setDuration(10);//duration in millisecond
                 ll3.startAnimation(alphaAnimation);
                 AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

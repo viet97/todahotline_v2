@@ -64,7 +64,12 @@
 		android:layout_above="@id/controls"
 		android:layout_below="@id/address_bar"
 		android:layout_centerInParent="true"/>
-
+	<LinearLayout
+        android:background="@color/black"
+		android:layout_above="@id/controls"
+		android:layout_width="match_parent"
+		android:layout_height="2dp">
+	</LinearLayout>
     <LinearLayout
         android:id="@+id/controls"
         android:layout_alignParentBottom="true"
@@ -91,7 +96,6 @@
 			<org.linphone.ui.CallButton
 				android:id="@+id/call"
 				android:src="@drawable/call_audio_start"
-				android:background="@drawable/bg"
 				android:contentDescription="@string/content_description_call"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

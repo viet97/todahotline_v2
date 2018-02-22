@@ -492,13 +492,13 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			if (log.getDirection() == CallDirection.Incoming) {
 				address = log.getFrom();
 				if (log.getStatus() == CallStatus.Missed) {
-					holder.callDirection.setImageResource(R.drawable.call_status_missed);
+					holder.callDirection.setImageResource(R.drawable.missed_call);
 				} else {
-					holder.callDirection.setImageResource(R.drawable.call_status_incoming);
+					holder.callDirection.setImageResource(R.drawable.received_call);
 				}
 			} else {
 				address = log.getTo();
-				holder.callDirection.setImageResource(R.drawable.call_status_outgoing);
+				holder.callDirection.setImageResource(R.drawable.outgoing_call);
 			}
 
 

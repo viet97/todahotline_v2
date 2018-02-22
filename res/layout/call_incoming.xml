@@ -94,7 +94,7 @@
 		<ImageView
 			android:id="@+id/decline"
 			android:src="@drawable/call_hangup"
-			android:background="@drawable/hangup"
+			android:background="@color/red"
 			android:contentDescription="@string/content_description_decline"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
 		<ImageView
 			android:id="@+id/accept"
 			android:src="@drawable/call_audio_start"
-			android:background="@drawable/call"
+			android:background="@color/green"
 			android:contentDescription="@string/content_description_accept"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

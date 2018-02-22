@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -149,7 +151,6 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 			android.util.Log.d(TAG, "displayHistory: 114");
 			contactAddress.setText(lAddress.getUserName());
 			contact = ContactsManager.getInstance().findContactFromAddress(lAddress);
-			displayName = getContactName(lAddress.getUserName(), view.getContext());
 			if (contact != null) {
 				android.util.Log.d(TAG, "displayHistory: 119");
 				contactName.setText(displayName);
@@ -158,7 +159,8 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 				goToContact.setVisibility(View.VISIBLE);
 			} else {
 				contactName.setText(displayName == null ? "" : displayName);
-				contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
+				Bitmap imageBitmap = BitmapFactory.decodeResource(LinphoneService.instance().getResources(), R.drawable.avatar);
+				contactPicture.setImageBitmap(imageBitmap);
 //				addToContacts.setVisibility(View.VISIBLE);
 				goToContact.setVisibility(View.GONE);
 			}

@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="@drawable/bg"
+
 	android:orientation="vertical" >
 
 	<LinearLayout
-		android:background="@drawable/bg"
 		android:id="@+id/top_bar"
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
@@ -76,6 +77,7 @@
 	<include layout="@layout/edit_list"/>
 
 	<ListView
+		android:scrollbars="none"
 		android:id="@+id/history_list"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
@@ -87,11 +89,13 @@
 		android:text="@string/no_call_history"
 		style="@style/font6"
 		android:visibility="gone"
+		android:textColor="@color/white"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:gravity="center"/>
 
 	<TextView
+		android:textColor="@color/white"
 		android:id="@+id/no_missed_call_history"
 		android:text="@string/no_missed_call_history"
 		style="@style/font6"
