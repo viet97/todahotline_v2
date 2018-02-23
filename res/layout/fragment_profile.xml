@@ -129,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="24dp"
-                android:src="@drawable/log_out" />
+                android:src="@drawable/exit" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -32,6 +32,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
@@ -137,6 +138,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private HashMap<String, String> mDecoderTexts;
 
 	private boolean oldIsSpeakerEnabled = false;
+	private String TAG="CallActivity";
 
 	public static CallActivity instance() {
 		return instance;
@@ -378,7 +380,9 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 		numpad = (Numpad) findViewById(R.id.numpad);
 		numpad.getBackground().setAlpha(240);
-
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.ABOVE,R.id.menu);
+		numpad.setLayoutParams(params);
 		chat = (ImageView) findViewById(R.id.chat);
 		chat.setOnClickListener(this);
 		missedChats = (TextView) findViewById(R.id.missed_chats);
@@ -1000,7 +1004,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 					addCall.setVisibility(View.INVISIBLE);
 					conference.setVisibility(View.INVISIBLE);
 					displayVideoCall(false);
-					numpad.setVisibility(View.GONE);
+//					numpad.setVisibility(View.GONE);
 					options.setImageResource(R.drawable.options_default);
 				}
 			}, SECONDS_BEFORE_HIDING_CONTROLS);
@@ -1024,15 +1028,18 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	}
 
 	private void hideOrDisplayNumpad() {
+
 		if (numpad == null) {
+			android.util.Log.d(TAG, "hideOrDisplayNumpad: 1029");
 			return;
 		}
-
+		android.util.Log.d(TAG, "hideOrDisplayNumpad: 1033");
 		if (numpad.getVisibility() == View.VISIBLE) {
 			hideNumpad();
 		} else {
 			dialer.setImageResource(R.drawable.dialer_alt_back);
 			numpad.setVisibility(View.VISIBLE);
+			android.util.Log.d(TAG, "hideOrDisplayNumpad: 1039");
 		}
 	}
 
@@ -1135,7 +1142,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			// dialer from chat
 			status.getView().setVisibility(View.VISIBLE);
 		}
-		findViewById(R.id.status).setVisibility(View.VISIBLE);
+//		findViewById(R.id.status).setVisibility(View.VISIBLE);
 		//findViewById(R.id.fragmentContainer).setPadding(0, LinphoneUtils.pixelsToDpi(getResources(), 40), 0, 0);
 	}
 
@@ -1359,7 +1366,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		LinphoneContact lContact  = ContactsManager.getInstance().findContactFromAddress(lAddress);
 		if (lContact == null) {
 			contactName.setText(LinphoneUtils.getAddressDisplayName(lAddress));
-			contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
+			contactPicture.setImageBitmap( BitmapFactory.decodeResource(LinphoneService.instance().getResources(), R.drawable.avatar));
 		} else {
 			contactName.setText(lContact.getFullName());
 			LinphoneUtils.setImagePictureFromUri(contactPicture.getContext(), contactPicture, lContact.getPhotoUri(), lContact.getThumbnailUri());

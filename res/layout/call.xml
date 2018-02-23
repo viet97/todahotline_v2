@@ -50,7 +50,8 @@
 						android:layout_width="match_parent"
 						android:layout_height="80dp"
 						android:layout_centerHorizontal="true"
-						android:orientation="vertical">
+						android:orientation="vertical"
+						>
 
 						<TextView
 							android:id="@+id/current_contact_name"
@@ -66,7 +67,10 @@
 							style="@style/font2"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:layout_gravity="center"/>
+							android:layout_gravity="center"
+							android:layout_marginBottom="16dp"/>
+
+
 					</LinearLayout>
 
 					<RelativeLayout
@@ -86,13 +90,13 @@
 							android:layout_height="200dp"
 							android:adjustViewBounds="true"/>
 
-						<ImageView
-							android:id="@+id/mask"
-							android:src="@drawable/avatar_mask_border"
-							android:contentDescription="@string/content_description_contact_picture"
-							android:layout_width="200dp"
-							android:layout_height="200dp"
-							android:adjustViewBounds="true"/>
+						<!--<ImageView-->
+							<!--android:id="@+id/mask"-->
+							<!--android:src="@drawable/avatar_mask_border"-->
+							<!--android:contentDescription="@string/content_description_contact_picture"-->
+							<!--android:layout_width="200dp"-->
+							<!--android:layout_height="200dp"-->
+							<!--android:adjustViewBounds="true"/>-->
 
 					</RelativeLayout>
 
@@ -122,6 +126,7 @@
 					</LinearLayout>
 
 					<ImageView
+						android:visibility="gone"
 						android:id="@+id/pause"
 						android:src="@drawable/pause_big_default"
 						android:contentDescription="@string/content_description_pause"
@@ -181,7 +186,7 @@
 
 			<LinearLayout
 				android:id="@+id/menu"
-				android:layout_width="wrap_content"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_alignParentBottom="true"
 				android:orientation="vertical">
@@ -267,36 +272,39 @@
 					android:layout_height="60dp"
 					android:layout_alignParentBottom="true"
 					android:layout_gravity="center"
-					android:orientation="horizontal" >
+					android:orientation="horizontal"
+					android:weightSum="1">
 
 					<ImageView
 						android:id="@+id/dialer"
 						android:src="@drawable/footer_dialer"
 						android:background="@color/colorC"
 						android:contentDescription="@string/content_description_numpad"
-						android:layout_width="match_parent"
+						android:layout_width="0dp"
 						android:layout_height="wrap_content"
-						android:layout_weight="0.8"
+						android:layout_weight="0.3"
 						android:padding="15dp" />
 
 					<ImageView
 						android:id="@+id/hang_up"
-						android:src="@drawable/call_hangup"
-						android:background="@drawable/hangup"
+						android:src="@drawable/call_end"
+						android:background="@color/red"
 						android:contentDescription="@string/content_description_hang_up"
 						android:layout_gravity="center"
-						android:layout_width="match_parent"
+						android:layout_width="0dp"
 						android:layout_height="wrap_content"
-						android:layout_weight="0.4"
+						android:layout_weight="0.7"
 						android:padding="12dp"/>
 
 					<RelativeLayout
+
 						android:background="@drawable/footer_button"
-						android:layout_width="match_parent"
+						android:layout_width="0dp"
 						android:layout_height="wrap_content"
 						android:layout_weight="0.8">
 
 						<ImageView
+							android:visibility="gone"
 							android:id="@+id/chat"
 							android:src="@drawable/footer_chat"
 							android:background="@color/colorC"
@@ -364,6 +372,7 @@
 			</LinearLayout>
 
 			<LinearLayout
+
 				android:id="@+id/menu_middle"
 				android:layout_width="match_parent"
 				android:layout_height="60dp"
@@ -452,8 +461,8 @@
 				android:id="@+id/numpad"
 				android:background="@color/colorF"
 				android:contentDescription="@string/content_description_numpad"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
 				android:visibility="gone"
 				android:layout_marginTop="50dp"
 				android:layout_marginBottom="10dp"
