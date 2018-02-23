@@ -50,7 +50,7 @@ public class ContactDetailsFragment extends Fragment implements OnClickListener 
 				LinphoneActivity.instance().setAddresGoToDialerAndCall(v.getTag().toString(), contact.getFullName(), contact.getPhotoUri());
 				Log.d("ContactDetailsFragment", "onClick: "+v.getTag().toString());
 				Log.d("ContactDetailsFragment", "onClick: "+contact.getFullName());
-				}
+			}
 		}
 	};
 
@@ -106,11 +106,11 @@ public class ContactDetailsFragment extends Fragment implements OnClickListener 
 	@SuppressLint("InflateParams")
 	private void displayContact(LayoutInflater inflater, View view) {
 		ImageView contactPicture = (ImageView) view.findViewById(R.id.contact_picture);
-		if (contact.hasPhoto()) {
-			LinphoneUtils.setImagePictureFromUri(getActivity(), contactPicture, contact.getPhotoUri(), contact.getThumbnailUri());
-        } else {
-        	contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
-        }
+//		if (contact.hasPhoto()) {
+//			LinphoneUtils.setImagePictureFromUri(getActivity(), contactPicture, contact.getPhotoUri(), contact.getThumbnailUri());
+//		} else {
+////			contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
+//		}
 
 		TextView contactName = (TextView) view.findViewById(R.id.contact_name);
 		contactName.setText(contact.getFullName());

@@ -823,6 +823,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     @Override
     public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         LinphoneContact contact = (LinphoneContact) adapter.getItemAtPosition(position);
+            Log.d(TAG, "onItemClick: ");
         if (editOnClick) {
             editConsumed = true;
             LinphoneActivity.instance().editContact(contact, sipAddressToAdd);
@@ -892,6 +893,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         private Context context = null;
 
         private class ViewHolder {
+            public LinearLayout layout;
             public CheckBox delete;
             public ImageView linphoneFriend;
             public TextView name;
@@ -913,6 +915,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 organization = (TextView) view.findViewById(R.id.contactOrganization);
                 address = (TextView) view.findViewById(R.id.address);
                 imgCall = (ImageButton) view.findViewById(R.id.secondary_action_icon);
+                layout = view.findViewById(R.id.layout);
                 //friendStatus = (ImageView) view.findViewById(R.id.friendStatus);
             }
         }
@@ -1004,6 +1007,21 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
+            holder.layout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LinphoneContact contact = (LinphoneContact) getItem(position);;
+                    if (onlyDisplayLinphoneContacts==0) {
+                        if (editOnClick) {
+                            editConsumed = true;
+                            LinphoneActivity.instance().editContact(contact, sipAddressToAdd);
+                        } else {
+                            lastKnownPosition = contactsList.getFirstVisiblePosition();
+                            LinphoneActivity.instance().displayContact(contact, onlyDisplayChatAddress);
+                        }
+                    }
+                }
+            });
             holder.imgCall.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
