@@ -13,7 +13,7 @@
 
 		<ImageView
 			android:id="@+id/back"
-			android:src="@drawable/back"
+			android:src="@drawable/backicon"
 			android:background="@drawable/toolbar_button"
 			android:contentDescription="@string/content_description_back"
 			android:layout_width="0dp"

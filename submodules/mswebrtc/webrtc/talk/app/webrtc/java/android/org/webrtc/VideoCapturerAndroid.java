@@ -60,7 +60,7 @@ import javax.microedition.khronos.egl.EGL10;
 // An instance of this class can be created by an application using
 // VideoCapturerAndroid.create();
 // This class extends VideoCapturer with a method to easily switch between the
-// front and back camera. It also provides methods for enumerating valid device
+// front and backicon camera. It also provides methods for enumerating valid device
 // names.
 //
 // Threading notes: this class is called from C++ code, Android Camera callbacks, and possibly

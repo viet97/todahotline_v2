@@ -921,7 +921,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			speaker.setImageResource(R.drawable.speaker_selected);
 			LinphoneManager.getLc().enableSpeaker(isSpeakerEnabled);
 		} else {
-			Log.d("Toggle speaker off, routing back to earpiece");
+			Log.d("Toggle speaker off, routing backicon to earpiece");
 			LinphoneManager.getInstance().routeAudioToReceiver();
 			speaker.setImageResource(R.drawable.speaker_default);
 		}
@@ -1138,7 +1138,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 
 		if (status != null && !status.isVisible()) {
-			// Hack to ensure statusFragment is visible after coming back to
+			// Hack to ensure statusFragment is visible after coming backicon to
 			// dialer from chat
 			status.getView().setVisibility(View.VISIBLE);
 		}

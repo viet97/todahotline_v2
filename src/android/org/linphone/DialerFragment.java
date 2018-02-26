@@ -157,11 +157,11 @@ public class DialerFragment extends Fragment {
 		}
 
 		boolean isOrientationLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-		if(isOrientationLandscape && !getResources().getBoolean(R.bool.isTablet)) {
-			((LinearLayout) numpad).setVisibility(View.GONE);
-		} else {
-			((LinearLayout) numpad).setVisibility(View.VISIBLE);
-		}
+//		if(isOrientationLandscape && !getResources().getBoolean(R.bool.isTablet)) {
+//			((LinearLayout) numpad).setVisibility(View.GONE);
+//		} else {
+//			((LinearLayout) numpad).setVisibility(View.VISIBLE);
+//		}
 
 		if (shouldEmptyAddressField) {
 			mAddress.setText("");

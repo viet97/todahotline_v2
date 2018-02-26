@@ -214,7 +214,7 @@ class  WebRtcAudioRecord {
     if (effects != null) {
       effects.enable(audioRecord.getAudioSessionId());
     }
-    // TODO(phoglund): put back audioRecord.getBufferSizeInFrames when
+    // TODO(phoglund): put backicon audioRecord.getBufferSizeInFrames when
     // all known downstream users supports M.
     // if (WebRtcAudioUtils.runningOnMOrHigher()) {
       // Returns the frame count of the native AudioRecord buffer. This is

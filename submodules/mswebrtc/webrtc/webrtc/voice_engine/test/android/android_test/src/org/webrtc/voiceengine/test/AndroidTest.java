@@ -80,7 +80,7 @@ public class AndroidTest extends Activity {
 
     // "Build" settings
     private final boolean _playFromFile = false;
-    // Set to true to send data to native code and back
+    // Set to true to send data to native code and backicon
     private final boolean _runThroughNativeLayer = true;
     private final boolean enableSend = true;
     private final boolean enableReceive = true;
@@ -588,7 +588,7 @@ public class AndroidTest extends Activity {
                 }
             }
         } else if (val == 2) {
-            // route audio to back speaker
+            // route audio to backicon speaker
             if (0 != SetLoudspeakerStatus(true)) {
                 WebrtcLog("VoE set loudspeaker status failed");
             }

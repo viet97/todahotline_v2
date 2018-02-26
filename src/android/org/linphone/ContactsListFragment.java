@@ -131,7 +131,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         public void afterTextChanged(final Editable editable) {
             searchText = editable.toString();
             Log.d(TAG, "afterTextChanged: " + editable.toString());
-
+            prelast=0;
             isLoaded = false;
             try {
                 timer = new Timer();
@@ -168,8 +168,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                             } catch (Exception e) {
 
                                             }
-
+                                            if (contactResponse.getNextpage() == 0) isLoaded = true;
                                             ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
+                                            page++;
                                         }
                                     }
 
@@ -272,17 +273,20 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                 @Override
                 public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                    int lastItem = i1 + i;
-                    Log.d(TAG, "onScroll: lastItem la " + lastItem);
-                    Log.d(TAG, "onScroll: i2 la " + i2);
-                    if (lastItem == i2) {
-                        if (prelast != lastItem && !isLoaded) {
-                            Log.d(TAG, "onScroll: last");
-                            prelast = lastItem;
-                            getContactToda();
+                    if (onlyDisplayLinphoneContacts!=0) {
+                        int lastItem = i1 + i;
+                        Log.d(TAG, "onScroll: lastItem la " + lastItem);
+                        Log.d(TAG, "onScroll: i2 la " + i2);
+                        Log.d(TAG, "onScroll: "+isLoaded);
+                        Log.d(TAG, "onScroll: "+prelast);
+                        if (lastItem == i2) {
+                            if (prelast != lastItem && !isLoaded) {
+                                Log.d(TAG, "onScroll: last");
+                                prelast = lastItem;
+                                getContactToda();
+                            }
                         }
                     }
-
                 }
             });
         } catch (Exception e) {
@@ -453,13 +457,15 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
 
         if (id == R.id.all_contacts) {
+            onlyDisplayLinphoneContacts = 0;
             page=1;
             isLoaded = false;
+            prelast=0;
             Log.d(TAG, "onClick: 394");
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
             searchField.setText("");
-            onlyDisplayLinphoneContacts = 0;
+
             allContactsSelected.setVisibility(View.VISIBLE);
             allContacts.setEnabled(false);
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
@@ -470,6 +476,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
 
         } else if (id == R.id.linphone_contacts) {
+            onlyDisplayLinphoneContacts = 1;
+            prelast=0;
             page=1;
             isLoaded = false;
             searchField.setText("");
@@ -553,9 +561,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             allContacts.setEnabled(true);
             cusContacts.setEnabled(true);
             cusContactSelected.setVisibility(View.INVISIBLE);
-            onlyDisplayLinphoneContacts = 1;
 
         } else if (id == R.id.cus_contacts) {
+            onlyDisplayLinphoneContacts = 2;
             searchField.setText("");
             searchText = "";
             try {
@@ -637,7 +645,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             cusContactSelected.setVisibility(View.VISIBLE);
             linphoneContacts.setEnabled(true);
             allContacts.setEnabled(true);
-            onlyDisplayLinphoneContacts = 2;
+
         }
 
         if (isEditMode) {
@@ -698,9 +706,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         editList.setVisibility(View.GONE);
         topbar.setVisibility(View.VISIBLE);
         invalidate();
-        if (getResources().getBoolean(R.bool.isTablet)) {
-            displayFirstContact();
-        }
+//        if (getResources().getBoolean(R.bool.isTablet)) {
+//            displayFirstContact();
+//        }
     }
 
     public void displayFirstContact() {

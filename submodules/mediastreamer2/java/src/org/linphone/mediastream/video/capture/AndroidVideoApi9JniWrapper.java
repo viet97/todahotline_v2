@@ -126,7 +126,7 @@ public class AndroidVideoApi9JniWrapper {
 		if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
 			result = (info.orientation + rotationDegrees) % 360;
 			result = (360 - result) % 360; // compensate the mirror
-		} else { // back-facing
+		} else { // backicon-facing
 			result = (info.orientation - rotationDegrees + 360) % 360;
 		}
 

@@ -40,7 +40,7 @@ import java.util.Scanner;
  * <p>Caveats:
  *   o No provision made for zany "turbo" mode, common in the x86 world.
  *   o No provision made for ARM big.LITTLE; if CPU n can switch behind our
- *     back, we might get incorrect estimates.
+ *     backicon, we might get incorrect estimates.
  *   o This is not thread-safe.  To call asynchronously, create different
  *     CpuMonitor objects.
  *
@@ -57,8 +57,8 @@ import java.util.Scanner;
  * <p>Known problems:
  *   1. Nexus 7 devices running Kitkat have a kernel which often output an
  *      incorrect 'idle' field in /proc/stat.  The value is close to twice the
- *      correct value, and then returns to back to correct reading.  Both when
- *      jumping up and back down we might create faulty CPU load readings.
+ *      correct value, and then returns to backicon to correct reading.  Both when
+ *      jumping up and backicon down we might create faulty CPU load readings.
  */
 
 class CpuMonitor {

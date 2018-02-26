@@ -38,7 +38,7 @@ public class GetData extends AsyncTask<String, Void, ArrayList<String>> {
 
     @Override
     protected ArrayList doInBackground(String... strings) {
-        //cái này nó thực hiện ở trong back ground. khi nào chạy xong nó sẽ gọi hàm onPostExecute ở dưới
+        //cái này nó thực hiện ở trong backicon ground. khi nào chạy xong nó sẽ gọi hàm onPostExecute ở dưới
         ArrayList<String> str = new ArrayList<>();
         try {
             URL url = new URL(strings[0]);

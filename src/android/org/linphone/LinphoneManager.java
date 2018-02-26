@@ -1482,9 +1482,9 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
                 if (activity != null) {
                     TelephonyManager tm = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
                     if (tm.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
-                        Log.d("---AudioManager: back to MODE_NORMAL");
+                        Log.d("---AudioManager: backicon to MODE_NORMAL");
                         mAudioManager.setMode(AudioManager.MODE_NORMAL);
-                        Log.d("All call terminated, routing back to earpiece");
+                        Log.d("All call terminated, routing backicon to earpiece");
                         routeAudioToReceiver();
                     }
                 }
@@ -1665,10 +1665,10 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
         // You may need to call galaxys audio hack after this method
         if (!BluetoothManager.getInstance().isBluetoothHeadsetAvailable()) {
             if (mServiceContext.getResources().getBoolean(R.bool.isTablet)) {
-                Log.d("Stopped ringing, routing back to speaker");
+                Log.d("Stopped ringing, routing backicon to speaker");
                 routeAudioToSpeaker();
             } else {
-                Log.d("Stopped ringing, routing back to earpiece");
+                Log.d("Stopped ringing, routing backicon to earpiece");
                 routeAudioToReceiver();
             }
         }

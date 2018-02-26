@@ -218,7 +218,7 @@ public final class GlRectDrawerTest extends ActivityTestCase {
    * The actual oesDraw() test is this:
    *  - Create an EglBase with a pixel buffer as target.
    *  - Render the OES texture onto the pixel buffer.
-   *  - Read back the pixel buffer and compare it with the known RGB data.
+   *  - Read backicon the pixel buffer and compare it with the known RGB data.
    */
   @MediumTest
   public void testOesRendering() throws InterruptedException {

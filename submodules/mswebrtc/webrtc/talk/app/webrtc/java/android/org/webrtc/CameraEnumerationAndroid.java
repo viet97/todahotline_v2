@@ -151,7 +151,7 @@ public class CameraEnumerationAndroid {
     }
 
     String facing =
-        (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) ? "front" : "back";
+        (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) ? "front" : "backicon";
     return "Camera " + index + ", Facing " + facing
         + ", Orientation " + info.orientation;
   }
@@ -162,7 +162,7 @@ public class CameraEnumerationAndroid {
     return getNameOfDevice(Camera.CameraInfo.CAMERA_FACING_FRONT);
   }
 
-  // Returns the name of the back facing camera. Returns null if the
+  // Returns the name of the backicon facing camera. Returns null if the
   // camera can not be used or does not exist.
   public static String getNameOfBackFacingDevice() {
     return getNameOfDevice(Camera.CameraInfo.CAMERA_FACING_BACK);

@@ -1,111 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 
+	This file is part of CSipSimple.
+    CSipSimple is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+	If you own a pjsip commercial license you can also redistribute it
+	and/or modify it under the terms of the GNU Lesser General Public License
+	as an android library.
+
+    CSipSimple is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with CSipSimple.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <TableRow
-        android:layout_weight="1"
-        android:gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit1"
-            android:text="1"
+            android:id="@+id/button1"
+            android:contentDescription="1"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_one"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_1" />
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit2"
-            android:text="2"
+            android:id="@+id/button2"
+            android:contentDescription="2"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_two"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_2" />
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit3"
-            android:text="3"
+            android:id="@+id/button3"
+            android:contentDescription="3"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_three"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_3" />
     </TableRow>
 
     <TableRow
-        android:layout_weight="1"
-        android:gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit4"
-            android:text="4"
+            android:id="@+id/button4"
+            android:contentDescription="4"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_four"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_4" />
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit5"
-            android:text="5"
+            android:id="@+id/button5"
+            android:contentDescription="5"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_five"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_5" />
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit6"
-            android:text="6"
+            android:id="@+id/button6"
+            android:contentDescription="6"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_six"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_6" />
     </TableRow>
 
     <TableRow
-        android:layout_weight="1"
-        android:gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit7"
-            android:text="7"
+            android:id="@+id/button7"
+            android:contentDescription="7"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_seven"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_7" />
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit8"
-            android:text="8"
+            android:id="@+id/button8"
+            android:contentDescription="8"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_eight"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_8" />
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit9"
-            android:text="9"
+            android:id="@+id/button9"
+            android:contentDescription="9"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_nine"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_9" />
     </TableRow>
 
     <TableRow
-        android:layout_weight="1"
-        android:gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
 
         <org.linphone.ui.Digit
-            android:id="@+id/DigitStar"
-            android:text="*"
+            android:clickable="true"
+            android:id="@+id/buttonstar"
+            android:contentDescription="*"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_star_digit"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_star" />
 
         <org.linphone.ui.Digit
-            android:id="@+id/Digit00"
-            android:text="0+"
+            android:id="@+id/button0"
+            android:contentDescription="0"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_zero"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_0" />
 
         <org.linphone.ui.Digit
-            android:id="@+id/DigitHash"
-            android:text="#"
+            android:id="@+id/buttonpound"
+            android:contentDescription="#"
             style="@style/DialerDigitTablet"
-            android:background="@drawable/numpad_sharp"
-            android:soundEffectsEnabled="true" />
+            android:src="@drawable/dial_num_pound" />
     </TableRow>
 
 </TableLayout>

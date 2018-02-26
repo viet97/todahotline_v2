@@ -128,7 +128,7 @@ public class VideoCapturerAndroidTest extends ActivityTestCase {
 
   @SmallTest
   // This test that the camera can be started and that the frames are forwarded
-  // to a Java video renderer using the back facing video capturer.
+  // to a Java video renderer using the backicon facing video capturer.
   // It tests both the Java and the C++ layer.
   public void testStartBackFacingVideoCapturer() throws InterruptedException {
     if (!VideoCapturerAndroidTestFixtures.HaveTwoCameras()) {

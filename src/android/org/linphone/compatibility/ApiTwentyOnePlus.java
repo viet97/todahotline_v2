@@ -99,6 +99,8 @@ public class ApiTwentyOnePlus {
                     .setLargeIcon(largeIcon)
 		        .setContentIntent(intent)
 				.setCategory(Notification.CATEGORY_SERVICE)
+					.setAutoCancel(false)
+					.setOngoing(true)
 //				.setVisibility(Notification.VISIBILITY_SECRET)
 //				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
 //						context.getResources().getInteger(R.integer.notification_ms_on),
@@ -109,8 +111,10 @@ public class ApiTwentyOnePlus {
 			notif = new Notification.Builder(context)
 		        .setContentTitle(title)
 		        .setContentText(message)
-		        .setSmallIcon(icon, level)
+					.setAutoCancel(false)
+					.setSmallIcon(icon, level)
 		        .setContentIntent(intent)
+					.setOngoing(true)
 				.setCategory(Notification.CATEGORY_SERVICE)
 //				.setVisibility(Notification.VISIBILITY_SECRET)
 //				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),

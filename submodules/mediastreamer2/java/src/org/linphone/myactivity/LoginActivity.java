@@ -454,7 +454,7 @@ public class LoginActivity extends Activity {
                                 + "&dongmay=" + android.os.Build.DEVICE
                                 + "&devicename=" + android.os.Build.DEVICE
                                 + "&imei=" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID)
-                                + "&ver=1.2.0.0"
+                                + "&ver=1.2.0.5"
                                 + "&idpush=" ;
                         android.util.Log.d(TAG, "loginURL: " + loginURL);
                         final Service service = NetContext.instance.create(Service.class);

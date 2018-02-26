@@ -1314,7 +1314,7 @@ public interface LinphoneCore {
 	void setRootCAData(String data);
 
 	/**
-	 * Sets the path to a wav file used for for ringing back.
+	 * Sets the path to a wav file used for for ringing backicon.
 	 *
 	 * Ringback means the ring that is heard when it's ringing at the remote party.
 	 *
@@ -2253,7 +2253,7 @@ public interface LinphoneCore {
 	public void removeListener(LinphoneCoreListener listener);
 
 	/**
-	 * Specifies a ring back tone to be played to far end during incoming calls, when early media is requested.
+	 * Specifies a ring backicon tone to be played to far end during incoming calls, when early media is requested.
 	 * @param file
 	 */
 	public void setRemoteRingbackTone(String file);

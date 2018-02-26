@@ -65,11 +65,11 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		dialBack.setOnClickListener(this);
 
 		back = (ImageView) view.findViewById(R.id.back);
-		if(getResources().getBoolean(R.bool.isTablet)){
-			back.setVisibility(View.INVISIBLE);
-		} else {
+//		if(getResources().getBoolean(R.bool.isTablet)){
+//			back.setVisibility(View.INVISIBLE);
+//		} else {
 			back.setOnClickListener(this);
-		}
+//		}
 
 		chat = (ImageView) view.findViewById(R.id.chat);
 		chat.setOnClickListener(this);

@@ -112,31 +112,37 @@ public class ApiTwentySixPlus {
 	}
 
 	public static Notification createNotification(Context context, String title, String message, int icon, int level, Bitmap largeIcon, PendingIntent intent, boolean isOngoingEvent,int priority) {
-		Notification notif;
+		Notification notif = null;
+		try {
+			if (largeIcon != null) {
+				notif = new Notification.Builder(context, context.getString(R.string.notification_service_channel_id))
+						.setContentTitle(title)
+						.setContentText(message)
+						.setSmallIcon(icon, level)
+						.setLargeIcon(largeIcon)
+						.setContentIntent(intent)
+						.setOngoing(true)
 
-		if (largeIcon != null) {
-			notif = new Notification.Builder(context, context.getString(R.string.notification_service_channel_id))
-					.setContentTitle(title)
-					.setContentText(message)
-					.setSmallIcon(icon, level)
-					.setLargeIcon(largeIcon)
-					.setContentIntent(intent)
-					.setCategory(Notification.CATEGORY_SERVICE)
+						.setCategory(Notification.CATEGORY_SERVICE)
 //					.setVisibility(Notification.VISIBILITY_SECRET)
 //					.setPriority(priority)
-                    .build();
-		} else {
-			notif = new Notification.Builder(context, context.getString(R.string.notification_service_channel_id))
-					.setContentTitle(title)
-					.setContentText(message)
-					.setSmallIcon(icon, level)
-					.setContentIntent(intent)
-					.setCategory(Notification.CATEGORY_SERVICE)
+						.build();
+			} else {
+				notif = new Notification.Builder(context, context.getString(R.string.notification_service_channel_id))
+						.setContentTitle(title)
+						.setContentText(message)
+						.setSmallIcon(icon, level)
+						.setOngoing(true)
+
+						.setContentIntent(intent)
+						.setCategory(Notification.CATEGORY_SERVICE)
 //					.setVisibility(Notification.VISIBILITY_SECRET)
 //					.setPriority(priority)
-                    .build();
+						.build();
+			}
+		}catch (Exception e){
+
 		}
-
 		return notif;
 	}
 

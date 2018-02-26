@@ -152,8 +152,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private OrientationEventListener mOrientationHelper;
     private LinphoneCoreListenerBase mListener;
     private LinearLayout mTabBar;
-    private ProgressDialog dialogLogout;
 
+    private ProgressDialog dialogLogin;
     private DrawerLayout sideMenu;
     private RelativeLayout sideMenuContent, quitLayout, defaultAccount;
     private ListView accountsList, sideMenuItemList;
@@ -389,7 +389,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         if (newFragmentType == currentFragment && newFragmentType != FragmentsAvailable.CHAT) {
             return;
         }
-
+        android.util.Log.d(TAG, "changeCurrentFragment: ");
         if (currentFragment == FragmentsAvailable.DIALER) {
             try {
                 DialerFragment dialerFragment = DialerFragment.instance();
@@ -447,22 +447,22 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
         if (fragment != null) {
             fragment.setArguments(extras);
-            if (isTablet()) {
-                changeFragmentForTablets(fragment, newFragmentType, withoutAnimation);
-                switch (newFragmentType) {
-                    case HISTORY_LIST:
-                        ((HistoryListFragment) fragment).displayFirstLog();
-                        break;
-                    case CONTACTS_LIST:
-                        ((ContactsListFragment) fragment).displayFirstContact();
-                        break;
-                    case CHAT_LIST:
-                        ((ChatListFragment) fragment).displayFirstChat();
-                        break;
-                }
-            } else {
+//            if (isTablet()) {
+//                changeFragmentForTablets(fragment, newFragmentType, withoutAnimation);
+//                switch (newFragmentType) {
+//                    case HISTORY_LIST:
+//                        ((HistoryListFragment) fragment).displayFirstLog();
+//                        break;
+//                    case CONTACTS_LIST:
+//                        ((ContactsListFragment) fragment).displayFirstContact();
+//                        break;
+//                    case CHAT_LIST:
+//                        ((ChatListFragment) fragment).displayFirstChat();
+//                        break;
+//                }
+//            } else {
                 changeFragment(fragment, newFragmentType, withoutAnimation);
-            }
+//            }
         }
     }
 
@@ -1506,7 +1506,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             mOrientationHelper.disable();
             mOrientationHelper = null;
         }
-
+        android.util.Log.d(TAG, "onDestroy: ");
         instance = null;
         super.onDestroy();
 
@@ -1867,34 +1867,70 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     }
 
     private void logoutAct() {
-        try {
-            if (LinphonePreferences.instance().getAccountCount() >= 0) {
-                int accountNumber = LinphonePreferences.instance().getAccountCount();
-                while (accountNumber >= 0) {
-                    android.util.Log.d(TAG, "accountNumber: " + accountNumber);
-                    LinphonePreferences.instance().deleteAccount(accountNumber);
-                    accountNumber--;
-                }
-            }
+        dialogLogin = ProgressDialog.show(LinphoneActivity.this, "", "Đăng xuất...", true, false);
+        String logoutURL = KEY_FUNC_URL
+                + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(LinphoneActivity.this).getData().getIdnhanvien()
+                + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
+
+        final Service service = NetContext.instance.create(Service.class);
+        service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
+            @Override
+            public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
+
+                VoidRespon voidRespon = response.body();
+                boolean logOutResponse = voidRespon.getStatus();
+                if (!logOutResponse) {
+                    dialogLogin.cancel();
+                    Toast.makeText(LinphoneActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                } else {
+
+
+                    try {
+                        if (LinphonePreferences.instance().getAccountCount() >= 0) {
+                            int accountNumber = LinphonePreferences.instance().getAccountCount();
+                            while (accountNumber >= 0) {
+
+                                LinphonePreferences.instance().deleteAccount(accountNumber);
+                                accountNumber--;
+                            }
+                        }
 
 //                    LocalBroadcastManager.getInstance(SipHome.this).unregisterReceiver(statusReceiver);
 
 //                                        finish();
 //                                        android.util.Log.d("SipHome", "registerBroadcasts: " + StaticForDynamicReceiver4.getInstance().deviceStateReceiver);
-            SharedPreferences.Editor autoLoginEditor = LinphoneActivity.this.getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
-            autoLoginEditor.putBoolean("AutoLogin", false);
-            autoLoginEditor.apply();
-            SharedPreferences.Editor databasePref = getSharedPreferences(Pref_String_DB, MODE_PRIVATE).edit();
-            databasePref.clear();
-            databasePref.commit();
+                        SharedPreferences.Editor autoLoginEditor = getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
+                        autoLoginEditor.putBoolean("AutoLogin", false);
+                        autoLoginEditor.apply();
+                        SharedPreferences.Editor databasePref = getSharedPreferences(Pref_String_DB, MODE_PRIVATE).edit();
+                        databasePref.clear();
+                        databasePref.commit();
+                        dialogLogin.cancel();
 //					stopService(new Intent(Intent.ACTION_MAIN).setClass(LinphoneActivity.this, LinphoneService.class));
 //					Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
 //					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //					startActivity(intent);
-            quit();
-        } catch (Exception e) {
+                       quit();
 
-        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VoidRespon> call, Throwable t) {
+                try {
+                    dialogLogin.cancel();
+                }catch (Exception e){
+
+                }
+                Toast.makeText(LinphoneActivity.this,
+                        "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
     @Override

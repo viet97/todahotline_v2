@@ -44,7 +44,7 @@ MAINTAINER:
 #1998-03-10: maler: Added &ldquo; and &rdquo;.
 #                   Used 8879:1986-compatible decimal character
 #                   references.
-#                   Merged charent.mod file back into main file.
+#                   Merged charent.mod file backicon into main file.
 -->
 
 <!ENTITY lt     "&#38;#60;">
@@ -330,7 +330,7 @@ MAINTAINER:
 <!ATTLIST body %common.att;>
 
 <!--
-#1997-09-30: maler: Added inform-div1 to back content.
+#1997-09-30: maler: Added inform-div1 to backicon content.
 -->
 
 <!ELEMENT back ((div1+, inform-div1*) | inform-div1+)>
@@ -343,7 +343,7 @@ MAINTAINER:
 #1997-09-30: maler: Added inform-div1 declarations.
 -->
 
-<!--    inform-div1: Non-normative division in back matter -->
+<!--    inform-div1: Non-normative division in backicon matter -->
 <!ELEMENT inform-div1 (head, (%div.mix;)*, div2*)>
 <!ATTLIST inform-div1 %common.att;>
 
@@ -905,7 +905,7 @@ MAINTAINER:
 #- Required head on scrap and added new bnf subelement.
 #- Added an xnt element and allowed it and nt in regular text and rhs.
 #- Removed the ntref element.
-#- Added back the com element to the content of rhs.
+#- Added backicon the com element to the content of rhs.
 #- Added a key attribute to bibl.
 #- Removed the ident element.
 #- Added a term element to be used inside termdef.

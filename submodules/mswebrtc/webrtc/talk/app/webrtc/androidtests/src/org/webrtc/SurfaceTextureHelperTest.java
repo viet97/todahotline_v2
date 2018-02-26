@@ -102,7 +102,7 @@ public final class SurfaceTextureHelperTest extends ActivityTestCase {
   /**
    * Test normal use by receiving three uniform texture frames. Texture frames are returned as early
    * as possible. The texture pixel values are inspected by drawing the texture frame to a pixel
-   * buffer and reading it back with glReadPixels().
+   * buffer and reading it backicon with glReadPixels().
    */
   @MediumTest
   public static void testThreeConstantColorFrames() throws InterruptedException {
@@ -169,7 +169,7 @@ public final class SurfaceTextureHelperTest extends ActivityTestCase {
   /**
    * Test disconnecting the SurfaceTextureHelper while holding a pending texture frame. The pending
    * texture frame should still be valid, and this is tested by drawing the texture frame to a pixel
-   * buffer and reading it back with glReadPixels().
+   * buffer and reading it backicon with glReadPixels().
    */
   @MediumTest
   public static void testLateReturnFrame() throws InterruptedException {

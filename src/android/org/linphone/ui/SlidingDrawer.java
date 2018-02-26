@@ -578,7 +578,7 @@ public class SlidingDrawer extends ViewGroup {
 				}
 			} else {
 				// We are expanded, but they didn't move sufficiently to cause
-				// us to retract. Animate back to the expanded position. so
+				// us to retract. Animate backicon to the expanded position. so
 				// animate BACK to expanded!
 				mAnimatedAcceleration = -mMaximumAcceleration;
 

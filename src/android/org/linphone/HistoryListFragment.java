@@ -555,7 +555,9 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 				holder.detail.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
+						Log.d(TAG, "onClick: 558");
 						if (LinphoneActivity.isInstanciated()) {
+							Log.d(TAG, "onClick: 560");
 							LinphoneActivity.instance().displayHistoryDetail(sipUri, log);
 						}
 					}

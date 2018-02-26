@@ -55,41 +55,19 @@
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:orientation="vertical"
-				android:layout_below="@id/top_bar"
-				android:layout_above="@id/footer">
+				android:layout_above="@id/footer"
+				android:layout_below="@id/top_bar">
 
 				<FrameLayout
 					android:layout_width="match_parent"
-					android:layout_height="match_parent">
+					android:layout_height="match_parent"
+					android:layout_alignParentTop="true">
 
 					<LinearLayout
-						android:baselineAligned="false"
+						android:id="@+id/fragmentContainer"
 						android:layout_width="match_parent"
 						android:layout_height="match_parent"
-						android:orientation="horizontal">
-
-						<LinearLayout
-							android:id="@+id/fragmentContainer"
-							android:layout_width="match_parent"
-							android:layout_height="match_parent"
-							android:layout_weight="1"
-							android:orientation="horizontal" />
-
-						<LinearLayout
-							android:visibility="gone"
-							android:id="@+id/fragmentContainer2"
-							android:layout_width="match_parent"
-							android:layout_height="match_parent"
-							android:layout_weight="1"
-							android:orientation="horizontal">
-
-							<View
-								android:background="@color/colorE"
-								android:layout_width="0dp"
-								android:layout_height="match_parent"/>
-
-						</LinearLayout>
-					</LinearLayout>
+						android:orientation="horizontal" />
 				</FrameLayout>
 
 			</LinearLayout>
@@ -98,6 +76,7 @@
 				android:id="@+id/footer"
 				android:layout_width="match_parent"
 				android:layout_height="60dp"
+				android:background="@drawable/bg"
 				android:layout_alignParentBottom="true"
 				android:orientation="horizontal">
 
@@ -109,17 +88,16 @@
 					android:layout_height="match_parent">
 
 					<ImageView
-						android:id="@+id/footer_history"
 						android:src="@drawable/footer_history"
-						android:contentDescription="@string/content_description_history"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
+						android:contentDescription="@string/content_description_history"
 						android:padding="15dp"
 						android:layout_centerInParent="true"/>
 
 					<View
 						android:id="@+id/history_select"
-						android:background="@color/colorA"
+						android:background="@color/white"
 						android:layout_width="match_parent"
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"
@@ -131,11 +109,9 @@
 						style="@style/font18"
 						android:layout_width="20dp"
 						android:layout_height="20dp"
+						android:layout_margin="15dp"
 						android:gravity="center"
-						android:layout_margin="20dp"
-						android:layout_alignParentTop="true"
-						android:layout_alignParentRight="true"
-						android:visibility="visible"/>
+						android:visibility="gone"/>
 
 				</RelativeLayout>
 
@@ -156,7 +132,7 @@
 
 					<View
 						android:id="@+id/contacts_select"
-						android:background="@color/colorA"
+						android:background="@color/white"
 						android:layout_width="match_parent"
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"
@@ -180,7 +156,7 @@
 
 					<View
 						android:id="@+id/dialer_select"
-						android:background="@color/colorA"
+						android:background="@color/white"
 						android:layout_width="match_parent"
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"/>
@@ -195,8 +171,8 @@
 					android:layout_height="match_parent">
 
 					<ImageView
-						android:src="@drawable/info"
-						android:contentDescription="@string/content_description_chat"
+						android:src="@drawable/footer_setting"
+						android:contentDescription="@string/content_description_chat_button"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:padding="15dp"
@@ -204,7 +180,7 @@
 
 					<View
 						android:id="@+id/chat_select"
-						android:background="@color/colorA"
+						android:background="@color/white"
 						android:layout_width="match_parent"
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"
@@ -216,82 +192,96 @@
 						style="@style/font18"
 						android:layout_width="20dp"
 						android:layout_height="20dp"
-						android:layout_margin="20dp"
+						android:layout_margin="15dp"
 						android:gravity="center"
-						android:layout_alignParentTop="true"
-						android:layout_alignParentRight="true"
 						android:visibility="gone"/>
 
 				</RelativeLayout>
 			</LinearLayout>
+
+			<LinearLayout
+				android:id="@+id/fragmentContainer2"
+				android:visibility="gone"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+			</LinearLayout>
 		</RelativeLayout>
 
-	<!-- Side Menu -->
-	<RelativeLayout
-		android:id="@+id/side_menu_content"
-		android:layout_width="400dp"
-		android:layout_height="match_parent"
-		android:layout_gravity="left">
-
-		<LinearLayout
+		<!-- Side Menu -->
+		<RelativeLayout
+			android:id="@+id/side_menu_content"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:orientation="vertical">
+			android:layout_gravity="left">
 
-			<include layout="@layout/side_menu_main_account"/>
+			<RelativeLayout
+				android:id="@+id/side_menu_quit"
+				android:background="@color/colorA"
+				android:gravity="bottom"
+				android:layout_alignParentBottom="true"
+				android:layout_width="match_parent"
+				android:layout_height="50dp">
 
-			<ListView
-				android:id="@+id/accounts_list"
-				android:background="@color/colorB"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:choiceMode="singleChoice"
-				android:cacheColorHint="@color/transparent"
-				android:divider="@android:color/transparent"
-				android:dividerHeight="0dp"/>
+				<ImageView
+					android:id="@+id/quit_button"
+					android:src="@drawable/quit"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:padding="5dp"
+					android:layout_alignParentLeft="true"
+					android:layout_centerVertical="true" />
 
-			<ListView
-				android:id="@+id/item_list"
-				android:background="@color/colorH"
+				<TextView
+					android:id="@+id/quit"
+					android:text="@string/quit"
+					style="@style/font14"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/quit_button"
+					android:gravity="center_vertical"
+					android:layout_centerInParent="true"/>
+			</RelativeLayout>
+
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:choiceMode="singleChoice"
-				android:divider="@color/colorE"
-				android:listSelector="@color/colorH"
-				android:dividerHeight="1dp"/>
-		</LinearLayout>
+				android:background="@color/colorH"
+				android:layout_above="@id/side_menu_quit"
+				android:orientation="vertical">
 
-		<RelativeLayout
-			android:id="@+id/side_menu_quit"
-			android:background="@color/colorA"
-			android:gravity="bottom"
-			android:layout_alignParentBottom="true"
-			android:layout_width="match_parent"
-			android:layout_height="50dp">
+				<include layout="@layout/side_menu_main_account"/>
 
-			<ImageView
-				android:id="@+id/quit_button"
-				android:src="@drawable/quit"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:padding="5dp"
-				android:layout_alignParentLeft="true"
-				android:layout_centerVertical="true" />
+				<ListView
+					android:id="@+id/accounts_list"
+					android:background="@color/colorH"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:choiceMode="singleChoice"
+					android:cacheColorHint="@color/transparent"
+					android:divider="@android:color/transparent"
+					android:dividerHeight="0dp"/>
 
-			<TextView
-				android:id="@+id/quit"
-				android:text="@string/quit"
-				style="@style/font14"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_toRightOf="@id/quit_button"
-				android:gravity="center_vertical"
-				android:layout_centerInParent="true"/>
+				<ListView
+					android:id="@+id/item_list"
+					android:background="@color/colorH"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:choiceMode="singleChoice"
+					android:divider="@color/colorE"
+					android:listSelector="@color/colorH"
+					android:footerDividersEnabled="true"
+					android:dividerHeight="1dp"/>
 
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="1dp"
+					android:background="@color/colorE"/>
+
+			</LinearLayout>
 		</RelativeLayout>
 
-	</RelativeLayout>
-
-</android.support.v4.widget.DrawerLayout>
+	</android.support.v4.widget.DrawerLayout>
 
 </RelativeLayout>

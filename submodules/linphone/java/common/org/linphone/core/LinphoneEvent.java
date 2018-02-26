@@ -105,7 +105,7 @@ public interface LinphoneEvent {
 	void sendPublish(LinphoneContent body);
 	
 	/**
-	 * Get a back pointer to the LinphoneCore object managing this LinphoneEvent.
+	 * Get a backicon pointer to the LinphoneCore object managing this LinphoneEvent.
 	 * @return
 	 */
 	LinphoneCore getCore();

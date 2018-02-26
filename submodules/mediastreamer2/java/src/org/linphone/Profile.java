@@ -2,6 +2,7 @@ package org.linphone;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,14 +14,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 //import com.todahotline.R;
 
 import org.linphone.assistant.AssistantActivity;
 import org.linphone.database.DbContext;
 import org.linphone.myactivity.InfoActivityMain;
+import org.linphone.myactivity.LoginActivity;
+import org.linphone.network.NetContext;
+import org.linphone.network.Service;
+import org.linphone.network.models.VoidRespon;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +40,9 @@ public class Profile extends Fragment {
 
 
     private String Pref_String_DB = "baseUrl";
+    public static final String KEY_FUNC_URL = "AppLogOut.aspx?";
+    private ProgressDialog dialogLogin;
+    private String TAG = "Profile";
 
     public Profile() {
         // Required empty public constructor
@@ -108,34 +122,70 @@ public class Profile extends Fragment {
     }
 
     private void logoutAct() {
-        try {
-            if (LinphonePreferences.instance().getAccountCount() >= 0) {
-                int accountNumber = LinphonePreferences.instance().getAccountCount();
-                while (accountNumber >= 0) {
+        String logoutURL = KEY_FUNC_URL
+                + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien()
+                + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
+        dialogLogin = ProgressDialog.show(getActivity(), "", "Đăng xuất...", true, false);
 
-                    LinphonePreferences.instance().deleteAccount(accountNumber);
-                    accountNumber--;
-                }
-            }
+        final Service service = NetContext.instance.create(Service.class);
+        service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
+            @Override
+            public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
+
+                VoidRespon voidRespon = response.body();
+                boolean logOutResponse = voidRespon.getStatus();
+                if (!logOutResponse) {
+                    dialogLogin.cancel();
+                    Toast.makeText(getActivity(), voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                } else {
+
+                    try {
+                        if (LinphonePreferences.instance().getAccountCount() >= 0) {
+                            int accountNumber = LinphonePreferences.instance().getAccountCount();
+                            while (accountNumber >= 0) {
+
+                                LinphonePreferences.instance().deleteAccount(accountNumber);
+                                accountNumber--;
+                            }
+                        }
 
 //                    LocalBroadcastManager.getInstance(SipHome.this).unregisterReceiver(statusReceiver);
 
 //                                        finish();
 //                                        android.util.Log.d("SipHome", "registerBroadcasts: " + StaticForDynamicReceiver4.getInstance().deviceStateReceiver);
-            SharedPreferences.Editor autoLoginEditor = getActivity().getSharedPreferences("AutoLogin", getActivity().MODE_PRIVATE).edit();
-            autoLoginEditor.putBoolean("AutoLogin", false);
-            autoLoginEditor.apply();
-            SharedPreferences.Editor databasePref = getActivity().getSharedPreferences(Pref_String_DB, getActivity().MODE_PRIVATE).edit();
-            databasePref.clear();
-            databasePref.commit();
+
+                        SharedPreferences.Editor autoLoginEditor = getActivity().getSharedPreferences("AutoLogin", getActivity().MODE_PRIVATE).edit();
+                        autoLoginEditor.putBoolean("AutoLogin", false);
+                        autoLoginEditor.apply();
+                        SharedPreferences.Editor databasePref = getActivity().getSharedPreferences(Pref_String_DB, getActivity().MODE_PRIVATE).edit();
+                        databasePref.clear();
+                        databasePref.commit();
+                        dialogLogin.cancel();
 //					stopService(new Intent(Intent.ACTION_MAIN).setClass(LinphoneActivity.this, LinphoneService.class));
 //					Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
 //					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //					startActivity(intent);
-            getActivity().finish();
-        } catch (Exception e) {
+                        getActivity().finish();
+                    } catch (Exception e) {
 
-        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VoidRespon> call, Throwable t) {
+                try {
+                    dialogLogin.cancel();
+                } catch (Exception e) {
+
+                }
+                Toast.makeText(getActivity(),
+                        "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
     }
 
 

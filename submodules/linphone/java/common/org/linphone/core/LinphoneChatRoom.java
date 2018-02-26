@@ -117,7 +117,7 @@ public interface LinphoneChatRoom {
 
 
 	/**
-	 * Returns a back pointer to the core managing the chat room.
+	 * Returns a backicon pointer to the core managing the chat room.
 	 * @return the LinphoneCore
 	 */
 	LinphoneCore getCore();

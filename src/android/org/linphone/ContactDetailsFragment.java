@@ -89,11 +89,11 @@ public class ContactDetailsFragment extends Fragment implements OnClickListener 
 		}
 
 		back = (ImageView) view.findViewById(R.id.back);
-		if(getResources().getBoolean(R.bool.isTablet)){
-			back.setVisibility(View.INVISIBLE);
-		} else {
+//		if(getResources().getBoolean(R.bool.isTablet)){
+//			back.setVisibility(View.INVISIBLE);
+//		} else {
 			back.setOnClickListener(this);
-		}
+//		}
 
 		return view;
 	}

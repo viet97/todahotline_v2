@@ -442,7 +442,7 @@ public class MediaCodecVideoDecoder {
     }
   }
 
-  // Release a dequeued output byte buffer back to the codec for re-use. Should only be called for
+  // Release a dequeued output byte buffer backicon to the codec for re-use. Should only be called for
   // non-surface decoding.
   // Throws IllegalStateException if the call is made on the wrong thread, if codec is configured
   // for surface decoding, or if |mediaCodec| is not in the Executing state. Throws

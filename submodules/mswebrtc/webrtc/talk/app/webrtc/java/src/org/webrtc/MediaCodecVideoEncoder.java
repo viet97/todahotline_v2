@@ -419,7 +419,7 @@ public class MediaCodecVideoEncoder {
           outputBuffers[result].position(info.offset);
           outputBuffers[result].limit(info.offset + info.size);
           configData.put(outputBuffers[result]);
-          // Release buffer back.
+          // Release buffer backicon.
           mediaCodec.releaseOutputBuffer(result, false);
           // Query next output.
           result = mediaCodec.dequeueOutputBuffer(info, DEQUEUE_TIMEOUT);
@@ -428,7 +428,7 @@ public class MediaCodecVideoEncoder {
       if (result >= 0) {
         // MediaCodec doesn't care about Buffer position/remaining/etc so we can
         // mess with them to get a slice and avoid having to pass extra
-        // (BufferInfo-related) parameters back to C++.
+        // (BufferInfo-related) parameters backicon to C++.
         ByteBuffer outputBuffer = outputBuffers[result].duplicate();
         outputBuffer.position(info.offset);
         outputBuffer.limit(info.offset + info.size);
@@ -470,7 +470,7 @@ public class MediaCodecVideoEncoder {
     }
   }
 
-  // Release a dequeued output buffer back to the codec for re-use.  Return
+  // Release a dequeued output buffer backicon to the codec for re-use.  Return
   // false if the codec is no longer operable.
   private boolean releaseOutputBuffer(int index) {
     checkOnMediaCodecThread();

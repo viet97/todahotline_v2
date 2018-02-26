@@ -60,14 +60,14 @@ public interface TunnelConfig {
 	 */
 	void setRemoteUdpMirrorPort(int remoteUdpMirrorPort);
 	/**
-	 * Get the maximum amount of time for waiting for UDP packets to come back during 
+	 * Get the maximum amount of time for waiting for UDP packets to come backicon during
 	 * the UDP connectivity check, in milliseconds.
 	 * 
 	 * @return
 	 */
 	int getDelay();
 	/**
-	 * Set the maximum amount of time for waiting for UDP packets to come back during 
+	 * Set the maximum amount of time for waiting for UDP packets to come backicon during
 	 * the UDP connectivity check, in milliseconds.
 	 */
 	void setDelay(int delay);

@@ -34,7 +34,7 @@ import android.os.Bundle;
  *
  * All calls will give a response code with the following possible values
  * RESULT_OK = 0 - success
- * RESULT_USER_CANCELED = 1 - user pressed back or canceled a dialog
+ * RESULT_USER_CANCELED = 1 - user pressed backicon or canceled a dialog
  * RESULT_BILLING_UNAVAILABLE = 3 - this billing API version is not supported for the type requested
  * RESULT_ITEM_UNAVAILABLE = 4 - requested SKU is not available for purchase
  * RESULT_DEVELOPER_ERROR = 5 - invalid arguments provided to the API
@@ -80,7 +80,7 @@ interface IInAppBillingService {
      * @param sku the SKU of the in-app item as published in the developer console
      * @param type the type of the in-app item ("inapp" for one-time purchases
      *        and "subs" for subscription).
-     * @param developerPayload optional argument to be sent back with the purchase information
+     * @param developerPayload optional argument to be sent backicon with the purchase information
      * @return Bundle containing the following key-value pairs
      *         "RESPONSE_CODE" with int value, RESULT_OK(0) if success, other response codes on
      *              failure as listed above.

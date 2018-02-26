@@ -195,7 +195,7 @@ public class WebSocketRTCClient implements AppRTCClient,
         jsonPut(json, "type", "offer");
         sendPostMessage(MessageType.MESSAGE, messageUrl, json.toString());
         if (connectionParameters.loopback) {
-          // In loopback mode rename this offer to answer and route it back.
+          // In loopback mode rename this offer to answer and route it backicon.
           SessionDescription sdpAnswer = new SessionDescription(
               SessionDescription.Type.fromCanonicalForm("answer"),
               sdp.description);

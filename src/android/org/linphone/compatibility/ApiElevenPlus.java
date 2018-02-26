@@ -89,25 +89,32 @@ public class ApiElevenPlus {
 
 	@SuppressWarnings("deprecation")
 	public static Notification createNotification(Context context, String title, String message, int icon, int level, Bitmap largeIcon, PendingIntent intent, boolean isOngoingEvent) {
-		Notification notif;
+		Notification notif = null;
+		try {
+			if (largeIcon != null) {
+				notif = new Notification.Builder(context)
+						.setContentTitle(title)
+						.setContentText(message)
+						.setSmallIcon(icon, level)
+						.setLargeIcon(largeIcon)
+						.setOngoing(true)
 
-		if (largeIcon != null) {
-			notif = new Notification.Builder(context)
-	        .setContentTitle(title)
-	        .setContentText(message)
-	        .setSmallIcon(icon, level)
-	        .setLargeIcon(largeIcon)
-	        .setContentIntent(intent)
-	        .setWhen(System.currentTimeMillis())
-	        .getNotification();
-		} else {
-			notif = new Notification.Builder(context)
-	        .setContentTitle(title)
-	        .setContentText(message)
-	        .setSmallIcon(icon, level)
-	        .setContentIntent(intent)
-	        .setWhen(System.currentTimeMillis())
-	        .getNotification();
+						.setContentIntent(intent)
+						.setWhen(System.currentTimeMillis())
+						.getNotification();
+			} else {
+				notif = new Notification.Builder(context)
+						.setContentTitle(title)
+						.setContentText(message)
+						.setSmallIcon(icon, level)
+						.setOngoing(true)
+
+						.setContentIntent(intent)
+						.setWhen(System.currentTimeMillis())
+						.getNotification();
+			}
+		}catch (Exception e){
+
 		}
 		if (isOngoingEvent) {
 			notif.flags |= Notification.FLAG_ONGOING_EVENT;

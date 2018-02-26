@@ -259,6 +259,8 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                     + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
 
                                             final Service service = NetContext.instance.create(Service.class);
+                                            dialogLogin = ProgressDialog.show(AssistantActivity.this, "", "Đăng xuất...", true, false);
+
                                             service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
                                                 @Override
                                                 public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
@@ -268,14 +270,9 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                     if (!logOutResponse) {
                                                         android.util.Log.d(TAG, "onResponse: " + passold + currentPass);
                                                         Toast.makeText(AssistantActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        dialogLogin = ProgressDialog.show(AssistantActivity.this, "", "Đăng xuất...", true, false);
-                                                        if (LoginActivity.ACCOUNT_ID > 0) {
-                                                            android.util.Log.d("Xoa", "onResponse: Xoa");
-                                                            LoginActivity.ACCOUNT_ID = 0;
-                                                        }
-                                                        Toast.makeText(AssistantActivity.this, "Đổi mật khẩu thành công, bạn đã bị đăng xuất khỏi tài khoản.", Toast.LENGTH_SHORT).show();
                                                         dialogLogin.cancel();
+                                                    } else {
+
                                                         if (getCurrentFocus() != null) {
                                                             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                                             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -295,6 +292,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                         SharedPreferences.Editor databasePref = getSharedPreferences(Pref_String_DB, MODE_PRIVATE).edit();
                                                         databasePref.clear();
                                                         databasePref.commit();
+                                                        dialogLogin.cancel();
                                                         Intent intent = new Intent(AssistantActivity.this, LoginActivity.class);
                                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
@@ -304,7 +302,11 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
 
                                                 @Override
                                                 public void onFailure(Call<VoidRespon> call, Throwable t) {
-                                                    dialogLogin.cancel();
+                                                    try {
+                                                        dialogLogin.cancel();
+                                                    }catch (Exception e){
+
+                                                    }
                                                     Toast.makeText(AssistantActivity.this,
                                                             "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
                                                             Toast.LENGTH_SHORT).show();

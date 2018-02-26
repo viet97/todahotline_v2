@@ -378,7 +378,7 @@ public class PeerConnectionClientTest extends InstrumentationTestCase
     doLoopbackTest(createParameters(true, VIDEO_CODEC_H264), true);
   }
 
-  // Checks if default front camera can be switched to back camera and then
+  // Checks if default front camera can be switched to backicon camera and then
   // again to front camera.
   public void testCameraSwitch() throws InterruptedException {
     Log.d(TAG, "testCameraSwitch");
@@ -425,7 +425,7 @@ public class PeerConnectionClientTest extends InstrumentationTestCase
   }
 
   // Checks if video source can be restarted - simulate app goes to
-  // background and back to foreground.
+  // background and backicon to foreground.
   public void testVideoSourceRestart() throws InterruptedException {
     Log.d(TAG, "testVideoSourceRestart");
     loopback = true;

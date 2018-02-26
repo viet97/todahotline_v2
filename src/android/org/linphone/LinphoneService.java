@@ -576,7 +576,6 @@ public final class LinphoneService extends Service {
 			setIncallIcon(IncallIconState.PAUSE);
 		}
 	}
-
 	@Deprecated
 	public void addNotification(Intent onClickIntent, int iconResourceID, String title, String message) {
 		addCustomNotification(onClickIntent, iconResourceID, title, message, true);
@@ -641,7 +640,6 @@ public final class LinphoneService extends Service {
 			bm = BitmapFactory.decodeResource(getResources(), R.drawable.topbar_avatar);
 		}
 		mMsgNotif = Compatibility.createMessageNotification(getApplicationContext(), mMsgNotifCount, to, fromName, message, bm, notifContentIntent);
-
 		notifyWrapper(MESSAGE_NOTIF_ID, mMsgNotif);
 	}
 
@@ -713,7 +711,7 @@ public final class LinphoneService extends Service {
 			return;
 		}
 
-		// Fall back on the old API.
+		// Fall backicon on the old API.
 		if (mSetForeground != null) {
 			mSetForegroundArgs[0] = Boolean.TRUE;
 			invokeMethod(mSetForeground, mSetForegroundArgs);
@@ -735,7 +733,7 @@ public final class LinphoneService extends Service {
 			return;
 		}
 
-		// Fall back on the old API.  Note to cancel BEFORE changing the
+		// Fall backicon on the old API.  Note to cancel BEFORE changing the
 		// foreground state, since we could be killed at that point.
 		mNM.cancel(id);
 		if (mSetForeground != null) {
@@ -847,7 +845,6 @@ public final class LinphoneService extends Service {
 		}
 		super.onTaskRemoved(rootIntent);
 	}
-
 	@Override
 	public synchronized void onDestroy() {
 
@@ -864,12 +861,12 @@ public final class LinphoneService extends Service {
 
 		instance = null;
 		LinphoneManager.destroy();
-
-	    // Make sure our notification is gone.
+		android.util.Log.d(TAG, "onDestroy: ");
+		// Make sure our notification is gone.
 	    stopForegroundCompat(NOTIF_ID);
 	    mNM.cancel(INCALL_NOTIF_ID);
 	    mNM.cancel(MESSAGE_NOTIF_ID);
-
+		mNM.cancelAll();
 		super.onDestroy();
 	}
 

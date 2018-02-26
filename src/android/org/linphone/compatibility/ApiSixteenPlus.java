@@ -78,28 +78,35 @@ public class ApiSixteenPlus {
 	}
 
 	public static Notification createNotification(Context context, String title, String message, int icon, int level, Bitmap largeIcon, PendingIntent intent, boolean isOngoingEvent,int priority) {
-		Notification notif;
-
+		Notification notif = null;
+	try {
 		if (largeIcon != null) {
 			notif = new Notification.Builder(context)
-	        .setContentTitle(title)
-	        .setContentText(message)
-	        .setSmallIcon(icon, level)
-	        .setLargeIcon(largeIcon)
-	        .setContentIntent(intent)
-	        .setWhen(System.currentTimeMillis())
+					.setContentTitle(title)
+					.setContentText(message)
+					.setSmallIcon(icon, level)
+					.setLargeIcon(largeIcon)
+					.setOngoing(true)
+
+					.setContentIntent(intent)
+					.setWhen(System.currentTimeMillis())
 //	        .setPriority(priority)
-                    .build();
+					.build();
 		} else {
 			notif = new Notification.Builder(context)
-	        .setContentTitle(title)
-	        .setContentText(message)
-	        .setSmallIcon(icon, level)
-	        .setContentIntent(intent)
-	        .setWhen(System.currentTimeMillis())
+					.setContentTitle(title)
+					.setContentText(message)
+					.setSmallIcon(icon, level)
+					.setOngoing(true)
+
+					.setContentIntent(intent)
+					.setWhen(System.currentTimeMillis())
 //	        .setPriority(priority)
-                    .build();
+					.build();
 		}
+	}catch (Exception e){
+
+	}
 		if (isOngoingEvent) {
 			notif.flags |= Notification.FLAG_ONGOING_EVENT;
 		}
