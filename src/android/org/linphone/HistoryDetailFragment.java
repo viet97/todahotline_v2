@@ -117,7 +117,6 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
             } catch (Exception e) {
 
             }
-
 		}
 
 		return contactName;

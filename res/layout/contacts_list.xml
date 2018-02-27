@@ -12,6 +12,7 @@
 		android:layout_height="60dp">
 
 		<RelativeLayout
+			android:id="@+id/rl_local_contact"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">
@@ -41,6 +42,7 @@
 		</RelativeLayout>
 
 		<RelativeLayout
+			android:id="@+id/rl_toda_contact"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">
@@ -72,7 +74,7 @@
 		</RelativeLayout>
 
 		<RelativeLayout
-			android:visibility="gone"
+			android:id="@+id/rl_cus_contact"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">

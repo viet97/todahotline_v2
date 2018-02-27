@@ -38,6 +38,7 @@ import com.google.gson.Gson;
 
 import org.linphone.AccountPreferencesFragment;
 import org.linphone.LinphoneActivity;
+import org.linphone.LinphoneLauncherActivity;
 import org.linphone.LinphoneManager;
 import org.linphone.LinphonePreferences;
 import org.linphone.LinphoneService;
@@ -207,7 +208,15 @@ public class LoginActivity extends Activity {
 
     @Override
     protected void onResume() {
-        android.util.Log.d(TAG, "onResume: "+LinphonePreferences.instance().getAccountCount());
+        LinphoneLauncherActivity.isLinphoneActivity=false;
+        LinphonePreferences mPrefs = LinphonePreferences.instance();
+        if (mPrefs.getAccountCount()>0){
+            int accountNumber = mPrefs.getAccountCount();
+            while(accountNumber>=0){
+                mPrefs.deleteAccount(accountNumber);
+                accountNumber--;
+            }
+        }
         if (!LinphoneService.isReady()) {
             startService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
         }
@@ -454,7 +463,7 @@ public class LoginActivity extends Activity {
                                 + "&dongmay=" + android.os.Build.DEVICE
                                 + "&devicename=" + android.os.Build.DEVICE
                                 + "&imei=" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID)
-                                + "&ver=1.2.0.5"
+                                + "&ver=1.3.0.3"
                                 + "&idpush=" ;
                         android.util.Log.d(TAG, "loginURL: " + loginURL);
                         final Service service = NetContext.instance.create(Service.class);
@@ -678,6 +687,7 @@ public class LoginActivity extends Activity {
             Log.e(e);
         }
         android.util.Log.d(TAG, "saveCreatedAccount: 648");
+        LinphoneLauncherActivity.isLinphoneActivity=true;
         startActivity(new Intent().setClass(this, LinphoneActivity.class));
         android.util.Log.d(TAG, "saveCreatedAccount: 650");
     }

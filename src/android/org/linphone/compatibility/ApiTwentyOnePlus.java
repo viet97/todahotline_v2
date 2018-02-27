@@ -35,139 +35,139 @@ public class ApiTwentyOnePlus {
     public static String TAG = "ApiTwentyOnePlus";
 
     @SuppressWarnings("deprecation")
-	public static Notification createMessageNotification(Context context,
-			int msgCount, String msgSender, String msg, Bitmap contactIcon,
-			PendingIntent intent) {
-		String title;
-		if (msgCount == 1) {
-			title = msgSender;
-		} else {
-			title = context.getString(R.string.unread_messages).replace("%i", String.valueOf(msgCount));
-		}
+    public static Notification createMessageNotification(Context context,
+                                                         int msgCount, String msgSender, String msg, Bitmap contactIcon,
+                                                         PendingIntent intent) {
+        String title;
+        if (msgCount == 1) {
+            title = msgSender;
+        } else {
+            title = context.getString(R.string.unread_messages).replace("%i", String.valueOf(msgCount));
+        }
 
-		Notification notif = new Notification.Builder(context)
-			.setContentTitle(title)
-			.setContentText(msg)
-			.setSmallIcon(R.drawable.topbar_chat_notification)
-			.setAutoCancel(true)
-			.setContentIntent(intent)
-			.setDefaults(Notification.DEFAULT_SOUND
-					| Notification.DEFAULT_VIBRATE)
-			.setLargeIcon(contactIcon)
-			.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
-					context.getResources().getInteger(R.integer.notification_ms_on),
-					context.getResources().getInteger(R.integer.notification_ms_off))
-			.setCategory(Notification.CATEGORY_MESSAGE)
-			.setVisibility(Notification.VISIBILITY_PRIVATE)
-			.setPriority(Notification.PRIORITY_HIGH)
-			.setNumber(msgCount)
-			.build();
+        Notification notif = new Notification.Builder(context)
+                .setContentTitle(title)
+                .setContentText(msg)
+                .setSmallIcon(R.drawable.topbar_chat_notification)
+                .setAutoCancel(true)
+                .setContentIntent(intent)
+                .setDefaults(Notification.DEFAULT_SOUND
+                        | Notification.DEFAULT_VIBRATE)
+                .setLargeIcon(contactIcon)
+                .setLights(ContextCompat.getColor(context, R.color.notification_color_led),
+                        context.getResources().getInteger(R.integer.notification_ms_on),
+                        context.getResources().getInteger(R.integer.notification_ms_off))
+                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setVisibility(Notification.VISIBILITY_PRIVATE)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setNumber(msgCount)
+                .build();
 
-		return notif;
-	}
+        return notif;
+    }
 
-	public static Notification createInCallNotification(Context context,
-			String title, String msg, int iconID, Bitmap contactIcon,
-			String contactName, PendingIntent intent) {
+    public static Notification createInCallNotification(Context context,
+                                                        String title, String msg, int iconID, Bitmap contactIcon,
+                                                        String contactName, PendingIntent intent) {
 
-		Notification notif = new Notification.Builder(context).setContentTitle(contactName)
-			.setContentText(msg)
-			.setSmallIcon(iconID)
-			.setAutoCancel(false)
-			.setContentIntent(intent)
-			.setLargeIcon(contactIcon)
-			.setCategory(Notification.CATEGORY_CALL)
-			.setVisibility(Notification.VISIBILITY_PUBLIC)
-			.setPriority(Notification.PRIORITY_HIGH)
-			.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
-					context.getResources().getInteger(R.integer.notification_ms_on),
-					context.getResources().getInteger(R.integer.notification_ms_off))
-			.build();
+        Notification notif = new Notification.Builder(context).setContentTitle(contactName)
+                .setContentText(msg)
+                .setSmallIcon(iconID)
+                .setAutoCancel(false)
+                .setContentIntent(intent)
+                .setLargeIcon(contactIcon)
+                .setCategory(Notification.CATEGORY_CALL)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setLights(ContextCompat.getColor(context, R.color.notification_color_led),
+                        context.getResources().getInteger(R.integer.notification_ms_on),
+                        context.getResources().getInteger(R.integer.notification_ms_off))
+                .build();
 
-		return notif;
-	}
+        return notif;
+    }
 
-	public static Notification createNotification(Context context, String title, String message, int icon, int level, Bitmap largeIcon, PendingIntent intent, boolean isOngoingEvent,int priority) {
-		Notification notif;
+    public static Notification createNotification(Context context, String title, String message, int icon, int level, Bitmap largeIcon, PendingIntent intent, boolean isOngoingEvent, int priority) {
+        Notification notif;
 
-		if (largeIcon != null) {
+        if (largeIcon != null) {
             Log.d(TAG, "createNotification:largeIcon != null " + icon);
             notif = new Notification.Builder(context)
-		        .setContentTitle(title)
-		        .setContentText(message)
+                    .setContentTitle(title)
+                    .setContentText(message)
                     .setSmallIcon(icon)
                     .setLargeIcon(largeIcon)
-		        .setContentIntent(intent)
-				.setCategory(Notification.CATEGORY_SERVICE)
-					.setAutoCancel(false)
-					.setOngoing(true)
+                    .setContentIntent(intent)
+                    .setCategory(Notification.CATEGORY_SERVICE)
+                    .setAutoCancel(false)
+                    .setOngoing(true)
 //				.setVisibility(Notification.VISIBILITY_SECRET)
 //				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
 //						context.getResources().getInteger(R.integer.notification_ms_on),
 //						context.getResources().getInteger(R.integer.notification_ms_off))
 //				.setPriority(priority)
                     .build();
-		} else {
-			notif = new Notification.Builder(context)
-		        .setContentTitle(title)
-		        .setContentText(message)
-					.setAutoCancel(false)
-					.setSmallIcon(icon, level)
-		        .setContentIntent(intent)
-					.setOngoing(true)
-				.setCategory(Notification.CATEGORY_SERVICE)
+        } else {
+            notif = new Notification.Builder(context)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setAutoCancel(false)
+                    .setSmallIcon(icon, level)
+                    .setContentIntent(intent)
+                    .setOngoing(true)
+                    .setCategory(Notification.CATEGORY_SERVICE)
 //				.setVisibility(Notification.VISIBILITY_SECRET)
 //				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
 //						context.getResources().getInteger(R.integer.notification_ms_on),
 //						context.getResources().getInteger(R.integer.notification_ms_off))
 //				.setPriority(priority)
                     .build();
-		}
+        }
 
-		return notif;
-	}
+        return notif;
+    }
 
-	public static void removeGlobalLayoutListener(ViewTreeObserver viewTreeObserver, OnGlobalLayoutListener keyboardListener) {
-		viewTreeObserver.removeOnGlobalLayoutListener(keyboardListener);
-	}
+    public static void removeGlobalLayoutListener(ViewTreeObserver viewTreeObserver, OnGlobalLayoutListener keyboardListener) {
+        viewTreeObserver.removeOnGlobalLayoutListener(keyboardListener);
+    }
 
-	public static Notification createMissedCallNotification(Context context, String title, String text, PendingIntent intent) {
-		Notification notif = new Notification.Builder(context)
-		.setContentTitle(title)
-		.setContentText(text)
-		.setSmallIcon(R.drawable.call_status_missed)
-		.setAutoCancel(true)
-		.setContentIntent(intent)
-		.setDefaults(Notification.DEFAULT_SOUND
-				| Notification.DEFAULT_VIBRATE)
-		.setCategory(Notification.CATEGORY_MESSAGE)
-		.setVisibility(Notification.VISIBILITY_PRIVATE)
-		.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
-				context.getResources().getInteger(R.integer.notification_ms_on),
-				context.getResources().getInteger(R.integer.notification_ms_off))
-		.setPriority(Notification.PRIORITY_HIGH)
-		.build();
+    public static Notification createMissedCallNotification(Context context, String title, String text, PendingIntent intent) {
+        Notification notif = new Notification.Builder(context)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setSmallIcon(R.drawable.call_status_missed)
+                .setAutoCancel(true)
+                .setContentIntent(intent)
+                .setDefaults(Notification.DEFAULT_SOUND
+                        | Notification.DEFAULT_VIBRATE)
+                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setVisibility(Notification.VISIBILITY_PRIVATE)
+                .setLights(ContextCompat.getColor(context, R.color.notification_color_led),
+                        context.getResources().getInteger(R.integer.notification_ms_on),
+                        context.getResources().getInteger(R.integer.notification_ms_off))
+                .setPriority(Notification.PRIORITY_HIGH)
+                .build();
 
-		return notif;
-	}
+        return notif;
+    }
 
-	public static Notification createSimpleNotification(Context context, String title, String text, PendingIntent intent) {
-		Notification notif = new Notification.Builder(context)
-		.setContentTitle(title)
-		.setContentText(text)
-		.setSmallIcon(R.drawable.linphone_logo)
-		.setAutoCancel(true)
-		.setContentIntent(intent)
-		.setDefaults(Notification.DEFAULT_SOUND
-				| Notification.DEFAULT_VIBRATE)
-		.setCategory(Notification.CATEGORY_MESSAGE)
-		.setVisibility(Notification.VISIBILITY_PRIVATE)
-		.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
-				context.getResources().getInteger(R.integer.notification_ms_on),
-				context.getResources().getInteger(R.integer.notification_ms_off))
-		.setPriority(Notification.PRIORITY_HIGH)
-		.build();
+    public static Notification createSimpleNotification(Context context, String title, String text, PendingIntent intent) {
+        Notification notif = new Notification.Builder(context)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setSmallIcon(R.drawable.linphone_logo)
+                .setAutoCancel(true)
+                .setContentIntent(intent)
+                .setDefaults(Notification.DEFAULT_SOUND
+                        | Notification.DEFAULT_VIBRATE)
+                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setVisibility(Notification.VISIBILITY_PRIVATE)
+                .setLights(ContextCompat.getColor(context, R.color.notification_color_led),
+                        context.getResources().getInteger(R.integer.notification_ms_on),
+                        context.getResources().getInteger(R.integer.notification_ms_off))
+                .setPriority(Notification.PRIORITY_HIGH)
+                .build();
 
-		return notif;
-	}
+        return notif;
+    }
 }

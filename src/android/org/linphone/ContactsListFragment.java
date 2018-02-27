@@ -48,6 +48,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,7 @@ import org.linphone.myactivity.LoginActivity;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.ContactResponse;
+import org.linphone.network.models.LoginRespon;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,7 +83,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private ListView contactsList;
     private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
     private ImageView newContact, edit, selectAll, deselectAll, delete, cancel;
-
+    private RelativeLayout rlCusContact,rlLocalContact,rlTodaContact;
     private boolean isEditMode, isSearchMode;
     public static int onlyDisplayLinphoneContacts;
     private View allContactsSelected, linphoneContactsSelected, cusContactSelected;
@@ -117,7 +119,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     TextWatcher twToda = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            page=1;
+            page = 1;
             if (timer != null)
                 timer.cancel();
         }
@@ -131,7 +133,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         public void afterTextChanged(final Editable editable) {
             searchText = editable.toString();
             Log.d(TAG, "afterTextChanged: " + editable.toString());
-            prelast=0;
+            prelast = 0;
             isLoaded = false;
             try {
                 timer = new Timer();
@@ -213,6 +215,21 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 onlyDisplayChatAddress = getArguments().getBoolean("ChatAddressOnly");
             }
 //            getContactToda();
+            rlCusContact = view.findViewById(R.id.rl_cus_contact);
+            rlLocalContact = view.findViewById(R.id.rl_local_contact);
+            rlTodaContact = view.findViewById(R.id.rl_toda_contact);
+            rlCusContact.setVisibility(View.GONE);
+            rlTodaContact.setVisibility(View.GONE);
+            for (LoginRespon.Data.DSloaidanhba ds : DbContext.getInstance().getLoginRespon(getActivity()).getData().getDsloaidanhba() ) {
+                  int type = ds.getIdloaidanhba();
+                switch (type){
+                    case 1: rlTodaContact.setVisibility(View.VISIBLE);
+                        break;
+                    case 2: rlCusContact.setVisibility(View.VISIBLE);
+                        break;
+                }
+
+            }
             noSipContact = (TextView) view.findViewById(R.id.noSipContact);
             noContact = (TextView) view.findViewById(R.id.noContact);
 
@@ -260,6 +277,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             clearSearchField = (ImageView) view.findViewById(R.id.clearSearchField);
             clearSearchField.setOnClickListener(this);
 
+
             searchField = view.findViewById(R.id.searchField);
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
@@ -273,12 +291,12 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                 @Override
                 public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                    if (onlyDisplayLinphoneContacts!=0) {
+                    if (onlyDisplayLinphoneContacts != 0) {
                         int lastItem = i1 + i;
                         Log.d(TAG, "onScroll: lastItem la " + lastItem);
                         Log.d(TAG, "onScroll: i2 la " + i2);
-                        Log.d(TAG, "onScroll: "+isLoaded);
-                        Log.d(TAG, "onScroll: "+prelast);
+                        Log.d(TAG, "onScroll: " + isLoaded);
+                        Log.d(TAG, "onScroll: " + prelast);
                         if (lastItem == i2) {
                             if (prelast != lastItem && !isLoaded) {
                                 Log.d(TAG, "onScroll: last");
@@ -458,14 +476,12 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         if (id == R.id.all_contacts) {
             onlyDisplayLinphoneContacts = 0;
-            page=1;
+            page = 1;
             isLoaded = false;
-            prelast=0;
             Log.d(TAG, "onClick: 394");
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
             searchField.setText("");
-
             allContactsSelected.setVisibility(View.VISIBLE);
             allContacts.setEnabled(false);
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
@@ -477,11 +493,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         } else if (id == R.id.linphone_contacts) {
             onlyDisplayLinphoneContacts = 1;
-            prelast=0;
-            page=1;
+            page = 1;
             isLoaded = false;
+            searchField.clearTextChangedListeners();
             searchField.setText("");
             searchText = "";
+            searchField.setText("");
+            searchField.addTextChangedListener(twToda);
             try {
                 dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tải...", true, false);
                 Service contactService = NetContext.instance.create(Service.class);
@@ -551,10 +569,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 android.util.Log.d(TAG, "Exception: " + e);
             }
             allContacts.setTextColor(Color.parseColor("#ffffff"));
-
             cusContacts.setTextColor(Color.parseColor("#ffffff"));
-            searchField.clearTextChangedListeners();
-            searchField.addTextChangedListener(twToda);
             allContactsSelected.setVisibility(View.INVISIBLE);
             linphoneContactsSelected.setVisibility(View.VISIBLE);
             linphoneContacts.setEnabled(false);
@@ -564,8 +579,12 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         } else if (id == R.id.cus_contacts) {
             onlyDisplayLinphoneContacts = 2;
-            searchField.setText("");
+            page = 1;
+            isLoaded = false;
             searchText = "";
+            searchField.clearTextChangedListeners();
+            searchField.setText("");
+            searchField.addTextChangedListener(twToda);
             try {
                 dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tải...", true, false);
                 Service contactService = NetContext.instance.create(Service.class);
@@ -607,10 +626,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 }
 
                             }
-
+                            if (contactResponse.getNextpage() == 0) isLoaded = true;
                             ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
 
-//                        page++;
+                            page++;
                         }
                     }
 
@@ -634,11 +653,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             } catch (Exception e) {
                 android.util.Log.d(TAG, "Exception: " + e);
             }
+
             allContacts.setTextColor(Color.parseColor("#ffffff"));
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
-
-            searchField.clearTextChangedListeners();
-            searchField.addTextChangedListener(twToda);
             allContactsSelected.setVisibility(View.INVISIBLE);
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             cusContacts.setEnabled(false);
@@ -654,13 +671,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             selectAll.setVisibility(View.VISIBLE);
         }
 
-        if (searchField.getText().toString().length() > 0) {
-            Log.d(TAG, "onClick: 424");
-//            searchContacts();
-        } else {
-            Log.d(TAG, "onClick: 427");
-            changeContactsAdapter();
-        }
+//        if (searchField.getText().toString().length() > 0) {
+//            Log.d(TAG, "onClick: 424");
+////            searchContacts();
+//        } else {
+//            Log.d(TAG, "onClick: 427");
+//            changeContactsAdapter();
+//        }
 
         if (id == R.id.newContact) {
             Log.d(TAG, "onClick: 432");
@@ -831,7 +848,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     @Override
     public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         LinphoneContact contact = (LinphoneContact) adapter.getItemAtPosition(position);
-            Log.d(TAG, "onItemClick: ");
+        Log.d(TAG, "onItemClick: ");
         if (editOnClick) {
             editConsumed = true;
             LinphoneActivity.instance().editContact(contact, sipAddressToAdd);
@@ -1018,8 +1035,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             holder.layout.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    LinphoneContact contact = (LinphoneContact) getItem(position);;
-                    if (onlyDisplayLinphoneContacts==0) {
+                    LinphoneContact contact = (LinphoneContact) getItem(position);
+                    ;
+                    if (onlyDisplayLinphoneContacts == 0) {
                         if (editOnClick) {
                             editConsumed = true;
                             LinphoneActivity.instance().editContact(contact, sipAddressToAdd);

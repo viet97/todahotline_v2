@@ -35,8 +35,11 @@ import android.os.SystemClock;
  * Purpose of this receiver is to disable keep alives when screen is off
  * */
 public class KeepAliveReceiver extends BroadcastReceiver {
+	private String TAG="KeepAliveReceiver";
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		android.util.Log.d(TAG, "onReceive: ");
 		if (!LinphoneService.isReady()) {
 			return;
 		} else {

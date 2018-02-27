@@ -150,7 +150,7 @@
 
     <!-- History -->
     <string name="no_call_history">Không có cuộc gọi nào</string>
-    <string name="no_missed_call_history">No missed call in your history</string>
+    <string name="no_missed_call_history">Không có cuộc gọi nhỡ nào</string>
     <string name="delete_history_log">Do you want to delete selected call log?</string>
     <string name="today">Hôm nay</string>
     <string name="yesterday">Hôm qua</string>

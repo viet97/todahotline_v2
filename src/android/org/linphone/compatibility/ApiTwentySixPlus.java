@@ -122,7 +122,6 @@ public class ApiTwentySixPlus {
 						.setLargeIcon(largeIcon)
 						.setContentIntent(intent)
 						.setOngoing(true)
-
 						.setCategory(Notification.CATEGORY_SERVICE)
 //					.setVisibility(Notification.VISIBILITY_SECRET)
 //					.setPriority(priority)

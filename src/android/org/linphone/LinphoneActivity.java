@@ -180,7 +180,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         //This must be done before calling super.onCreate().
         super.onCreate(savedInstanceState);
         android.util.Log.d(TAG, "onCreate: ");
-
+        LinphoneLauncherActivity.isLinphoneActivity=true;
         if (getResources().getBoolean(R.bool.orientation_portrait_only)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -1427,6 +1427,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     protected void onResume() {
         super.onResume();
+
         if (!LinphoneService.isReady()) {
             startService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
         }
@@ -1661,9 +1662,9 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             @Override
             public void onClick(View view) {
                 if (sideMenu.isDrawerVisible(Gravity.LEFT)) {
-                    sideMenu.closeDrawer(sideMenuContent);
+//                    sideMenu.closeDrawer(sideMenuContent);
                 } else {
-                    sideMenu.openDrawer(sideMenuContent);
+//                    sideMenu.openDrawer(sideMenuContent);
                 }
             }
         });

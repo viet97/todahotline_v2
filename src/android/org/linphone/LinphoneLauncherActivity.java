@@ -41,7 +41,7 @@ import static android.content.Intent.ACTION_MAIN;
 public class LinphoneLauncherActivity extends Activity {
 
 	private final String ACTION_CALL_LINPHONE  = "org.linphone.intent.action.CallLaunched";
-
+	public static boolean isLinphoneActivity = false;
 	private Handler mHandler;
 	private ServiceWaitThread mServiceThread;
 	private String addressToCall;
@@ -83,6 +83,7 @@ public class LinphoneLauncherActivity extends Activity {
 			onServiceReady();
 		} else {
 			// start linphone as background
+
 			startService(new Intent(ACTION_MAIN).setClass(this, LinphoneService.class));
 			mServiceThread = new ServiceWaitThread();
 			mServiceThread.start();

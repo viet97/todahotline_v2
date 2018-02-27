@@ -107,7 +107,16 @@ public class LoginRespon {
         private String somayle;
         @SerializedName("chophepxemonoffext")
         private String chophepxemonoffext;
+        @SerializedName("dsloaidanhba")
+        private ArrayList<DSloaidanhba> dsloaidanhba = new ArrayList<>();
 
+        public ArrayList<Data.DSloaidanhba> getDsloaidanhba() {
+            return dsloaidanhba;
+        }
+
+        public void setDsloaidanhba(ArrayList<Data.DSloaidanhba> dsloaidanhba) {
+            this.dsloaidanhba = dsloaidanhba;
+        }
 
         public ArrayList<QuyenReponse> getDsquyen() {
             return dsquyen;
@@ -121,6 +130,28 @@ public class LoginRespon {
             this.chophepxemonoffext = chophepxemonoffext;
         }
 
+        public class DSloaidanhba {
+            @SerializedName("idloaidanhba")
+            private int idloaidanhba;
+            @SerializedName("tendanhba")
+            private String tendanhba;
+
+            public int getIdloaidanhba() {
+                return idloaidanhba;
+            }
+
+            public void setIdloaidanhba(int idloaidanhba) {
+                this.idloaidanhba = idloaidanhba;
+            }
+
+            public String getTendanhba() {
+                return tendanhba;
+            }
+
+            public void setTendanhba(String tendanhba) {
+                this.tendanhba = tendanhba;
+            }
+        }
         public void setDsquyen(ArrayList<QuyenReponse> dsquyen) {
             this.dsquyen = dsquyen;
         }
