@@ -1614,15 +1614,16 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     //SIDE MENU
     public void openOrCloseSideMenu(boolean open) {
-        if (open) {
-            sideMenu.openDrawer(sideMenuContent);
-        } else {
-            sideMenu.closeDrawer(sideMenuContent);
-        }
+//        if (open) {
+//            sideMenu.openDrawer(sideMenuContent);
+//        } else {
+//            sideMenu.closeDrawer(sideMenuContent);
+//        }
     }
 
     public void initSideMenu() {
         sideMenu = (DrawerLayout) findViewById(R.id.side_menu);
+        sideMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         sideMenuItems = new ArrayList<String>();
         sideMenuItems.add(getResources().getString(R.string.menu_assistant));
 //		sideMenuItems.add(getResources().getString(R.string.menu_settings));
