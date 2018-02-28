@@ -875,10 +875,12 @@ public final class LinphoneService extends Service {
         if (getResources().getBoolean(R.bool.kill_service_with_task_manager)) {
 
             LinphonePreferences mPrefs = LinphonePreferences.instance();
-            if (mPrefs.getAccountCount() > 0) {
-                int accountNumber = mPrefs.getAccountCount();
+            if (LinphonePreferences.instance().getAccountCount() > 0) {
+                LinphonePreferences.instance().setAccountEnabled(0,false);
+                int accountNumber = LinphonePreferences.instance().getAccountCount();
                 while (accountNumber >= 0) {
-                    mPrefs.deleteAccount(accountNumber);
+
+                    LinphonePreferences.instance().deleteAccount(accountNumber);
                     accountNumber--;
                 }
             }
@@ -902,10 +904,12 @@ public final class LinphoneService extends Service {
             activityCallbacks = null;
         }
         LinphonePreferences mPrefs = LinphonePreferences.instance();
-        if (mPrefs.getAccountCount() > 0) {
-            int accountNumber = mPrefs.getAccountCount();
+        if (LinphonePreferences.instance().getAccountCount() > 0) {
+            LinphonePreferences.instance().setAccountEnabled(0,false);
+            int accountNumber = LinphonePreferences.instance().getAccountCount();
             while (accountNumber >= 0) {
-                mPrefs.deleteAccount(accountNumber);
+
+                LinphonePreferences.instance().deleteAccount(accountNumber);
                 accountNumber--;
             }
         }

@@ -792,6 +792,7 @@ public class ActionBarView extends AbsActionBarView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.d(TAG, "onMeasure: ");
         final int childCount = getChildCount();
         if (mIsCollapsable) {
             int visibleChildren = 0;

@@ -180,7 +180,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         //This must be done before calling super.onCreate().
         super.onCreate(savedInstanceState);
         android.util.Log.d(TAG, "onCreate: ");
-        LinphoneLauncherActivity.isLinphoneActivity=true;
+        LinphoneLauncherActivity.isLinphoneActivity = true;
         if (getResources().getBoolean(R.bool.orientation_portrait_only)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
@@ -228,7 +228,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         initSideMenu();
         try {
             if (DbContext.getInstance().getLoginRespon(this).getData().getDsquyen().get(0).getIdcauhinh() != ONLY_TAKECALL) {
-               dialer.setVisibility(View.GONE);
+                dialer.setVisibility(View.GONE);
             }
         } catch (Exception e) {
 
@@ -239,7 +239,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 if (DbContext.getInstance().getLoginRespon(this).getData().getDsquyen().get(0).getIdcauhinh() != ONLY_TAKECALL) {
                     dialer.setVisibility(View.VISIBLE);
                     changeCurrentFragment(FragmentsAvailable.DIALER, getIntent().getExtras());
-                }else {
+                } else {
                     changeCurrentFragment(FragmentsAvailable.HISTORY_LIST, getIntent().getExtras());
                     dialer.setVisibility(View.GONE);
                 }
@@ -461,7 +461,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 //                        break;
 //                }
 //            } else {
-                changeFragment(fragment, newFragmentType, withoutAnimation);
+            changeFragment(fragment, newFragmentType, withoutAnimation);
 //            }
         }
     }
@@ -547,7 +547,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 }
 
 				/*if (!withoutAnimation && !isAnimationDisabled && currentFragment.shouldAnimate()) {
-					if (newFragmentType.isRightOf(currentFragment)) {
+                    if (newFragmentType.isRightOf(currentFragment)) {
 						transaction.setCustomAnimations(R.anim.slide_in_right_to_left, R.anim.slide_out_right_to_left, R.anim.slide_in_left_to_right, R.anim.slide_out_left_to_right);
 					} else {
 						transaction.setCustomAnimations(R.anim.slide_in_left_to_right, R.anim.slide_out_left_to_right, R.anim.slide_in_right_to_left, R.anim.slide_out_right_to_left);
@@ -1057,7 +1057,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         AddressType address = new AddressText(this, null);
         address.setDisplayedName(name);
         address.setText(number);
-        android.util.Log.d(TAG, "setAddresGoToDialerAndCall: 1060"+number);
+        android.util.Log.d(TAG, "setAddresGoToDialerAndCall: 1060" + number);
         LinphoneManager.getInstance().newOutgoingCall(address);
     }
 
@@ -1370,45 +1370,45 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         super.onStart();
         ArrayList<String> permissionsList = new ArrayList<String>();
 
-		int contacts = getPackageManager().checkPermission(Manifest.permission.READ_CONTACTS, getPackageName());
-		Log.i("[Permission] Contacts permission is " + (contacts == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
+        int contacts = getPackageManager().checkPermission(Manifest.permission.READ_CONTACTS, getPackageName());
+        Log.i("[Permission] Contacts permission is " + (contacts == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
 
-		int readPhone = getPackageManager().checkPermission(Manifest.permission.READ_PHONE_STATE, getPackageName());
-		Log.i("[Permission] Read phone state permission is " + (readPhone == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
+        int readPhone = getPackageManager().checkPermission(Manifest.permission.READ_PHONE_STATE, getPackageName());
+        Log.i("[Permission] Read phone state permission is " + (readPhone == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
 
-		int ringtone = getPackageManager().checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, getPackageName());
-		Log.i("[Permission] Read external storage for ring tone permission is " + (ringtone == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
+        int ringtone = getPackageManager().checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, getPackageName());
+        Log.i("[Permission] Read external storage for ring tone permission is " + (ringtone == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
 
-		if (ringtone != PackageManager.PERMISSION_GRANTED) {
-			if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-				Log.i("[Permission] Asking for read external storage for ring tone");
-				permissionsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-			}
-		}
-		if (readPhone != PackageManager.PERMISSION_GRANTED) {
-			if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_PHONE_STATE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
-				Log.i("[Permission] Asking for read phone state");
-				permissionsList.add(Manifest.permission.READ_PHONE_STATE);
-			}
-		}
-		if (contacts != PackageManager.PERMISSION_GRANTED) {
-			if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_CONTACTS) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
-				Log.i("[Permission] Asking for contacts");
-				permissionsList.add(Manifest.permission.READ_CONTACTS);
-			}
-		} else {
-			if (!ContactsManager.getInstance().contactsFetchedOnce()) {
-				ContactsManager.getInstance().enableContactsAccess();
-				ContactsManager.getInstance().fetchContactsAsync();
-			}
-		}
+        if (ringtone != PackageManager.PERMISSION_GRANTED) {
+            if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Log.i("[Permission] Asking for read external storage for ring tone");
+                permissionsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+        }
+        if (readPhone != PackageManager.PERMISSION_GRANTED) {
+            if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_PHONE_STATE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+                Log.i("[Permission] Asking for read phone state");
+                permissionsList.add(Manifest.permission.READ_PHONE_STATE);
+            }
+        }
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_CONTACTS) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
+                Log.i("[Permission] Asking for contacts");
+                permissionsList.add(Manifest.permission.READ_CONTACTS);
+            }
+        } else {
+            if (!ContactsManager.getInstance().contactsFetchedOnce()) {
+                ContactsManager.getInstance().enableContactsAccess();
+                ContactsManager.getInstance().fetchContactsAsync();
+            }
+        }
 
-		if (permissionsList.size() > 0) {
-			String[] permissions = new String[permissionsList.size()];
-			permissions = permissionsList.toArray(permissions);
-			ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_READ_EXTERNAL_STORAGE_DEVICE_RINGTONE);
-		}
-	}
+        if (permissionsList.size() > 0) {
+            String[] permissions = new String[permissionsList.size()];
+            permissions = permissionsList.toArray(permissions);
+            ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_READ_EXTERNAL_STORAGE_DEVICE_RINGTONE);
+        }
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -1737,7 +1737,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         } else {
             try {
                 address.setText(DbContext.getInstance().getLoginRespon(this).getData().getSomayle());
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             android.util.Log.d(TAG, "displayMainAccount: " + proxy.getAddress().asStringUriOnly());
@@ -1750,7 +1750,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 //				public void onClick(View view) {
 //					LinphoneActivity.instance().displayAccountSettings(LinphonePreferences.instance().getDefaultAccountIndex());
 //					openOrCloseSideMenu(false);
- //				}
+            //				}
 //			});
         }
     }
@@ -1886,7 +1886,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
                     try {
                         if (LinphonePreferences.instance().getAccountCount() > 0) {
-                            LinphonePreferences.instance().setAccountEnabled(0,false);
+                            LinphonePreferences.instance().setAccountEnabled(0, false);
                             int accountNumber = LinphonePreferences.instance().getAccountCount();
                             while (accountNumber >= 0) {
 
@@ -1910,7 +1910,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 //					Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
 //					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //					startActivity(intent);
-                       quit();
+                        quit();
 
                     } catch (Exception e) {
 
@@ -1922,7 +1922,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             public void onFailure(Call<VoidRespon> call, Throwable t) {
                 try {
                     dialogLogin.cancel();
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
                 Toast.makeText(LinphoneActivity.this,

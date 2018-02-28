@@ -708,6 +708,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     }
 
     public void changeAdapter() {
+
         ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
         Log.d(TAG, "changeAdapter: "+contactsList.getHeight());
         if (((ContactsListAdapter) contactsList.getAdapter()).getCount() == 0) {
@@ -779,7 +780,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         contactsList.setAdapter(new ContactsListAdapter(ContactsManager.getInstance().getContacts(search)));
         changeAdapter();
-//		if (onlyDisplayLinphoneContacts) {
+//		if (onlyDisplayLinphoneContacts!=0) {
 //			contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 //			contactsList.setAdapter(new ContactsListAdapter(ContactsManager.getInstance().getSIPContacts(search)));
 //		} else {
@@ -1051,14 +1052,18 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
 
         public View getView(final int position, View convertView, ViewGroup parent) {
+            Log.d(TAG, "getView: 1055");
             View view = null;
             final LinphoneContact contact = (LinphoneContact) getItem(position);
-            if (contact == null) return null;
+
+//            if (contact == null) return null;
             ViewHolder holder = null;
             if (convertView != null) {
+                Log.d(TAG, "convertView != null: ");
                 view = convertView;
                 holder = (ViewHolder) view.getTag();
             } else {
+                Log.d(TAG, "convertView == null: ");
                 view = mInflater.inflate(R.layout.contact_cell, parent, false);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
@@ -1101,7 +1106,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     }
                 }
             });
-            if (onlyDisplayLinphoneContacts == 0) {
+            if (onlyDisplayLinphoneContacts == 0&&contact!=null) {
                 holder.name.setText(contact.getFullName());
                 try {
                     holder.address.setText(contact.getNumbersOrAddresses().get(0).getValue());
@@ -1130,7 +1135,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 } else {
                     holder.separator.setVisibility(View.GONE);
                     String fullName = "";
-                    if (onlyDisplayLinphoneContacts == 0)
+                    if (onlyDisplayLinphoneContacts == 0&&contact!=null)
                         fullName = contact.getFullName();
                     else
                         try {
@@ -1145,20 +1150,20 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             } else {
                 holder.separator.setVisibility(View.GONE);
             }
-
-            if (contact.isInLinphoneFriendList()) {
-                holder.linphoneFriend.setVisibility(View.VISIBLE);
-            } else {
-                holder.linphoneFriend.setVisibility(View.GONE);
-            }
-
             holder.contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
-            if (contact.hasPhoto()) {
-                LinphoneUtils.setThumbnailPictureFromUri(LinphoneActivity.instance(), holder.contactPicture, contact.getThumbnailUri());
+            if(contact!=null) {
+                if (contact.isInLinphoneFriendList()) {
+                    holder.linphoneFriend.setVisibility(View.VISIBLE);
+                } else {
+                    holder.linphoneFriend.setVisibility(View.GONE);
+                }
+                if (contact.hasPhoto()) {
+                    LinphoneUtils.setThumbnailPictureFromUri(LinphoneActivity.instance(), holder.contactPicture, contact.getThumbnailUri());
+                }
             }
-
             boolean isOrgVisible = getResources().getBoolean(R.bool.display_contact_organization);
-            String org = contact.getOrganization();
+            String org="";
+            if (contact!=null) org= contact.getOrganization();
 //            if (org != null && !org.isEmpty() && isOrgVisible) {
 //                holder.organization.setText(org);
 //                holder.organization.setVisibility(View.VISIBLE);

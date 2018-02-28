@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,7 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
     private static final int ANIMATE_IDLE = 0;
     private static final int ANIMATE_IN = 1;
     private static final int ANIMATE_OUT = 2;
+    private String TAG="ActionBarViewContext";
 
     public ActionBarContextView(Context context) {
         this(context, null);
@@ -445,6 +447,7 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        Log.d(TAG, "onLayout: ");
         int x = getPaddingLeft();
         final int y = getPaddingTop();
         final int contentHeight = b - t - getPaddingTop() - getPaddingBottom();
