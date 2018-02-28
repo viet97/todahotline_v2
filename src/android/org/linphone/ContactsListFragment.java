@@ -114,6 +114,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         @Override
         public void afterTextChanged(Editable editable) {
+            prelast = 0;
             searchContacts(searchField.getText().toString());
         }
     };
@@ -486,6 +487,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
 
         if (id == R.id.all_contacts) {
+            prelast = 0;
             onlyDisplayLinphoneContacts = 0;
             page = 1;
             isLoaded = false;
@@ -502,6 +504,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             changeAdapter();
         } else if (id == R.id.linphone_contacts) {
+            prelast = 0;
             onlyDisplayLinphoneContacts = 1;
             page = 1;
             isLoaded = false;
@@ -593,6 +596,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             cusContactSelected.setVisibility(View.INVISIBLE);
 
         } else if (id == R.id.cus_contacts) {
+            prelast = 0;
             onlyDisplayLinphoneContacts = 2;
             page = 1;
             isLoaded = false;

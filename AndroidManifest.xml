@@ -3,7 +3,7 @@
     package="org.linphone"
     android:installLocation="auto"
     android:versionCode="3320"
-    android:versionName="1.3.0.3">
+    android:versionName="1.3.0.5">
 
     <uses-sdk
         android:minSdkVersion="16"
