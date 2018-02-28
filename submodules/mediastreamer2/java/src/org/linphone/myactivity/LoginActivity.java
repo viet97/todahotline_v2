@@ -212,6 +212,7 @@ public class LoginActivity extends Activity {
         LinphonePreferences mPrefs = LinphonePreferences.instance();
         if (mPrefs.getAccountCount()>0){
             int accountNumber = mPrefs.getAccountCount();
+            LinphonePreferences.instance().setAccountEnabled(0,false);
             while(accountNumber>=0){
                 mPrefs.deleteAccount(accountNumber);
                 accountNumber--;

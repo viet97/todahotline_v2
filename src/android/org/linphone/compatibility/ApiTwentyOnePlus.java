@@ -7,6 +7,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.ViewTreeObserver;
@@ -89,7 +90,13 @@ public class ApiTwentyOnePlus {
 
     public static Notification createNotification(Context context, String title, String message, int icon, int level, Bitmap largeIcon, PendingIntent intent, boolean isOngoingEvent, int priority) {
         Notification notif;
+        int color;
+        if (icon == R.drawable.ic_fiber_manual_record_black_124dp) {
+            color = Color.RED;
 
+        } else {
+            color = Color.GREEN;
+        }
         if (largeIcon != null) {
             Log.d(TAG, "createNotification:largeIcon != null " + icon);
             notif = new Notification.Builder(context)
@@ -101,6 +108,7 @@ public class ApiTwentyOnePlus {
                     .setCategory(Notification.CATEGORY_SERVICE)
                     .setAutoCancel(false)
                     .setOngoing(true)
+                    .setColor(color)
 //				.setVisibility(Notification.VISIBILITY_SECRET)
 //				.setLights(ContextCompat.getColor(context, R.color.notification_color_led),
 //						context.getResources().getInteger(R.integer.notification_ms_on),

@@ -324,10 +324,10 @@ public final class LinphoneService extends Service {
         dumpInstalledLinphoneInformation();
 
         //Disable service notification for Android O
-        if ((Version.sdkAboveOrEqual(Version.API26_O_80))) {
-            LinphonePreferences.instance().setServiceNotificationVisibility(false);
-            mDisableRegistrationStatus = true;
-        }
+//        if ((Version.sdkAboveOrEqual(Version.API26_O_80))) {
+//            LinphonePreferences.instance().setServiceNotificationVisibility(false);
+//            mDisableRegistrationStatus = true;
+//        }
 
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNM.cancel(INCALL_NOTIF_ID); // in case of crash the icon is not removed
@@ -875,12 +875,10 @@ public final class LinphoneService extends Service {
         if (getResources().getBoolean(R.bool.kill_service_with_task_manager)) {
 
             LinphonePreferences mPrefs = LinphonePreferences.instance();
-            if (LinphonePreferences.instance().getAccountCount() > 0) {
-                LinphonePreferences.instance().setAccountEnabled(0,false);
-                int accountNumber = LinphonePreferences.instance().getAccountCount();
+            if (mPrefs.getAccountCount() > 0) {
+                int accountNumber = mPrefs.getAccountCount();
                 while (accountNumber >= 0) {
-
-                    LinphonePreferences.instance().deleteAccount(accountNumber);
+                    mPrefs.deleteAccount(accountNumber);
                     accountNumber--;
                 }
             }
@@ -904,12 +902,10 @@ public final class LinphoneService extends Service {
             activityCallbacks = null;
         }
         LinphonePreferences mPrefs = LinphonePreferences.instance();
-        if (LinphonePreferences.instance().getAccountCount() > 0) {
-            LinphonePreferences.instance().setAccountEnabled(0,false);
-            int accountNumber = LinphonePreferences.instance().getAccountCount();
+        if (mPrefs.getAccountCount() > 0) {
+            int accountNumber = mPrefs.getAccountCount();
             while (accountNumber >= 0) {
-
-                LinphonePreferences.instance().deleteAccount(accountNumber);
+                mPrefs.deleteAccount(accountNumber);
                 accountNumber--;
             }
         }

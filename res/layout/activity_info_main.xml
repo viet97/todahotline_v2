@@ -4,7 +4,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg"
     android:orientation="vertical">
-
+    <ImageView
+        android:id="@+id/back_info"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="18dp"
+        android:src="@drawable/backicon" />
     <RelativeLayout
         android:id="@+id/llabout"
         android:layout_width="match_parent"

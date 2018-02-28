@@ -730,7 +730,6 @@
       <excludeFolder url="file://$MODULE_DIR$/bin/intermediates/jniLibs" />
       <excludeFolder url="file://$MODULE_DIR$/bin/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/bin/intermediates/multi-dex" />
-      <excludeFolder url="file://$MODULE_DIR$/bin/intermediates/pre-dexed" />
       <excludeFolder url="file://$MODULE_DIR$/bin/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/bin/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/bin/intermediates/shaders" />

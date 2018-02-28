@@ -7,6 +7,7 @@ import android.text.Spannable;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InfoActivityMain extends Activity {
+public class InfoActivityMain extends Activity implements View.OnClickListener {
     private String idnv;
     private int idct;
     private String IPSV;
@@ -34,6 +35,7 @@ public class InfoActivityMain extends Activity {
     TextView cskh;
     TextView website;
     TextView email;
+    ImageView backImg;
     private String TAG = "InfoFragment";
 
     @Override
@@ -52,6 +54,8 @@ public class InfoActivityMain extends Activity {
             cskh = (TextView) findViewById(R.id.tv_cskh);
             website = (TextView) findViewById(R.id.tv_website);
             email = (TextView) findViewById(R.id.tv_email);
+            backImg = (ImageView) findViewById(R.id.back_info);
+            backImg.setOnClickListener(this);
         } catch (Exception e) {
             Log.d("Info", "Exception: " + e);
         }
@@ -174,6 +178,11 @@ public class InfoActivityMain extends Activity {
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e);
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId()==R.id.back_info) onBackPressed();
     }
 }
 

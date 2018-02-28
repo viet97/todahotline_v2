@@ -1882,8 +1882,6 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                     dialogLogin.cancel();
                     Toast.makeText(LinphoneActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
                 } else {
-
-
                     try {
                         if (LinphonePreferences.instance().getAccountCount() > 0) {
                             LinphonePreferences.instance().setAccountEnabled(0, false);
