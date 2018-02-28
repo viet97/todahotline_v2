@@ -152,7 +152,7 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
                 alphaAnimation.setFillAfter(true);
                 alphaAnimation.setDuration(10);//duration in millisecond
                 accept.startAnimation(alphaAnimation);
@@ -162,7 +162,7 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
                 alphaAnimation.setFillAfter(true);
                 alphaAnimation.setDuration(10);//duration in millisecond
                 decline.startAnimation(alphaAnimation);

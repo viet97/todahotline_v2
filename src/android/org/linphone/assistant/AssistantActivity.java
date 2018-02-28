@@ -101,7 +101,6 @@ import static org.linphone.myactivity.LoginActivity.DEFAULT_BASE;
 
 public class AssistantActivity extends Activity implements OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback, LinphoneAccountCreator.LinphoneAccountCreatorListener {
     private static AssistantActivity instance;
-    private ImageView back, cancel;
     private AssistantFragmentsEnum currentFragment;
     private AssistantFragmentsEnum lastFragment;
     private AssistantFragmentsEnum firstFragment;
@@ -132,6 +131,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
     EditText edPass;
     EditText edPassOld;
     EditText edpassveri;
+    ImageView backImg;
     private static final String Pref_String_DB = "DbContext";
     private String TAG = "ChangePassFragment";
     private ProgressDialog dialogLogout;
@@ -145,14 +145,13 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         edPass = (EditText) findViewById(R.id.etPass);
         edPassOld = (EditText) findViewById(R.id.etPassold);
         edpassveri = (EditText) findViewById(R.id.edPassVerify);
+        backImg = (ImageView) findViewById(R.id.back_btn);
         initButtonChangePass();
         //my code
         if (getResources().getBoolean(R.bool.orientation_portrait_only)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-
-        initUI();
 
         if (getIntent().getBooleanExtra("LinkPhoneNumber", false)) {
             isLink = true;
@@ -229,6 +228,14 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
             }
         };
         instance = this;
+        backImg.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                android.util.Log.d(TAG, "backImg: ");
+                onBackPressed();
+            }
+        });
+
     }
 
     public void initButtonChangePass() {
@@ -278,10 +285,11 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                                                         }
                                                         LinphoneActivity.instance().finish();
-                                                        if (LinphonePreferences.instance().getAccountCount() >= 0) {
+                                                        if (LinphonePreferences.instance().getAccountCount() > 0) {
+                                                            LinphonePreferences.instance().setAccountEnabled(0,false);
                                                             int accountNumber = LinphonePreferences.instance().getAccountCount();
                                                             while (accountNumber >= 0) {
-                                                                android.util.Log.d(TAG, "accountNumber: " + accountNumber);
+
                                                                 LinphonePreferences.instance().deleteAccount(accountNumber);
                                                                 accountNumber--;
                                                             }
@@ -487,12 +495,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         return accountCreator;
     }
 
-    private void initUI() {
-        back = (ImageView) findViewById(R.id.back);
-        back.setOnClickListener(this);
-        cancel = (ImageView) findViewById(R.id.assistant_cancel);
-        cancel.setOnClickListener(this);
-    }
+
 
     private void changeFragment(Fragment newFragment) {
         hideKeyboard();
@@ -599,8 +602,8 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
             fragment.enableEcCalibrationResultSending(sendEcCalibrationResult);
             changeFragment(fragment);
             currentFragment = AssistantFragmentsEnum.ECHO_CANCELLER_CALIBRATION;
-            back.setVisibility(View.VISIBLE);
-            cancel.setEnabled(false);
+
+
         } else {
             checkAndRequestAudioPermission();
         }
@@ -694,14 +697,13 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         changeFragment(fragment);
         country = null;
         currentFragment = AssistantFragmentsEnum.WELCOME;
-        back.setVisibility(View.INVISIBLE);
     }
 
     public void displayLoginGeneric() {
         fragment = new LoginFragment();
         changeFragment(fragment);
         currentFragment = AssistantFragmentsEnum.LOGIN;
-        back.setVisibility(View.VISIBLE);
+
     }
 
     public void displayLoginLinphone(String username, String password) {
@@ -714,7 +716,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         fragment.setArguments(extras);
         changeFragment(fragment);
         currentFragment = AssistantFragmentsEnum.LINPHONE_LOGIN;
-        back.setVisibility(View.VISIBLE);
+
     }
 
     public void displayCreateAccount() {
@@ -725,14 +727,14 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         fragment.setArguments(extra);
         changeFragment(fragment);
         currentFragment = AssistantFragmentsEnum.CREATE_ACCOUNT;
-        back.setVisibility(View.VISIBLE);
+
     }
 
     public void displayRemoteProvisioning() {
         fragment = new RemoteProvisioningFragment();
         changeFragment(fragment);
         currentFragment = AssistantFragmentsEnum.REMOTE_PROVISIONING;
-        back.setVisibility(View.VISIBLE);
+
     }
 
     public void displayCountryChooser() {
@@ -740,7 +742,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         changeFragment(fragment);
         lastFragment = currentFragment;
         currentFragment = AssistantFragmentsEnum.COUNTRY_CHOOSER;
-        back.setVisibility(View.VISIBLE);
+
     }
 
     private void launchDownloadCodec() {
@@ -750,8 +752,8 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                 CodecDownloaderFragment codecFragment = new CodecDownloaderFragment();
                 changeFragment(codecFragment);
                 currentFragment = AssistantFragmentsEnum.DOWNLOAD_CODEC;
-                back.setVisibility(View.VISIBLE);
-                cancel.setEnabled(false);
+
+
             } else
                 goToLinphoneActivity();
         } else {
@@ -849,7 +851,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         changeFragment(fragment);
 
         currentFragment = AssistantFragmentsEnum.CREATE_ACCOUNT_ACTIVATION;
-        back.setVisibility(View.INVISIBLE);
+
     }
 
     public void displayAssistantCodeConfirm(String username, String phone, String dialcode, boolean recoverAccount) {
@@ -865,7 +867,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         changeFragment(fragment);
 
         currentFragment = AssistantFragmentsEnum.CREATE_ACCOUNT_CODE_ACTIVATION;
-        back.setVisibility(View.INVISIBLE);
+
     }
 
     public void displayAssistantLinphoneLogin(String phone, String dialcode) {
@@ -878,7 +880,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         changeFragment(fragment);
 
         currentFragment = AssistantFragmentsEnum.LINPHONE_LOGIN;
-        back.setVisibility(View.VISIBLE);
+
     }
 
     public void isAccountVerified(String username) {

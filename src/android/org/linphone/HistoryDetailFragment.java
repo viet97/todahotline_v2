@@ -44,7 +44,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 	private ImageView dialBack, chat, addToContacts, goToContact, back;
 	private View view;
 	private ImageView contactPicture, callDirection;
-	private TextView contactName, contactAddress, time, date;
+	private TextView contactName, contactAddress, time, date,statusCall;
 	private String sipUri, displayName, pictureUri;
 	private LinphoneContact contact;
 	private String TAG = "HistoryDetailFragment";
@@ -86,7 +86,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 
 		contactName = (TextView) view.findViewById(R.id.contact_name);
 		contactAddress = (TextView) view.findViewById(R.id.contact_address);
-
+		statusCall = (TextView) view.findViewById(R.id.status_call);
 		callDirection = (ImageView) view.findViewById(R.id.direction);
 
 		time = (TextView) view.findViewById(R.id.time);
@@ -123,10 +123,13 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 	}
 	private void displayHistory(String status, String callTime, String callDate) {
 		if (status.equals(getResources().getString(R.string.missed))) {
+			statusCall.setText("Cuộc gọi nhỡ");
 			callDirection.setImageResource(R.drawable.call_missed);
 		} else if (status.equals(getResources().getString(R.string.incoming))) {
+			statusCall.setText("Cuộc gọi đến");
 			callDirection.setImageResource(R.drawable.call_incoming);
 		} else if (status.equals(getResources().getString(R.string.outgoing))) {
+			statusCall.setText("Cuộc gọi đi");
 			callDirection.setImageResource(R.drawable.call_outgoing);
 		}
 

@@ -67,7 +67,7 @@ public class Profile extends Fragment {
         ll1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
                 alphaAnimation.setFillAfter(true);
                 alphaAnimation.setDuration(10);//duration in millisecond
                 ll1.startAnimation(alphaAnimation);
@@ -77,7 +77,7 @@ public class Profile extends Fragment {
         ll2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
                 alphaAnimation.setFillAfter(true);
                 alphaAnimation.setDuration(10);//duration in millisecond
                 ll2.startAnimation(alphaAnimation);
@@ -87,7 +87,7 @@ public class Profile extends Fragment {
         ll3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
                 alphaAnimation.setFillAfter(true);
                 alphaAnimation.setDuration(10);//duration in millisecond
                 ll3.startAnimation(alphaAnimation);
@@ -140,7 +140,8 @@ public class Profile extends Fragment {
                 } else {
 
                     try {
-                        if (LinphonePreferences.instance().getAccountCount() >= 0) {
+                        if (LinphonePreferences.instance().getAccountCount() > 0) {
+                            LinphonePreferences.instance().setAccountEnabled(0,false);
                             int accountNumber = LinphonePreferences.instance().getAccountCount();
                             while (accountNumber >= 0) {
 

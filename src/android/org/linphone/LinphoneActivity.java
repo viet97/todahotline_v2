@@ -1170,10 +1170,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     public void quit() {
         finish();
-//		stopService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
-//		ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
-//		am.killBackgroundProcesses(getString(R.string.sync_account_type));
-//		android.os.Process.killProcess(android.os.Process.myPid());
+
     }
 
     @Override
@@ -1614,11 +1611,11 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     //SIDE MENU
     public void openOrCloseSideMenu(boolean open) {
-//        if (open) {
-//            sideMenu.openDrawer(sideMenuContent);
-//        } else {
-//            sideMenu.closeDrawer(sideMenuContent);
-//        }
+        if (open) {
+            sideMenu.openDrawer(sideMenuContent);
+        } else {
+            sideMenu.closeDrawer(sideMenuContent);
+        }
     }
 
     public void initSideMenu() {
@@ -1888,7 +1885,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
 
                     try {
-                        if (LinphonePreferences.instance().getAccountCount() >= 0) {
+                        if (LinphonePreferences.instance().getAccountCount() > 0) {
+                            LinphonePreferences.instance().setAccountEnabled(0,false);
                             int accountNumber = LinphonePreferences.instance().getAccountCount();
                             while (accountNumber >= 0) {
 

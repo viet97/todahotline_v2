@@ -360,7 +360,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			public ImageView callDirection;
 			public ImageView contactPicture;
 			public RelativeLayout CallContact;
-
+			public TextView date;
 			public ViewHolder(View view) {
 				contact = (TextView) view.findViewById(R.id.sip_uri);
 				detail = (ImageView) view.findViewById(R.id.detail);
@@ -368,6 +368,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 				callDirection = (ImageView) view.findViewById(R.id.icon);
 				contactPicture = (ImageView) view.findViewById(R.id.contact_picture);
 				CallContact = (RelativeLayout) view.findViewById(R.id.history_click);
+				date = (TextView) view.findViewById(R.id.date_log);
 			}
 		}
 
@@ -467,7 +468,14 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			LinphoneAddress address;
 
 			holder.contact.setSelected(true); // For automated horizontal scrolling of long texts
+			String callDate = String.valueOf(mLogs.get(position).getTimestamp());
+			Long longDate = Long.parseLong(callDate);
 
+			String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_detail_date_format));
+			if (datetime.length() > 0) {
+				datetime = datetime.substring(0, datetime.length() - 2);
+			}
+			holder.date.setText(datetime);
 			LinearLayout separator = (LinearLayout) view.findViewById(R.id.separator);
 			TextView separatorText = (TextView) view.findViewById(R.id.separator_text);
 			Calendar logTime = Calendar.getInstance();

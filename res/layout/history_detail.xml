@@ -132,8 +132,8 @@
 					android:layout_height="1dp"/>
 
 				<TextView
-					android:text="@string/call"
-					style="@style/font13"
+					android:id="@+id/status_call"
+					android:textSize="15sp"
 					android:textAllCaps="true"
 					android:layout_marginTop="2dp"
 					android:layout_gravity="center"

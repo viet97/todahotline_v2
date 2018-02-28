@@ -22,6 +22,12 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:orientation="horizontal" />
+	<ImageView
+		android:id="@+id/back_btn"
+		android:layout_width="60dp"
+		android:layout_height="60dp"
+		android:padding="18dp"
+		android:src="@drawable/backicon" />
 	<RelativeLayout
 		android:id="@+id/ll_login"
 		android:layout_width="match_parent"

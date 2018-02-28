@@ -267,7 +267,7 @@ public class AccountPreferencesFragment extends PreferencesListFragment implemen
 			if (isNewAccount) {
 				builder.setEnabled(!value);
 			} else {
-				mPrefs.setAccountEnabled(n, !value);
+				mPrefs.setAccountEnabled(0, !value);
 			}
 			return true;
 		}

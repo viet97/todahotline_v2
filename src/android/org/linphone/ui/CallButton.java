@@ -53,7 +53,7 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 	}
 
 	public void onClick(View v) {
-		AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1.0f);
+		AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
 		alphaAnimation.setFillAfter(true);
 		alphaAnimation.setDuration(10);
 		this.startAnimation(alphaAnimation);
