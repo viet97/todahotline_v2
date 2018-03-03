@@ -23,10 +23,12 @@ public class ContactResponse {
     private boolean status;
     @SerializedName("msg")
     private String msg;
-    @SerializedName("nextpage")
-    private int nextpage;
+     @SerializedName("lastid")
+    private int lastid;
     @SerializedName("dsdanhba")
     private ArrayList<DSDanhBa> dsdanhba;
+    @SerializedName("endlist")
+    private boolean endlist;
 
     public ContactResponse() {
         this.dsdanhba = new ArrayList<>();
@@ -36,12 +38,20 @@ public class ContactResponse {
         return status;
     }
 
-    public int getNextpage() {
-        return nextpage;
+    public int getLastid() {
+        return lastid;
     }
 
-    public void setNextpage(int nextpage) {
-        this.nextpage = nextpage;
+    public void setLastid(int lastid) {
+        this.lastid = lastid;
+    }
+
+    public boolean isEndlist() {
+        return endlist;
+    }
+
+    public void setEndlist(boolean endlist) {
+        this.endlist = endlist;
     }
 
     public boolean getStatus() {

@@ -84,6 +84,8 @@ import org.linphone.core.PayloadType;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
+import org.linphone.network.NetworkStateReceiver;
+import org.linphone.ui.AddressText;
 import org.linphone.ui.Numpad;
 
 import java.text.DecimalFormat;
@@ -93,7 +95,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class CallActivity extends LinphoneGenericActivity implements OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class CallActivity extends LinphoneGenericActivity implements OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback,NetworkStateReceiver.NetworkStateReceiverListener {
 	private final static int SECONDS_BEFORE_HIDING_CONTROLS = 4000;
 	private final static int SECONDS_BEFORE_DENYING_CALL_UPDATE = 30000;
 	private static final int PERMISSIONS_REQUEST_CAMERA = 202;
@@ -110,6 +112,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private ImageView pause, hangUp, dialer, video, micro, speaker, options, addCall, transfer, conference, conferenceStatus, contactPicture;
 	private ImageView audioRoute, routeSpeaker, routeEarpiece, routeBluetooth, menu, chat;
 	private LinearLayout mNoCurrentCall, callInfo, mCallPaused;
+	private AddressText addressText;
 	private ProgressBar videoProgress;
 	private StatusFragment status;
 	private CallAudioFragment audioCallFragment;
@@ -123,7 +126,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private Dialog dialog = null;
 	private static long TimeRemind = 0;
 	private HeadsetReceiver headsetReceiver;
-
+	public NetworkStateReceiver networkStateReceiver;
 	private LinearLayout callsList, conferenceList;
 	private LayoutInflater inflater;
 	private ViewGroup container;
@@ -159,8 +162,11 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		setContentView(R.layout.call);
-
 		//Earset Connectivity Broadcast Processing
+		networkStateReceiver = new NetworkStateReceiver();
+		networkStateReceiver.addListener(CallActivity.this);
+		CallActivity.this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("android.intent.action.HEADSET_PLUG");
 		headsetReceiver = new HeadsetReceiver();
@@ -244,6 +250,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 				refreshIncallUi();
 				transfer.setEnabled(LinphoneManager.getLc().getCurrentCall() != null);
+
 			}
 
 			@Override
@@ -383,6 +390,10 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ABOVE,R.id.menu);
 		numpad.setLayoutParams(params);
+
+		addressText= findViewById(R.id.address_call);
+
+		numpad.setAddressWidget(addressText);
 		chat = (ImageView) findViewById(R.id.chat);
 		chat.setOnClickListener(this);
 		missedChats = (TextView) findViewById(R.id.missed_chats);
@@ -1199,6 +1210,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	protected void onResume() {
 
 		instance = this;
+        try {
+            networkStateReceiver.addListener(this);
+            this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        }catch (Exception e){
+
+        }
 		super.onResume();
 
 		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
@@ -1269,7 +1286,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		LinphoneManager.getInstance().enableProximitySensing(false);
 
 		unregisterReceiver(headsetReceiver);
+		try{
+			networkStateReceiver.removeListener(this);
+			this.unregisterReceiver(networkStateReceiver);
+		}catch (Exception e){
 
+		}
 		if (mControlsHandler != null && mControls != null) {
 			mControlsHandler.removeCallbacks(mControls);
 		}
@@ -1771,6 +1793,21 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			}
 		};
 		mTimer.scheduleAtFixedRate(mTask, 0, 1000);
+	}
+
+	@Override
+	public void networkAvailable() {
+
+	}
+
+	@Override
+	public void networkUnavailable() {
+		try {
+            hangUp();
+			Toast.makeText(CallActivity.this, "Mất kết nối đến tổng đài", Toast.LENGTH_SHORT).show();
+		}catch (Exception e){
+
+		}
 	}
 
 	////Earset Connectivity Broadcast innerClass

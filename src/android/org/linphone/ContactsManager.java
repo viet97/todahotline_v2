@@ -136,9 +136,9 @@ public class ContactsManager extends ContentObserver {
 		List<LinphoneContact> searchContactsContain = new ArrayList<LinphoneContact>();
 		for (LinphoneContact contact : contacts) {
 			if (contact.getFullName() != null) {
-				if (contact.getFullName().toLowerCase(Locale.getDefault()).startsWith(search)) {
+				if (contact.getFullName().toLowerCase(Locale.getDefault()).startsWith(search)||contact.getNumbersOrAddresses().get(0).getValue().toLowerCase(Locale.getDefault()).startsWith(search)) {
 					searchContactsBegin.add(contact);
-				} else if (contact.getFullName().toLowerCase(Locale.getDefault()).contains(search)) {
+				} else if (contact.getFullName().toLowerCase(Locale.getDefault()).contains(search)||contact.getNumbersOrAddresses().get(0).getValue().toLowerCase(Locale.getDefault()).contains(search)) {
 					searchContactsContain.add(contact);
 				}
 			}

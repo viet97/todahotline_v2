@@ -240,7 +240,7 @@
     <string name="menu_reset_log">Reset log</string>
 
     <!-- Service -->
-    <string name="incall_notif_active">Audio call ongoing</string>
+    <string name="incall_notif_active">Đang gọi</string>
     <string name="incall_notif_paused">Paused call ongoing</string>
     <string name="incall_notif_video">Video capturing call ongoing</string>
     <string name="notification_started">started</string>

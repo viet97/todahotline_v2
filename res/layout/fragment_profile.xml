@@ -7,38 +7,46 @@
     tools:context="org.linphone.Profile">
 
     <RelativeLayout
-        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:layout_marginTop="24dp">
 
         <ImageView
-            android:layout_centerHorizontal="true"
             android:id="@+id/img_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:src="@drawable/info_icon_medium" />
 
         <TextView
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:textSize="24dp"
-            android:textColor="@color/white"
             android:id="@+id/tv_profilename"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/img_profile" />
+            android:layout_below="@id/img_profile"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/white"
+            android:textSize="24dp" />
+        <TextView
+            android:id="@+id/tv_job"
+            android:layout_below="@id/tv_profilename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
         <TextView
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:textSize="18dp"
-            android:textColor="@color/white"
             android:id="@+id/tv_sipAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_profilename" />
+            android:layout_below="@id/tv_job"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
     </RelativeLayout>
 
     <LinearLayout

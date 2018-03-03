@@ -49,7 +49,7 @@ public class Profile extends Fragment {
     }
 
     LinearLayout ll1, ll2, ll3;
-    TextView tvName, tvSipAddress;
+    TextView tvName, tvSipAddress,tvJob;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,10 +60,20 @@ public class Profile extends Fragment {
         ll2 = view.findViewById(R.id.llprofile_changepass);
         ll3 = view.findViewById(R.id.llprofile_logout);
         tvName = view.findViewById(R.id.tv_profilename);
+        tvJob = view.findViewById(R.id.tv_job);
         tvSipAddress = view.findViewById(R.id.tv_sipAddress);
-        tvName.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getTennhanvien());
-        tvSipAddress.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getSomayle());
+        try {
+            tvName.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getTennhanvien());
+            tvSipAddress.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getSomayle());
+            if (DbContext.getInstance().getLoginRespon(getActivity()).getData().getChucvu() != null) {
+                tvJob.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getChucvu());
+                 tvJob.setVisibility(View.VISIBLE);
+            }else {
+                tvJob.setVisibility(View.GONE);
+            }
+        }catch (Exception e){
 
+        }
         ll1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

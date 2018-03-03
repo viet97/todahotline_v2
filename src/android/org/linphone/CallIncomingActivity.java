@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import android.Manifest;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -46,14 +47,15 @@ import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCoreListenerBase;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
+import org.linphone.network.NetworkStateReceiver;
 import org.linphone.ui.LinphoneSliders.LinphoneSliderTriggered;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CallIncomingActivity extends LinphoneGenericActivity implements LinphoneSliderTriggered {
+public class CallIncomingActivity extends LinphoneGenericActivity implements LinphoneSliderTriggered,NetworkStateReceiver.NetworkStateReceiverListener {
     private static CallIncomingActivity instance;
-
+    public NetworkStateReceiver networkStateReceiver;
     private TextView name, number;
     private ImageView contactPicture, accept, decline, arrow;
     private LinphoneCall mCall;
@@ -82,6 +84,9 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.call_incoming);
+        networkStateReceiver = new NetworkStateReceiver();
+        networkStateReceiver.addListener(this);
+        this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
 
         name = (TextView) findViewById(R.id.contact_name);
         number = (TextView) findViewById(R.id.contact_number);
@@ -105,6 +110,7 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         }
         decline = (ImageView) findViewById(R.id.decline);
         arrow = (ImageView) findViewById(R.id.arrow_hangup);
+
 //        accept.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -234,7 +240,12 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         if (lc != null) {
             lc.addListener(mListener);
         }
+        try {
+            networkStateReceiver.addListener(this);
+            this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        }catch (Exception e){
 
+        }
         alreadyAcceptedOrDeniedCall = false;
         mCall = null;
 
@@ -301,6 +312,12 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
 
     @Override
     protected void onDestroy() {
+        try{
+            networkStateReceiver.removeListener(this);
+            this.unregisterReceiver(networkStateReceiver);
+        }catch (Exception e){
+
+        }
         super.onDestroy();
         instance = null;
     }
@@ -408,6 +425,21 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         for (int i = 0; i < permissions.length; i++) {
             Log.i("[Permission] " + permissions[i] + " is " + (grantResults[i] == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
+        }
+    }
+
+    @Override
+    public void networkAvailable() {
+
+    }
+
+    @Override
+    public void networkUnavailable() {
+        try {
+            decline();
+            Toast.makeText(CallIncomingActivity.this, "Mất kết nối đến tổng đài", Toast.LENGTH_SHORT).show();
+        }catch (Exception e){
+
         }
     }
 }

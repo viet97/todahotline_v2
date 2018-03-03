@@ -26,23 +26,21 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,18 +51,14 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import org.linphone.database.DbContext;
 import org.linphone.layoutXML.ExtendedEditText;
-import org.linphone.myactivity.LoginActivity;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -78,13 +72,14 @@ import retrofit2.Response;
 
 import static org.linphone.FragmentsAvailable.CONTACTS_LIST;
 
-public class ContactsListFragment extends Fragment implements OnClickListener, OnItemClickListener, ContactsUpdatedListener {
+public class ContactsListFragment extends Fragment implements OnClickListener, OnItemClickListener, ContactsUpdatedListener,SwipeRefreshLayout.OnRefreshListener {
     private LayoutInflater mInflater;
     private ListView contactsList;
     private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
     private ImageView newContact, edit, selectAll, deselectAll, delete, cancel;
     private RelativeLayout rlCusContact, rlLocalContact, rlTodaContact;
-    private RelativeLayout rlContact, rlNoResult;
+    private RelativeLayout  rlNoResult,rlContact;
+    private SwipeRefreshLayout refreshLayout ;
     private boolean isEditMode, isSearchMode;
     public static int onlyDisplayLinphoneContacts;
     private View allContactsSelected, linphoneContactsSelected, cusContactSelected;
@@ -98,7 +93,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private String TAG = "ContactsListFragment";
     private int prelast;
     private Timer timer = new Timer();
-    private int page = 1;
+    private int lastID = 0;
     private ProgressDialog dialogSearch;
     private String searchText = "";
     TextWatcher twLocal = new TextWatcher() {
@@ -121,7 +116,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     TextWatcher twToda = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            page = 1;
+            lastID = 0;
             if (timer != null)
                 timer.cancel();
         }
@@ -148,11 +143,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tìm kiếm...", true, false);
                                 String urlContact;
                                 if (onlyDisplayLinphoneContacts == 1)
-                                    urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                                            + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                                    urlContact = "AppDanhBa_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                                            + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
                                 else
-                                    urlContact = "AppDanhBaKhachHang.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                                            + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                                    urlContact = "AppDanhBaKhachHang_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                                            + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
                                 android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
                                 Service service = NetContext.getInstance().create(Service.class);
                                 service.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
@@ -172,9 +167,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                             } catch (Exception e) {
 
                                             }
-                                            if (contactResponse.getNextpage() == 0) isLoaded = true;
+                                            if (contactResponse.isEndlist()) isLoaded = true;
                                             changeAdapter();
-                                            page++;
+                                            lastID=contactResponse.getLastid();
                                         }
                                     }
 
@@ -200,14 +195,17 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
     };
     private boolean isLoaded = false;
-
+    private boolean listIsAtTop()   {
+        if(contactsList.getChildCount() == 0) return true;
+        return contactsList.getChildAt(0).getTop() == 0;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         isLoaded = false;
         mInflater = inflater;
         View view = inflater.inflate(R.layout.contacts_list, container, false);
         try {
-            page = 1;
+            lastID = 0;
             searchText = "";
             if (getArguments() != null) {
                 editOnClick = getArguments().getBoolean("EditOnClick");
@@ -222,6 +220,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             rlCusContact = view.findViewById(R.id.rl_cus_contact);
             rlLocalContact = view.findViewById(R.id.rl_local_contact);
             rlTodaContact = view.findViewById(R.id.rl_toda_contact);
+            refreshLayout = view.findViewById(R.id.refresh_layout);
             rlCusContact.setVisibility(View.GONE);
             rlTodaContact.setVisibility(View.GONE);
             for (LoginRespon.Data.DSloaidanhba ds : DbContext.getInstance().getLoginRespon(getActivity()).getData().getDsloaidanhba()) {
@@ -288,7 +287,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
             contactsFetchInProgress = (ProgressBar) view.findViewById(R.id.contactsFetchInProgress);
-            contactsFetchInProgress.setVisibility(View.VISIBLE);
+//            contactsFetchInProgress.setVisibility(View.VISIBLE);
+            refreshLayout.setOnRefreshListener(this);
             contactsList.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -297,8 +297,15 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                 @Override
                 public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                        try{
+                            refreshLayout.setEnabled( listIsAtTop() );
+                        }catch (Exception e){
+
+                        }
+
                     if (onlyDisplayLinphoneContacts != 0) {
                         int lastItem = i1 + i;
+
                         Log.d(TAG, "onScroll: lastItem la " + lastItem);
                         Log.d(TAG, "onScroll: i2 la " + i2);
                         Log.d(TAG, "onScroll: " + isLoaded);
@@ -313,7 +320,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     }
                 }
             });
-
+            allContacts.callOnClick();
         } catch (Exception e) {
             Log.d(TAG, "onCreateView: " + e);
         }
@@ -347,20 +354,20 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             Service contactService = NetContext.instance.create(Service.class);
             String urlContact;
             if (onlyDisplayLinphoneContacts == 1)
-                urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                urlContact = "AppDanhBa_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
             else
-                urlContact = "AppDanhBaKhachHang.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
-            android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
+                urlContact = "AppDanhBaKhachHang_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
+
             contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
                 @Override
                 public void onResponse(Call<ContactResponse> call, Response<ContactResponse> response) {
                     ContactResponse contactResponse = new ContactResponse();
                     contactResponse = response.body();
                     if (contactResponse.getStatus()) {
-                        Log.d(TAG, "onResponse: " + page);
-                        if (page == 1) {
+                        Log.d(TAG, "onResponse: " + lastID);
+                        if (lastID == 0) {
                             Log.d(TAG, "onResponse:" + DbContext.getInstance());
                             try {
                                 DbContext.getInstance().setContactResponse(contactResponse, getActivity());
@@ -384,8 +391,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         }
 
                         changeAdapter();
-                        if (contactResponse.getNextpage() == 0) isLoaded = true;
-                        page++;
+                        if (contactResponse.isEndlist()) isLoaded = true;
+                        lastID=contactResponse.getLastid();
                     }
                 }
 
@@ -489,7 +496,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         if (id == R.id.all_contacts) {
             prelast = 0;
             onlyDisplayLinphoneContacts = 0;
-            page = 1;
+            lastID = 0;
             isLoaded = false;
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
@@ -506,7 +513,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         } else if (id == R.id.linphone_contacts) {
             prelast = 0;
             onlyDisplayLinphoneContacts = 1;
-            page = 1;
+            lastID = 0;
             isLoaded = false;
             searchField.clearTextChangedListeners();
             searchField.setText("");
@@ -515,8 +522,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             try {
                 dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tải...", true, false);
                 Service contactService = NetContext.instance.create(Service.class);
-                String urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                String urlContact = "AppDanhBa_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
                 android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
                 contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
                     @Override
@@ -529,8 +536,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                         }
                         if (contactResponse.getStatus()) {
-                            Log.d(TAG, "onResponse: " + page);
-                            if (page == 1) {
+                            Log.d(TAG, "onResponse: " + lastID);
+                            if (lastID == 0) {
 
                                 Log.d(TAG, "onResponse:" + DbContext.getInstance());
                                 try {
@@ -555,8 +562,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             }
 
                             changeAdapter();
-                            if (contactResponse.getNextpage() == 0) isLoaded = true;
-                            page++;
+                            if (contactResponse.isEndlist()) isLoaded = true;
+                            lastID=contactResponse.getLastid();
                         }
                     }
 
@@ -598,7 +605,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         } else if (id == R.id.cus_contacts) {
             prelast = 0;
             onlyDisplayLinphoneContacts = 2;
-            page = 1;
+            lastID = 0;
             isLoaded = false;
             searchText = "";
             searchField.clearTextChangedListeners();
@@ -607,8 +614,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             try {
                 dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tải...", true, false);
                 Service contactService = NetContext.instance.create(Service.class);
-                String urlContact = "AppDanhBaKhachHang.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&page=" + page + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                String urlContact = "AppDanhBaKhachHang_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
                 android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
                 contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
                     @Override
@@ -621,8 +628,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                         }
                         if (contactResponse.getStatus()) {
-                            Log.d(TAG, "onResponse: " + page);
-                            if (page == 1) {
+                            Log.d(TAG, "onResponse: " + lastID);
+                            if (lastID == 0) {
 
                                 Log.d(TAG, "onResponse:" + DbContext.getInstance());
                                 try {
@@ -645,10 +652,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 }
 
                             }
-                            if (contactResponse.getNextpage() == 0) isLoaded = true;
+                            if (contactResponse.isEndlist()) isLoaded = true;
                             changeAdapter();
 
-                            page++;
+                            lastID=contactResponse.getLastid();
                         }
                     }
 
@@ -852,13 +859,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             cusContacts.setEnabled(true);
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             cusContactSelected.setVisibility(View.INVISIBLE);
-
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
             cusContacts.setTextColor(Color.parseColor("#ffffff"));
 
         } else if (onlyDisplayLinphoneContacts == 1) {
             allContacts.setTextColor(Color.parseColor("#ffffff"));
-
             cusContacts.setTextColor(Color.parseColor("#ffffff"));
             allContacts.setEnabled(true);
             allContactsSelected.setVisibility(View.INVISIBLE);
@@ -945,6 +950,90 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             changeContactsAdapter();
         }
         contactsList.setSelectionFromTop(lastKnownPosition, 0);
+    }
+
+    @Override
+    public void onRefresh() {
+        if(onlyDisplayLinphoneContacts!=0) {
+            try {
+                lastID = 0;
+                isLoaded = false;
+                prelast = 0;
+                Service contactService = NetContext.instance.create(Service.class);
+                String urlContact;
+                if (onlyDisplayLinphoneContacts == 1)
+                    urlContact = "AppDanhBa_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                            + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
+                else
+                    urlContact = "AppDanhBaKhachHang_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                            + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
+
+                contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
+                    @Override
+                    public void onResponse(Call<ContactResponse> call, Response<ContactResponse> response) {
+                        ContactResponse contactResponse = new ContactResponse();
+                        contactResponse = response.body();
+                        if (contactResponse.getStatus()) {
+                            Log.d(TAG, "onResponse: " + lastID);
+                            if (lastID == 0) {
+                                Log.d(TAG, "onResponse:" + DbContext.getInstance());
+                                try {
+                                    DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+                                } catch (Exception e) {
+
+                                }
+
+                            } else {
+                                try {
+                                    ContactResponse currentContactResponse = DbContext.getInstance().getContactResponse(getActivity());
+                                    ArrayList<ContactResponse.DSDanhBa> dsDanhBas = currentContactResponse.getDsdanhba();
+                                    for (ContactResponse.DSDanhBa ds : contactResponse.getDsdanhba()) {
+                                        dsDanhBas.add(ds);
+                                    }
+                                    currentContactResponse.setDsdanhba(dsDanhBas);
+                                    DbContext.getInstance().setContactResponse(currentContactResponse, getActivity());
+                                } catch (Exception e) {
+
+                                }
+
+                            }
+                            try {
+                                refreshLayout.setRefreshing(false);
+                            } catch (Exception e) {
+
+                            }
+                            changeAdapter();
+                            if (contactResponse.isEndlist()) isLoaded = true;
+                            lastID = contactResponse.getLastid();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ContactResponse> call, Throwable t) {
+                        try {
+                            refreshLayout.setRefreshing(false);
+                            dialogSearch.cancel();
+                        } catch (Exception e) {
+
+                        }
+
+                        try {
+                            Toast.makeText(getActivity(),
+                                    "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                    Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+                });
+            } catch (Exception e) {
+                android.util.Log.d(TAG, "Exception: " + e);
+            }
+        }else {
+            refreshLayout.setRefreshing(false);
+        }
+
     }
 
     class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
@@ -1126,7 +1215,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
                     }
                     holder.name.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getTenlienhe());
-                    holder.address.setVisibility(View.VISIBLE);
+                    holder.organization.setVisibility(View.VISIBLE);
                     holder.address.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getSodienthoai());
                     holder.organization.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getJob());
                 } catch (Exception e) {

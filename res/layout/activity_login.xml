@@ -31,7 +31,8 @@
                     android:layout_marginBottom="40dp"
                     android:src="@drawable/logolachong" />
                 <LinearLayout
-
+                    android:descendantFocusability="beforeDescendants"
+                    android:focusableInTouchMode="true"
                     android:id="@+id/llsv"
                     android:layout_width="wrap_content"
                     android:layout_height="45dp"

@@ -301,6 +301,8 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                         databasePref.clear();
                                                         databasePref.commit();
                                                         dialogLogin.cancel();
+                                                        Toast.makeText(AssistantActivity.this,"Đổi mật khẩu thành công , bạn sẽ bị đăng xuất khỏi tài khoản.",Toast.LENGTH_SHORT).show();
+
                                                         Intent intent = new Intent(AssistantActivity.this, LoginActivity.class);
                                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);

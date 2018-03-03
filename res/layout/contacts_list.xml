@@ -1,220 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:background="@drawable/bg"
-	android:orientation="vertical" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical">
 
-	<LinearLayout
-		android:id="@+id/top_bar"
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="60dp">
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
 
-		<RelativeLayout
-			android:id="@+id/rl_local_contact"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="0.2">
+        <RelativeLayout
+            android:id="@+id/rl_local_contact"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2">
 
-			<TextView
-				android:id="@+id/all_contacts"
-				android:textColor="@color/white"
-				android:text="Trên máy"
-				android:padding="15dp"
-				android:gravity="center"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent" />
-			<!--<ImageView-->
-			<!--android:id="@+id/all_contacts"-->
-			<!--android:src="@drawable/contacts_all"-->
-			<!--android:contentDescription="@string/content_description_all_contacts"-->
-			<!--android:padding="15dp"-->
-			<!--android:layout_width="match_parent"-->
-			<!--android:layout_height="match_parent"/>-->
+            <TextView
+                android:id="@+id/all_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Trên máy"
+                android:textColor="@color/white" />
+            <!--<ImageView-->
+            <!--android:id="@+id/all_contacts"-->
+            <!--android:src="@drawable/contacts_all"-->
+            <!--android:contentDescription="@string/content_description_all_contacts"-->
+            <!--android:padding="15dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
 
-			<View
-				android:id="@+id/all_contacts_select"
-				android:background="@color/colorA"
-				android:layout_width="match_parent"
-				android:layout_height="5dp"
-				android:layout_alignParentBottom="true"/>
-		</RelativeLayout>
+            <View
+                android:id="@+id/all_contacts_select"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorA" />
+        </RelativeLayout>
 
-		<RelativeLayout
-			android:id="@+id/rl_toda_contact"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="0.2">
+        <RelativeLayout
+            android:id="@+id/rl_toda_contact"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2">
 
-			<TextView
-				android:id="@+id/linphone_contacts"
-				android:textColor="@color/white"
-				android:text="Nội bộ"
-				android:padding="15dp"
-				android:gravity="center"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent" />
-			<!--<ImageView-->
-			<!--android:id="@+id/linphone_contacts"-->
-			<!--android:src="@drawable/contacts_sip"-->
-			<!--android:contentDescription="@string/content_description_linphone_contacts"-->
-			<!--android:gravity="center"-->
-			<!--android:padding="15dp"-->
-			<!--android:layout_width="match_parent"-->
-			<!--android:layout_height="match_parent"/>-->
+            <TextView
+                android:id="@+id/linphone_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Nội bộ"
+                android:textColor="@color/white" />
+            <!--<ImageView-->
+            <!--android:id="@+id/linphone_contacts"-->
+            <!--android:src="@drawable/contacts_sip"-->
+            <!--android:contentDescription="@string/content_description_linphone_contacts"-->
+            <!--android:gravity="center"-->
+            <!--android:padding="15dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
 
-			<View
-				android:id="@+id/linphone_contacts_select"
-				android:background="@color/colorA"
-				android:layout_width="match_parent"
-				android:layout_height="5dp"
-				android:visibility="gone"
-				android:layout_alignParentBottom="true"/>
-		</RelativeLayout>
+            <View
+                android:id="@+id/linphone_contacts_select"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorA"
+                android:visibility="gone" />
+        </RelativeLayout>
 
-		<RelativeLayout
-			android:id="@+id/rl_cus_contact"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="0.2">
+        <RelativeLayout
+            android:id="@+id/rl_cus_contact"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2">
 
-			<TextView
-				android:id="@+id/cus_contacts"
-				android:textColor="@color/white"
-				android:text="Khách hàng"
-				android:padding="15dp"
-				android:gravity="center"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent" />
-			<!--<ImageView-->
-			<!--android:id="@+id/cus_contacts"-->
-			<!--android:src="@drawable/contacts_all"-->
-			<!--android:contentDescription="@string/content_description_all_contacts"-->
-			<!--android:padding="15dp"-->
-			<!--android:layout_width="match_parent"-->
-			<!--android:layout_height="match_parent"/>-->
+            <TextView
+                android:id="@+id/cus_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Khách hàng"
+                android:textColor="@color/white" />
+            <!--<ImageView-->
+            <!--android:id="@+id/cus_contacts"-->
+            <!--android:src="@drawable/contacts_all"-->
+            <!--android:contentDescription="@string/content_description_all_contacts"-->
+            <!--android:padding="15dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
 
-			<View
-				android:id="@+id/cus_contacts_select"
-				android:background="@color/colorA"
-				android:layout_width="match_parent"
-				android:layout_height="5dp"
-				android:visibility="gone"
-				android:layout_alignParentBottom="true" />
-		</RelativeLayout>
+            <View
+                android:id="@+id/cus_contacts_select"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorA"
+                android:visibility="gone" />
+        </RelativeLayout>
 
 
-		<ImageView
-			android:visibility="gone"
-			android:id="@+id/newContact"
-			android:src="@drawable/contact_add"
-			android:background="@drawable/toolbar_button"
-			android:contentDescription="@string/content_description_new_contact"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="0.2"
-			android:padding="15dp"/>
+        <ImageView
+            android:id="@+id/newContact"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:background="@drawable/toolbar_button"
+            android:contentDescription="@string/content_description_new_contact"
+            android:padding="15dp"
+            android:src="@drawable/contact_add"
+            android:visibility="gone" />
 
-		<ImageView
-			android:visibility="gone"
-			android:id="@+id/edit"
-			android:src="@drawable/edit_list_button"
-			android:background="@drawable/toolbar_button"
-			android:contentDescription="@string/content_description_edit_list"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="0.2"
-			android:padding="15dp"/>
-	</LinearLayout>
+        <ImageView
+            android:id="@+id/edit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:background="@drawable/toolbar_button"
+            android:contentDescription="@string/content_description_edit_list"
+            android:padding="15dp"
+            android:src="@drawable/edit_list_button"
+            android:visibility="gone" />
+    </LinearLayout>
 
-	<include layout="@layout/edit_list"/>
+    <include layout="@layout/edit_list" />
 
-	<RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_margin="10dp">
-
-		<org.linphone.layoutXML.ExtendedEditText
-            android:contentDescription="@string/content_description_search_contact"
-			android:textCursorDrawable="@null"
-			android:id="@+id/searchField"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:textColor="@android:color/black"
-			android:background="@drawable/resizable_textfield"
-			android:paddingRight="5dp"
-			android:hint="Nhập để tìm kiếm"
-			android:inputType="textPersonName"/>
-
-		<ImageView
-			android:id="@+id/clearSearchField"
-			android:layout_width="30dp"
-			android:layout_height="30dp"
-			android:src="@drawable/clean_field_default"
-			android:layout_centerVertical="true"
-			android:layout_alignParentRight="true"
-			android:paddingLeft="5dp"
-			android:paddingRight="5dp"/>
-
-	</RelativeLayout>
-
-	<RelativeLayout
-        android:id="@+id/rl_contactlist"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent">
-
-		<ListView
-			android:focusable="false"
-			android:focusableInTouchMode="false"
-			android:descendantFocusability="blocksDescendants"
-			android:scrollbars="none"
-			android:id="@+id/contactsList"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:dividerHeight="1dp" />
-		
-		<ProgressBar
-			android:id="@+id/contactsFetchInProgress"
-			style="?android:attr/progressBarStyle"
-			android:layout_centerHorizontal="true"
-			android:layout_centerVertical="true"
-			android:visibility="gone"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"/>
-
-		<TextView
-			android:id="@+id/noSipContact"
-			android:text="@string/no_sip_contact"
-			style="@style/font6"
-			android:visibility="gone"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:layout_centerVertical="true"/>
-
-		<TextView
-			android:id="@+id/noContact"
-			android:text="@string/no_contact"
-			android:visibility="gone"
-			style="@style/font6"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:layout_centerVertical="true"/>
-
-	</RelativeLayout>
     <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/rl_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <org.linphone.layoutXML.ExtendedEditText
+            android:id="@+id/searchField"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/resizable_textfield"
+            android:contentDescription="@string/content_description_search_contact"
+            android:hint="Nhập để tìm kiếm"
+            android:inputType="textPersonName"
+            android:paddingRight="5dp"
+            android:textColor="@android:color/black"
+            android:textCursorDrawable="@null" />
+
+        <ImageView
+            android:id="@+id/clearSearchField"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:src="@drawable/clean_field_default" />
+
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
-            android:text="Không tìm thấy kết quả"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/rl_contactlist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <ListView
+                    android:id="@+id/contactsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:descendantFocusability="blocksDescendants"
+                    android:dividerHeight="1dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:scrollbars="none" />
+
+                <ProgressBar
+                    android:id="@+id/contactsFetchInProgress"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/noSipContact"
+                    style="@style/font6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="@string/no_sip_contact"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/noContact"
+                    style="@style/font6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="@string/no_contact"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_centerInParent="true"
+                android:id="@+id/rl_no_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:text="Không tìm thấy kết quả"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

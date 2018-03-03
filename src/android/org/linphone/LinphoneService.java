@@ -36,6 +36,7 @@ import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.core.LinphoneCoreListenerBase;
 import org.linphone.core.LinphoneProxyConfig;
+import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.mediastream.Version;
 import org.linphone.myactivity.LoginActivity;
@@ -818,6 +819,7 @@ public final class LinphoneService extends Service {
             notificationIntent = new Intent(LinphoneService.this, incomingReceivedActivity);
             notificationIntent.putExtra("Notification", true);
             content = LinphonePreferences.instance().getAccountDisplayName(0);
+
             icon = R.drawable.ic_fiber_manual_record_black_24dp;
         } else {
             if (LinphonePreferences.instance().getAccountCount() > 0) {

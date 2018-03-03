@@ -208,6 +208,7 @@ public class LoginActivity extends Activity {
 
     @Override
     protected void onResume() {
+
         LinphoneLauncherActivity.isLinphoneActivity=false;
         LinphonePreferences mPrefs = LinphonePreferences.instance();
         if (mPrefs.getAccountCount()>0){

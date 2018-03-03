@@ -30,9 +30,11 @@ import org.linphone.core.LinphoneCoreListenerBase;
 import org.linphone.core.Reason;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
+import org.linphone.network.NetworkStateReceiver;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -54,13 +56,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CallOutgoingActivity extends LinphoneGenericActivity implements OnClickListener{
+public class CallOutgoingActivity extends LinphoneGenericActivity implements OnClickListener,NetworkStateReceiver.NetworkStateReceiverListener{
 	private static CallOutgoingActivity instance;
     public String TAG = "CallOutgoingActivity";
     private TextView name, number;
 	private ImageView contactPicture, micro, speaker, hangUp;
 	private LinphoneCall mCall;
 	private LinphoneCoreListenerBase mListener;
+	public NetworkStateReceiver networkStateReceiver;
 	private boolean isMicMuted, isSpeakerEnabled;
 
 	public static CallOutgoingActivity instance() {
@@ -151,6 +154,10 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 				}
 			}
 		};
+		networkStateReceiver = new NetworkStateReceiver();
+		networkStateReceiver.addListener(this);
+		this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+
 		instance = this;
 	}
 
@@ -189,7 +196,12 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 		}
 
 		mCall = null;
+		try {
+			networkStateReceiver.addListener(this);
+			this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+		}catch (Exception e){
 
+		}
 		// Only one call ringing at a time is allowed
 		if (LinphoneManager.getLcIfManagerNotDestroyedOrNull() != null) {
 			List<LinphoneCall> calls = LinphoneUtils.getLinphoneCalls(LinphoneManager.getLc());
@@ -245,6 +257,12 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 
 	@Override
 	protected void onDestroy() {
+		try{
+			networkStateReceiver.removeListener(this);
+			this.unregisterReceiver(networkStateReceiver);
+		}catch (Exception e){
+
+		}
 		super.onDestroy();
 		instance = null;
 	}
@@ -340,6 +358,22 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		for (int i = 0; i < permissions.length; i++) {
 			Log.i("[Permission] " + permissions[i] + " is " + (grantResults[i] == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
+		}
+	}
+
+	@Override
+	public void networkAvailable() {
+
+	}
+
+	@Override
+	public void networkUnavailable() {
+		android.util.Log.d(TAG, "networkUnavailable: ");
+		try {
+			decline();
+			Toast.makeText(CallOutgoingActivity.this, "Mất kết nối đến tổng đài", Toast.LENGTH_SHORT).show();
+		}catch (Exception e){
+
 		}
 	}
 }

@@ -612,7 +612,7 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
                 return;
             }
         } else if (LinphoneActivity.isInstanciated()) {
-            LinphoneActivity.instance().displayCustomToast(getString(R.string.error_network_unreachable), Toast.LENGTH_LONG);
+            Toast.makeText(getContext(),R.string.error_network_unreachable,Toast.LENGTH_SHORT).show();
         } else {
             Log.e("Error: " + getString(R.string.error_network_unreachable));
         }
