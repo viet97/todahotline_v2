@@ -720,7 +720,22 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     }
 
     public void changeAdapter() {
-
+        ContactsListAdapter adapter;
+        contactsList.setFastScrollEnabled(false);
+        contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        switch (onlyDisplayLinphoneContacts) {
+            case 0:
+                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts());
+                break;
+            case 1:
+                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
+                break;
+            default:
+                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
+                break;
+        }
+        contactsList.setAdapter(null);
+        contactsList.setAdapter(adapter);
         ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
         Log.d(TAG, "changeAdapter: "+contactsList.getHeight());
         if (((ContactsListAdapter) contactsList.getAdapter()).getCount() == 0) {
@@ -1211,9 +1226,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder.organization.setVisibility(View.GONE);
             } else {
                 try {
+                    Log.d(TAG, "getViewonlyDisplayLinphoneContacts: " + onlyDisplayLinphoneContacts);
                     if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")
                             && DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau() != null
                             && onlyDisplayLinphoneContacts == 1) {
+                        Log.d(TAG, "getViewonlyDisplayLinphoneContacts: setImage ");
                         holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
                     }
                     holder.name.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getTenlienhe());
