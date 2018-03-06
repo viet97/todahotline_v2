@@ -165,6 +165,7 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -172,7 +173,7 @@
                 android:id="@+id/rl_contactlist"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ListView
                     android:id="@+id/contactsList"
@@ -220,12 +221,12 @@
                 android:id="@+id/rl_no_result"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
+                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
                     android:text="Không tìm thấy kết quả"
                     android:textColor="@color/white"
                     android:textSize="20sp" />

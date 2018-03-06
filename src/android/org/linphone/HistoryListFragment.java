@@ -33,14 +33,17 @@ import org.linphone.core.LinphoneCallLog.CallStatus;
 import org.linphone.core.LinphoneCore;
 import org.linphone.database.DbContext;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -422,31 +425,45 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			return isSameDay(cal, yesterday);
 		}
 
+        public void checkAndRequestPermission(String permission, int result) {
+
+        }
+
 		public String getContactName(final String phoneNumber, Context context) {
-			Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+            int permissionGranted = getActivity().getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, getActivity().getPackageName());
+            org.linphone.mediastream.Log.i("[Permission] " + Manifest.permission.WRITE_CONTACTS + " is " + (permissionGranted == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
 
-			String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+            if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_CONTACTS);
+                org.linphone.mediastream.Log.i("[Permission] Asking for " + Manifest.permission.WRITE_CONTACTS);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_CONTACTS}, 0);
+            } else {
+                checkAndRequestPermission(Manifest.permission.WRITE_CONTACTS, 0);
+                Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
-			String contactName = null;
-			Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
 
-			if (cursor != null) {
-				if (cursor.moveToFirst()) {
-					contactName = cursor.getString(0);
-				}
-				cursor.close();
-			}
-			if (contactName == null) {
-                try {
-                    contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
-                } catch (Exception e) {
+                String contactName = null;
+                Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        contactName = cursor.getString(0);
+                    }
+                    cursor.close();
+                }
+                if (contactName == null) {
+                    try {
+                        contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+                    } catch (Exception e) {
+
+                    }
 
                 }
-
-			}
-
-			return contactName;
-		}
+                return contactName;
+            }
+            return null;
+        }
 
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			View view = null;

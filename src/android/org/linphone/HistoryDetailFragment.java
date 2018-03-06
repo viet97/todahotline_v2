@@ -193,7 +193,6 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 			LinphoneActivity.instance().hideTabBar(false);
 		}
 	}
-
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
@@ -201,7 +200,6 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		if (id == R.id.back) {
 			getFragmentManager().popBackStackImmediate();
 		} if (id == R.id.call) {
-			android.util.Log.d("History", "onClick: "+sipUri);
 			LinphoneActivity.instance().setAddresGoToDialerAndCall(sipUri, displayName, pictureUri == null ? null : Uri.parse(pictureUri));
 		} else if (id == R.id.chat) {
 			LinphoneActivity.instance().displayChat(sipUri, null, null);

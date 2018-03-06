@@ -89,6 +89,7 @@
 				android:hint="Mật khẩu mới"
 				android:inputType="textPassword"
 				android:paddingTop="6dp"
+                android:focusable="false"
 				android:textColor="@android:color/white"
 				android:textColorHint="@android:color/white" />
 		</LinearLayout>

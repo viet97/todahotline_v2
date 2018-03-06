@@ -400,6 +400,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 public void onFailure(Call<ContactResponse> call, Throwable t) {
                     try {
                         dialogSearch.cancel();
+
                     } catch (Exception e) {
 
                     }
@@ -1211,7 +1212,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             } else {
                 try {
                     if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")
-                            && DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau() != null) {
+                            && DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau() != null
+                            && onlyDisplayLinphoneContacts == 1) {
                         holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
                     }
                     holder.name.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getTenlienhe());

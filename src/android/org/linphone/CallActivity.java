@@ -162,6 +162,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		setContentView(R.layout.call);
+
 		//Earset Connectivity Broadcast Processing
 		networkStateReceiver = new NetworkStateReceiver();
 		networkStateReceiver.addListener(CallActivity.this);
@@ -515,6 +516,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 	public void createInCallStats() {
 		sideMenu = (DrawerLayout) findViewById(R.id.side_menu);
+		sideMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		menu = (ImageView) findViewById(R.id.call_quality);
 
 		sideMenuContent = (RelativeLayout) findViewById(R.id.side_menu_content);

@@ -121,7 +121,6 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
     public DialPlan country;
     public String phone_number;
     public String email;
-
     //my code
     public static String currentPass = "";
     private String pass, passold, idnv, passveri;
@@ -132,6 +131,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
     EditText edPassOld;
     EditText edpassveri;
     ImageView backImg;
+    boolean firstTimeComeIn = true;
     private static final String Pref_String_DB = "DbContext";
     private String TAG = "ChangePassFragment";
     private ProgressDialog dialogLogout;
@@ -231,8 +231,82 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         backImg.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                android.util.Log.d(TAG, "backImg: ");
-                onBackPressed();
+                android.util.Log.d(TAG, "backImg: " + getCurrentFocus());
+                try {
+                    if (firstTimeComeIn) {
+                        onBackPressed();
+                    } else if (getCurrentFocus() != null) {
+                        try {
+                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                            edPass.setFocusable(false);
+                            edPassOld.setFocusable(false);
+                            edpassveri.setFocusable(false);
+                        } catch (Exception e) {
+
+                        }
+                    } else {
+                        onBackPressed();
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        });
+        edpassveri.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    edpassveri.setFocusableInTouchMode(true);
+                    edpassveri.setFocusable(true);
+                    edPassOld.setFocusableInTouchMode(true);
+                    edPassOld.setFocusable(true);
+                    edPass.setFocusableInTouchMode(true);
+                    edPass.setFocusable(true);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(edpassveri, InputMethodManager.SHOW_IMPLICIT);
+                    firstTimeComeIn = false;
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+        edPassOld.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//
+                try {
+                    edPassOld.setFocusableInTouchMode(true);
+                    edPassOld.setFocusable(true);
+                    edPass.setFocusableInTouchMode(true);
+                    edPass.setFocusable(true);
+                    edpassveri.setFocusableInTouchMode(true);
+                    edpassveri.setFocusable(true);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(edPassOld, InputMethodManager.SHOW_IMPLICIT);
+                    firstTimeComeIn = false;
+                } catch (Exception e) {
+
+                }
+            }
+        });
+        edPass.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    edPass.setFocusableInTouchMode(true);
+                    edPass.setFocusable(true);
+                    edPassOld.setFocusableInTouchMode(true);
+                    edPassOld.setFocusable(true);
+                    edpassveri.setFocusableInTouchMode(true);
+                    edpassveri.setFocusable(true);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(edPass, InputMethodManager.SHOW_IMPLICIT);
+                    firstTimeComeIn = false;
+                } catch (Exception e) {
+
+                }
             }
         });
 
@@ -286,7 +360,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                         }
                                                         LinphoneActivity.instance().finish();
                                                         if (LinphonePreferences.instance().getAccountCount() > 0) {
-                                                            LinphonePreferences.instance().setAccountEnabled(0,false);
+                                                            LinphonePreferences.instance().setAccountEnabled(0, false);
                                                             int accountNumber = LinphonePreferences.instance().getAccountCount();
                                                             while (accountNumber >= 0) {
 
@@ -301,7 +375,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                         databasePref.clear();
                                                         databasePref.commit();
                                                         dialogLogin.cancel();
-                                                        Toast.makeText(AssistantActivity.this,"Đổi mật khẩu thành công , bạn sẽ bị đăng xuất khỏi tài khoản.",Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(AssistantActivity.this, "Đổi mật khẩu thành công , bạn sẽ bị đăng xuất khỏi tài khoản.", Toast.LENGTH_SHORT).show();
 
                                                         Intent intent = new Intent(AssistantActivity.this, LoginActivity.class);
                                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -314,7 +388,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                 public void onFailure(Call<VoidRespon> call, Throwable t) {
                                                     try {
                                                         dialogLogin.cancel();
-                                                    }catch (Exception e){
+                                                    } catch (Exception e) {
 
                                                     }
                                                     Toast.makeText(AssistantActivity.this,
@@ -496,7 +570,6 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         }
         return accountCreator;
     }
-
 
 
     private void changeFragment(Fragment newFragment) {

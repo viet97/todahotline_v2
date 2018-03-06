@@ -34,7 +34,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_gravity="top"
                     android:orientation="vertical"
-                    android:visibility="gone"></LinearLayout>
+                    android:visibility="visible"></LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/active_call"
@@ -215,7 +215,6 @@
                     android:visibility="gone">
 
                     <RelativeLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
@@ -251,7 +250,6 @@
                         android:src="@drawable/micro_default" />
 
                     <ImageView
-                        android:id="@+id/speaker"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -295,18 +293,29 @@
                         android:id="@+id/dialer"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.2"
                         android:background="@color/colorC"
                         android:contentDescription="@string/content_description_numpad"
                         android:padding="15dp"
                         android:src="@drawable/footer_dialer" />
 
                     <ImageView
+                        android:id="@+id/speaker"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+
+                        android:background="@drawable/button_background"
+                        android:contentDescription="@string/content_description_toggle_speaker"
+                        android:padding="15dp"
+                        android:src="@drawable/speaker_default" />
+
+                    <ImageView
                         android:id="@+id/hang_up"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.6"
                         android:background="@color/red"
                         android:contentDescription="@string/content_description_hang_up"
                         android:padding="12dp"

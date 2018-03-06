@@ -1378,11 +1378,19 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
         int ringtone = getPackageManager().checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, getPackageName());
         Log.i("[Permission] Read external storage for ring tone permission is " + (ringtone == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
+        int writeContact = getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, getPackageName());
+        Log.i("[Permission] Read external storage for ring tone permission is " + (ringtone == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
 
         if (ringtone != PackageManager.PERMISSION_GRANTED) {
             if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 Log.i("[Permission] Asking for read external storage for ring tone");
                 permissionsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+        }
+        if (writeContact != PackageManager.PERMISSION_GRANTED) {
+            if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.WRITE_CONTACTS) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_CONTACTS)) {
+                Log.i("[Permission] Asking for read external storage for ring tone");
+                permissionsList.add(Manifest.permission.WRITE_CONTACTS);
             }
         }
         if (readPhone != PackageManager.PERMISSION_GRANTED) {
@@ -1933,31 +1941,35 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     @Override
     public void onBackPressed() {
-
-        AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(LinphoneActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count > 0) {
+            getFragmentManager().popBackStackImmediate();
         } else {
-            builder = new AlertDialog.Builder(LinphoneActivity.this);
-        }
-        try {
-            builder.setTitle("Đăng xuất")
-                    .setMessage("Bạn có thật sự muốn đăng xuất ?")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            logoutAct();
-                        }
-                    })
-                    .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                        }
-                    })
-                    .setIcon(R.drawable.logout1)
-                    .show();
-            android.util.Log.d("LinphoneActivity", "onBackPressed: ");
-        } catch (Exception e) {
-            android.util.Log.d("SipHome", "Exception: " + e);
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(LinphoneActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(LinphoneActivity.this);
+            }
+            try {
+                builder.setTitle("Đăng xuất")
+                        .setMessage("Bạn có thật sự muốn đăng xuất ?")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                logoutAct();
+                            }
+                        })
+                        .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(R.drawable.logout1)
+                        .show();
+                android.util.Log.d("LinphoneActivity", "onBackPressed: ");
+            } catch (Exception e) {
+                android.util.Log.d("SipHome", "Exception: " + e);
+            }
         }
 
     }
