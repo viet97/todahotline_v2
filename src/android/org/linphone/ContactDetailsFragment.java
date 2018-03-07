@@ -119,7 +119,6 @@ public class ContactDetailsFragment extends Fragment implements OnClickListener 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 int type = cursor.getInt(0);
-                Log.d(TAG, "getPhoneType: "+cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
 
                 switch (type) {
                     case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:

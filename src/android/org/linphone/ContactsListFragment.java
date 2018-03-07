@@ -20,11 +20,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
@@ -34,6 +37,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -51,13 +55,19 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.swipe.SimpleSwipeListener;
+import com.daimajia.swipe.SwipeLayout;
+
 import org.linphone.database.DbContext;
 import org.linphone.layoutXML.ExtendedEditText;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
+import org.linphone.network.models.VoidRespon;
 
+import java.lang.reflect.Array;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -76,14 +86,16 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private LayoutInflater mInflater;
     private ListView contactsList;
     private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
-    private ImageView newContact, edit, selectAll, deselectAll, delete, cancel;
+    private ImageView newContact, edit, selectAll, deselectAll, delete, cancel, backDeleteMode;
     private RelativeLayout rlCusContact, rlLocalContact, rlTodaContact;
     private RelativeLayout  rlNoResult,rlContact;
     private SwipeRefreshLayout refreshLayout ;
     private boolean isEditMode, isSearchMode;
+
     public static int onlyDisplayLinphoneContacts;
     private View allContactsSelected, linphoneContactsSelected, cusContactSelected;
     private LinearLayout editList, topbar;
+    private RelativeLayout deleteBar;
     private int lastKnownPosition;
     private boolean editOnClick = false, editConsumed = false, onlyDisplayChatAddress = false;
     private String sipAddressToAdd, displayName = null;
@@ -95,7 +107,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private Timer timer = new Timer();
     private int lastID = 0;
     private ProgressDialog dialogSearch;
+    private ProgressDialog dialogRemove;
     private String searchText = "";
+    private boolean isDeleteMode = false;
+    private ArrayList<Integer> listIdDelete = new ArrayList<>();
     TextWatcher twLocal = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -195,6 +210,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
     };
     private boolean isLoaded = false;
+
+
     private boolean listIsAtTop()   {
         if(contactsList.getChildCount() == 0) return true;
         return contactsList.getChildAt(0).getTop() == 0;
@@ -220,7 +237,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             rlCusContact = view.findViewById(R.id.rl_cus_contact);
             rlLocalContact = view.findViewById(R.id.rl_local_contact);
             rlTodaContact = view.findViewById(R.id.rl_toda_contact);
+            deleteBar = view.findViewById(R.id.delete_bar);
             refreshLayout = view.findViewById(R.id.refresh_layout);
+            backDeleteMode = view.findViewById(R.id.back_delete_mode);
             rlCusContact.setVisibility(View.GONE);
             rlTodaContact.setVisibility(View.GONE);
             for (LoginRespon.Data.DSloaidanhba ds : DbContext.getInstance().getLoginRespon(getActivity()).getData().getDsloaidanhba()) {
@@ -289,6 +308,24 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             contactsFetchInProgress = (ProgressBar) view.findViewById(R.id.contactsFetchInProgress);
 //            contactsFetchInProgress.setVisibility(View.VISIBLE);
             refreshLayout.setOnRefreshListener(this);
+            backDeleteMode.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteBar.setVisibility(View.GONE);
+                    topbar.setVisibility(View.VISIBLE);
+                    backDeleteMode.setVisibility(View.GONE);
+                    listIdDelete.clear();
+                    isDeleteMode = false;
+                    changeAdapter();
+                }
+            });
+            contactsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    return false;
+                }
+            });
             contactsList.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -737,7 +774,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         contactsList.setAdapter(null);
         contactsList.setAdapter(adapter);
         ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
-        Log.d(TAG, "changeAdapter: "+contactsList.getHeight());
         if (((ContactsListAdapter) contactsList.getAdapter()).getCount() == 0) {
             rlNoResult.setVisibility(View.VISIBLE);
             rlContact.setVisibility(View.GONE);
@@ -1066,6 +1102,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             public TextView organization;
             public TextView address;
             public ImageButton imgCall;
+            public ImageButton imgDelete;
+            public ImageButton imgEdit;
+            public SwipeLayout swLayout;
+            public RelativeLayout rlDeleteBar;
+            public CheckBox cbxDelete;
+            private boolean isOpenSwipeLayout;
+
             //public ImageView friendStatus;
 
             public ViewHolder(View view) {
@@ -1078,7 +1121,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 organization = (TextView) view.findViewById(R.id.contactOrganization);
                 address = (TextView) view.findViewById(R.id.address);
                 imgCall = (ImageButton) view.findViewById(R.id.secondary_action_icon);
+                imgDelete = (ImageButton) view.findViewById(R.id.delete_contact);
+                imgEdit = (ImageButton) view.findViewById(R.id.edit_contact);
+                cbxDelete = view.findViewById(R.id.cbx_delete);
                 layout = view.findViewById(R.id.layout);
+                swLayout = view.findViewById(R.id.swipe_lay_out);
                 //friendStatus = (ImageView) view.findViewById(R.id.friendStatus);
             }
         }
@@ -1177,6 +1224,99 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
+            final ViewHolder finalHolder = holder;
+            if (isDeleteMode) {
+                holder.cbxDelete.setVisibility(View.VISIBLE);
+                holder.imgCall.setVisibility(View.GONE);
+            } else {
+                holder.imgCall.setVisibility(View.VISIBLE);
+                holder.cbxDelete.setVisibility(View.GONE);
+            }
+            holder.swLayout.addSwipeListener(new SimpleSwipeListener() {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+                    finalHolder.isOpenSwipeLayout = true;
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout layout) {
+                    finalHolder.isOpenSwipeLayout = false;
+                }
+            });
+            ViewTreeObserver.OnGlobalLayoutListener swipeGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (finalHolder.isOpenSwipeLayout) {
+                        // Opens the layout without animation
+                        finalHolder.swLayout.open(false);
+                    }
+                }
+            };
+            if (onlyDisplayLinphoneContacts == 0) {
+                holder.swLayout.setLeftSwipeEnabled(true);
+                holder.swLayout.setBottomSwipeEnabled(false);
+            } else {
+                holder.swLayout.setBottomSwipeEnabled(true);
+            }
+
+            holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Log.d(TAG, "onLongClick: ");
+                    isDeleteMode = true;
+                    changeMode(finalHolder, isDeleteMode);
+                    return true;
+                }
+            });
+            holder.swLayout.getViewTreeObserver().addOnGlobalLayoutListener(swipeGlobalLayoutListener);
+//            holder.swLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+//            holder.swLayout.addDrag(SwipeLayout.DragEdge.Left, view.findViewById(R.id.bottom_view));
+
+
+            holder.cbxDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        finalHolder.cbxDelete.setChecked(b);
+                        listIdDelete.add(position, DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba());
+                    } else {
+                        finalHolder.cbxDelete.setChecked(b);
+                        listIdDelete.remove(position);
+                    }
+                    Log.d(TAG, "onCheckedChanged: " + listIdDelete.toString());
+                    Log.d(TAG, "onCheckedChanged: " + position);
+                }
+            });
+            holder.imgDelete.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+                    } else {
+                        builder = new AlertDialog.Builder(getActivity());
+                    }
+                    try {
+                        builder.setTitle("Xóa")
+                                .setMessage("Bạn có thật sự muốn xóa liên hệ này ?")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteContact(DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba(), position);
+                                    }
+                                })
+                                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(R.drawable.logout1)
+                                .show();
+
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
             holder.layout.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1335,6 +1475,98 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             return view;
         }
 
+        private void changeMode(ViewHolder holder, boolean isDeleteMode) {
+            if (isDeleteMode) {
+                deleteBar.setVisibility(View.VISIBLE);
+                topbar.setVisibility(View.GONE);
+                backDeleteMode.setVisibility(View.VISIBLE);
+            }
+            changeAdapter();
+        }
+
+        private void deleteContact(int idDanhBa, final int position) {
+            try {
+                dialogRemove = ProgressDialog.show(getActivity(), "", "Đang xóa...", true, false);
+            } catch (Exception e) {
+
+            }
+            String contact = "[" + idDanhBa + "]";
+            try {
+                contact = URLEncoder.encode(contact);
+            } catch (Exception e) {
+
+            }
+            String deleteContact = "AppXoaDanhBaNoiBo.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                    + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&dulieudanhba=" + contact;//lay tat ca danh ba ra
+            Log.d(TAG, "deleteContact: " + deleteContact);
+            Service service = NetContext.getInstance().create(Service.class);
+            service.xoaDanhBa(deleteContact).enqueue(new Callback<VoidRespon>() {
+                @Override
+                public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
+                    Log.d(TAG, "onResponse: " + response);
+                    try {
+                        dialogRemove.cancel();
+                    } catch (Exception e) {
+
+                    }
+                    if (response != null) {
+                        VoidRespon respon = response.body();
+                        if (respon.getStatus()) {
+                            ContactResponse contactResponse = DbContext.getInstance().getContactResponse(getActivity());
+                            contactResponse.getDsdanhba().remove(position);
+                            DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+                            changeAdapter();
+                        } else {
+                            try {
+                                Toast.makeText(getActivity(),
+                                        "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+
+                            }
+                        }
+                    } else {
+                        try {
+                            Toast.makeText(getActivity(),
+                                    "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                    Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<VoidRespon> call, Throwable t) {
+                    Log.d(TAG, "onFailure: " + t.toString());
+                    try {
+                        dialogRemove.cancel();
+                    } catch (Exception e) {
+
+                    }
+                    try {
+                        Toast.makeText(getActivity(),
+                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+//            service.xoaDanhBa(deleteContact).enqueue(new Callback<Void>() {
+//                @Override
+//                public void onResponse(Call<Void> call, Response<Void> response) {
+//                    Log.d(TAG, "onResponse: "+response.body());
+//                }
+//
+//                @Override
+//                public void onFailure(Call<Void> call, Throwable t) {
+//                    Log.d(TAG, "onFailure: "+t.toString());
+//                }
+//            });
+        }
+
         @Override
         public Object[] getSections() {
             return sections;
@@ -1362,4 +1594,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             return sectionsList.indexOf(letter);
         }
     }
+
+
 }

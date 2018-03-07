@@ -74,6 +74,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+
             android:id="@+id/rl_cus_contact"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -128,6 +129,33 @@
             android:visibility="gone" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/delete_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/back_delete_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:src="@drawable/back_delete_mode" />
+
+        <ImageButton
+            android:id="@+id/delete_contact"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/transparent"
+            android:padding="8dp"
+            android:layout_marginRight="16dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_delete_black_24dp" />
+
+    </RelativeLayout>
     <include layout="@layout/edit_list" />
 
     <RelativeLayout

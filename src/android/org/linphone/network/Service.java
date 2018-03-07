@@ -28,6 +28,12 @@ public interface Service {
     @GET
     Call<VoidRespon> dangxuat(@Url String url);
     @GET
+    Call<VoidRespon> xoaDanhBa(@Url String url);
+
+    @GET
+    Call<VoidRespon> suaDanhBa(@Url String url);
+
+    @GET
     Call<ContactResponse> getDanhBa(@Url String url);
 
 }

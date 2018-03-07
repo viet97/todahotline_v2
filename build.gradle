@@ -23,6 +23,7 @@ buildscript {
         if (googleFile.exists()) {
             classpath 'com.google.gms:google-services:3.+'
         }
+
     }
 }
 
@@ -49,6 +50,9 @@ dependencies {
         compile 'com.android.support:support-v4:+'
     }
 //    compile project(':actionbarsherlock')
+    compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile 'com.android.support:support-v4:20.+'
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
     compile 'com.android.support:percent:27.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'

@@ -86,8 +86,16 @@ public class ContactResponse {
     }
 
     public static class DSDanhBa {
+        public int getIddanhba() {
+            return iddanhba;
+        }
+
+        public void setIddanhba(int iddanhba) {
+            this.iddanhba = iddanhba;
+        }
+
         @SerializedName("iddanhba")
-        private String iddanhba;
+        private int iddanhba;
         @SerializedName("idqllh")
         private String idqllh;
         @SerializedName("idnhanvien")
@@ -117,13 +125,7 @@ public class ContactResponse {
             this.job = job;
         }
 
-        public String getIddanhba() {
-            return iddanhba;
-        }
 
-        public void setIddanhba(String iddanhba) {
-            this.iddanhba = iddanhba;
-        }
 
         public String getIdqllh() {
             return idqllh;
