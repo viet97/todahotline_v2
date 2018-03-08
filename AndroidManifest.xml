@@ -85,9 +85,10 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.CALL" />
-                <!--<action android:name="android.intent.action.CALL_PRIVILEGED" />-->
+                <!-- <action android:name="android.intent.action.CALL_PRIVILEGED" /> -->
 
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
+
+                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
 
                 <data android:scheme="tel" />
                 <data android:scheme="sip" />
@@ -375,7 +376,8 @@
             android:name=".myactivity.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".myactivity.InfoActivityMain"></activity>
+        <activity android:name=".myactivity.InfoActivityMain" />
+        <activity android:name=".NonTodaContacts"></activity>
     </application>
 
 </manifest>

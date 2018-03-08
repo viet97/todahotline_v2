@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:swipe="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
 
     <TextView
         android:layout_width="match_parent"
@@ -148,20 +147,8 @@
 
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/secondary_action_icon"
-            android:layout_width="52dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/transparent"
-            android:contentDescription="@string/call"
-            android:padding="8dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_ab_dialer_holo_dark" />
-
         <CheckBox
-            android:id="@+id/cbx_delete"
+            android:id="@+id/cbx_pick"
             android:layout_width="52dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -169,7 +156,6 @@
             android:background="@drawable/transparent"
             android:button="@drawable/custom_tickbox"
             android:padding="8dp"
-            android:scaleType="center"
-            android:visibility="gone" />
+            android:scaleType="center" />
     </RelativeLayout>
 </LinearLayout>

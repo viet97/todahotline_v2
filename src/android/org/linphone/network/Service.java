@@ -1,10 +1,11 @@
 package org.linphone.network;
 
 
-
+import org.linphone.NonTodaContacts;
 import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
+import org.linphone.network.models.NonTodaContactsResponse;
 import org.linphone.network.models.VoidRespon;
 
 import retrofit2.Call;
@@ -35,5 +36,8 @@ public interface Service {
 
     @GET
     Call<ContactResponse> getDanhBa(@Url String url);
+
+    @GET
+    Call<NonTodaContactsResponse> getNonTodaDanhBa(@Url String url);
 
 }

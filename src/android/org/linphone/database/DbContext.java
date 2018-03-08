@@ -7,9 +7,11 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.linphone.NonTodaContacts;
 import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
+import org.linphone.network.models.NonTodaContactsResponse;
 
 import java.util.HashMap;
 
@@ -19,12 +21,13 @@ import java.util.HashMap;
 
 public class DbContext {
     private static final String Pref_String_DB = "DbContext";
-    private static SharedPreferences DBaboutRespon, DBloginResponse, DBcontactResponse, DBlistContactTodaName;
-    private SharedPreferences.Editor DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBlistContactTodaNameEditor;
+    private static SharedPreferences DBaboutRespon, DBloginResponse, DBcontactResponse, DBlistContactTodaName, DBnonTodaContacts;
+    private SharedPreferences.Editor DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBlistContactTodaNameEditor, DBnonTodaContactsEditor;
     private Context context;
     private static final DbContext instance = new DbContext();
     private AboutRespon aboutRespon;
     private LoginRespon loginRespon;
+    private NonTodaContactsResponse nonTodaContactsResponse;
     private ContactResponse contactResponse;
     private HashMap<String, String> listContactTodaName;
     private HashMap<String, String> listContactTodaJob;
@@ -39,6 +42,38 @@ public class DbContext {
         this.aboutRespon = new AboutRespon();
         hashmapType = new TypeToken<HashMap<String, String>>() {
         }.getType();
+    }
+
+    public NonTodaContactsResponse getNonTodaContactsResponse(Context context) {
+        try {
+            if (context != null) {
+                DBnonTodaContacts = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                String nonTodaContactsResponStr = DBnonTodaContacts.getString("DBnonTodaContacts", null);
+                if (nonTodaContactsResponStr != null) {
+                    this.nonTodaContactsResponse = gson.fromJson(nonTodaContactsResponStr, NonTodaContactsResponse.class);
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return nonTodaContactsResponse;
+    }
+
+    public void setNonTodaContactsResponse(NonTodaContactsResponse nonTodaContactsResponse, Context context) {
+        try {
+
+            if (context != null) {
+                DBnonTodaContacts = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                DBnonTodaContactsEditor = DBnonTodaContacts.edit();
+                String nonTodaContactsResponStr = gson.toJson(nonTodaContactsResponse);
+                DBnonTodaContactsEditor.putString("DBaboutRespon", nonTodaContactsResponStr);
+                DBnonTodaContactsEditor.commit();
+                this.nonTodaContactsResponse = nonTodaContactsResponse;
+            }
+        } catch (Exception e) {
+
+        }
+        this.nonTodaContactsResponse = nonTodaContactsResponse;
     }
 
     public HashMap<String, String> getListContactTodaName(Context context) {
