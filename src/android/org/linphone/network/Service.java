@@ -39,5 +39,7 @@ public interface Service {
 
     @GET
     Call<NonTodaContactsResponse> getNonTodaDanhBa(@Url String url);
+    @GET
+    Call<VoidRespon> addNonTodaDanhBa(@Url String url);
 
 }

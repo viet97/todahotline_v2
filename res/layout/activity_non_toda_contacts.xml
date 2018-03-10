@@ -5,34 +5,6 @@
     android:background="@drawable/bg"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/delete_bar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/back_delete_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:src="@drawable/back_delete_mode"
-            android:visibility="gone" />
-
-        <ImageButton
-            android:id="@+id/delete_contact"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/transparent"
-            android:padding="8dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_delete_black_24dp"
-            android:visibility="gone" />
-
-    </RelativeLayout>
 
     <!--<include layout="@layout/edit_list" />-->
 
@@ -55,7 +27,7 @@
 
         <ImageView
             android:layout_alignRight="@+id/searchField"
-            android:id="@+id/clearSearchField"
+            android:id="@+id/clearSearchFieldNonToda"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"

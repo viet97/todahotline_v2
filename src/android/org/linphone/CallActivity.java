@@ -183,7 +183,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		mListener = new LinphoneCoreListenerBase() {
 			@Override
 			public void messageReceived(LinphoneCore lc, LinphoneChatRoom cr, LinphoneChatMessage message) {
-		        displayMissedChats();
+				displayMissedChats();
 			}
 
 			@Override
@@ -236,8 +236,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 					boolean localVideo = call.getCurrentParams().getVideoEnabled();
 					boolean autoAcceptCameraPolicy = LinphonePreferences.instance().shouldAutomaticallyAcceptVideoRequests();
 					if (remoteVideo && !localVideo && !autoAcceptCameraPolicy && !LinphoneManager.getLc().isInConference()) {
-							showAcceptCallUpdateDialog();
-							createTimerForDialog(SECONDS_BEFORE_DENYING_CALL_UPDATE);
+						showAcceptCallUpdateDialog();
+						createTimerForDialog(SECONDS_BEFORE_DENYING_CALL_UPDATE);
 					}
 //        			else if (remoteVideo && !LinphoneManager.getLc().isInConference() && autoAcceptCameraPolicy) {
 //        				mHandler.post(new Runnable() {
@@ -286,9 +286,9 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 					TimeRemind = savedInstanceState.getLong("TimeRemind");
 					createTimerForDialog(TimeRemind);
 				}
-                if (status != null && savedInstanceState.getBoolean("AskingZrtp")) {
-                    status.setisZrtpAsk(savedInstanceState.getBoolean("AskingZrtp"));
-                }
+				if (status != null && savedInstanceState.getBoolean("AskingZrtp")) {
+					status.setisZrtpAsk(savedInstanceState.getBoolean("AskingZrtp"));
+				}
 				refreshInCallActions();
 				return;
 			} else {
@@ -346,7 +346,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		outState.putBoolean("VideoCallPaused", isVideoCallPaused);
 		outState.putBoolean("AskingVideo", isVideoAsk);
 		outState.putLong("TimeRemind", TimeRemind);
-        if (status != null) outState.putBoolean("AskingZrtp", status.getisZrtpAsk());
+		if (status != null) outState.putBoolean("AskingZrtp", status.getisZrtpAsk());
 		if (dialog != null) dialog.dismiss();
 		super.onSaveInstanceState(outState);
 	}
@@ -539,7 +539,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		refreshInCallActions();
 		refreshCallList(getResources());
 		enableAndRefreshInCallActions();
-		displayMissedChats();
+//		displayMissedChats();
 	}
 
 	protected void setSpeakerEnabled(boolean enabled){
@@ -553,7 +553,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			if(video.isEnabled()) {
 				if (isVideoEnabled(LinphoneManager.getLc().getCurrentCall())) {
 					video.setImageResource(R.drawable.camera_selected);
-					videoProgress.setVisibility(View.INVISIBLE);
+//					videoProgress.setVisibility(View.INVISIBLE);
 				} else {
 					video.setImageResource(R.drawable.camera_button);
 				}
@@ -1175,7 +1175,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		delete.setText(R.string.accept);
 		Button cancel = (Button) dialog.findViewById(R.id.cancel);
 		cancel.setText(R.string.decline);
-        isVideoAsk = true;
+		isVideoAsk = true;
 
 		delete.setOnClickListener(new OnClickListener() {
 			@Override
@@ -1188,7 +1188,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				} else {
 					checkAndRequestPermission(Manifest.permission.CAMERA, PERMISSIONS_REQUEST_CAMERA);
 				}
-                isVideoAsk = false;
+				isVideoAsk = false;
 				dialog.dismiss();
 				dialog = null;
 			}
@@ -1200,7 +1200,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				if (CallActivity.isInstanciated()) {
 					CallActivity.instance().acceptCallUpdate(false);
 				}
-                isVideoAsk = false;
+				isVideoAsk = false;
 				dialog.dismiss();
 				dialog = null;
 			}
@@ -1212,12 +1212,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	protected void onResume() {
 
 		instance = this;
-        try {
-            networkStateReceiver.addListener(this);
-            this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
-        }catch (Exception e){
+		try {
+			networkStateReceiver.addListener(this);
+			this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+		}catch (Exception e){
 
-        }
+		}
 		super.onResume();
 
 		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
@@ -1229,9 +1229,9 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		refreshIncallUi();
 		handleViewIntent();
 
-        if (status != null && status.getisZrtpAsk() && lc != null) {
-            status.showZRTPDialog(lc.getCurrentCall());
-        }
+		if (status != null && status.getisZrtpAsk() && lc != null) {
+			status.showZRTPDialog(lc.getCurrentCall());
+		}
 
 		if (!isVideoEnabled(LinphoneManager.getLc().getCurrentCall())) {
 			if (!isSpeakerEnabled) {
@@ -1385,11 +1385,36 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 		callsList.addView(callView);
 	}
+	public  String getContactName(final String phoneNumber, Context context) {
+		Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
+		String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+		String contactName = null;
+		Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+		if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				contactName = cursor.getString(0);
+			}
+			cursor.close();
+		}
+		if (contactName == null) {
+			try {
+				contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+			} catch (Exception e) {
+
+			}
+		}
+		if (contactName==null) return phoneNumber;
+		return contactName;
+	}
 	private void setContactInformation(TextView contactName, ImageView contactPicture,  LinphoneAddress lAddress) {
 		LinphoneContact lContact  = ContactsManager.getInstance().findContactFromAddress(lAddress);
+		android.util.Log.d(TAG, "setContactInformationLconTact: "+lContact);
+		android.util.Log.d(TAG, "setContactInformationLinphoneUtils: "+LinphoneUtils.getAddressDisplayName(lAddress));
 		if (lContact == null) {
-			contactName.setText(LinphoneUtils.getAddressDisplayName(lAddress));
+			contactName.setText(getContactName(lAddress.getDisplayName(),this));
 			contactPicture.setImageBitmap( BitmapFactory.decodeResource(LinphoneService.instance().getResources(), R.drawable.avatar));
 		} else {
 			contactName.setText(lContact.getFullName());
@@ -1445,20 +1470,20 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 		//MultiCalls
 		if(LinphoneManager.getLc().getCallsNb() > 1){
-			callsList.setVisibility(View.VISIBLE);
+//			callsList.setVisibility(View.VISIBLE);
 		}
 
 		//Active call
 		if(LinphoneManager.getLc().getCurrentCall() != null) {
 			displayNoCurrentCall(false);
 			if(isVideoEnabled(LinphoneManager.getLc().getCurrentCall()) && !isConferenceRunning && pausedCalls.size() == 0) {
-				displayVideoCall(false);
+//				displayVideoCall(false);
 			} else {
 				displayAudioCall();
 			}
 		} else {
 			showAudioView();
-			displayNoCurrentCall(true);
+//			displayNoCurrentCall(true);
 			if(LinphoneManager.getLc().getCallsNb() == 1) {
 				callsList.setVisibility(View.VISIBLE);
 			}
@@ -1487,7 +1512,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 					index++;
 				} else {
 					if (call != LinphoneManager.getLc().getCurrentCall() && !call.isInConference()) {
-						displayPausedCalls(resources, call, index);
+//						displayPausedCalls(resources, call, index);
 						index++;
 					} else {
 						displayCurrentCall(call);
@@ -1497,8 +1522,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 			if (!isConferenceRunning) {
 				if (isConfPaused) {
-					callsList.setVisibility(View.VISIBLE);
-					displayPausedCalls(resources, null, index);
+//					callsList.setVisibility(View.VISIBLE);
+//					displayPausedCalls(resources, null, index);
 				}
 
 			}
@@ -1506,11 +1531,11 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 
 		//Paused by remote
-		if (pausedCalls.size() == 1) {
-			displayCallPaused(true);
-		} else {
-			displayCallPaused(false);
-		}
+//		if (pausedCalls.size() == 1) {
+//			displayCallPaused(true);
+//		} else {
+//			displayCallPaused(false);
+//		}
 	}
 
 	//Conference
@@ -1739,7 +1764,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		final View audioLayout = view.findViewById(R.id.callStatsAudio);
 
 
-	 	mTimer = new Timer();
+		mTimer = new Timer();
 		mTask = new TimerTask() {
 			@Override
 			public void run() {
@@ -1805,7 +1830,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	@Override
 	public void networkUnavailable() {
 		try {
-            hangUp();
+			hangUp();
 			Toast.makeText(CallActivity.this, "Mất kết nối đến tổng đài", Toast.LENGTH_SHORT).show();
 		}catch (Exception e){
 

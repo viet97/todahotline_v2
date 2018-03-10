@@ -92,42 +92,42 @@ public class LoginActivity extends Activity {
     //Dialog loginMess;
 
     private static SharedPreferences accountSelected, autoLogin, config, settings, loginPreferences, accPre, listContactTodaPreferences;
-    private SharedPreferences.Editor externalIpEditor, internalIpEditor, accountSelectedEditor, autoLoginEditor, configEditor, loginEditor, editor, editor2, listContactTodaEditor;
+    private SharedPreferences.Editor  internalIpEditor, autoLoginEditor, configEditor, loginEditor, editor, editor2, listContactTodaEditor;
     private final String sharedPrefsFile = "vn.lachongmedia.tongdai_preferences";
     public static final String PREF_URLCONFIG = "urlconfig";
-    public static final String PREF_USERNAME = "username";
-    public static final String PREF_PASSWORD = "password";
-    public static final String PREF_SERVER = "server";
-    public static final String PREF_DOMAIN = "domain";
-    public static final String PREF_DNS = "dns0";
-    public static final String PREF_EARGAIN = "eargain";
-    public static final String PREF_MICGAIN = "micgain";
-    public static final String PREF_HEARGAIN = "heargain";
-    public static final String PREF_HMICGAIN = "hmicgain";
-    public static boolean backToLoginFromSipHome = false;
+//    public static final String PREF_USERNAME = "username";
+//    public static final String PREF_PASSWORD = "password";
+//    public static final String PREF_SERVER = "server";
+//    public static final String PREF_DOMAIN = "domain";
+//    public static final String PREF_DNS = "dns0";
+//    public static final String PREF_EARGAIN = "eargain";
+//    public static final String PREF_MICGAIN = "micgain";
+//    public static final String PREF_HEARGAIN = "heargain";
+//    public static final String PREF_HMICGAIN = "hmicgain";
+//    public static boolean backToLoginFromSipHome = false;
     public boolean isShowPassWord = false;
     private ProgressDialog dialogLogin;
 
-    private String wizardId = "Basic";
-    private static final String THIS_FILE = "Login Activity";
+//    private String wizardId = "Basic";
+//    private static final String THIS_FILE = "Login Activity";
 
     private NotificationManager mgr;
     private static final int NOTIFY_ME_ID = 1337;
 
-    public static final String KEY_PROTOCOL = "http://42.112.31.63:10001";
+//    public static final String KEY_PROTOCOL = "http://42.112.31.63:10001";
     public final String KEY_FUNC_URL = "AppLogin.aspx?";
     private String loginURL;
-    public static final String KEY_SIGN = "lh$toda@2014";
+//    public static final String KEY_SIGN = "lh$toda@2014";
     private static final String KEYLACHONG = "!lac@hong#media$";
-    private String deviceID;
-    private String xmlLogin;
-    private Document docLogin;
-    private String urlConfig;
-    private String sendSttURL;
-    private String xmlStt;
-    private Document docStt;
-    private String sendSttCheck;
-    private long accountId;
+//    private String deviceID;
+//    private String xmlLogin;
+//    private Document docLogin;
+//    private String urlConfig;
+//    private String sendSttURL;
+//    private String xmlStt;
+//    private Document docStt;
+//    private String sendSttCheck;
+//    private long accountId;
     public  LinphonePreferences mPrefs;
     private String loginCheck = "";
     private String ext = "default";
@@ -146,7 +146,7 @@ public class LoginActivity extends Activity {
     public static final String KEY_ERR_CODE = "err_code";
     public ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener;
 
-    public static long ACCOUNT_ID = 0;
+    public static long ACCOUNT_ID = 0; // check de xoa id moi lan dang nhap
     private SharedPreferences.Editor backToLoginFromSipHomeEditor;
 
 
@@ -160,8 +160,7 @@ public class LoginActivity extends Activity {
             contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
                 @Override
                 public void onResponse(Call<ContactResponse> call, Response<ContactResponse> response) {
-                    ContactResponse contactResponse = new ContactResponse();
-                    contactResponse = response.body();
+                    ContactResponse contactResponse = response.body() ;
                     if (contactResponse.getStatus()) {
                         ArrayList<ContactResponse.DSDanhBa> listDB = contactResponse.getDsdanhba();
 //                        DbContext.getInstance().setContactResponse(contactResponse, LoginActivity.this);
@@ -415,7 +414,7 @@ public class LoginActivity extends Activity {
     }
 
     public void loginAct() {
-
+        // check ip khac rong
         if (!config.getString(PREF_URLCONFIG, "").equals("")) {
             dialogLogin = ProgressDialog.show(LoginActivity.this, "", "Đăng nhập...", true, false);
             Handler handler = new Handler();
@@ -512,6 +511,7 @@ public class LoginActivity extends Activity {
 
 
                                                 getContactToda();
+
                                                 //xoa nhung account cu di
                                                 if (mPrefs.getAccountCount()>0){
                                                     int accountNumber = mPrefs.getAccountCount();

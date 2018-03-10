@@ -81,14 +81,14 @@ import retrofit2.Response;
 
 import static org.linphone.FragmentsAvailable.CONTACTS_LIST;
 
-public class ContactsListFragment extends Fragment implements OnClickListener, OnItemClickListener, ContactsUpdatedListener,SwipeRefreshLayout.OnRefreshListener {
+public class ContactsListFragment extends Fragment implements OnClickListener, OnItemClickListener, ContactsUpdatedListener, SwipeRefreshLayout.OnRefreshListener {
     private LayoutInflater mInflater;
     private ListView contactsList;
     private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
     private ImageView newContact, edit, selectAll, deselectAll, delete, cancel, backDeleteMode, deleteContact, addContacts;
     private RelativeLayout rlCusContact, rlLocalContact, rlTodaContact;
-    private RelativeLayout  rlNoResult,rlContact;
-    private SwipeRefreshLayout refreshLayout ;
+    private RelativeLayout rlNoResult, rlContact;
+    private SwipeRefreshLayout refreshLayout;
     private boolean isEditMode, isSearchMode;
 
     public static int onlyDisplayLinphoneContacts;
@@ -185,7 +185,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                             }
                                             if (contactResponse.isEndlist()) isLoaded = true;
                                             changeAdapter();
-                                            lastID=contactResponse.getLastid();
+                                            lastID = contactResponse.getLastid();
                                         }
                                     }
 
@@ -213,10 +213,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private boolean isLoaded = false;
 
 
-    private boolean listIsAtTop()   {
-        if(contactsList.getChildCount() == 0) return true;
+    private boolean listIsAtTop() {
+        if (contactsList.getChildCount() == 0) return true;
         return contactsList.getChildAt(0).getTop() == 0;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         isLoaded = false;
@@ -246,6 +247,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             addContacts = view.findViewById(R.id.add_contacts);
             rlCusContact.setVisibility(View.GONE);
             rlTodaContact.setVisibility(View.GONE);
+            clearSearchField = (ImageView) view.findViewById(R.id.clearSearchField);
+            clearSearchField.setOnClickListener(this);
             for (LoginRespon.Data.DSloaidanhba ds : DbContext.getInstance().getLoginRespon(getActivity()).getData().getDsloaidanhba()) {
                 int type = ds.getIdloaidanhba();
                 switch (type) {
@@ -258,6 +261,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 }
 
             }
+
             noSipContact = (TextView) view.findViewById(R.id.noSipContact);
             noContact = (TextView) view.findViewById(R.id.noContact);
 
@@ -302,8 +306,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             edit = (ImageView) view.findViewById(R.id.edit);
             edit.setOnClickListener(this);
 
-            clearSearchField = (ImageView) view.findViewById(R.id.clearSearchField);
-            clearSearchField.setOnClickListener(this);
+
             addContacts.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -394,11 +397,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                 @Override
                 public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                        try{
-                            refreshLayout.setEnabled( listIsAtTop() );
-                        }catch (Exception e){
+                    try {
+                        refreshLayout.setEnabled(listIsAtTop());
+                    } catch (Exception e) {
 
-                        }
+                    }
                     Log.d(TAG, "onScroll: " + listIsAtTop());
                     if (onlyDisplayLinphoneContacts != 0) {
                         int lastItem = i1 + i;
@@ -572,7 +575,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                         changeAdapter();
                         if (contactResponse.isEndlist()) isLoaded = true;
-                        lastID=contactResponse.getLastid();
+                        lastID = contactResponse.getLastid();
                     }
                 }
 
@@ -696,6 +699,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             onlyDisplayLinphoneContacts = 1;
             lastID = 0;
             isLoaded = false;
+            Log.d(TAG, "onClick: "+searchField);
             searchField.clearTextChangedListeners();
             searchField.setText("");
             searchText = "";
@@ -744,7 +748,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                             changeAdapter();
                             if (contactResponse.isEndlist()) isLoaded = true;
-                            lastID=contactResponse.getLastid();
+                            lastID = contactResponse.getLastid();
                         }
                     }
 
@@ -836,7 +840,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             if (contactResponse.isEndlist()) isLoaded = true;
                             changeAdapter();
 
-                            lastID=contactResponse.getLastid();
+                            lastID = contactResponse.getLastid();
                         }
                     }
 
@@ -1037,7 +1041,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
 
         if (adapter.getCount() > 0) {
-            contactsFetchInProgress.setVisibility(View.GONE);
+            if (contactsFetchInProgress!=null)   contactsFetchInProgress.setVisibility(View.GONE);
         }
         if (onlyDisplayLinphoneContacts == 0) {
             ContactsManager.getInstance().setLinphoneContactsPrefered(false);
@@ -1150,7 +1154,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
     @Override
     public void onRefresh() {
-        if(onlyDisplayLinphoneContacts!=0) {
+        if (onlyDisplayLinphoneContacts != 0) {
             try {
                 lastID = 0;
                 isLoaded = false;
@@ -1226,7 +1230,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             } catch (Exception e) {
                 android.util.Log.d(TAG, "Exception: " + e);
             }
-        }else {
+        } else {
             refreshLayout.setRefreshing(false);
         }
 
@@ -1246,7 +1250,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             public TextView organization;
             public TextView address;
             public ImageButton imgCall;
-            public ImageButton imgDelete;
+
             public ImageButton imgEdit;
             public RelativeLayout rlDeleteBar;
             public CheckBox cbxDelete;
@@ -1264,7 +1268,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 organization = (TextView) view.findViewById(R.id.contactOrganization);
                 address = (TextView) view.findViewById(R.id.address);
                 imgCall = (ImageButton) view.findViewById(R.id.secondary_action_icon);
-                imgDelete = (ImageButton) view.findViewById(R.id.delete_contact);
+
                 cbxDelete = view.findViewById(R.id.cbx_delete);
                 layout = view.findViewById(R.id.layout);
 
@@ -1313,19 +1317,19 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         public int getCount() {
             switch (ContactsListFragment.onlyDisplayLinphoneContacts) {
                 case 0:
-                    Log.d(TAG, "getCount: "+contacts.size());
+                    Log.d(TAG, "getCount: " + contacts.size());
                     return contacts.size();
 
                 case 1:
                     try {
-                        Log.d(TAG, "getCount: "+DbContext.getInstance().getContactResponse(context).getDsdanhba().size());
+                        Log.d(TAG, "getCount: " + DbContext.getInstance().getContactResponse(context).getDsdanhba().size());
                         return DbContext.getInstance().getContactResponse(context).getDsdanhba().size();
                     } catch (Exception e) {
                         return 0;
                     }
                 default:
                     try {
-                        Log.d(TAG, "getCount: "+DbContext.getInstance().getContactResponse(context).getDsdanhba().size());
+                        Log.d(TAG, "getCount: " + DbContext.getInstance().getContactResponse(context).getDsdanhba().size());
                         return DbContext.getInstance().getContactResponse(context).getDsdanhba().size();
                     } catch (Exception e) {
                         return 0;
@@ -1361,7 +1365,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 view = convertView;
                 holder = (ViewHolder) view.getTag();
             } else {
-                Log.d(TAG, "convertView == null: ");
                 view = mInflater.inflate(R.layout.contact_cell, parent, false);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
@@ -1378,7 +1381,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder.imgCall.setVisibility(View.VISIBLE);
                 holder.cbxDelete.setVisibility(View.GONE);
             }
-
 
 
             holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
@@ -1409,36 +1411,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         deleteContact.setVisibility(View.GONE);
                     } else {
                         deleteContact.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
-            holder.imgDelete.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AlertDialog.Builder builder;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
-                    } else {
-                        builder = new AlertDialog.Builder(getActivity());
-                    }
-                    try {
-                        builder.setTitle("Xóa")
-                                .setMessage("Bạn có thật sự muốn xóa liên hệ này ?")
-                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deleteContact(DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba(), position);
-                                    }
-                                })
-                                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // do nothing
-                                    }
-                                })
-                                .setIcon(R.drawable.ic_delete_black_24dp)
-                                .show();
-
-                    } catch (Exception e) {
-
                     }
                 }
             });
@@ -1476,11 +1448,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         } catch (Exception e) {
 
                         }
-
                     }
                 }
             });
-            if (onlyDisplayLinphoneContacts == 0&&contact!=null) {
+
+            if (onlyDisplayLinphoneContacts == 0 && contact != null) {
                 holder.name.setText(contact.getFullName());
                 try {
                     holder.address.setText(contact.getNumbersOrAddresses().get(0).getValue());
@@ -1512,7 +1484,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 } else {
                     holder.separator.setVisibility(View.GONE);
                     String fullName = "";
-                    if (onlyDisplayLinphoneContacts == 0&&contact!=null)
+                    if (onlyDisplayLinphoneContacts == 0 && contact != null)
                         fullName = contact.getFullName();
                     else
                         try {
@@ -1528,7 +1500,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder.separator.setVisibility(View.GONE);
             }
             holder.contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
-            if(contact!=null) {
+            if (contact != null) {
                 if (contact.isInLinphoneFriendList()) {
                     holder.linphoneFriend.setVisibility(View.VISIBLE);
                 } else {
@@ -1539,8 +1511,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 }
             }
             boolean isOrgVisible = getResources().getBoolean(R.bool.display_contact_organization);
-            String org="";
-            if (contact!=null) org= contact.getOrganization();
+            String org = "";
+            if (contact != null) org = contact.getOrganization();
 //            if (org != null && !org.isEmpty() && isOrgVisible) {
 //                holder.organization.setText(org);
 //                holder.organization.setVisibility(View.VISIBLE);

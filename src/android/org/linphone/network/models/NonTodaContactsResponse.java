@@ -31,6 +31,8 @@ public class NonTodaContactsResponse {
         private String sodienthoai;
         @SerializedName("chucvu")
         private String chucvu;
+        @SerializedName("isChoose")
+        private boolean isChoose;
 
         public int getIdrow() {
             return idrow;
@@ -78,6 +80,19 @@ public class NonTodaContactsResponse {
 
         public void setChucvu(String chucvu) {
             this.chucvu = chucvu;
+        }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "idrow=" + idrow +
+                    ", idqllh=" + idqllh +
+                    ", idnhanvien=" + idnhanvien +
+                    ", tennhanvien='" + tennhanvien + '\'' +
+                    ", sodienthoai='" + sodienthoai + '\'' +
+                    ", chucvu='" + chucvu + '\'' +
+                    ", isChoose=" + isChoose +
+                    '}';
         }
     }
 
