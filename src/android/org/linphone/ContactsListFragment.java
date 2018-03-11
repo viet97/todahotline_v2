@@ -247,8 +247,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             addContacts = view.findViewById(R.id.add_contacts);
             rlCusContact.setVisibility(View.GONE);
             rlTodaContact.setVisibility(View.GONE);
-            clearSearchField = (ImageView) view.findViewById(R.id.clearSearchField);
-            clearSearchField.setOnClickListener(this);
             for (LoginRespon.Data.DSloaidanhba ds : DbContext.getInstance().getLoginRespon(getActivity()).getData().getDsloaidanhba()) {
                 int type = ds.getIdloaidanhba();
                 switch (type) {
@@ -261,7 +259,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 }
 
             }
-
             noSipContact = (TextView) view.findViewById(R.id.noSipContact);
             noContact = (TextView) view.findViewById(R.id.noContact);
 
@@ -306,89 +303,16 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             edit = (ImageView) view.findViewById(R.id.edit);
             edit.setOnClickListener(this);
 
+            clearSearchField = (ImageView) view.findViewById(R.id.clearSearchField);
+            clearSearchField.setOnClickListener(this);
 
-            addContacts.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), NonTodaContacts.class));
-                }
-            });
-            deleteContact.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AlertDialog.Builder builder;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
-                    } else {
-                        builder = new AlertDialog.Builder(getActivity());
-                    }
-                    try {
-                        builder.setTitle("Xóa")
-                                .setMessage("Bạn có thật sự muốn xóa những liên hệ này ?")
-                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deleteArrayContact();
-                                    }
 
-                                })
-                                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // do nothing
-                                    }
-                                })
-                                .setIcon(R.drawable.ic_delete_black_24dp)
-                                .show();
-
-                    } catch (Exception e) {
-
-                    }
-                }
-            });
             searchField = view.findViewById(R.id.searchField);
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
             contactsFetchInProgress = (ProgressBar) view.findViewById(R.id.contactsFetchInProgress);
 //            contactsFetchInProgress.setVisibility(View.VISIBLE);
             refreshLayout.setOnRefreshListener(this);
-            deleteAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    deleteAll.setChecked(b);
-                    isDeleteAll = b;
-                    if (!b) {
-                        listIdDelete.clear();
-                        deleteContact.setVisibility(View.GONE);
-                    } else {
-                        deleteContact.setVisibility(View.VISIBLE);
-                        listIdDelete.clear();
-                        ArrayList<ContactResponse.DSDanhBa> listContact = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba();
-                        for (ContactResponse.DSDanhBa danhba : listContact) {
-
-                            listIdDelete.add(danhba.getIddanhba());
-                        }
-                    }
-                    changeAdapter();
-                }
-            });
-            backDeleteMode.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    deleteBar.setVisibility(View.GONE);
-                    topbar.setVisibility(View.VISIBLE);
-                    backDeleteMode.setVisibility(View.GONE);
-                    deleteAll.setVisibility(View.GONE);
-                    listIdDelete.clear();
-                    isDeleteMode = false;
-                    changeAdapter();
-                }
-            });
-            contactsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    return false;
-                }
-            });
             contactsList.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -402,10 +326,14 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     } catch (Exception e) {
 
                     }
-                    Log.d(TAG, "onScroll: " + listIsAtTop());
+
                     if (onlyDisplayLinphoneContacts != 0) {
                         int lastItem = i1 + i;
 
+                        Log.d(TAG, "onScroll: lastItem la " + lastItem);
+                        Log.d(TAG, "onScroll: i2 la " + i2);
+                        Log.d(TAG, "onScroll: " + isLoaded);
+                        Log.d(TAG, "onScroll: " + prelast);
                         if (lastItem == i2) {
                             if (prelast != lastItem && !isLoaded) {
                                 Log.d(TAG, "onScroll: last");
@@ -699,7 +627,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             onlyDisplayLinphoneContacts = 1;
             lastID = 0;
             isLoaded = false;
-            Log.d(TAG, "onClick: "+searchField);
             searchField.clearTextChangedListeners();
             searchField.setText("");
             searchText = "";
@@ -905,23 +832,26 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
     public void changeAdapter() {
         listIdDelete.clear();
-        ContactsListAdapter adapter;
-        contactsList.setFastScrollEnabled(false);
-        contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-        switch (onlyDisplayLinphoneContacts) {
-            case 0:
-                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts());
-                break;
-            case 1:
-                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
-                break;
-            default:
-                adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
-                break;
+        if (onlyDisplayLinphoneContacts != 0) {
+            ContactsListAdapter adapter;
+            contactsList.setFastScrollEnabled(false);
+            contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+            switch (onlyDisplayLinphoneContacts) {
+                case 0:
+                    adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts());
+                    break;
+                case 1:
+                    adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
+                    break;
+                default:
+                    adapter = new ContactsListAdapter(ContactsManager.getInstance().getContacts(), getActivity());
+                    break;
+            }
+            contactsList.setAdapter(null);
+            contactsList.setAdapter(adapter);
         }
-        contactsList.setAdapter(null);
-        contactsList.setAdapter(adapter);
         ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
+        Log.d(TAG, "changeAdapter: " + contactsList.getHeight());
         if (((ContactsListAdapter) contactsList.getAdapter()).getCount() == 0) {
             rlNoResult.setVisibility(View.VISIBLE);
             rlContact.setVisibility(View.GONE);
@@ -990,6 +920,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         isSearchMode = true;
         contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         contactsList.setAdapter(new ContactsListAdapter(ContactsManager.getInstance().getContacts(search)));
+        Log.d(TAG, "searchContacts: ");
         changeAdapter();
 //		if (onlyDisplayLinphoneContacts!=0) {
 //			contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
@@ -1041,7 +972,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
 
         if (adapter.getCount() > 0) {
-            if (contactsFetchInProgress!=null)   contactsFetchInProgress.setVisibility(View.GONE);
+            if (contactsFetchInProgress!=null) contactsFetchInProgress.setVisibility(View.GONE);
         }
         if (onlyDisplayLinphoneContacts == 0) {
             ContactsManager.getInstance().setLinphoneContactsPrefered(false);
@@ -1365,55 +1296,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 view = convertView;
                 holder = (ViewHolder) view.getTag();
             } else {
+                Log.d(TAG, "convertView == null: ");
                 view = mInflater.inflate(R.layout.contact_cell, parent, false);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
-            final ViewHolder finalHolder = holder;
-            if (isDeleteAll) {
-                holder.cbxDelete.setChecked(isDeleteAll);
-            }
-
-            if (isDeleteMode) {
-                holder.cbxDelete.setVisibility(View.VISIBLE);
-                holder.imgCall.setVisibility(View.GONE);
-            } else {
-                holder.imgCall.setVisibility(View.VISIBLE);
-                holder.cbxDelete.setVisibility(View.GONE);
-            }
-
-
-            holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    Log.d(TAG, "onLongClick: ");
-                    isDeleteMode = true;
-                    changeMode(finalHolder, isDeleteMode);
-                    return true;
-                }
-            });
-//            holder.swLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
-//            holder.swLayout.addDrag(SwipeLayout.DragEdge.Left, view.findViewById(R.id.bottom_view));
-
-
-            holder.cbxDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    int iddanhba = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
-                    if (b) {
-                        finalHolder.cbxDelete.setChecked(b);
-                        listIdDelete.add(iddanhba);
-                    } else {
-                        finalHolder.cbxDelete.setChecked(b);
-                        listIdDelete.remove(listIdDelete.indexOf(iddanhba));
-                    }
-                    if (listIdDelete.size() == 0) {
-                        deleteContact.setVisibility(View.GONE);
-                    } else {
-                        deleteContact.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
             holder.layout.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1448,10 +1335,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         } catch (Exception e) {
 
                         }
+
                     }
                 }
             });
-
             if (onlyDisplayLinphoneContacts == 0 && contact != null) {
                 holder.name.setText(contact.getFullName());
                 try {
@@ -1463,11 +1350,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder.organization.setVisibility(View.GONE);
             } else {
                 try {
-                    Log.d(TAG, "getViewonlyDisplayLinphoneContacts: " + onlyDisplayLinphoneContacts);
                     if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")
                             && DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau() != null
                             && onlyDisplayLinphoneContacts == 1) {
-                        Log.d(TAG, "getViewonlyDisplayLinphoneContacts: setImage ");
                         holder.imgCall.setColorFilter(Color.parseColor(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getMamau()));
                     }
                     holder.name.setText(DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).getTenlienhe());
@@ -1692,6 +1577,4 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             return sectionsList.indexOf(letter);
         }
     }
-
-
 }
