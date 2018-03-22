@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="40dp"
+                    android:src="@drawable/logolachong" />
+                <LinearLayout
+                    android:descendantFocusability="beforeDescendants"
+                    android:focusableInTouchMode="true"
+                    android:id="@+id/llsv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_below="@id/iv_logo"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/thanhtrang"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="8"
+                        android:background="@drawable/gray"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/nha" />
+
+                    </RelativeLayout>
+                    <Spinner
+                        android:popupBackground="@color/white"
+                        android:id="@+id/spinner_idct"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+
+                        android:spinnerMode="dropdown"/>
+
+                    <EditText
+                        android:visibility="gone"
+                        android:textColorHint="@color/gray"
+                        android:id="@+id/idct"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="2"
+                        android:background="#0000"
+                        android:hint="Mã công ty"
+                        android:singleLine="true"
+                        android:textColor="#000000"
+                        android:textCursorDrawable="@null" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/llsv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/thanhtrang"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="8"
+                        android:background="@drawable/gray"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/dienthoai" />
+
+                    </RelativeLayout>
+
+                    <EditText
+                        android:textColorHint="@color/gray"
+                        android:id="@+id/username"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="2"
+                        android:background="#0000"
+                        android:hint="Tên Đăng Nhập"
+                        android:singleLine="true"
+                        android:textColor="#000000"
+                        android:textCursorDrawable="@null" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llpa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/llid"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/thanhtrang"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="8"
+                        android:background="@drawable/gray"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/khoa" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="#0000"
+                        android:padding="10dp">
+
+                        <EditText
+                            android:textColorHint="@color/gray"
+                            android:id="@+id/password"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:layout_marginLeft="5dp"
+                            android:background="#0000"
+                            android:hint="Mật Khẩu"
+                            android:inputType="textPassword"
+                            android:singleLine="true"
+                            android:textColor="#000000"
+                            android:layout_toLeftOf="@+id/visibility"
+                            android:textCursorDrawable="@null" />
+
+                        <ImageView
+                            android:id="@+id/visibility"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_visibility_black_24dp" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/cbxRemember"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_alignLeft="@+id/llpa"
+                    android:layout_below="@+id/llpa"
+                    android:layout_margin="16dp"
+                    android:button="@drawable/custom_tickbox"
+                    android:text="Ghi nhớ đăng nhập"
+                    android:textColor="@android:color/white" />
+
+                <Button
+
+                    android:id="@+id/btnLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/cbxRemember"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/button_login"
+                    android:text="Đăng nhập"
+                    android:textColor="@android:color/white" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/config_url"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/btnLogin"
+                    android:src="@drawable/ic_settings_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+
+                android:id="@+id/ll_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/tv_website"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/tv_hotline"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textIsSelectable="false"
+
+                    />
+
+                <TextView
+
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.2.0.0."
+                    android:textColor="#ffff" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
+

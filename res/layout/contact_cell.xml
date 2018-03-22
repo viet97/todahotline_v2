@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/separator_text"
+            style="@style/font1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center_vertical">
+
+        <RelativeLayout
+            android:id="@+id/avatar_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/contact_picture"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/content_description_contact_picture"
+                android:src="@drawable/avatar"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/mask"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/info_icon_medium" />
+
+        </RelativeLayout>
+
+        <CheckBox
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:button="@drawable/checkbox"
+            android:contentDescription="@string/content_description_delete"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/friendStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/led_connected"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/friendLinphone"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/delete"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/linphone_user"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@+id/secondary_action_icon"
+            android:layout_toRightOf="@id/avatar_layout"
+            android:orientation="vertical"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/name"
+                    style="@style/font6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/contactOrganization"
+                style="@style/font9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/name"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/address"
+                style="@style/font9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/secondary_action_icon"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/transparent"
+            android:contentDescription="@string/call"
+            android:padding="8dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_ab_dialer_holo_dark" />
+
+        <CheckBox
+            android:id="@+id/cbx_delete"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/transparent"
+            android:button="@drawable/custom_tickbox"
+            android:padding="8dp"
+            android:scaleType="center"
+            android:visibility="gone" />
+    </RelativeLayout>
+</LinearLayout>

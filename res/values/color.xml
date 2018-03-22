@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorA">#FFFFFF</color>
+    <color name="colorB">#000000</color>
+    <color name="colorC">#444444</color>
+    <color name="colorD">#808080</color>
+    <color name="colorE">#c4c4c4</color>
+    <color name="colorF">#e1e1e1</color>
+    <color name="colorG">#f3f3f3</color>
+    <color name="colorH">#ffffff</color>
+    <color name="colorI">#ff0000</color>
+    <color name="colorJ">#ffa645</color>
+    <color name="colorK">#3eb5c0</color>
+    <color name="colorL">#96c11f</color>
+    <color name="notification_color_led">#FF8000</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="account_inactive">#1874CD</color>
+
+
+    <!--<color name="account_inactive">#FF646464</color>-->
+    <color name="account_unregistered">#FFFFC200</color>
+    <color name="account_valid">#FF84E300</color>
+    <color name="account_error">#FFFF0F00</color>
+    <color name="background">#d1cece</color>
+    <color name="white">#ffffff</color>
+    <color name="white_0">#00ffffff</color>
+    <color name="white_50">#6affffff</color>
+    <color name="green1">#92db67</color>
+    <color name="black">#ef464242</color>
+    <color name="trans">#0000</color>
+    <color name="cam">#f46c45</color>
+    <color name="xanh">#1874CD</color>
+    <color name="capnhatfocus">#7AB0ECFF</color>
+    <color name="capnhatunfocus">#c877c5ff</color>
+    <color name="dyfc">#60518D</color>
+    <color name="dynfc">#806CB4</color>
+    <color name="red">#ff0000</color>
+    <color name="gray">#a3a3a3</color>
+    <color name="yellow">#fee901</color>
+    <color name="toast">#948cc8</color>
+    <color name="green">#8fe316</color>
+    <color name="green_bold">#19A855</color>
+    <color name="xam">#c0c0a5</color>
+    <color name="vangdam">#FFA500</color>
+    <color name="xanhladam">#33cc00</color>
+    <color name="xanhdatroi">#353535</color>
+    <color name="mautest">#9e92db67</color>
+    <color name="a">#9e92db67</color>
+    <color name="mautieude">#e9ffa500</color>
+    <color name="backGroundLH">#d2765e9c</color>
+    <color name="mauxanhreu">#009A2B</color>
+    <color name="mauchu_chuCK">#666666</color>
+    <color name="mauchu_huyDH">#70fc0606</color>
+
+</resources>

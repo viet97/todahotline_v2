@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:gravity="center_vertical"
+	android:orientation="vertical" >
+
+	<LinearLayout
+		android:id="@+id/separator"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/separator_text"
+			style="@style/font1"
+			android:textColor="@color/white"
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:gravity="center"/>
+
+		<ImageView
+			android:background="@color/colorE"
+			android:layout_width="match_parent"
+			android:layout_height="1dp"/>
+
+	</LinearLayout>
+
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="60dp"
+		android:layout_margin="5dp"
+		android:gravity="center_vertical">
+
+		<ImageView
+			android:layout_centerVertical="true"
+			android:padding="8dp"
+			android:id="@+id/detail"
+			android:src="@drawable/detailcallog"
+			android:contentDescription="@string/content_description_detail"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:layout_alignParentRight="true"
+			android:adjustViewBounds="true" />
+
+		<CheckBox
+			android:id="@+id/delete"
+			android:button="@drawable/checkbox"
+			android:contentDescription="@string/content_description_delete"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_centerInParent="true"
+			android:visibility="gone"
+			android:padding="5dp" />
+
+		<RelativeLayout
+			android:id="@+id/history_click"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_toLeftOf="@id/detail"
+			android:gravity="center_vertical">
+
+			<RelativeLayout
+				android:id="@+id/avatar_layout"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:gravity="center">
+
+				<ImageView
+					android:id="@+id/contact_picture"
+					android:src="@drawable/avatar"
+					android:contentDescription="@string/content_description_contact_picture"
+					android:layout_width="35dp"
+					android:layout_height="35dp"
+					android:adjustViewBounds="true"
+					android:layout_alignParentLeft="true"
+					android:layout_marginLeft="5dp"/>
+
+				<!--<ImageView-->
+					<!--android:id="@+id/mask"-->
+					<!--android:src="@drawable/avatar_mask"-->
+					<!--android:layout_width="35dp"-->
+					<!--android:layout_height="35dp"-->
+					<!--android:adjustViewBounds="true"-->
+					<!--android:layout_alignParentLeft="true"-->
+					<!--android:layout_marginLeft="5dp"/>-->
+
+			</RelativeLayout>
+
+			<ImageView
+				android:id="@+id/icon"
+				android:layout_centerVertical="true"
+				android:src="@drawable/received_call"
+				android:contentDescription="@string/content_description_call_direction"
+				android:padding="7dp"
+				android:layout_toRightOf="@id/avatar_layout"
+				android:layout_width="40dp"
+				android:layout_height="40dp"
+				android:adjustViewBounds="true"
+				android:layout_marginLeft="5dp"/>
+
+			<TextView
+				android:id="@+id/sip_uri"
+				style="@style/font6"
+				android:lines="1"
+				android:ellipsize="end"
+				android:maxLines="1"
+				android:textColor="@color/white"
+				android:gravity="center_vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_toRightOf="@id/icon"
+				android:layout_marginLeft="10dp" />
+			<TextView
+				android:layout_marginTop="4dp"
+				android:layout_below="@id/sip_uri"
+				android:id="@+id/date_log"
+				android:textSize="16dp"
+				android:lines="1"
+				android:text="12-12313"
+				android:ellipsize="end"
+				android:maxLines="1"
+				android:textColor="@color/white"
+				android:gravity="center_vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_toRightOf="@id/icon"
+				android:layout_marginLeft="10dp" />
+
+
+		</RelativeLayout>
+
+	</RelativeLayout>
+
+</LinearLayout>
