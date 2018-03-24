@@ -1497,6 +1497,57 @@
         <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/res" />
       </configuration>
     </facet>
+    <facet type="android-gradle" name="Android-Gradle">
+      <configuration>
+        <option name="GRADLE_PROJECT_PATH" value=":" />
+      </configuration>
+    </facet>
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="SELECTED_BUILD_VARIANT" value="debug" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
+        <afterSyncTasks>
+          <task>generateDebugSources</task>
+        </afterSyncTasks>
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/res" />
+      </configuration>
+    </facet>
+    <facet type="android-gradle" name="Android-Gradle">
+      <configuration>
+        <option name="GRADLE_PROJECT_PATH" value=":" />
+      </configuration>
+    </facet>
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="SELECTED_BUILD_VARIANT" value="debug" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
+        <afterSyncTasks>
+          <task>generateDebugSources</task>
+        </afterSyncTasks>
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/res" />
+      </configuration>
+    </facet>
+    <facet type="android-gradle" name="Android-Gradle">
+      <configuration>
+        <option name="GRADLE_PROJECT_PATH" value=":" />
+      </configuration>
+    </facet>
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="SELECTED_BUILD_VARIANT" value="debug" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
+        <afterSyncTasks>
+          <task>generateDebugSources</task>
+        </afterSyncTasks>
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/res" />
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/bin/intermediates/classes/debug" />
@@ -1596,58 +1647,58 @@
     <orderEntry type="library" exported="" scope="TEST" name="robotium-solo-5.6.3" level="project" />
     <orderEntry type="library" exported="" name="okio-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="espresso-core-3.0.2-alpha1" level="project" />
-    <orderEntry type="library" exported="" name="firebase-core-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-core-11.8.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="monitor-1.0.2-alpha1" level="project" />
-    <orderEntry type="library" exported="" name="firebase-messaging-license-11.4.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-library-1.3" level="project" />
+    <orderEntry type="library" exported="" name="firebase-messaging-license-11.8.0" level="project" />
     <orderEntry type="library" exported="" name="jjwt-0.9.0" level="project" />
-    <orderEntry type="library" exported="" name="firebase-messaging-11.4.2" level="project" />
-    <orderEntry type="library" exported="" name="firebase-common-license-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-messaging-11.8.0" level="project" />
+    <orderEntry type="library" exported="" name="firebase-common-license-11.8.0" level="project" />
     <orderEntry type="library" exported="" name="jackson-annotations-2.8.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-27.0.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="multidex-instrumentation-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-fragment-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="common-1.0.3" level="project" />
+    <orderEntry type="library" exported="" name="firebase-common-11.8.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="javawriter-2.1.1" level="project" />
     <orderEntry type="library" exported="" name="common-1.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="espresso-idling-resource-3.0.2-alpha1" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.3.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="runner-1.0.2-alpha1" level="project" />
-    <orderEntry type="library" exported="" name="firebase-common-11.4.2" level="project" />
-    <orderEntry type="library" exported="" name="play-services-tasks-11.4.2" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-26.1.0" level="project" />
-    <orderEntry type="library" exported="" name="firebase-analytics-license-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-tasks-11.8.0" level="project" />
     <orderEntry type="library" exported="" name="support-media-compat-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="percent-27.0.2" level="project" />
-    <orderEntry type="library" exported="" name="firebase-iid-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="firebase-analytics-license-11.8.0" level="project" />
+    <orderEntry type="library" exported="" name="firebase-iid-11.8.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-basement-license-11.8.0" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-26.1.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-integration-1.3" level="project" />
     <orderEntry type="library" exported="" name="support-core-utils-26.1.0" level="project" />
-    <orderEntry type="library" exported="" name="play-services-basement-11.4.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="rules-1.0.2-alpha1" level="project" />
     <orderEntry type="library" exported="" name="support-compat-27.0.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="jsr305-2.0.1" level="project" />
-    <orderEntry type="library" exported="" name="firebase-analytics-impl-license-11.4.2" level="project" />
-    <orderEntry type="library" exported="" name="firebase-iid-license-11.4.2" level="project" />
+    <orderEntry type="library" exported="" name="play-services-basement-11.8.0" level="project" />
+    <orderEntry type="library" exported="" name="firebase-iid-license-11.8.0" level="project" />
     <orderEntry type="library" exported="" name="jackson-databind-2.8.9" level="project" />
+    <orderEntry type="library" exported="" name="play-services-tasks-license-11.8.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="javax.inject-1" level="project" />
     <orderEntry type="library" exported="" name="retrofit-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.7" level="project" />
     <orderEntry type="library" exported="" name="converter-gson-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="commons-compress-1.8.1" level="project" />
-    <orderEntry type="library" exported="" name="play-services-tasks-license-11.4.2" level="project" />
     <orderEntry type="library" exported="" name="runtime-1.0.3" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-26.1.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="kxml2-2.3.0" level="project" />
+    <orderEntry type="library" exported="" name="firebase-analytics-impl-license-11.8.0" level="project" />
+    <orderEntry type="library" exported="" name="firebase-analytics-impl-11.8.0" level="project" />
     <orderEntry type="library" exported="" name="multidex-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-26.1.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
-    <orderEntry type="library" exported="" name="firebase-analytics-11.4.2" level="project" />
-    <orderEntry type="library" exported="" name="firebase-analytics-impl-11.4.2" level="project" />
     <orderEntry type="library" exported="" name="jackson-core-2.8.9" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
-    <orderEntry type="library" exported="" name="play-services-basement-license-11.4.2" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-21.0.0" level="project" />
+    <orderEntry type="library" exported="" name="firebase-analytics-11.8.0" level="project" />
   </component>
 </module>

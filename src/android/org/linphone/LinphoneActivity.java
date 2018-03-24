@@ -1464,7 +1464,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     protected void onResume() {
         super.onResume();
-
+        android.util.Log.d(TAG, "onResumeCallLog: " + DbContext.getInstance().getMyCallLogs(this).toString());
         if (!LinphoneService.isReady()) {
 //            startService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
         }

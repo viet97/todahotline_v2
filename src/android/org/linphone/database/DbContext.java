@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 
+import org.linphone.MyCallLogs;
 import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.DSCongTyResponse;
@@ -21,13 +22,16 @@ import java.util.HashMap;
  */
 
 public class DbContext {
+    public static final String PREFS_CALL_lOG = "CallLog";
     private static final String Pref_String_DB = "DbContext";
-    private static SharedPreferences DBDsCongTyResponse,DBaboutRespon, DBloginResponse, DBcontactResponse,DBcuscontactResponse, DBlistContactTodaName, DBnonTodaContacts,DBsearchcontactResponse;
-    private SharedPreferences.Editor DBDsCongTyResponseEditor,DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor,DBcuscontactResponseEditor, DBlistContactTodaNameEditor, DBnonTodaContactsEditor,DBsearchcontactResponseEditor;
+
+    private static SharedPreferences callLogsPref, DBDsCongTyResponse, DBaboutRespon, DBloginResponse, DBcontactResponse, DBcuscontactResponse, DBlistContactTodaName, DBnonTodaContacts, DBsearchcontactResponse;
+    private SharedPreferences.Editor callLogsPrefEditor, DBDsCongTyResponseEditor, DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBcuscontactResponseEditor, DBlistContactTodaNameEditor, DBnonTodaContactsEditor, DBsearchcontactResponseEditor;
     private Context context;
     private static final DbContext instance = new DbContext();
     private AboutRespon aboutRespon;
     private LoginRespon loginRespon;
+    private MyCallLogs myCallLogs;
     private NonTodaContactsResponse nonTodaContactsResponse;
     private DSCongTyResponse dsCongTyResponse;
     private ContactResponse contactResponse,cusContactResponse,searchContactResponse;
@@ -44,6 +48,7 @@ public class DbContext {
         this.listContactTodaName = new HashMap<>();
         this.listContactTodaJob = new HashMap<>();
         this.aboutRespon = new AboutRespon();
+        this.myCallLogs = new MyCallLogs();
         hashmapType = new TypeToken<HashMap<String, String>>() {
         }.getType();
     }
@@ -77,13 +82,43 @@ public class DbContext {
         return dsCongTyResponse;
     }
 
+    public void setMyCallLogs(MyCallLogs myCallLogs, Context context) {
+        try {
+            if (context != null) {
+                callLogsPref = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                callLogsPrefEditor = callLogsPref.edit();
+                String callLogsStr = gson.toJson(myCallLogs);
+                callLogsPrefEditor.putString(PREFS_CALL_lOG, callLogsStr);
+                callLogsPrefEditor.commit();
+                this.myCallLogs = myCallLogs;
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public MyCallLogs getMyCallLogs(Context context) {
+        try {
+            if (context != null) {
+                callLogsPref = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                String callLogsString = callLogsPref.getString(PREFS_CALL_lOG, null);
+                if (callLogsString != null) {
+                    this.myCallLogs = gson.fromJson(callLogsString, MyCallLogs.class);
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return myCallLogs;
+    }
+
     public void setDsCongty(DSCongTyResponse dsCongTyResponse, Context context) {
         try {
             if (context != null) {
                 DBDsCongTyResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
                 DBDsCongTyResponseEditor = DBDsCongTyResponse.edit();
                 String DBDsCongTyResponseStr = gson.toJson(dsCongTyResponse);
-                Log.d("DBContext", "setDsCongty: "+DBDsCongTyResponseStr);
+
                 DBDsCongTyResponseEditor.putString("DBDsCongTyResponse", DBDsCongTyResponseStr);
                 DBDsCongTyResponseEditor.commit();
                 Log.d("DBContext", "setDsCongty: "+DBDsCongTyResponse.getString("DBDsCongTyResponse",""));

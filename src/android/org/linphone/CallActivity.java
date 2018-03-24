@@ -68,9 +68,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.linphone.core.CallDirection;
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCall.State;
+import org.linphone.core.LinphoneCallLog;
 import org.linphone.core.LinphoneCallParams;
 import org.linphone.core.LinphoneCallStats;
 import org.linphone.core.LinphoneCallStats.LinphoneAddressFamily;
@@ -89,6 +91,7 @@ import org.linphone.ui.AddressText;
 import org.linphone.ui.Numpad;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -188,8 +191,15 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 			@Override
 			public void callState(LinphoneCore lc, final LinphoneCall call, LinphoneCall.State state, String message) {
-				android.util.Log.d(TAG, "callStateCallActivity: "+call.getDuration());
-				if (LinphoneManager.getLc().getCallsNb() == 0) {
+                if (state == State.CallEnd) {
+                    if (call.getDirection().toString().equals(CallDirection.Incoming)) {
+                        addLog(call, MyCallLogs.CallLog.CUOC_GOI_DEN);
+                    } else {
+                        addLog(call, MyCallLogs.CallLog.CUOC_GOI_DI);
+                    }
+                }
+                if (LinphoneManager.getLc().getCallsNb() == 0) {
+
 					if (status != null) {
 						LinphoneService.instance().removeSasNotification();
 						status.setisZrtpAsk(false);
@@ -356,7 +366,20 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		return getResources().getBoolean(R.bool.isTablet);
 	}
 
-	private void initUI() {
+    public void addLog(LinphoneCall linphoneCall, int status) {
+        LinphoneCallLog linphoneCallLog = linphoneCall.getCallLog();
+        MyCallLogs.CallLog callLog = new MyCallLogs.CallLog(linphoneCallLog.getTo().getUserName(),
+                linphoneCallLog.getTimestamp(),
+                linphoneCallLog.getCallDuration(),
+                status);
+        MyCallLogs myCallLogs = DbContext.getInstance().getMyCallLogs(CallActivity.this);
+        ArrayList<MyCallLogs.CallLog> callLogs = myCallLogs.getCallLogs();
+        callLogs.add(callLog);
+        myCallLogs.setCallLogs(callLogs);
+        DbContext.getInstance().setMyCallLogs(myCallLogs, CallActivity.this);
+    }
+
+    private void initUI() {
 		inflater = LayoutInflater.from(this);
 		container = (ViewGroup) findViewById(R.id.topLayout);
 		callsList = (LinearLayout) findViewById(R.id.calls_list);

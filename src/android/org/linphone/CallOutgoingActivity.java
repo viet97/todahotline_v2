@@ -25,6 +25,7 @@ import java.util.List;
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCall.State;
+import org.linphone.core.LinphoneCallLog;
 import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreListenerBase;
@@ -49,6 +50,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
+import android.telecom.Call;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -70,11 +72,12 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
     public NetworkStateReceiver networkStateReceiver;
     private boolean isMicMuted, isSpeakerEnabled;
     public static final int BUSY_CODE=6;
-
+    public MyCallLogs.CallLog callLog;
     public static CallOutgoingActivity instance() {
         return instance;
     }
 
+    public boolean isDeclinedAlready = false;
     public static boolean isInstanciated() {
         return instance != null;
     }
@@ -129,6 +132,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
                     // Convert LinphoneCore message 	for internalization
                     if (call.getErrorInfo().getReason() == Reason.Declined) {
                         displayCustomToast(getString(R.string.error_call_declined), Toast.LENGTH_SHORT);
+                        android.util.Log.d(TAG, "call.getErrorInfo().getReason(): " + call.getState());
                         decline();
                     } else if (call.getErrorInfo().getReason() == Reason.NotFound) {
                         displayCustomToast(getString(R.string.error_user_not_found), Toast.LENGTH_SHORT);
@@ -139,13 +143,14 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
                     } else if (call.getErrorInfo().getReason() == Reason.Busy) {
                         android.util.Log.d(TAG, "callState: Busy");
                         displayCustomToast(getString(R.string.error_user_busy), Toast.LENGTH_SHORT);
-                        Intent busyIntent = new Intent();
-                        setResult(BUSY_CODE, busyIntent);
+                        addOutGoingLog(call, MyCallLogs.CallLog.MAY_BAN);
+//                        Intent busyIntent = new Intent();
+//                        setResult(BUSY_CODE, busyIntent);
                         decline();
                     } else if (message != null) {
                         LinphoneAddress address = mCall.getRemoteAddress();
                         displayCustomToast(address.getUserName() + " offline", Toast.LENGTH_SHORT);
-
+                        addOutGoingLog(call, MyCallLogs.CallLog.OFFLINE);
                         decline();
 //                        LinphoneManager.getLc().declineCall(mCall,Reason.Busy);
                     }
@@ -155,6 +160,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
                     android.util.Log.d(TAG, "callStateCallOutGoingActivity: "+call.getDuration());
                     if (call.getErrorInfo().getReason() == Reason.Declined) {
                         displayCustomToast(getString(R.string.error_call_declined), Toast.LENGTH_SHORT);
+                        if (isDeclinedAlready) addOutGoingLog(call, MyCallLogs.CallLog.CUOC_GOI_DI);
                         decline();
                     }
                 }
@@ -172,6 +178,18 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
         instance = this;
     }
 
+    public void addOutGoingLog(LinphoneCall linphoneCall, int status) {
+        LinphoneCallLog linphoneCallLog = linphoneCall.getCallLog();
+        callLog = new MyCallLogs.CallLog(linphoneCallLog.getTo().getUserName(),
+                linphoneCallLog.getTimestamp(),
+                linphoneCallLog.getCallDuration(),
+                status);
+        MyCallLogs myCallLogs = DbContext.getInstance().getMyCallLogs(CallOutgoingActivity.this);
+        ArrayList<MyCallLogs.CallLog> callLogs = myCallLogs.getCallLogs();
+        callLogs.add(callLog);
+        myCallLogs.setCallLogs(callLogs);
+        DbContext.getInstance().setMyCallLogs(myCallLogs, CallOutgoingActivity.this);
+    }
     public String getContactName(final String phoneNumber, Context context) {
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
@@ -199,6 +217,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 
     @Override
     protected void onResume() {
+        isDeclinedAlready = false;
         android.util.Log.d(TAG, "onResume: ");
         super.onResume();
         instance = this;
@@ -302,6 +321,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
             LinphoneManager.getLc().enableSpeaker(isSpeakerEnabled);
         }
         if (id == R.id.outgoing_hang_up) {
+            isDeclinedAlready = true;
             decline();
         }
     }

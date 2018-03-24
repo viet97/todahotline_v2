@@ -380,7 +380,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 		}
 
 		public int getCount() {
-			return mLogs.size();
+			return DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs().size();
 		}
 
 		public Object getItem(int position) {
@@ -480,13 +480,11 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			Log.d(TAG, "getView: "+mLogs.get(position).getStatus().toString());
 			if (mLogs == null || mLogs.size() < position) return view;
 
-			final LinphoneCallLog log = mLogs.get(position);
-			long timestamp = log.getTimestamp();
-			Log.d(TAG, "getView: "+timestamp);
+			final MyCallLogs.CallLog log = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs().get(position);
+			long timestamp = log.getTime();
 			LinphoneAddress address;
-
 			holder.contact.setSelected(true); // For automated horizontal scrolling of long texts
-			String callDate = String.valueOf(mLogs.get(position).getTimestamp());
+			String callDate = String.valueOf(log.getTime());
 			Long longDate = Long.parseLong(callDate);
 
 			String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_detail_date_format));
@@ -501,8 +499,8 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			separatorText.setText(timestampToHumanDate(logTime));
 
 			if (position > 0) {
-				LinphoneCallLog previousLog = mLogs.get(position-1);
-				long previousTimestamp = previousLog.getTimestamp();
+				MyCallLogs.CallLog previousLog = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs().get(position - 1);
+				long previousTimestamp = previousLog.getTime();
 				Calendar previousLogTime = Calendar.getInstance();
 				previousLogTime.setTimeInMillis(previousTimestamp);
 
@@ -515,34 +513,32 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 				separator.setVisibility(View.VISIBLE);
 			}
 
-			if (log.getDirection() == CallDirection.Incoming) {
-				address = log.getFrom();
-				if (log.getStatus() == CallStatus.Missed) {
-					holder.callDirection.setImageResource(R.drawable.missed_call);
-				} else {
-					if (log.getStatus() == CallStatus.Declined) {
-						holder.callDirection.setImageResource(R.drawable.unreceived_call);
-					}else holder.callDirection.setImageResource(R.drawable.received_call);
-				}
-			} else {
-				address = log.getTo();
+			if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DEN) {
+				holder.callDirection.setImageResource(R.drawable.received_call);
+			} else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DI) {
 				holder.callDirection.setImageResource(R.drawable.outgoing_call);
+			} else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
+
+			} else if (log.getStatus() == MyCallLogs.CallLog.MAY_BAN) {
+
+			} else if (log.getStatus() == MyCallLogs.CallLog.OFFLINE) {
+
 			}
 
 
-			LinphoneContact c = ContactsManager.getInstance().findContactFromAddress(address);
-			if (c == null) c = ContactsManager.getInstance().findContactFromPhoneNumber(address.getUserName());
+//			LinphoneContact c = ContactsManager.getInstance().findContactFromAddress(address);
+//			if (c == null) c = ContactsManager.getInstance().findContactFromPhoneNumber(address.getUserName());
 			String displayName = null;
-			final String sipUri = address.asString();
-			if (c != null) {
-				displayName = c.getFullName();
-				LinphoneUtils.setThumbnailPictureFromUri(LinphoneActivity.instance(), holder.contactPicture, c.getThumbnailUri());
-			} else {
+//			final String sipUri = address.asString();
+//			if (c != null) {
+//				displayName = c.getFullName();
+//				LinphoneUtils.setThumbnailPictureFromUri(LinphoneActivity.instance(), holder.contactPicture, c.getThumbnailUri());
+//			} else {
 				holder.contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
-			}
-			displayName = getContactName(address.getUserName(), view.getContext());
+//			}
+			displayName = getContactName(log.getPhoneNumber(), view.getContext());
 			if (displayName == null) {
-				holder.contact.setText(LinphoneUtils.getAddressDisplayName(sipUri));
+				holder.contact.setText(LinphoneUtils.getAddressDisplayName(log.getPhoneNumber()));
 			} else {
 				holder.contact.setText(displayName);
 			}
@@ -586,7 +582,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 						Log.d(TAG, "onClick: 558");
 						if (LinphoneActivity.isInstanciated()) {
 							Log.d(TAG, "onClick: 560");
-							LinphoneActivity.instance().displayHistoryDetail(sipUri, log);
+//							LinphoneActivity.instance().displayHistoryDetail(log.getPhoneNumber(), log);
 						}
 					}
 				});

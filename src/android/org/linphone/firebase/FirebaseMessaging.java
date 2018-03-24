@@ -52,41 +52,41 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
     }
 
-    @Override
-    public void handleIntent(Intent intent) {
-//        super.handleIntent(intent);
-        Log.d(TAG, "handleIntent: "+intent.getExtras().getString("type"));
-        AddressText add = new AddressText(this,null) ;
-        add.setText("0967092691");
-//        Intent intent1 = new Intent("ServiceReady");
-//        sendBroadcast(intent);
-//        try {
-//            FirebaseInstanceId.getInstance().deleteInstanceId();
-//        } catch (IOException e) {
-//            Log.d(TAG, "handleIntent: "+e.toString());
-//        }
-//        LinphoneManager.getInstance().newOutgoingCall(add);
-        if (!LinphoneService.isReady()) {
-        startService(new Intent(ACTION_MAIN).setClass(this, LinphoneService.class));
-
-            while (!LinphoneService.isReady()) {
-                try {
-                    Log.d(TAG, "handleIntent: " + LinphoneService.isReady());
-                    sleep(30);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException("waiting thread sleep() has been interrupted");
-                }
+//    @Override
+//    public void handleIntent(Intent intent) {
+////        super.handleIntent(intent);
+//        Log.d(TAG, "handleIntent: "+intent.getExtras().getString("type"));
+//        AddressText add = new AddressText(this,null) ;
+//        add.setText("0967092691");
+////        Intent intent1 = new Intent("ServiceReady");
+////        sendBroadcast(intent);
+////        try {
+////            FirebaseInstanceId.getInstance().deleteInstanceId();
+////        } catch (IOException e) {
+////            Log.d(TAG, "handleIntent: "+e.toString());
+////        }
+////        LinphoneManager.getInstance().newOutgoingCall(add);
+//        if (!LinphoneService.isReady()) {
+//        startService(new Intent(ACTION_MAIN).setClass(this, LinphoneService.class));
+//
+//            while (!LinphoneService.isReady()) {
+//                try {
+//                    Log.d(TAG, "handleIntent: " + LinphoneService.isReady());
+//                    sleep(30);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException("waiting thread sleep() has been interrupted");
+//                }
+////            }
+////            Intent intent = new Intent(this, KeepAliveReceiver.class);
+////            PendingIntent keepAlivePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+////            AlarmManager alarmManager = ((AlarmManager) this.getSystemService(Context.ALARM_SERVICE));
+////            Compatibility.scheduleAlarm(alarmManager, AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, keepAlivePendingIntent);
+////                startActivity(new Intent()
+////                        .setClass(this, CallIncomingActivity.class)
+////                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 //            }
-//            Intent intent = new Intent(this, KeepAliveReceiver.class);
-//            PendingIntent keepAlivePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-//            AlarmManager alarmManager = ((AlarmManager) this.getSystemService(Context.ALARM_SERVICE));
-//            Compatibility.scheduleAlarm(alarmManager, AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 600000, keepAlivePendingIntent);
-//                startActivity(new Intent()
-//                        .setClass(this, CallIncomingActivity.class)
-//                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        }
-    }
+//        }
+//    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

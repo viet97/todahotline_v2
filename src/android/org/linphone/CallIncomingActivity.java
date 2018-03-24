@@ -42,6 +42,7 @@ import android.widget.Toast;
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCall.State;
+import org.linphone.core.LinphoneCallLog;
 import org.linphone.core.LinphoneCallParams;
 import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCoreListenerBase;
@@ -220,6 +221,9 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
             public void callState(LinphoneCore lc, LinphoneCall call, State state, String message) {
                 android.util.Log.d(TAG, "callState: "+state+"      "+ alreadyAcceptedOrDeniedCall);
                 if (call == mCall && State.CallEnd == state) {
+                    if (!alreadyAcceptedOrDeniedCall)
+                        addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_NHO);
+                    else addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_DEN);
                     finish();
                 }
 
@@ -233,6 +237,19 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
 
         super.onCreate(savedInstanceState);
         instance = this;
+    }
+
+    public void addIncomingLog(LinphoneCall linphoneCall, int status) {
+        LinphoneCallLog linphoneCallLog = linphoneCall.getCallLog();
+        MyCallLogs.CallLog callLog = new MyCallLogs.CallLog(linphoneCallLog.getTo().getUserName(),
+                linphoneCallLog.getTimestamp(),
+                linphoneCallLog.getCallDuration(),
+                status);
+        MyCallLogs myCallLogs = DbContext.getInstance().getMyCallLogs(CallIncomingActivity.this);
+        ArrayList<MyCallLogs.CallLog> callLogs = myCallLogs.getCallLogs();
+        callLogs.add(callLog);
+        myCallLogs.setCallLogs(callLogs);
+        DbContext.getInstance().setMyCallLogs(myCallLogs, CallIncomingActivity.this);
     }
 
     @Override
