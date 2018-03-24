@@ -39,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 
 import org.linphone.AccountPreferencesFragment;
@@ -476,7 +477,7 @@ public class LoginActivity extends Activity {
                             + "&devicename=" + android.os.Build.DEVICE
                             + "&imei=" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID)
                             + "&ver=1.3.0.3"
-                            + "&idpush=";
+                            + "&idpush="+ FirebaseInstanceId.getInstance().getToken();
                     android.util.Log.d(TAG, "loginURL: " + loginURL);
                     final Service service = NetContext.instance.create(Service.class);
                     service.login(loginURL).enqueue(new Callback<LoginRespon>() {
