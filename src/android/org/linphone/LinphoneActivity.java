@@ -72,6 +72,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.linphone.LinphoneManager.AddressType;
 import org.linphone.assistant.AssistantActivity;
 import org.linphone.assistant.RemoteProvisioningLoginActivity;
@@ -100,6 +102,7 @@ import org.linphone.network.Service;
 import org.linphone.network.models.VoidRespon;
 import org.linphone.purchase.InAppPurchaseActivity;
 import org.linphone.ui.AddressText;
+import org.linphone.ultils.ContactUltils;
 import org.linphone.xmlrpc.XmlRpcHelper;
 import org.linphone.xmlrpc.XmlRpcListenerBase;
 
@@ -184,16 +187,17 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     protected void onCreate(Bundle savedInstanceState) {
         //This must be done before calling super.onCreate().
         super.onCreate(savedInstanceState);
+        FirebaseMessaging.getInstance().subscribeToTopic("TodaPhone");
 //        auto save login
-        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, StartServiceReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 5);
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(), 2000, pendingIntent);
+//        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(this, StartServiceReceiver.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        calendar.add(Calendar.SECOND, 5);
+//        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
+//                calendar.getTimeInMillis(), 2000, pendingIntent);
         SharedPreferences.Editor autoLoginEditor = getApplicationContext().getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
         autoLoginEditor.putBoolean("AutoLogin", true);
         autoLoginEditor.apply();
@@ -406,10 +410,11 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     }
 
     private void changeCurrentFragment(FragmentsAvailable newFragmentType, Bundle extras, boolean withoutAnimation) {
+        android.util.Log.d(TAG, "changeCurrentFragment: 412");
         if (newFragmentType == currentFragment && newFragmentType != FragmentsAvailable.CHAT) {
             return;
         }
-        android.util.Log.d(TAG, "changeCurrentFragment: ");
+        android.util.Log.d(TAG, "changeCurrentFragment: 416");
         if (currentFragment == FragmentsAvailable.DIALER) {
             try {
                 DialerFragment dialerFragment = DialerFragment.instance();
@@ -594,41 +599,48 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         }
     }
 
-    public void displayHistoryDetail(String sipUri, LinphoneCallLog log) {
+    public void displayHistoryDetail(String sipUri, MyCallLogs.CallLog log) {
         LinphoneAddress lAddress;
-        try {
-            lAddress = LinphoneCoreFactory.instance().createLinphoneAddress(sipUri);
-        } catch (LinphoneCoreException e) {
-            Log.e("Cannot display history details", e);
-            //TODO display error message
-            return;
-        }
-        LinphoneContact c = ContactsManager.getInstance().findContactFromAddress(lAddress);
+        android.util.Log.d(TAG, "displayHistoryDetail: 610");
+//        try {
+//            lAddress = LinphoneCoreFactory.instance().createLinphoneAddress(sipUri);
+//        } catch (LinphoneCoreException e) {
+//            Log.e("Cannot display history details", e);
+//            //TODO display error message
+//            return;
+//        }
+        android.util.Log.d(TAG, "displayHistoryDetail: 610");
+//        LinphoneContact c = ContactsManager.getInstance().findContactFromAddress(lAddress);
 
-        String displayName = c != null ? c.getFullName() : LinphoneUtils.getAddressDisplayName(sipUri);
-        String pictureUri = c != null && c.getPhotoUri() != null ? c.getPhotoUri().toString() : null;
+        String displayName = ContactUltils.instance.getContactName(sipUri, this);
+        String pictureUri = null;
 
-        String status;
-        if (log.getDirection() == CallDirection.Outgoing) {
+        String status = null;
+        if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DEN) {
+            status = getString(R.string.incoming);
+        } else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DI) {
             status = getString(R.string.outgoing);
-        } else {
-            if (log.getStatus() == CallStatus.Missed) {
-                status = getString(R.string.missed);
-            } else {
-                status = getString(R.string.incoming);
-            }
+        } else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
+            status = getString(R.string.missed);
+        } else if (log.getStatus() == MyCallLogs.CallLog.MAY_BAN) {
+            status = getString(R.string.busy);
+        } else if (log.getStatus() == MyCallLogs.CallLog.OFFLINE) {
+            status = getString(R.string.offline);
         }
 
-        String callTime = secondsToDisplayableString(log.getCallDuration());
-        String callDate = String.valueOf(log.getTimestamp());
+        String callTime = secondsToDisplayableString(log.getDuration());
+        String callDate = String.valueOf(log.getTime());
 
         Fragment fragment2 = getFragmentManager().findFragmentById(R.id.fragmentContainer2);
         if (fragment2 != null && fragment2.isVisible() && currentFragment == FragmentsAvailable.HISTORY_DETAIL) {
             HistoryDetailFragment historyDetailFragment = (HistoryDetailFragment) fragment2;
-            historyDetailFragment.changeDisplayedHistory(lAddress.asStringUriOnly(), displayName, pictureUri, status, callTime, callDate);
+            String address = "sip:" + log.getPhoneNumber() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+
+            historyDetailFragment.changeDisplayedHistory(address, displayName, pictureUri, status, callTime, callDate);
+            android.util.Log.d(TAG, "displayHistoryDetail: 636");
         } else {
             Bundle extras = new Bundle();
-            extras.putString("SipUri", lAddress.asString());
+            extras.putString("SipUri", log.getPhoneNumber());
             if (displayName != null) {
                 extras.putString("DisplayName", displayName);
                 extras.putString("PictureUri", pictureUri);
@@ -636,7 +648,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             extras.putString("CallStatus", status);
             extras.putString("CallTime", callTime);
             extras.putString("CallDate", callDate);
-
+            android.util.Log.d(TAG, "displayHistoryDetail: 647");
             changeCurrentFragment(FragmentsAvailable.HISTORY_DETAIL, extras);
         }
     }
@@ -1464,10 +1476,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     protected void onResume() {
         super.onResume();
-        android.util.Log.d(TAG, "onResumeCallLog: " + DbContext.getInstance().getMyCallLogs(this).toString());
-        if (!LinphoneService.isReady()) {
-//            startService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
-        }
+        NetContext.getInstance().init(this);
 
         LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
         if (lc != null) {
@@ -1929,37 +1938,37 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                     dialogLogin.cancel();
                     Toast.makeText(LinphoneActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
                 } else {
-                    try {
-                        SharedPreferences.Editor autoLoginEditor = getApplicationContext().getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
-                        autoLoginEditor.putBoolean("AutoLogin", false);
-                        autoLoginEditor.commit();
-                        if (LinphonePreferences.instance().getAccountCount() > 0) {
-                            LinphonePreferences.instance().setAccountEnabled(0, false);
-                            int accountNumber = LinphonePreferences.instance().getAccountCount();
-                            while (accountNumber >= 0) {
+//                    try {
+                    SharedPreferences.Editor autoLoginEditor = getApplicationContext().getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
+                    autoLoginEditor.putBoolean("AutoLogin", false);
+                    autoLoginEditor.commit();
+                    if (LinphonePreferences.instance().getAccountCount() > 0) {
+                        LinphonePreferences.instance().setAccountEnabled(0, false);
+                        int accountNumber = LinphonePreferences.instance().getAccountCount();
+                        while (accountNumber >= 0) {
 
-                                LinphonePreferences.instance().deleteAccount(accountNumber);
-                                accountNumber--;
-                            }
+                            LinphonePreferences.instance().deleteAccount(accountNumber);
+                            accountNumber--;
                         }
+                    }
 
 //                    LocalBroadcastManager.getInstance(SipHome.this).unregisterReceiver(statusReceiver);
 
 //                                        finish();
 //                                        android.util.Log.d("SipHome", "registerBroadcasts: " + StaticForDynamicReceiver4.getInstance().deviceStateReceiver);
-                        SharedPreferences.Editor databasePref = getSharedPreferences(Pref_String_DB, MODE_PRIVATE).edit();
-                        databasePref.clear();
-                        databasePref.commit();
-                        dialogLogin.cancel();
-                        stopService(new Intent(Intent.ACTION_MAIN).setClass(LinphoneActivity.this, LinphoneService.class));
-                        Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                    SharedPreferences.Editor databasePref = getSharedPreferences(Pref_String_DB, MODE_PRIVATE).edit();
+                    databasePref.clear();
+                    databasePref.commit();
+                    dialogLogin.cancel();
+                    stopService(new Intent(Intent.ACTION_MAIN).setClass(LinphoneActivity.this, LinphoneService.class));
+                    Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 //                        quit();
 
-                    } catch (Exception e) {
-
-                    }
+//                    } catch (Exception e) {
+//                        android.util.Log.d(TAG, "Exception: "+e.toString());
+//                    }
                 }
             }
 
@@ -1990,25 +1999,25 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             } else {
                 builder = new AlertDialog.Builder(LinphoneActivity.this);
             }
-            try {
-                builder.setTitle("Đăng xuất")
-                        .setMessage("Bạn có thật sự muốn đăng xuất ?")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                logoutAct();
-                            }
-                        })
-                        .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                        .setIcon(R.drawable.logout1)
-                        .show();
-                android.util.Log.d("LinphoneActivity", "onBackPressed: ");
-            } catch (Exception e) {
-                android.util.Log.d("SipHome", "Exception: " + e);
-            }
+//            try {
+            builder.setTitle("Đăng xuất")
+                    .setMessage("Bạn có thật sự muốn đăng xuất ?")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            logoutAct();
+                        }
+                    })
+                    .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(R.drawable.logout1)
+                    .show();
+            android.util.Log.d("LinphoneActivity", "onBackPressed: ");
+//            } catch (Exception e) {
+//                android.util.Log.d("SipHome", "Exception: " + e);
+//            }
         }
 
     }

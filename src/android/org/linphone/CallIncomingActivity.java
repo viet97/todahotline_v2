@@ -247,7 +247,7 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
                 status);
         MyCallLogs myCallLogs = DbContext.getInstance().getMyCallLogs(CallIncomingActivity.this);
         ArrayList<MyCallLogs.CallLog> callLogs = myCallLogs.getCallLogs();
-        callLogs.add(callLog);
+        callLogs.add(0, callLog);
         myCallLogs.setCallLogs(callLogs);
         DbContext.getInstance().setMyCallLogs(myCallLogs, CallIncomingActivity.this);
     }

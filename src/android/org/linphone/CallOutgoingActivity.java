@@ -186,7 +186,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
                 status);
         MyCallLogs myCallLogs = DbContext.getInstance().getMyCallLogs(CallOutgoingActivity.this);
         ArrayList<MyCallLogs.CallLog> callLogs = myCallLogs.getCallLogs();
-        callLogs.add(callLog);
+        callLogs.add(0, callLog);
         myCallLogs.setCallLogs(callLogs);
         DbContext.getInstance().setMyCallLogs(myCallLogs, CallOutgoingActivity.this);
     }

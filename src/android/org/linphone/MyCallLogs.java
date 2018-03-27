@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class MyCallLogs {
     private ArrayList<CallLog> callLogs = new ArrayList<>();
-
+    public static final int MAX_LOG = 100;
     public MyCallLogs() {
     }
 

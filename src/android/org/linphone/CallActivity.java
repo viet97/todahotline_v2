@@ -374,7 +374,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
                 status);
         MyCallLogs myCallLogs = DbContext.getInstance().getMyCallLogs(CallActivity.this);
         ArrayList<MyCallLogs.CallLog> callLogs = myCallLogs.getCallLogs();
-        callLogs.add(callLog);
+        callLogs.add(0, callLog);
         myCallLogs.setCallLogs(callLogs);
         DbContext.getInstance().setMyCallLogs(myCallLogs, CallActivity.this);
     }

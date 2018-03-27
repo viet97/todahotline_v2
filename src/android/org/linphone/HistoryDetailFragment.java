@@ -51,7 +51,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 		sipUri = getArguments().getString("SipUri");
 		displayName = getArguments().getString("DisplayName");
 		pictureUri = getArguments().getString("PictureUri");
@@ -68,7 +68,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 //		if(getResources().getBoolean(R.bool.isTablet)){
 //			back.setVisibility(View.INVISIBLE);
 //		} else {
-			back.setOnClickListener(this);
+		back.setOnClickListener(this);
 //		}
 
 		chat = (ImageView) view.findViewById(R.id.chat);
@@ -112,11 +112,11 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 			cursor.close();
 		}
 		if (contactName == null) {
-            try {
-                contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
-            } catch (Exception e) {
+			try {
+				contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+			} catch (Exception e) {
 
-            }
+			}
 		}
 
 		return contactName;
@@ -131,16 +131,22 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		} else if (status.equals(getResources().getString(R.string.outgoing))) {
 			statusCall.setText("Cuộc gọi đi");
 			callDirection.setImageResource(R.drawable.call_outgoing);
+		} else if (status.equals(getResources().getString(R.string.busy))) {
+			statusCall.setText("Máy bận");
+			callDirection.setImageResource(R.drawable.busy_phone);
+		} else if (status.equals(getResources().getString(R.string.offline))) {
+			statusCall.setText("Offline");
+			callDirection.setImageResource(R.drawable.offline);
 		}
 
 		time.setText(callTime == null ? "" : callTime);
 		Long longDate = Long.parseLong(callDate);
-        String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_detail_date_format));
-        if (datetime.length() > 0) {
-            datetime = datetime.substring(0, datetime.length() - 2);
-        }
-        android.util.Log.d(TAG, "displayHistory: " + datetime);
-        date.setText(datetime);
+		String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_detail_date_format));
+		if (datetime.length() > 0) {
+			datetime = datetime.substring(0, datetime.length() - 2);
+		}
+		android.util.Log.d(TAG, "displayHistory: " + datetime);
+		date.setText(datetime);
 
 		LinphoneAddress lAddress = null;
 		try {
@@ -200,7 +206,9 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		if (id == R.id.back) {
 			getFragmentManager().popBackStackImmediate();
 		} if (id == R.id.call) {
-			LinphoneActivity.instance().setAddresGoToDialerAndCall(sipUri, displayName, pictureUri == null ? null : Uri.parse(pictureUri));
+			String address = "sip:" + sipUri + "@" + LinphonePreferences.instance().getAccountDomain(0);
+
+			LinphoneActivity.instance().setAddresGoToDialerAndCall(address, displayName, pictureUri == null ? null : Uri.parse(pictureUri));
 		} else if (id == R.id.chat) {
 			LinphoneActivity.instance().displayChat(sipUri, null, null);
 		} else if (id == R.id.add_contact) {

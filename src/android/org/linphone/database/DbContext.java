@@ -15,6 +15,7 @@ import org.linphone.network.models.DSCongTyResponse;
 import org.linphone.network.models.LoginRespon;
 import org.linphone.network.models.NonTodaContactsResponse;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -39,6 +40,7 @@ public class DbContext {
     private HashMap<String, String> listContactTodaJob;
     java.lang.reflect.Type hashmapType;
     private Gson gson = new Gson();
+    private String TAG = "DbContext";
 
     public DbContext() {
         this.loginRespon = new LoginRespon();
@@ -63,7 +65,7 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return nonTodaContactsResponse;
     }
@@ -77,13 +79,17 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return dsCongTyResponse;
     }
 
     public void setMyCallLogs(MyCallLogs myCallLogs, Context context) {
         try {
+            ArrayList<MyCallLogs.CallLog> callLogs = myCallLogs.getCallLogs();
+            if (callLogs.size() > MyCallLogs.MAX_LOG) {
+                callLogs.subList(MyCallLogs.MAX_LOG, callLogs.size()).clear();
+            }
             if (context != null) {
                 callLogsPref = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
                 callLogsPrefEditor = callLogsPref.edit();
@@ -93,7 +99,7 @@ public class DbContext {
                 this.myCallLogs = myCallLogs;
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
     }
 
@@ -107,7 +113,7 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return myCallLogs;
     }
@@ -125,7 +131,7 @@ public class DbContext {
                 this.dsCongTyResponse = dsCongTyResponse;
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
     }
     public void setSearchContactResponse(ContactResponse searchContactResponse, Context context) {
@@ -139,7 +145,7 @@ public class DbContext {
                 this.contactResponse = contactResponse;
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
 
     }
@@ -153,7 +159,7 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return searchContactResponse;
     }
@@ -170,7 +176,7 @@ public class DbContext {
                 this.nonTodaContactsResponse = nonTodaContactsResponse;
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         this.nonTodaContactsResponse = nonTodaContactsResponse;
     }
@@ -185,7 +191,7 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return listContactTodaName;
 
@@ -202,7 +208,7 @@ public class DbContext {
                 this.listContactTodaName = listContactTodaName;
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
     }
 
@@ -214,7 +220,7 @@ public class DbContext {
         try {
             this.listContactTodaJob = listContactTodaJob;
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
 
     }
@@ -229,7 +235,7 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return aboutRespon;
     }
@@ -246,7 +252,7 @@ public class DbContext {
                 this.aboutRespon = aboutRespon;
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
     }
     public static DbContext getInstance() {
@@ -263,7 +269,7 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return contactResponse;
     }
@@ -279,7 +285,7 @@ public class DbContext {
                 this.contactResponse = contactResponse;
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
 
     }
@@ -293,7 +299,7 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return cusContactResponse;
     }
@@ -310,7 +316,7 @@ public class DbContext {
                 this.contactResponse = contactResponse;
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
 
     }
@@ -325,7 +331,7 @@ public class DbContext {
                 }
             }
         } catch (Exception e) {
-
+            Log.d(TAG, "Exception: " + e.toString());
         }
         return loginRespon;
     }
@@ -341,8 +347,8 @@ public class DbContext {
                 this.loginRespon = loginRespon;
             }
 
-        } catch (Exception E) {
-
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
         }
     }
 }
