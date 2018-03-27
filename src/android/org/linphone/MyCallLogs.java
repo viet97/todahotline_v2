@@ -38,7 +38,7 @@ public class MyCallLogs {
         int status;
         int duration;
 
-        public CallLog(String phoneNumber, long time, int status, int duration) {
+        public CallLog(String phoneNumber, long time, int duration, int status) {
             this.phoneNumber = phoneNumber;
             this.time = time;
             this.status = status;

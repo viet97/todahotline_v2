@@ -123,9 +123,9 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 		return view;
 	}
 
-//	public void refresh() {
-//		mLogs = Arrays.asList(LinphoneManager.getLc().getCallLogs());
-//	}
+    public void refresh() {
+        mLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+    }
 
 	private void selectAllList(boolean isSelectAll){
 		int size = historyList.getAdapter().getCount();
@@ -278,8 +278,8 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			missedCallsSelected.setVisibility(View.INVISIBLE);
 			missedCalls.setEnabled(true);
 			onlyDisplayMissedCalls = false;
-//			refresh();
-		}
+            refresh();
+        }
 		if (id == R.id.missed_calls) {
 			allCalls.setEnabled(true);
 			allCallsSelected.setVisibility(View.INVISIBLE);
@@ -355,8 +355,8 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 		}
 
 		public int getCount() {
-			return DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs().size();
-		}
+            return mLogs.size();
+        }
 
 		public Object getItem(int position) {
 			return mLogs.get(position);
@@ -421,8 +421,8 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 
 			if (mLogs == null || mLogs.size() < position) return view;
 
-			final MyCallLogs.CallLog log = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs().get(position);
-			long timestamp = log.getTime();
+            final MyCallLogs.CallLog log = mLogs.get(position);
+            long timestamp = log.getTime();
 			LinphoneAddress address;
 			holder.contact.setSelected(true); // For automated horizontal scrolling of long texts
 			String callDate = String.valueOf(log.getTime());
@@ -440,8 +440,8 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			separatorText.setText(timestampToHumanDate(logTime));
 
 			if (position > 0) {
-				MyCallLogs.CallLog previousLog = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs().get(position - 1);
-				long previousTimestamp = previousLog.getTime();
+                MyCallLogs.CallLog previousLog = mLogs.get(position - 1);
+                long previousTimestamp = previousLog.getTime();
 				Calendar previousLogTime = Calendar.getInstance();
 				previousLogTime.setTimeInMillis(previousTimestamp);
 

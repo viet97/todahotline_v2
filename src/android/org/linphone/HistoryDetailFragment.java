@@ -133,7 +133,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 			callDirection.setImageResource(R.drawable.call_outgoing);
 		} else if (status.equals(getResources().getString(R.string.busy))) {
 			statusCall.setText("Máy bận");
-			callDirection.setImageResource(R.drawable.busy_phone);
+			callDirection.setImageResource(R.drawable.detail_busy_phone);
 		} else if (status.equals(getResources().getString(R.string.offline))) {
 			statusCall.setText("Offline");
 			callDirection.setImageResource(R.drawable.offline);

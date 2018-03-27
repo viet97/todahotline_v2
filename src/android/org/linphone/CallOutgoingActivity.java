@@ -157,10 +157,12 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 
                 }else if (state == State.CallEnd) {
                     // Convert LinphoneCore message for internalization
+                    if (isDeclinedAlready) addOutGoingLog(call, MyCallLogs.CallLog.CUOC_GOI_DI);
+
                     android.util.Log.d(TAG, "callStateCallOutGoingActivity: "+call.getDuration());
                     if (call.getErrorInfo().getReason() == Reason.Declined) {
                         displayCustomToast(getString(R.string.error_call_declined), Toast.LENGTH_SHORT);
-                        if (isDeclinedAlready) addOutGoingLog(call, MyCallLogs.CallLog.CUOC_GOI_DI);
+                        android.util.Log.d(TAG, "callStateCallOutGoingActivity: ");
                         decline();
                     }
                 }
