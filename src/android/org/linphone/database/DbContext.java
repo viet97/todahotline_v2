@@ -26,14 +26,14 @@ public class DbContext {
     public static final String PREFS_CALL_lOG = "CallLog";
     private static final String Pref_String_DB = "DbContext";
 
-    private static SharedPreferences callLogsPref, DBDsCongTyResponse, DBaboutRespon, DBloginResponse, DBcontactResponse, DBcuscontactResponse, DBlistContactTodaName, DBnonTodaContacts, DBsearchcontactResponse;
-    private SharedPreferences.Editor callLogsPrefEditor, DBDsCongTyResponseEditor, DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBcuscontactResponseEditor, DBlistContactTodaNameEditor, DBnonTodaContactsEditor, DBsearchcontactResponseEditor;
+    private static SharedPreferences callLogsPref, DBDsCongTyResponse, DBaboutRespon, DBloginResponse, DBcontactResponse, DBcuscontactResponse, DBlistContactTodaName, DBnonTodaContacts, DBsearchcontactResponse, DBsearchNonTodacontactResponse;
+    private SharedPreferences.Editor callLogsPrefEditor, DBDsCongTyResponseEditor, DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBcuscontactResponseEditor, DBlistContactTodaNameEditor, DBnonTodaContactsEditor, DBsearchcontactResponseEditor, DBsearchNonTodacontactResponseEditor;
     private Context context;
     private static final DbContext instance = new DbContext();
     private AboutRespon aboutRespon;
     private LoginRespon loginRespon;
     private MyCallLogs myCallLogs;
-    private NonTodaContactsResponse nonTodaContactsResponse;
+    private NonTodaContactsResponse nonTodaContactsResponse, searchNonTodaContactResponse;
     private DSCongTyResponse dsCongTyResponse;
     private ContactResponse contactResponse,cusContactResponse,searchContactResponse;
     private HashMap<String, String> listContactTodaName;
@@ -43,6 +43,7 @@ public class DbContext {
     private String TAG = "DbContext";
 
     public DbContext() {
+        this.nonTodaContactsResponse = new NonTodaContactsResponse();
         this.loginRespon = new LoginRespon();
         this.contactResponse = new ContactResponse();
         this.cusContactResponse = new ContactResponse();
@@ -142,7 +143,7 @@ public class DbContext {
                 String searchContactResponseStr = gson.toJson(searchContactResponse);
                 DBsearchcontactResponseEditor.putString("DBsearchcontactResponse", searchContactResponseStr);
                 DBsearchcontactResponseEditor.commit();
-                this.contactResponse = contactResponse;
+
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.toString());
@@ -164,6 +165,35 @@ public class DbContext {
         return searchContactResponse;
     }
 
+    public void setSearchNonTodaContactResponse(NonTodaContactsResponse searchNonTodaContactResponse, Context context) {
+        try {
+            if (context != null) {
+                DBsearchNonTodacontactResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                DBsearchNonTodacontactResponseEditor = DBsearchNonTodacontactResponse.edit();
+                String searchNonTodaContactResponseStr = gson.toJson(searchNonTodaContactResponse);
+                DBsearchNonTodacontactResponseEditor.putString("DBsearchNonTodacontactResponse", searchNonTodaContactResponseStr);
+                DBsearchNonTodacontactResponseEditor.commit();
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
+        }
+
+    }
+
+    public NonTodaContactsResponse getSearchNonTodaContactResponse(Context context) {
+        try {
+            if (context != null) {
+                DBsearchNonTodacontactResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                String searchNonTodaContactResponseStr = DBsearchNonTodacontactResponse.getString("DBsearchNonTodacontactResponse", null);
+                if (searchNonTodaContactResponseStr != null) {
+                    this.searchNonTodaContactResponse = gson.fromJson(searchNonTodaContactResponseStr, NonTodaContactsResponse.class);
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
+        }
+        return searchNonTodaContactResponse;
+    }
     public void setNonTodaContactsResponse(NonTodaContactsResponse nonTodaContactsResponse, Context context) {
         try {
 

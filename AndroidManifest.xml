@@ -254,7 +254,8 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".StartServiceReceiver"
+        <receiver
+            android:name=".StartServiceReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -391,9 +392,7 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity android:name=".myactivity.InfoActivityMain" />
-        <activity android:name=".NonTodaContacts">
-
-        </activity>
+        <activity android:name=".NonTodaContacts"></activity>
     </application>
 
 </manifest>

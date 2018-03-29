@@ -1413,6 +1413,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     protected void onStart() {
         super.onStart();
         ArrayList<String> permissionsList = new ArrayList<String>();
+        int recordAudio = getPackageManager().checkPermission(Manifest.permission.RECORD_AUDIO, getPackageName());
 
         int contacts = getPackageManager().checkPermission(Manifest.permission.READ_CONTACTS, getPackageName());
         Log.i("[Permission] Contacts permission is " + (contacts == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
@@ -1424,7 +1425,12 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         Log.i("[Permission] Read external storage for ring tone permission is " + (ringtone == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
         int writeContact = getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, getPackageName());
         Log.i("[Permission] Read external storage for ring tone permission is " + (ringtone == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
-
+        if (recordAudio != PackageManager.PERMISSION_GRANTED) {
+            if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.RECORD_AUDIO) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                Log.i("[Permission] Asking for record audio");
+                permissionsList.add(Manifest.permission.RECORD_AUDIO);
+            }
+        }
         if (ringtone != PackageManager.PERMISSION_GRANTED) {
             if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 Log.i("[Permission] Asking for read external storage for ring tone");

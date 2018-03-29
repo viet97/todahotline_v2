@@ -228,7 +228,6 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
                 }
 
                 if (state == State.StreamsRunning) {
-                    Log.e("CallIncommingActivity - onCreate -  State.StreamsRunning - speaker = " + LinphoneManager.getLc().isSpeakerEnabled());
                     // The following should not be needed except some devices need it (e.g. Galaxy S).
                     LinphoneManager.getLc().enableSpeaker(LinphoneManager.getLc().isSpeakerEnabled());
                 }

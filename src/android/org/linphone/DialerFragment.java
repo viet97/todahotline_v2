@@ -164,8 +164,8 @@ public class DialerFragment extends Fragment {
 //		}
 
 		if (shouldEmptyAddressField) {
-			mAddress.setText("");
-		} else {
+//			mAddress.setText("");
+        } else {
 			shouldEmptyAddressField = true;
 		}
 		resetLayout(isCallTransferOngoing);
