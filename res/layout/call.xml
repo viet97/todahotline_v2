@@ -34,7 +34,9 @@
                     android:layout_alignParentTop="true"
                     android:layout_gravity="top"
                     android:orientation="vertical"
-                    android:visibility="visible"></LinearLayout>
+                    android:visibility="visible">
+
+                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/active_call"
@@ -45,7 +47,7 @@
                     <LinearLayout
                         android:id="@+id/active_call_info"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:alpha="0.8"
                         android:background="@color/colorH"
@@ -100,7 +102,6 @@
                         <!--android:layout_height="200dp"-->
                         <!--android:adjustViewBounds="true"/>-->
                         <org.linphone.ui.AddressText
-
                             android:id="@+id/address_call"
                             android:layout_below="@id/contact_picture"
                             android:background="@color/transparent"
