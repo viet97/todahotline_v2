@@ -160,7 +160,7 @@
             android:configChanges="orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/FullScreen">
+            android:theme="@style/CallTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

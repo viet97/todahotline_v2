@@ -860,7 +860,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     public void changeAdapter() {
         Log.d(TAG, "changeAdapter: " + DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().size());
         Log.d(TAG, "changeAdapter: " + DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().size());
-        listIdDelete.clear();
+//        listIdDelete.clear();
         ContactsListAdapter adapter;
         contactsList.setFastScrollEnabled(false);
         contactsList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
@@ -1318,7 +1318,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         public View getView(final int position, View convertView, ViewGroup parent) {
             View view = null;
             final LinphoneContact contact = (LinphoneContact) getItem(position);
-
 //            if (contact == null) return null;
             ViewHolder holder = null;
             if (convertView != null) {
@@ -1329,6 +1328,19 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
+
+            // giu nguyen trang thai check box moi lan adapter thay doi
+            if (onlyDisplayLinphoneContacts != 0) {
+                ContactResponse.DSDanhBa danhBa;
+                if (searchText.equals("")) {
+                    danhBa = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
+                } else
+                    danhBa = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+                if (listIdDelete.indexOf(danhBa.getIddanhba()) != -1) {
+                    holder.cbxDelete.setChecked(true);
+                }
+            }
+
             final ViewHolder finalHolder = holder;
             if (isDeleteAll) {
                 holder.cbxDelete.setChecked(isDeleteAll);
@@ -1359,6 +1371,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             holder.cbxDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
                     int iddanhba;
                     if (searchText.equals(""))
                         iddanhba = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
@@ -1468,11 +1481,16 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             } else if (onlyDisplayLinphoneContacts == 1) {
                 try {
                     Log.d(TAG, "getViewonlyDisplayLinphoneContacts: " + onlyDisplayLinphoneContacts);
-                    if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")
-                            && DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position).isStatus()
-                            && onlyDisplayLinphoneContacts == 1) {
-                        Log.d(TAG, "getViewonlyDisplayLinphoneContacts: setImage ");
-                        holder.avatar.setImageResource(R.drawable.online_info_icon_medium);
+                    if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")) {
+                        ContactResponse.DSDanhBa danhba;
+                        if (searchText.equals(""))
+                            danhba = DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position);
+                        else
+                            danhba = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba().get(position);
+                        if (danhba.isStatus()) {
+                            Log.d(TAG, "getViewonlyDisplayLinphoneContacts: setImage ");
+                            holder.avatar.setImageResource(R.drawable.online_info_icon_medium);
+                        }
                     }
                     ArrayList<ContactResponse.DSDanhBa> dsDanhBa;
                     if (searchField.length() == 0)

@@ -44,6 +44,7 @@ public class DbContext {
 
     public DbContext() {
         this.nonTodaContactsResponse = new NonTodaContactsResponse();
+        this.searchNonTodaContactResponse = new NonTodaContactsResponse();
         this.loginRespon = new LoginRespon();
         this.contactResponse = new ContactResponse();
         this.cusContactResponse = new ContactResponse();

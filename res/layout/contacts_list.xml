@@ -175,8 +175,6 @@
             android:hint="Nhập để tìm kiếm"
             android:layout_marginRight="44dp"
             android:inputType="textPersonName"
-
-
             android:textColor="@android:color/black"
             android:textCursorDrawable="@null" />
 
