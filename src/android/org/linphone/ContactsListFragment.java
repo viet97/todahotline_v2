@@ -68,6 +68,8 @@ import org.linphone.network.models.VoidRespon;
 import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -415,8 +417,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     try {
                         dialogRemove.cancel();
                     } catch (Exception e) {
-
+                        Log.d(TAG, "Exception: " + e.toString());
                     }
+                    HashMap<String, String> itemContactName = DbContext.getInstance().getListContactTodaName(getActivity());
                     if (response != null) {
                         VoidRespon respon = response.body();
                         if (respon.getStatus()) {
@@ -426,8 +429,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 int id = dsDanhBa.getIddanhba();
                                 if (listIdDelete.indexOf(id) != -1) {
                                     contactResponse.getDsdanhba().remove(dsDanhBa);
+                                    itemContactName.remove(dsDanhBa.getSodienthoai());
+
                                 }
+
                             }
+                            Log.d(TAG, "onResponse: " + itemContactName.toString());
+                            DbContext.getInstance().setListContactTodaName(itemContactName, getActivity());
                             DbContext.getInstance().setContactResponse(contactResponse, getActivity());
                             if (!searchText.equals("")) {
                                 contactResponse = DbContext.getInstance().getSearchContactResponse(getActivity());
@@ -439,6 +447,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                     }
                                 }
                                 DbContext.getInstance().setSearchContactResponse(contactResponse, getActivity());
+
                             }
                             listIdDelete.clear();
                             changeAdapter();
@@ -1625,96 +1634,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             changeAdapter();
         }
 
-        private void deleteContact(int idDanhBa, final int position) {
-            try {
-                dialogRemove = ProgressDialog.show(getActivity(), "", "Đang xóa...", true, false);
-            } catch (Exception e) {
-                Log.d(TAG, "Exception: " + e.toString());
-            }
-            String contact = "[" + idDanhBa + "]";
-            try {
-                contact = URLEncoder.encode(contact);
-            } catch (Exception e) {
-                Log.d(TAG, "Exception: " + e.toString());
-            }
-            String deleteContact = "AppXoaDanhBaNoiBo.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                    + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&dulieudanhba=" + contact;//lay tat ca danh ba ra
-            Log.d(TAG, "deleteContact: " + deleteContact);
-            Service service = NetContext.getInstance().create(Service.class);
-            service.xoaDanhBa(deleteContact).enqueue(new Callback<VoidRespon>() {
-                @Override
-                public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
-                    Log.d(TAG, "onResponse: " + response);
-                    try {
-                        dialogRemove.cancel();
-                    } catch (Exception e) {
-                        Log.d(TAG, "Exception: " + e.toString());
-                    }
-                    if (response != null) {
-                        VoidRespon respon = response.body();
-                        if (respon.getStatus()) {
-                            ContactResponse contactResponse;
-
-                            contactResponse = DbContext.getInstance().getContactResponse(getActivity());
-                            contactResponse.getDsdanhba().remove(position);
-                            DbContext.getInstance().setContactResponse(contactResponse, getActivity());
-                            if (!searchText.equals("")) {
-                                contactResponse = DbContext.getInstance().getSearchContactResponse(getActivity());
-                                contactResponse.getDsdanhba().remove(position);
-                                DbContext.getInstance().setSearchContactResponse(contactResponse, getActivity());
-                            }
-                            Log.d(TAG, "onResponse: " + DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().size());
-                            changeAdapter();
-                        } else {
-                            try {
-                                Toast.makeText(getActivity(),
-                                        "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
-                                        Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                Log.d(TAG, "Exception: " + e.toString());
-                            }
-                        }
-                    } else {
-                        try {
-                            Toast.makeText(getActivity(),
-                                    "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
-                                    Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            Log.d(TAG, "Exception: " + e.toString());
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onFailure(Call<VoidRespon> call, Throwable t) {
-                    Log.d(TAG, "onFailure: " + t.toString());
-                    try {
-                        dialogRemove.cancel();
-                    } catch (Exception e) {
-                        Log.d(TAG, "Exception: " + e.toString());
-                    }
-                    try {
-                        Toast.makeText(getActivity(),
-                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
-                                Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Log.d(TAG, "Exception: " + e.toString());
-                    }
-                }
-            });
-//            service.xoaDanhBa(deleteContact).enqueue(new Callback<Void>() {
-//                @Override
-//                public void onResponse(Call<Void> call, Response<Void> response) {
-//                    Log.d(TAG, "onResponse: "+response.body());
-//                }
-//
-//                @Override
-//                public void onFailure(Call<Void> call, Throwable t) {
-//                    Log.d(TAG, "onFailure: "+t.toString());
-//                }
-//            });
-        }
 
         @Override
         public Object[] getSections() {

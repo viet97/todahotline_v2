@@ -193,6 +193,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
         DbContext.getInstance().setMyCallLogs(myCallLogs, CallOutgoingActivity.this);
     }
     public String getContactName(final String phoneNumber, Context context) {
+        android.util.Log.d(TAG, "getContactName: " + DbContext.getInstance().getListContactTodaName(context).toString());
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
         String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
@@ -210,7 +211,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
             try {
                 contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
             } catch (Exception e) {
-
+                android.util.Log.d(TAG, "getContactName: ");
             }
         }
 
