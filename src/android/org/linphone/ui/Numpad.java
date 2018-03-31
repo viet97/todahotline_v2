@@ -65,8 +65,9 @@ public class Numpad extends LinearLayout implements AddressAware {
 	@Override
 	protected final void onFinishInflate() {
 		for (Digit v : retrieveChildren(this, Digit.class)) {
-			v.setPlayDtmf(mPlayDtmf);
-		}
+            //tat am ban phim
+//			v.setPlayDtmf(mPlayDtmf);
+        }
 		super.onFinishInflate();
 	}
 	public void setAddressWidget(AddressText address) {

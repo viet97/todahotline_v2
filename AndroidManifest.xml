@@ -392,7 +392,9 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity android:name=".myactivity.InfoActivityMain" />
-        <activity android:name=".NonTodaContacts"></activity>
+        <activity
+            android:name=".NonTodaContacts"
+            android:theme="@style/NoTitle"></activity>
     </application>
 
 </manifest>

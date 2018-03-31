@@ -54,7 +54,7 @@ import org.linphone.ui.LinphoneSliders.LinphoneSliderTriggered;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CallIncomingActivity extends LinphoneGenericActivity implements LinphoneSliderTriggered,NetworkStateReceiver.NetworkStateReceiverListener {
+public class CallIncomingActivity extends LinphoneGenericActivity implements LinphoneSliderTriggered, NetworkStateReceiver.NetworkStateReceiverListener {
     private static CallIncomingActivity instance;
     public NetworkStateReceiver networkStateReceiver;
     private TextView name, number;
@@ -66,7 +66,7 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
     private boolean alreadyAcceptedOrDeniedCall, begin;
     private float answerX, oldMove;
     private float declineX;
-    private String TAG="CallIncomingActivity";
+    private String TAG = "CallIncomingActivity";
 
     public static CallIncomingActivity instance() {
         return instance;
@@ -219,7 +219,7 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         mListener = new LinphoneCoreListenerBase() {
             @Override
             public void callState(LinphoneCore lc, LinphoneCall call, State state, String message) {
-                android.util.Log.d(TAG, "callState: "+state+"      "+ alreadyAcceptedOrDeniedCall);
+                android.util.Log.d(TAG, "callState: " + state + "      " + alreadyAcceptedOrDeniedCall);
                 if (call == mCall && State.CallEnd == state) {
                     if (!alreadyAcceptedOrDeniedCall)
                         addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_NHO);
@@ -262,7 +262,7 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         try {
             networkStateReceiver.addListener(this);
             this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         alreadyAcceptedOrDeniedCall = false;
@@ -305,9 +305,13 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         }
         if (contactName == null) {
             try {
-                contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+                if (ContactsListFragment.onlyDisplayLinphoneContacts == 1) {
+                    contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+                } else if (ContactsListFragment.onlyDisplayLinphoneContacts == 2) {
+                    contactName = DbContext.getInstance().getListCusContactTodaName(context).get(phoneNumber);
+                }
             } catch (Exception e) {
-
+                android.util.Log.d(TAG, "Exception: " + e.toString());
             }
         }
 
@@ -331,10 +335,10 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
 
     @Override
     protected void onDestroy() {
-        try{
+        try {
             networkStateReceiver.removeListener(this);
             this.unregisterReceiver(networkStateReceiver);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         super.onDestroy();
@@ -457,7 +461,7 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         try {
             decline();
             Toast.makeText(CallIncomingActivity.this, "Mất kết nối đến tổng đài", Toast.LENGTH_SHORT).show();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }

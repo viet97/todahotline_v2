@@ -26,8 +26,8 @@ public class DbContext {
     public static final String PREFS_CALL_lOG = "CallLog";
     private static final String Pref_String_DB = "DbContext";
 
-    private static SharedPreferences callLogsPref, DBDsCongTyResponse, DBaboutRespon, DBloginResponse, DBcontactResponse, DBcuscontactResponse, DBlistContactTodaName, DBnonTodaContacts, DBsearchcontactResponse, DBsearchNonTodacontactResponse;
-    private SharedPreferences.Editor callLogsPrefEditor, DBDsCongTyResponseEditor, DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBcuscontactResponseEditor, DBlistContactTodaNameEditor, DBnonTodaContactsEditor, DBsearchcontactResponseEditor, DBsearchNonTodacontactResponseEditor;
+    private static SharedPreferences callLogsPref, DBDsCongTyResponse, DBaboutRespon, DBloginResponse, DBcontactResponse, DBcuscontactResponse, DBlistContactTodaName, DBlistCusContactTodaName, DBnonTodaContacts, DBsearchcontactResponse, DBsearchNonTodacontactResponse;
+    private SharedPreferences.Editor callLogsPrefEditor, DBDsCongTyResponseEditor, DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBcuscontactResponseEditor, DBlistContactTodaNameEditor, DBlistCusContactTodaNameEditor, DBnonTodaContactsEditor, DBsearchcontactResponseEditor, DBsearchNonTodacontactResponseEditor;
     private Context context;
     private static final DbContext instance = new DbContext();
     private AboutRespon aboutRespon;
@@ -37,6 +37,7 @@ public class DbContext {
     private DSCongTyResponse dsCongTyResponse;
     private ContactResponse contactResponse,cusContactResponse,searchContactResponse;
     private HashMap<String, String> listContactTodaName;
+    private HashMap<String, String> listCusContactTodaName;
     private HashMap<String, String> listContactTodaJob;
     java.lang.reflect.Type hashmapType;
     private Gson gson = new Gson();
@@ -50,6 +51,7 @@ public class DbContext {
         this.cusContactResponse = new ContactResponse();
         this.searchContactResponse = new ContactResponse();
         this.listContactTodaName = new HashMap<>();
+        this.listCusContactTodaName = new HashMap<>();
         this.listContactTodaJob = new HashMap<>();
         this.aboutRespon = new AboutRespon();
         this.myCallLogs = new MyCallLogs();
@@ -228,6 +230,22 @@ public class DbContext {
 
     }
 
+    public HashMap<String, String> getListCusContactTodaName(Context context) {
+        try {
+            if (context != null) {
+                DBlistCusContactTodaName = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                String listCuscontactTodaname = DBlistCusContactTodaName.getString("DBlistCusContactTodaName", null);
+                if (listCuscontactTodaname != null) {
+                    this.listCusContactTodaName = gson.fromJson(listCuscontactTodaname, hashmapType);
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
+        }
+        return listCusContactTodaName;
+
+    }
+
     public void setListContactTodaName(HashMap<String, String> listContactTodaName, Context context) {
         try {
             if (context != null) {
@@ -237,6 +255,21 @@ public class DbContext {
                 DBlistContactTodaNameEditor.putString("DBlistContactTodaName", contactTodaName);
                 DBlistContactTodaNameEditor.commit();
                 this.listContactTodaName = listContactTodaName;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
+        }
+    }
+
+    public void setListCusContactTodaName(HashMap<String, String> listCusContactTodaName, Context context) {
+        try {
+            if (context != null) {
+                DBlistCusContactTodaName = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                DBlistCusContactTodaNameEditor = DBlistCusContactTodaName.edit();
+                String contactTodaName = gson.toJson(listCusContactTodaName);
+                DBlistCusContactTodaNameEditor.putString("DBlistCusContactTodaName", contactTodaName);
+                DBlistCusContactTodaNameEditor.commit();
+                this.listCusContactTodaName = listCusContactTodaName;
             }
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.toString());

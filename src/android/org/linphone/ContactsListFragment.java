@@ -53,6 +53,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SectionIndexer;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -406,8 +407,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             } catch (Exception e) {
 
             }
-            String deleteContact = "AppXoaDanhBaNoiBo.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                    + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&dulieudanhba=" + arrayContact;//lay tat ca danh ba ra
+            String deleteContact = "";
+            if (onlyDisplayLinphoneContacts == 1) {
+                deleteContact = "AppXoaDanhBaNoiBo.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&dulieudanhba=" + arrayContact;
+            } else if (onlyDisplayLinphoneContacts == 2)
+                deleteContact = "AppXoaDanhBaKhachHang.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
+                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&dulieudanhba=" + arrayContact;
             Log.d(TAG, "deleteContact: " + deleteContact);
             Service service = NetContext.getInstance().create(Service.class);
             service.xoaDanhBa(deleteContact).enqueue(new Callback<VoidRespon>() {
@@ -419,12 +425,19 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     } catch (Exception e) {
                         Log.d(TAG, "Exception: " + e.toString());
                     }
-                    HashMap<String, String> itemContactName = DbContext.getInstance().getListContactTodaName(getActivity());
+
                     if (response != null) {
                         VoidRespon respon = response.body();
                         if (respon.getStatus()) {
-                            ContactResponse contactResponse = DbContext.getInstance().getContactResponse(getActivity());
-
+                            ContactResponse contactResponse = null;
+                            HashMap<String, String> itemContactName = null;
+                            if (onlyDisplayLinphoneContacts == 1) {
+                                contactResponse = DbContext.getInstance().getContactResponse(getActivity());
+                                itemContactName = DbContext.getInstance().getListContactTodaName(getActivity());
+                            } else if (onlyDisplayLinphoneContacts == 2) {
+                                contactResponse = DbContext.getInstance().getCusContactResponse(getActivity());
+                                itemContactName = DbContext.getInstance().getListCusContactTodaName(getActivity());
+                            }
                             for (ContactResponse.DSDanhBa dsDanhBa : new ArrayList<ContactResponse.DSDanhBa>(contactResponse.getDsdanhba())) {
                                 int id = dsDanhBa.getIddanhba();
                                 if (listIdDelete.indexOf(id) != -1) {
@@ -434,9 +447,15 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 }
 
                             }
+                            if (onlyDisplayLinphoneContacts == 1) {
+                                DbContext.getInstance().setListContactTodaName(itemContactName, getActivity());
+                                DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+                            } else if (onlyDisplayLinphoneContacts == 2) {
+                                DbContext.getInstance().setListCusContactTodaName(itemContactName, getActivity());
+                                DbContext.getInstance().setCusContactResponse(contactResponse, getActivity());
+                            }
                             Log.d(TAG, "onResponse: " + itemContactName.toString());
-                            DbContext.getInstance().setListContactTodaName(itemContactName, getActivity());
-                            DbContext.getInstance().setContactResponse(contactResponse, getActivity());
+
                             if (!searchText.equals("")) {
                                 contactResponse = DbContext.getInstance().getSearchContactResponse(getActivity());
 
@@ -639,10 +658,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
 
         if (id == R.id.all_contacts) {
+            Log.d(TAG, "all_contacts: ");
+            setWidthSearchField(0);
             prelast = 0;
             onlyDisplayLinphoneContacts = 0;
             lastID = 0;
             isLoaded = false;
+            addContacts.setVisibility(View.GONE);
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
             searchField.setText("");
@@ -656,6 +678,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             changeAdapter();
         } else if (id == R.id.linphone_contacts) {
+            setWidthSearchField(102);
+            addContacts.setVisibility(View.VISIBLE);
             prelast = 0;
             onlyDisplayLinphoneContacts = 1;
             lastID = 0;
@@ -749,6 +773,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             cusContactSelected.setVisibility(View.INVISIBLE);
 
         } else if (id == R.id.cus_contacts) {
+            setWidthSearchField(0);
+            addContacts.setVisibility(View.GONE);
             prelast = 0;
             onlyDisplayLinphoneContacts = 2;
             lastID = 0;
@@ -864,6 +890,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             searchField.setText("");
             searchText = "";
         }
+    }
+
+    public void setWidthSearchField(int widthSearchField) {
+        ViewGroup.LayoutParams layoutParams = searchField.getLayoutParams();
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(layoutParams.width, layoutParams.height);
+        params.setMargins(0, 0, widthSearchField, 0);
+        searchField.setLayoutParams(params);
     }
 
     public void changeAdapter() {
@@ -1340,11 +1373,16 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
             // giu nguyen trang thai check box moi lan adapter thay doi
             if (onlyDisplayLinphoneContacts != 0) {
-                ContactResponse.DSDanhBa danhBa;
+                ContactResponse.DSDanhBa danhBa = null;
                 if (searchText.equals("")) {
-                    danhBa = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
-                } else
+                    if (onlyDisplayLinphoneContacts == 1)
+                        danhBa = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
+                    if (onlyDisplayLinphoneContacts == 2)
+                        danhBa = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position);
+                } else {
                     danhBa = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+
+                }
                 if (listIdDelete.indexOf(danhBa.getIddanhba()) != -1) {
                     holder.cbxDelete.setChecked(true);
                 }
@@ -1368,8 +1406,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 @Override
                 public boolean onLongClick(View view) {
                     Log.d(TAG, "onLongClick: ");
-                    isDeleteMode = true;
-                    changeMode(finalHolder, isDeleteMode);
+                    if (onlyDisplayLinphoneContacts != 0) {
+                        isDeleteMode = true;
+                        changeMode(finalHolder, isDeleteMode);
+                    }
                     return true;
                 }
             });
@@ -1381,12 +1421,16 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                    int iddanhba;
-                    if (searchText.equals(""))
-                        iddanhba = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
-                    else
-                        iddanhba = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
+                    int iddanhba = 0;
+                    if (searchText.equals("")) {
+                        if (onlyDisplayLinphoneContacts == 1)
+                            iddanhba = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
+                        if (onlyDisplayLinphoneContacts == 2)
+                            iddanhba = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
 
+                    } else {
+                        iddanhba = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
+                    }
                     if (b) {
                         finalHolder.cbxDelete.setChecked(b);
                         listIdDelete.add(iddanhba);

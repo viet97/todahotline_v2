@@ -7,6 +7,34 @@
 
 
     <!--<include layout="@layout/edit_list" />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/back_add_contact"
+            android:padding="8dp"
+            android:src="@drawable/backicon"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="Danh sách liên hệ"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:id="@+id/complete_add_contact"
+            android:src="@drawable/complete_add_contacts"
+            android:layout_alignParentBottom="true"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_searchfield"
@@ -39,7 +67,7 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -120,15 +148,9 @@
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
-
-            <Button
-                android:id="@+id/complete_add_contact"
-                android:text="OK"
-                android:layout_alignParentBottom="true"
-                android:layout_width="match_parent"
-                android:layout_height="60dp" />
         </RelativeLayout>
 
-
     </android.support.v4.widget.SwipeRefreshLayout>
+
+
 </LinearLayout>

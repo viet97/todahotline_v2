@@ -180,7 +180,6 @@
 
         <ImageView
             android:id="@+id/add_contacts"
-
             android:src="@drawable/add_contact"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"

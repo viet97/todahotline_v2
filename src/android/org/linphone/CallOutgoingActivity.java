@@ -209,7 +209,11 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
         }
         if (contactName == null) {
             try {
-                contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+                if (ContactsListFragment.onlyDisplayLinphoneContacts == 1) {
+                    contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+                } else if (ContactsListFragment.onlyDisplayLinphoneContacts == 2) {
+                    contactName = DbContext.getInstance().getListCusContactTodaName(context).get(phoneNumber);
+                }
             } catch (Exception e) {
                 android.util.Log.d(TAG, "getContactName: ");
             }

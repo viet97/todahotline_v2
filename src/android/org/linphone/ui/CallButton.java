@@ -56,6 +56,7 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 	}
 
 	public void onClick(View v) {
+
 		AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
 		alphaAnimation.setFillAfter(true);
 		alphaAnimation.setDuration(10);
@@ -75,7 +76,8 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 				Log.d(TAG, "onClick: 69");
 				if (add.getText().length() > 0) {
 					LinphoneManager.getInstance().newOutgoingCall(add);
-				} else {
+                    mAddress.setText("");
+                } else {
 
 					if (LinphonePreferences.instance().isBisFeatureEnabled()) {
 						Log.d(TAG, "onClick: 75");
@@ -108,7 +110,8 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 			LinphoneManager.getInstance().terminateCall();
 			onWrongDestinationAddress();
 		}
-	}
+
+    }
 
 	protected void onWrongDestinationAddress() {
 		Log.d(TAG, "onWrongDestinationAddress: ");
