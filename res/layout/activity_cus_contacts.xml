@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context="org.linphone.CusContactsActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/back_cus_contact"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:src="@drawable/backicon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Thêm liên hệ"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/complete_add_cus_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:padding="8dp"
+            android:src="@drawable/complete_add_contacts" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/img_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/info_icon_medium" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/img_contact"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên liên hệ"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/thanhtrang">
+
+            <EditText
+                android:layout_weight="2"
+
+                android:id="@+id/et_tenlienhe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0000"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="@color/gray"
+                android:textCursorDrawable="@null" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/thanhtrang">
+
+            <EditText
+                android:id="@+id/et_sdt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="#0000"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="@color/gray"
+                android:textCursorDrawable="@null" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

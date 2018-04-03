@@ -182,7 +182,7 @@
             android:id="@+id/add_contacts"
             android:src="@drawable/add_contact"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="40dp" />
 
         <ImageView
@@ -212,6 +212,7 @@
                 android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
                 android:button="@drawable/custom_tickbox"
                 android:text="chọn tất cả"
                 android:textColor="@android:color/white"

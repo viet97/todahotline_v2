@@ -111,8 +111,9 @@ public class LinphoneLauncherActivity extends Activity {
 							NetContext.getInstance().setBASE_URL(dsCongTyResponse.getDscongty().get(0).getBaseURL());
 							onServiceReady();
 						} catch (Exception e) {
-							android.util.Log.d("LinphoneLaunched", "onResponse: "+e.toString());
-						}
+                            finish();
+                            android.util.Log.d("LinphoneLaunched", "onResponse: " + e.toString());
+                        }
 					}
 				}
 
@@ -121,6 +122,7 @@ public class LinphoneLauncherActivity extends Activity {
 					Toast.makeText(LinphoneLauncherActivity.this,
 							"Không có kết nối internet,vui lòng bật wifi hoặc 3g",
 							Toast.LENGTH_SHORT).show();
+                    finish();
 
 				}
 			});
@@ -148,8 +150,9 @@ public class LinphoneLauncherActivity extends Activity {
 							mServiceThread.start();
 						} catch (Exception e) {
 							android.util.Log.d("LinphoneLaunched", "onResponse: "+e.toString());
-						}
-					}
+                            finish();
+                        }
+                    }
 				}
 
 				@Override
@@ -157,9 +160,9 @@ public class LinphoneLauncherActivity extends Activity {
 					Toast.makeText(LinphoneLauncherActivity.this,
 							"Không có kết nối internet,vui lòng bật wifi hoặc 3g",
 							Toast.LENGTH_SHORT).show();
-
-				}
-			});
+                    finish();
+                }
+            });
 
 		}
 	}

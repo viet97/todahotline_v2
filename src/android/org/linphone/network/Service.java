@@ -50,4 +50,7 @@ public interface Service {
 
     @GET
     Call<DSCongTyResponse> getDsCongTy(@Url String url);
+
+    @GET
+    Call<VoidRespon> addCusContact(@Url String url);
 }
