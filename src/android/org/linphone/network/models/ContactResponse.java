@@ -94,6 +94,8 @@ public class ContactResponse {
             this.iddanhba = iddanhba;
         }
 
+        @SerializedName("idrow")
+        private int idrow;
         @SerializedName("iddanhba")
         private int iddanhba;
         @SerializedName("idqllh")
@@ -110,6 +112,14 @@ public class ContactResponse {
         private String mamau;
         @SerializedName("status")
         private boolean status;
+
+        public int getIdrow() {
+            return idrow;
+        }
+
+        public void setIdrow(int idrow) {
+            this.idrow = idrow;
+        }
 
         public boolean isStatus() {
             return status;

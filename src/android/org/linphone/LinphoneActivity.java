@@ -187,7 +187,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     protected void onCreate(Bundle savedInstanceState) {
         //This must be done before calling super.onCreate().
         super.onCreate(savedInstanceState);
-//        FirebaseMessaging.getInstance().subscribeToTopic("TodaPhone");
+        FirebaseMessaging.getInstance().subscribeToTopic("TodaPhone");
 //        auto save login
 //        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 //        Intent intent = new Intent(this, StartServiceReceiver.class);

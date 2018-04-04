@@ -83,9 +83,10 @@
         </LinearLayout>
 
         <TextView
-            android:layout_marginTop="8dp"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Số điện thoại"
             android:textColor="@color/white"
             android:textSize="20sp" />
@@ -103,6 +104,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="#0000"
+                android:inputType="number"
                 android:singleLine="true"
                 android:textColor="#000000"
                 android:textColorHint="@color/gray"

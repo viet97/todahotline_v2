@@ -18,7 +18,7 @@ public class NonTodaContactsResponse {
     @SerializedName("lastid")
     private int lastid;
 
-    public class DSDanhBaNonToda {
+    public static class DSDanhBaNonToda {
         @SerializedName("idrow")
         private int idrow;
         @SerializedName("idqllh")
@@ -33,6 +33,16 @@ public class NonTodaContactsResponse {
         private String chucvu;
         @SerializedName("isChoose")
         private boolean isChoose;
+
+        public DSDanhBaNonToda(int idrow, int idqllh, int idnhanvien, String tennhanvien, String sodienthoai, String chucvu, boolean isChoose) {
+            this.idrow = idrow;
+            this.idqllh = idqllh;
+            this.idnhanvien = idnhanvien;
+            this.tennhanvien = tennhanvien;
+            this.sodienthoai = sodienthoai;
+            this.chucvu = chucvu;
+            this.isChoose = isChoose;
+        }
 
         public boolean isChoose() {
             return isChoose;
