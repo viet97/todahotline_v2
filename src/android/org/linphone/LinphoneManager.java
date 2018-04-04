@@ -257,7 +257,7 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
     private Timer mTimer;
 
     private void routeAudioToSpeakerHelper(boolean speakerOn) {
-        Log.w("Routing audio to " + (speakerOn ? "speaker" : "earpiece") + ", disabling bluetooth audio route");
+        Log.w("Routing audio to " + (speakerOn ? "speaker_off" : "earpiece") + ", disabling bluetooth audio route");
         BluetoothManager.getInstance().disableBluetoothSCO();
 
         mLc.enableSpeaker(speakerOn);
@@ -679,7 +679,7 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
     public void playDtmf(ContentResolver r, char dtmf) {
         try {
             if (Settings.System.getInt(r, Settings.System.DTMF_TONE_WHEN_DIALING) == 0) {
-                // audible touch disabled: don't play on speaker, only send in outgoing stream
+                // audible touch disabled: don't play on speaker_off, only send in outgoing stream
                 return;
             }
         } catch (SettingNotFoundException e) {
@@ -1602,7 +1602,7 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
 
     private synchronized void startRinging() {
         if (!LinphonePreferences.instance().isDeviceRingtoneEnabled()) {
-            // Enable speaker audio route, linphone library will do the ringing itself automatically
+            // Enable speaker_off audio route, linphone library will do the ringing itself automatically
             routeAudioToSpeaker();
             return;
         }
@@ -1666,7 +1666,7 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
         // You may need to call galaxys audio hack after this method
         if (!BluetoothManager.getInstance().isBluetoothHeadsetAvailable()) {
             if (mServiceContext.getResources().getBoolean(R.bool.isTablet)) {
-                Log.d("Stopped ringing, routing backicon to speaker");
+                Log.d("Stopped ringing, routing backicon to speaker_off");
                 routeAudioToSpeaker();
             } else {
                 Log.d("Stopped ringing, routing backicon to earpiece");

@@ -353,7 +353,7 @@ public class StatusFragment extends Fragment {
 			MediaEncryption mediaEncryption = call.getCurrentParams().getMediaEncryption();
 
 			if (isVideoEnabled) {
-				//background.setVisibility(View.GONE);
+//				background.setVisibility(View.GONE);
 			} else {
 				//background.setVisibility(View.VISIBLE);
 			}
