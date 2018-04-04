@@ -155,7 +155,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
 
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+//		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 		setContentView(R.layout.call);
 
 		//Earset Connectivity Broadcast Processing
@@ -317,7 +317,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			}
 
 			callFragment.setArguments(getIntent().getExtras());
-			getFragmentManager().beginTransaction().add(R.id.fragmentContainer, callFragment).commitAllowingStateLoss();
+//			getFragmentManager().beginTransaction().add(R.id.fragmentContainer, callFragment).commitAllowingStateLoss();
 		}
 	}
 
@@ -705,8 +705,10 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			goBackToDialer();
 		}
 		else if (id == R.id.pause) {
-			pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
-			addCall.callOnClick();
+
+			if (LinphoneManager.getLc().getCurrentCall() != null)
+				pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
+
 		}
 		else if (id == R.id.hang_up) {
 			hangUp();
@@ -866,7 +868,6 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				LinphoneManager.getInstance().enableProximitySensing(true);
 			}
 		}
-		replaceFragmentVideoByAudio();
 		displayAudioCall();
 		showStatusBar();
 		removeCallbacks();
@@ -912,15 +913,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		switchCamera.setVisibility(View.GONE);
 	}
 
-	private void replaceFragmentVideoByAudio() {
-		audioCallFragment = new CallAudioFragment();
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragmentContainer, audioCallFragment);
-		try {
-			transaction.commitAllowingStateLoss();
-		} catch (Exception e) {
-		}
-	}
+
 
 	private void replaceFragmentAudioByVideo() {
 //		Hiding controls to let displayVideoCallControlsIfHidden add them plus the callback
@@ -939,9 +932,9 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		isMicMuted = !isMicMuted;
 		lc.muteMic(isMicMuted);
 		if (isMicMuted) {
-			micro.setImageResource(R.drawable.micro_selected);
+			micro.setImageResource(R.drawable.my_mic_off);
 		} else {
-			micro.setImageResource(R.drawable.micro_default);
+			micro.setImageResource(R.drawable.my_mic);
 		}
 	}
 
@@ -955,16 +948,17 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 		if (isSpeakerEnabled) {
 			LinphoneManager.getInstance().routeAudioToSpeaker();
-			speaker.setImageResource(R.drawable.speaker_selected);
+			speaker.setImageResource(R.drawable.my_speaker);
 			LinphoneManager.getLc().enableSpeaker(isSpeakerEnabled);
 		} else {
 			Log.d("Toggle speaker_off off, routing backicon to earpiece");
 			LinphoneManager.getInstance().routeAudioToReceiver();
-			speaker.setImageResource(R.drawable.speaker_default);
+			speaker.setImageResource(R.drawable.my_speaker);
 		}
 	}
 
 	public void pauseOrResumeCall(LinphoneCall call) {
+		android.util.Log.d(TAG, "pauseOrResumeCall: " + call);
 		LinphoneCore lc = LinphoneManager.getLc();
 		if (call != null && LinphoneManager.getLc().getCurrentCall() == call) {
 			lc.pauseCall(call);
@@ -972,6 +966,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				isVideoCallPaused = true;
 			}
 			pause.setImageResource(R.drawable.my_play);
+
 		} else if (call != null) {
 			if (call.getState() == State.Paused) {
 				lc.resumeCall(call);
@@ -1555,6 +1550,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	}
 
 	public void pauseOrResumeConference() {
+		android.util.Log.d(TAG, "pauseOrResumeConference: ");
 		LinphoneCore lc = LinphoneManager.getLc();
 		conferenceStatus = (ImageView) findViewById(R.id.conference_pause);
 		if(conferenceStatus != null) {
