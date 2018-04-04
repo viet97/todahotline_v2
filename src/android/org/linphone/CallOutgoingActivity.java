@@ -33,6 +33,7 @@ import org.linphone.core.Reason;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.network.NetworkStateReceiver;
+import org.linphone.ultils.ContactUltils;
 
 import android.Manifest;
 import android.app.Activity;
@@ -268,14 +269,15 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 
         LinphoneAddress address = mCall.getRemoteAddress();
         LinphoneContact contact = ContactsManager.getInstance().findContactFromAddress(address);
-        String displayName = getContactName(address.getUserName(), this);
+        String displayName = ContactUltils.instance.getContactName(address.getUserName(), this);
         if (contact != null) {
             LinphoneUtils.setImagePictureFromUri(this, contactPicture, contact.getPhotoUri(), contact.getThumbnailUri());
             name.setText(displayName == null ? "" : displayName);
         } else {
             name.setText(displayName == null ? "" : displayName);
         }
-        number.setText(address.getUserName());
+        if (address.getUserName().equalsIgnoreCase(displayName)) number.setVisibility(View.GONE);
+        else number.setText(address.getUserName());
     }
 
     @Override
@@ -310,20 +312,20 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
         int id = v.getId();
 
         if (id == R.id.micro) {
-            isMicMuted = !isMicMuted;
-            if(isMicMuted) {
-                micro.setImageResource(R.drawable.micro_selected);
-            } else {
-                micro.setImageResource(R.drawable.micro_default);
-            }
-            LinphoneManager.getLc().muteMic(isMicMuted);
+//            isMicMuted = !isMicMuted;
+//            if(isMicMuted) {
+//                micro.setImageResource(R.drawable.micro_selected);
+//            } else {
+//                micro.setImageResource(R.drawable.micro_default);
+//            }
+//            LinphoneManager.getLc().muteMic(isMicMuted);
         }
         if (id == R.id.speaker) {
             isSpeakerEnabled = !isSpeakerEnabled;
             if(isSpeakerEnabled) {
-                speaker.setImageResource(R.drawable.speaker_selected);
+                speaker.setImageResource(R.drawable.speaker_on);
             } else {
-                speaker.setImageResource(R.drawable.speaker_default);
+                speaker.setImageResource(R.drawable.speaker_off);
             }
             LinphoneManager.getLc().enableSpeaker(isSpeakerEnabled);
         }

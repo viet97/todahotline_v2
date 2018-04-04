@@ -31,21 +31,13 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.os.SystemClock;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -570,7 +562,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		refreshInCallActions();
 		refreshCallList(getResources());
 		enableAndRefreshInCallActions();
-		displayMissedChats();
+//		displayMissedChats();
 	}
 
 	protected void setSpeakerEnabled(boolean enabled){
@@ -584,7 +576,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			if(video.isEnabled()) {
 				if (isVideoEnabled(LinphoneManager.getLc().getCurrentCall())) {
 					video.setImageResource(R.drawable.camera_selected);
-					videoProgress.setVisibility(View.INVISIBLE);
+//					videoProgress.setVisibility(View.INVISIBLE);
 				} else {
 					video.setImageResource(R.drawable.camera_button);
 				}
@@ -597,18 +589,18 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 
 		if (isSpeakerEnabled) {
-			speaker.setImageResource(R.drawable.speaker_selected);
+			speaker.setImageResource(R.drawable.my_speaker);
 		} else {
-			speaker.setImageResource(R.drawable.speaker_default);
+			speaker.setImageResource(R.drawable.my_speaker);
 		}
 
 		if (getPackageManager().checkPermission(Manifest.permission.RECORD_AUDIO, getPackageName()) != PackageManager.PERMISSION_GRANTED) {
 			isMicMuted = true;
 		}
 		if (isMicMuted) {
-			micro.setImageResource(R.drawable.micro_selected);
+			micro.setImageResource(R.drawable.my_mic);
 		} else {
-			micro.setImageResource(R.drawable.micro_default);
+			micro.setImageResource(R.drawable.my_mic);
 		}
 
 		try {
@@ -714,6 +706,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 		else if (id == R.id.pause) {
 			pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
+			addCall.callOnClick();
 		}
 		else if (id == R.id.hang_up) {
 			hangUp();
@@ -788,10 +781,10 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private void enabledPauseButton(boolean enabled){
 		if(enabled) {
 			pause.setEnabled(true);
-			pause.setImageResource(R.drawable.pause_big_default);
+			pause.setImageResource(R.drawable.my_pause);
 		} else {
 			pause.setEnabled(false);
-			pause.setImageResource(R.drawable.pause_big_disabled);
+			pause.setImageResource(R.drawable.my_play);
 		}
 	}
 
@@ -881,7 +874,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 	private void showVideoView() {
 		if (!BluetoothManager.getInstance().isBluetoothHeadsetAvailable()) {
-			Log.w("Bluetooth not available, using speaker");
+			Log.w("Bluetooth not available, using speaker_off");
 			LinphoneManager.getInstance().routeAudioToSpeaker();
 			isSpeakerEnabled = true;
 		}
@@ -912,10 +905,10 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	}
 
 	private void displayAudioCall(){
-		mControlsLayout.setVisibility(View.VISIBLE);
+//		mControlsLayout.setVisibility(View.VISIBLE);
 		mActiveCallHeader.setVisibility(View.VISIBLE);
 		callInfo.setVisibility(View.VISIBLE);
-		avatar_layout.setVisibility(View.VISIBLE);
+//		avatar_layout.setVisibility(View.VISIBLE);
 		switchCamera.setVisibility(View.GONE);
 	}
 
@@ -965,7 +958,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			speaker.setImageResource(R.drawable.speaker_selected);
 			LinphoneManager.getLc().enableSpeaker(isSpeakerEnabled);
 		} else {
-			Log.d("Toggle speaker off, routing backicon to earpiece");
+			Log.d("Toggle speaker_off off, routing backicon to earpiece");
 			LinphoneManager.getInstance().routeAudioToReceiver();
 			speaker.setImageResource(R.drawable.speaker_default);
 		}
@@ -978,14 +971,14 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			if (isVideoEnabled(LinphoneManager.getLc().getCurrentCall())) {
 				isVideoCallPaused = true;
 			}
-			pause.setImageResource(R.drawable.pause_big_over_selected);
+			pause.setImageResource(R.drawable.my_play);
 		} else if (call != null) {
 			if (call.getState() == State.Paused) {
 				lc.resumeCall(call);
 				if (isVideoCallPaused) {
 					isVideoCallPaused = false;
 				}
-				pause.setImageResource(R.drawable.pause_big_default);
+				pause.setImageResource(R.drawable.my_pause);
 			}
 		}
 	}
@@ -1006,7 +999,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	public void displayVideoCall(boolean display){
 		if(display) {
 			showStatusBar();
-			mControlsLayout.setVisibility(View.VISIBLE);
+//			mControlsLayout.setVisibility(View.VISIBLE);
 			mActiveCallHeader.setVisibility(View.VISIBLE);
 			callInfo.setVisibility(View.VISIBLE);
 			avatar_layout.setVisibility(View.GONE);
@@ -1067,7 +1060,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			return;
 		}
 
-		dialer.setImageResource(R.drawable.footer_dialer);
+		dialer.setImageResource(R.drawable.my_numpad);
 		numpad.setVisibility(View.GONE);
 	}
 
@@ -1184,7 +1177,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		if (status != null && !status.isVisible()) {
 			// Hack to ensure statusFragment is visible after coming backicon to
 			// dialer from chat
-			status.getView().setVisibility(View.VISIBLE);
+//			status.getView().setVisibility(View.VISIBLE);
 		}
 //		findViewById(R.id.status).setVisibility(View.VISIBLE);
 		//findViewById(R.id.fragmentContainer).setPadding(0, LinphoneUtils.pixelsToDpi(getResources(), 40), 0, 0);
@@ -1392,7 +1385,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private void displayPausedCalls(Resources resources, final LinphoneCall call, int index) {
 		// Control Row
 		LinearLayout callView;
-
+		android.util.Log.d(TAG, "checkBackGround: 1388");
 		if(call == null) {
 			callView = (LinearLayout) inflater.inflate(R.layout.conference_paused_row, container, false);
 			callView.setId(index + 1);
@@ -1435,7 +1428,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		callState.setOnClickListener(this);
 
 		if (call.getState() == State.Paused || call.getState() == State.PausedByRemote || call.getState() == State.Pausing) {
-			callState.setImageResource(R.drawable.pause);
+			callState.setImageResource(R.drawable.pausepts);
 			isCallPaused = true;
 			isInConference = false;
 		} else if (call.getState() == State.OutgoingInit || call.getState() == State.OutgoingProgress || call.getState() == State.OutgoingRinging) {
@@ -1476,21 +1469,21 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 		//MultiCalls
 		if(LinphoneManager.getLc().getCallsNb() > 1){
-			callsList.setVisibility(View.VISIBLE);
+//			callsList.setVisibility(View.VISIBLE);
 		}
 
 		//Active call
 		if(LinphoneManager.getLc().getCurrentCall() != null) {
-			displayNoCurrentCall(false);
+//			displayNoCurrentCall(false);
 			if(isVideoEnabled(LinphoneManager.getLc().getCurrentCall()) && !isConferenceRunning && pausedCalls.size() == 0) {
-				displayVideoCall(false);
+//				displayVideoCall(false);
 			} else {
 				displayAudioCall();
 			}
 		} else {
 			showAudioView();
-			displayNoCurrentCall(true);
-			if(LinphoneManager.getLc().getCallsNb() == 1) {
+//			displayNoCurrentCall(true);
+			if (LinphoneManager.getLc().getCallsNb() == 1) {
 				callsList.setVisibility(View.VISIBLE);
 			}
 		}
@@ -1518,7 +1511,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 					index++;
 				} else {
 					if (call != LinphoneManager.getLc().getCurrentCall() && !call.isInConference()) {
-						displayPausedCalls(resources, call, index);
+//						displayPausedCalls(resources, call, index);
 						index++;
 					} else {
 						displayCurrentCall(call);
@@ -1528,8 +1521,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 			if (!isConferenceRunning) {
 				if (isConfPaused) {
-					callsList.setVisibility(View.VISIBLE);
-					displayPausedCalls(resources, null, index);
+//					callsList.setVisibility(View.VISIBLE);
+//					displayPausedCalls(resources, null, index);
 				}
 
 			}
@@ -1577,6 +1570,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	}
 
 	private void displayConferenceParticipant(int index, final LinphoneCall call){
+		android.util.Log.d(TAG, "checkBackGround: 1573");
 		LinearLayout confView = (LinearLayout) inflater.inflate(R.layout.conf_call_control_row, container, false);
 		conferenceList.setId(index + 1);
 		TextView contact = (TextView) confView.findViewById(R.id.contactNameOrNumber);
@@ -1602,6 +1596,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	}
 
 	private void displayConferenceHeader(){
+		android.util.Log.d(TAG, "checkBackGround: 1599");
 		conferenceList.setVisibility(View.VISIBLE);
 		RelativeLayout headerConference = (RelativeLayout) inflater.inflate(R.layout.conference_header, container, false);
 		conferenceStatus = (ImageView) headerConference.findViewById(R.id.conference_pause);
@@ -1612,7 +1607,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 	private void displayConference(boolean isInConf){
 		if(isInConf) {
-			mControlsLayout.setVisibility(View.VISIBLE);
+//			mControlsLayout.setVisibility(View.VISIBLE);
 			mActiveCallHeader.setVisibility(View.GONE);
 			mNoCurrentCall.setVisibility(View.GONE);
 			conferenceList.removeAllViews();

@@ -565,7 +565,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         dialogSearch.cancel();
 
                     } catch (Exception e) {
-
+                        Log.d(TAG, "Exception: " + e.toString());
                     }
 
                     try {
@@ -573,7 +573,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
                                 Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-
+                        Log.d(TAG, "Exception: " + e.toString());
                     }
                 }
 
@@ -677,8 +677,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             changeAdapter();
         } else if (id == R.id.linphone_contacts) {
-//            setWidthSearchField(56);
-//            addContacts.setVisibility(View.VISIBLE);
+            setWidthSearchField(56);
+            addContacts.setVisibility(View.VISIBLE);
 
             onlyDisplayLinphoneContacts = 1;
             lastID = 0;
