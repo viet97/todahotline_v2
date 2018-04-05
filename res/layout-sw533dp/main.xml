@@ -76,7 +76,7 @@
 				android:id="@+id/footer"
 				android:layout_width="match_parent"
 				android:layout_height="60dp"
-				android:background="@drawable/bg"
+                android:background="@drawable/bg_old"
 				android:layout_alignParentBottom="true"
 				android:orientation="horizontal">
 				<RelativeLayout

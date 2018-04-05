@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@drawable/bg"
+    android:background="@drawable/bg_old"
 
 	android:orientation="vertical" >
 
@@ -10,18 +10,18 @@
 		android:id="@+id/top_bar"
 		android:orientation="horizontal"
 		android:layout_width="match_parent"
-		android:layout_height="60dp">
+        android:layout_height="50dp">
 
 		<RelativeLayout
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">
 
-			<ImageView
+            <TextView
+                android:gravity="center"
 				android:id="@+id/all_calls"
-				android:src="@drawable/history_all"
-				android:contentDescription="@string/content_description_all_contacts"
-				android:padding="15dp"
+                android:text="Tất cả"
+                android:textColor="@color/white"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"/>
 
@@ -38,16 +38,16 @@
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">
 
-			<ImageView
-				android:id="@+id/missed_calls"
-				android:src="@drawable/history_missed"
-				android:contentDescription="@string/content_description_linphone_contacts"
+            <TextView
 				android:gravity="center"
-				android:padding="15dp"
+                android:id="@+id/missed_calls"
+                android:text="Cuộc gọi nhỡ"
+                android:textColor="@color/white"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"/>
 
-			<View
+
+            <View
 				android:id="@+id/missed_calls_select"
 				android:background="@color/colorA"
 				android:layout_width="match_parent"

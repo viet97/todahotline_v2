@@ -9,7 +9,7 @@
 		android:id="@+id/top_bar"
 		android:layout_width="match_parent"
 		android:layout_height="60dp"
-		android:background="@drawable/bg"
+        android:background="@drawable/bg_old"
 		android:orientation="horizontal">
 
 		<ImageView

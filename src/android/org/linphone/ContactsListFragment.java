@@ -1441,7 +1441,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 holder.cbxDelete.setVisibility(View.VISIBLE);
                 holder.imgCall.setVisibility(View.GONE);
             } else {
-                holder.imgCall.setVisibility(View.VISIBLE);
+//                holder.imgCall.setVisibility(View.VISIBLE);
                 holder.cbxDelete.setVisibility(View.GONE);
             }
 
@@ -1528,29 +1528,24 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             holder.layout.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    LinphoneContact contact = (LinphoneContact) getItem(position);
-                    ;
-                    if (onlyDisplayLinphoneContacts == 0) {
-                        if (editOnClick) {
-                            editConsumed = true;
-                            LinphoneActivity.instance().editContact(contact, sipAddressToAdd);
-                        } else {
-                            lastKnownPosition = contactsList.getFirstVisiblePosition();
-                            LinphoneActivity.instance().displayContact(contact, onlyDisplayChatAddress);
-                        }
-                    }
-                    if (onlyDisplayLinphoneContacts == 2) {
-                        Intent editIntent = new Intent(getActivity(), CusContactsActivity.class);
-                        editIntent.putExtra("tenlienhe", finalDanhBa.getTenlienhe());
-                        editIntent.putExtra("sodienthoai", finalDanhBa.getSodienthoai());
-                        editIntent.putExtra("iddanhba", finalDanhBa.getIddanhba());
-                        startActivity(editIntent);
-                    }
-                }
-            });
-            holder.imgCall.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
+//                    LinphoneContact contact = (LinphoneContact) getItem(position);
+//                    ;
+//                    if (onlyDisplayLinphoneContacts == 0) {
+//                        if (editOnClick) {
+//                            editConsumed = true;
+//                            LinphoneActivity.instance().editContact(contact, sipAddressToAdd);
+//                        } else {
+//                            lastKnownPosition = contactsList.getFirstVisiblePosition();
+//                            LinphoneActivity.instance().displayContact(contact, onlyDisplayChatAddress);
+//                        }
+//                    }
+//                    if (onlyDisplayLinphoneContacts == 2) {
+//                        Intent editIntent = new Intent(getActivity(), CusContactsActivity.class);
+//                        editIntent.putExtra("tenlienhe", finalDanhBa.getTenlienhe());
+//                        editIntent.putExtra("sodienthoai", finalDanhBa.getSodienthoai());
+//                        editIntent.putExtra("iddanhba", finalDanhBa.getIddanhba());
+//                        startActivity(editIntent);
+//                    }
                     if (onlyDisplayLinphoneContacts == 0) {
                         String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
                         if (phoneNumber.contains("+84")) {
@@ -1583,10 +1578,47 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             Log.d(TAG, "Exception: " + e.toString());
                         }
                     }
-
-
                 }
             });
+//            holder.imgCall.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (onlyDisplayLinphoneContacts == 0) {
+//                        String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
+//                        if (phoneNumber.contains("+84")) {
+//                            phoneNumber = "0" + phoneNumber.substring(3);
+//                        }
+//                        String uri = "sip:" + phoneNumber + "@" + LinphonePreferences.instance().getAccountDomain(0);
+//                        LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, contacts.get(position).getFullName(), null);
+//                    } else if (onlyDisplayLinphoneContacts == 1) {
+//                        try {
+//                            ContactResponse.DSDanhBa to;
+//                            if (searchText.equals(""))
+//                                to = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
+//                            else
+//                                to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+//                            String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+//                            LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
+//                        } catch (Exception e) {
+//                            Log.d(TAG, "Exception: " + e.toString());
+//                        }
+//                    } else {
+//                        try {
+//                            ContactResponse.DSDanhBa to;
+//                            if (searchText.equals(""))
+//                                to = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position);
+//                            else
+//                                to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+//                            String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+//                            LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
+//                        } catch (Exception e) {
+//                            Log.d(TAG, "Exception: " + e.toString());
+//                        }
+//                    }
+//
+//
+//                }
+//            });
             if (onlyDisplayLinphoneContacts == 0 && contact != null) {
                 holder.name.setText(contact.getFullName());
                 try {

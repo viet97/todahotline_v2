@@ -69,9 +69,9 @@ import static org.linphone.FragmentsAvailable.HISTORY_LIST;
 public class HistoryListFragment extends Fragment implements OnClickListener, OnItemClickListener, ContactsUpdatedListener {
 	private ListView historyList;
 	private LayoutInflater mInflater;
-	private TextView noCallHistory, noMissedCallHistory;
-	private ImageView missedCalls, allCalls, edit, selectAll, deselectAll, delete, cancel;
-	private View allCallsSelected, missedCallsSelected;
+    private TextView missedCalls, allCalls, noCallHistory, noMissedCallHistory;
+    private ImageView edit, selectAll, deselectAll, delete, cancel;
+    private View allCallsSelected, missedCallsSelected;
 	private LinearLayout editList, topBar;
 	private boolean onlyDisplayMissedCalls, isEditMode;
 	private List<MyCallLogs.CallLog> mLogs;
@@ -98,13 +98,13 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 		cancel = (ImageView) view.findViewById(R.id.cancel);
 		cancel.setOnClickListener(this);
 
-		allCalls = (ImageView) view.findViewById(R.id.all_calls);
-		allCalls.setOnClickListener(this);
+        allCalls = view.findViewById(R.id.all_calls);
+        allCalls.setOnClickListener(this);
 
 		allCallsSelected = view.findViewById(R.id.all_calls_select);
 
-		missedCalls = (ImageView) view.findViewById(R.id.missed_calls);
-		missedCalls.setOnClickListener(this);
+        missedCalls = view.findViewById(R.id.missed_calls);
+        missedCalls.setOnClickListener(this);
 
 		missedCallsSelected = view.findViewById(R.id.missed_calls_select);
 
@@ -429,10 +429,10 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			Long longDate = Long.parseLong(callDate);
 
 			String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_detail_date_format));
-			if (datetime.length() > 0) {
-				datetime = datetime.substring(0, datetime.length() - 2);
-			}
-			holder.date.setText(datetime);
+//			if (datetime.length() > 0) {
+//				datetime = datetime.substring(0, datetime.length() - 2);
+//			}
+            holder.date.setText(datetime);
 			LinearLayout separator = (LinearLayout) view.findViewById(R.id.separator);
 			TextView separatorText = (TextView) view.findViewById(R.id.separator_text);
 			Calendar logTime = Calendar.getInstance();
@@ -455,14 +455,14 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			}
 			Log.d(TAG, "getView: " + log.getStatus());
 			if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DEN) {
-				holder.callDirection.setImageResource(R.drawable.received_call);
-			} else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DI) {
-				holder.callDirection.setImageResource(R.drawable.outgoing_call);
-			} else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
-				holder.callDirection.setImageResource(R.drawable.missed_call);
-			} else if (log.getStatus() == MyCallLogs.CallLog.MAY_BAN) {
-				holder.callDirection.setImageResource(R.drawable.busy_phone);
-			} else if (log.getStatus() == MyCallLogs.CallLog.OFFLINE) {
+                holder.callDirection.setImageResource(R.drawable.my_incoming_call);
+            } else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DI) {
+                holder.callDirection.setImageResource(R.drawable.my_outgoing_call);
+            } else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
+                holder.callDirection.setImageResource(R.drawable.my_missed_call);
+            } else if (log.getStatus() == MyCallLogs.CallLog.MAY_BAN) {
+                holder.callDirection.setImageResource(R.drawable.my_busy_call);
+            } else if (log.getStatus() == MyCallLogs.CallLog.OFFLINE) {
 				holder.callDirection.setImageResource(R.drawable.offline_ext);
 			}
 
