@@ -19,14 +19,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -182,6 +189,7 @@ public class DialerFragment extends Fragment {
         return view;
     }
 
+
     private void suggesDialer(String number) {
         suggestionDialers.clear();
         Context context = getActivity();
@@ -199,22 +207,46 @@ public class DialerFragment extends Fragment {
                 suggestionDialers.add(new SuggestionDialer(danhba.getTenlienhe(), danhba.getSodienthoai()));
             }
         }
-//		for (ContactResponse.DSDanhBa danhba :DbContext.getInstance().getContactResponse(context).getDsdanhba()) {
-//				if (danhba.getSodienthoai().contains(number)){
-//					suggestionDialers.add(new SuggestionDialer(danhba.getTenlienhe(),danhba.getSodienthoai()));
-//				}
-//		}
+        android.util.Log.d(TAG, "suggesDialer: " + DbContext.getInstance().getPhoneContacts(context).size());
+        for (PhoneContact phoneContact : DbContext.getInstance().getPhoneContacts(context)) {
+            if (phoneContact.getNumber().contains(number)) {
+                suggestionDialers.add(new SuggestionDialer(phoneContact.getName(), phoneContact.getNumber()));
+            }
+        }
         for (MyCallLogs.CallLog callLog : DbContext.getInstance().getMyCallLogs(context).getCallLogs()) {
             if (callLog.getPhoneNumber().contains(number)) {
                 suggestionDialers.add(new SuggestionDialer(ContactUltils.instance.getContactName(callLog.getPhoneNumber(), context), callLog.getPhoneNumber()));
             }
         }
-        ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
+        ((BaseAdapter) lvSuggestion.getAdapter()).
+
+                notifyDataSetChanged();
     }
+//        if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.WRITE_CONTACTS);
+//            org.linphone.mediastream.Log.i("[Permission] Asking for " + Manifest.permission.WRITE_CONTACTS);
+//            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_CONTACTS}, 0);
+//        } else {
+//            Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+//
+//            String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+//
+//            String contactName = null;
+//            Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+//
+//            if (cursor != null) {
+//                if (cursor.moveToFirst()) {
+//                    contactName = cursor.getString(0);
+//                }
+//                cursor.close();
+//            }
+//        }
+
 
     /**
      * @return null if not ready yet
      */
+
     public static DialerFragment instance() {
         return instance;
     }
@@ -382,13 +414,15 @@ public class DialerFragment extends Fragment {
                 view.setTag(holder);
             }
             SuggestionDialer suggestionDialer = suggestionDialers.get(position);
-            String suggestCharacter = "<font color='#EE0000'>" + mAddress.getText().toString() + "</font>";
+
             holder.tvName.setText(suggestionDialer.getName());
+
             //boi mau vao nhung so trung voi so tim kiem
             holder.tvExt.setText(suggestionDialer.getExt(), TextView.BufferType.SPANNABLE);
+            String searchNumber = mAddress.getText().toString();
             Spannable s = (Spannable) holder.tvExt.getText();
-            int startBuffColor = 0;
-            int endBuffColor = mAddress.getText().toString().length();
+            int startBuffColor = holder.tvExt.getText().toString().indexOf(searchNumber);
+            int endBuffColor = startBuffColor + mAddress.getText().toString().length();
             s.setSpan(new ForegroundColorSpan(Color.GREEN), startBuffColor, endBuffColor, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 

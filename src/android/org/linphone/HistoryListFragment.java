@@ -32,6 +32,7 @@ import org.linphone.core.LinphoneCallLog;
 import org.linphone.core.LinphoneCallLog.CallStatus;
 import org.linphone.core.LinphoneCore;
 import org.linphone.database.DbContext;
+import org.linphone.layoutXML.ExtendedEditText;
 import org.linphone.ultils.ContactUltils;
 
 import android.Manifest;
@@ -46,6 +47,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.telecom.Call;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +79,38 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 	private boolean onlyDisplayMissedCalls, isEditMode;
 	private List<MyCallLogs.CallLog> mLogs;
 	private String TAG = "HistoryListFragment";
+	private ExtendedEditText searchField;
+	TextWatcher twAllCall = new TextWatcher() {
+		@Override
+		public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+		}
+
+		@Override
+		public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+		}
+
+		@Override
+		public void afterTextChanged(Editable editable) {
+
+		}
+	};
+	TextWatcher twMissedCall = new TextWatcher() {
+		@Override
+		public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+		}
+
+		@Override
+		public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+		}
+
+		@Override
+		public void afterTextChanged(final Editable editable) {
+
+		}
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

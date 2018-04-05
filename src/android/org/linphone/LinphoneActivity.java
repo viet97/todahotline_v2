@@ -39,6 +39,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -46,6 +47,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -126,7 +128,7 @@ import retrofit2.Response;
 import static android.content.Intent.ACTION_MAIN;
 import static org.linphone.LinphoneActivity.ChatRoomContainer.createChatroomContainer;
 
-public class LinphoneActivity extends LinphoneGenericActivity implements OnClickListener, ContactPicked, ActivityCompat.OnRequestPermissionsResultCallback,Thread.UncaughtExceptionHandler {
+public class LinphoneActivity extends LinphoneGenericActivity implements OnClickListener, ContactPicked, ActivityCompat.OnRequestPermissionsResultCallback, Thread.UncaughtExceptionHandler {
     public static final String PREF_FIRST_LAUNCH = "pref_first_launch";
     public static final String KEY_FUNC_URL = "AppLogOut.aspx?";
     public static final String TAG = "LinphoneActivity";
@@ -160,7 +162,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private OrientationEventListener mOrientationHelper;
     private LinphoneCoreListenerBase mListener;
     private LinearLayout mTabBar;
-
+    private ArrayList<PhoneContact> phoneContacts;
     private ProgressDialog dialogLogin;
     private DrawerLayout sideMenu;
     private RelativeLayout sideMenuContent, quitLayout, defaultAccount;
@@ -188,6 +190,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         //This must be done before calling super.onCreate().
         super.onCreate(savedInstanceState);
         FirebaseMessaging.getInstance().subscribeToTopic("TodaPhone");
+        phoneContacts = new ArrayList<>();
 //        auto save login
 //        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 //        Intent intent = new Intent(this, StartServiceReceiver.class);
@@ -313,12 +316,12 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
             @Override
             public void callState(LinphoneCore lc, LinphoneCall call, LinphoneCall.State state, String message) {
-                android.util.Log.d(TAG, "callStateLinphoneActivity: "+state);
+                android.util.Log.d(TAG, "callStateLinphoneActivity: " + state);
                 if (state == State.IncomingReceived) {
                     startActivity(new Intent(LinphoneActivity.instance(), CallIncomingActivity.class));
                 } else if (state == State.OutgoingInit || state == State.OutgoingProgress) {
                     android.util.Log.d(TAG, "startActivityForResult: ");
-                    startActivityForResult(new Intent(LinphoneActivity.instance(), CallOutgoingActivity.class),1);
+                    startActivityForResult(new Intent(LinphoneActivity.instance(), CallOutgoingActivity.class), 1);
                 } else if (state == State.CallEnd || state == State.Error || state == State.CallReleased) {
                     resetClassicMenuLayoutAndGoBackToCallIfStillRunning();
                 }
@@ -351,6 +354,56 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             LinphoneManager.getLc().setDeviceRotation(rotation);
         }
         mAlwaysChangingPhoneAngle = rotation;
+    }
+
+    public void getContactsPhone() {
+        phoneContacts.clear();
+
+        int permissionGranted = this.getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, this.getPackageName());
+
+        if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.shouldShowRequestPermissionRationale((Activity) this, Manifest.permission.WRITE_CONTACTS);
+            org.linphone.mediastream.Log.i("[Permission] Asking for " + Manifest.permission.WRITE_CONTACTS);
+            ActivityCompat.requestPermissions((Activity) this, new String[]{Manifest.permission.WRITE_CONTACTS}, 0);
+        } else {
+            try {
+                ContentResolver cr = getContentResolver();
+                Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                        null, null, null, null);
+
+                if ((cur != null ? cur.getCount() : 0) > 0) {
+                    while (cur != null && cur.moveToNext()) {
+                        String id = cur.getString(
+                                cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cur.getString(cur.getColumnIndex(
+                                ContactsContract.Contacts.DISPLAY_NAME));
+
+                        if (cur.getInt(cur.getColumnIndex(
+                                ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                            Cursor pCur = cr.query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                    new String[]{id}, null);
+                            while (pCur.moveToNext()) {
+                                String phoneNo = pCur.getString(pCur.getColumnIndex(
+                                        ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                phoneContacts.add(new PhoneContact(name, phoneNo));
+
+                            }
+                            pCur.close();
+                        }
+                    }
+                }
+                if (cur != null) {
+                    cur.close();
+                }
+                DbContext.getInstance().setPhoneContacts(phoneContacts, this);
+            } catch (Exception e) {
+                android.util.Log.d(TAG, "Exception: " + e.toString());
+            }
+
+        }
     }
 
     private void initButtons() {
@@ -1222,7 +1275,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==1) {
+        if (requestCode == 1) {
             if (resultCode == CallOutgoingActivity.BUSY_CODE) {
 //                android.util.Log.d(TAG, "onActivityResult: BUSY_CODE");
 //                MediaPlayer mpintro = MediaPlayer.create(this, R.raw.busy);
@@ -1466,6 +1519,11 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             permissions = permissionsList.toArray(permissions);
             ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_READ_EXTERNAL_STORAGE_DEVICE_RINGTONE);
         }
+
+        //lay tat ca danh ba dien thoai
+        if (DbContext.getInstance().getPhoneContacts(this).size() == 0) {
+            getContactsPhone();
+        }
     }
 
     @Override
@@ -1524,7 +1582,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                     startActivity(new Intent(this, CallIncomingActivity.class));
                 } else if (callState == State.OutgoingInit || callState == State.OutgoingProgress || callState == State.OutgoingRinging) {
                     android.util.Log.d(TAG, "startActivityForResult: ");
-                    startActivityForResult(new Intent(this, CallOutgoingActivity.class),1);
+                    startActivityForResult(new Intent(this, CallOutgoingActivity.class), 1);
                 } else {
                     startIncallActivity(call);
                 }
@@ -1583,6 +1641,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             ((ViewGroup) view).removeAllViews();
         }
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
