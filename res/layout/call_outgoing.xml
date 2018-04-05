@@ -98,63 +98,164 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_centerInParent="true"
-        android:orientation="vertical"
         android:id="@+id/ll_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:gravity="center"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/micro"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:contentDescription="@string/content_description_toggle_micro"
-                android:padding="10dp"
+                android:layout_height="70dp"
                 android:layout_weight="1"
-                android:src="@drawable/my_mic" />
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/speaker"
+                <ImageView
+                    android:id="@+id/micro"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/content_description_toggle_micro"
+                    android:padding="10dp"
+                    android:src="@drawable/my_mic_disable_1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tắt âm"
+                    android:textColor="#b2b0a1" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="70dp"
                 android:layout_weight="1"
-                android:contentDescription="@string/content_description_toggle_speaker"
-                android:padding="10dp"
-                android:src="@drawable/my_speaker" />
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/speaker"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/content_description_toggle_speaker"
+                    android:padding="10dp"
+                    android:src="@drawable/my_speaker" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Âm thanh"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/transfer"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/content_description_toggle_speaker"
+                    android:padding="10dp"
+                    android:src="@drawable/my_transfer_off" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chuyển cuộc gọi"
+                    android:textColor="#b2b0a1" />
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/numpad"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="70dp"
                 android:layout_weight="1"
-                android:contentDescription="@string/content_description_toggle_micro"
-                android:padding="10dp"
-                android:src="@drawable/my_numpad" />
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/hold"
+                <ImageView
+                    android:id="@+id/dialer"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/content_description_toggle_micro"
+                    android:padding="10dp"
+                    android:src="@drawable/my_numpad" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bàn phím"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="70dp"
                 android:layout_weight="1"
-                android:contentDescription="@string/content_description_toggle_speaker"
-                android:padding="10dp"
-                android:src="@drawable/my_pause" />
+                android:gravity="center"
+                android:orientation="vertical">
 
+                <ImageView
+                    android:id="@+id/add_call"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/content_description_toggle_micro"
+                    android:padding="10dp"
+                    android:src="@drawable/my_add_call_disable" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thêm cuộc gọi"
+                    android:textColor="#b2b0a1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/pause"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/content_description_toggle_speaker"
+                    android:padding="10dp"
+                    android:src="@drawable/my_pause_disable" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tạm giữ"
+                    android:textColor="#b2b0a1" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

@@ -50,6 +50,7 @@ import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.network.NetworkStateReceiver;
 import org.linphone.ui.LinphoneSliders.LinphoneSliderTriggered;
+import org.linphone.ultils.ContactUltils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -282,11 +283,13 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         LinphoneContact contact = ContactsManager.getInstance().findContactFromAddress(address);
         if (contact != null) {
             LinphoneUtils.setImagePictureFromUri(this, contactPicture, contact.getPhotoUri(), contact.getThumbnailUri());
-            name.setText(getContactName(address.getUserName(), this));
+            name.setText(ContactUltils.instance.getContactName(address.getUserName(), this));
         } else {
-            name.setText(getContactName(address.getUserName(), this));
+            name.setText(ContactUltils.instance.getContactName(address.getUserName(), this));
         }
-        number.setText(address.getUserName());
+        if (!name.getText().toString().equals(address.getUserName()))
+            number.setText(address.getUserName());
+        else number.setVisibility(View.GONE);
     }
 
     public String getContactName(final String phoneNumber, Context context) {

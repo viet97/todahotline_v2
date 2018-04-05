@@ -708,8 +708,9 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 			if (LinphoneManager.getLc().getCurrentCall() != null)
 				pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
-
-		}
+            else
+                pauseOrResumeCall((LinphoneCall) v.getTag());
+        }
 		else if (id == R.id.hang_up) {
 			hangUp();
 		}
@@ -965,7 +966,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			if (isVideoEnabled(LinphoneManager.getLc().getCurrentCall())) {
 				isVideoCallPaused = true;
 			}
-			pause.setImageResource(R.drawable.my_play);
+            pause.setTag(call);
+            pause.setImageResource(R.drawable.my_play);
 
 		} else if (call != null) {
 			if (call.getState() == State.Paused) {
