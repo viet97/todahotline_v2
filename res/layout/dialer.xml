@@ -59,7 +59,14 @@
 
 	</RelativeLayout>
 
+	<ListView
+		android:id="@+id/lv_suggestion"
+		android:layout_width="match_parent"
+		android:layout_height="100dp">
+
+	</ListView>
 	<org.linphone.ui.Numpad
+
 		android:layout_weight="5"
 		android:id="@+id/numpad"
 		android:layout_width="match_parent"

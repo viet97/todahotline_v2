@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 
 
 import org.linphone.MyCallLogs;
+import org.linphone.SuggestionDialer;
 import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.DSCongTyResponse;
@@ -33,6 +34,7 @@ public class DbContext {
     private AboutRespon aboutRespon;
     private LoginRespon loginRespon;
     private MyCallLogs myCallLogs;
+
     private NonTodaContactsResponse nonTodaContactsResponse, searchNonTodaContactResponse;
     private DSCongTyResponse dsCongTyResponse;
     private ContactResponse contactResponse,cusContactResponse,searchContactResponse;
@@ -44,6 +46,7 @@ public class DbContext {
     private String TAG = "DbContext";
 
     public DbContext() {
+
         this.nonTodaContactsResponse = new NonTodaContactsResponse();
         this.searchNonTodaContactResponse = new NonTodaContactsResponse();
         this.loginRespon = new LoginRespon();
