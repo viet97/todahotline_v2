@@ -183,7 +183,9 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
 
     public void addOutGoingLog(LinphoneCall linphoneCall, int status) {
         LinphoneCallLog linphoneCallLog = linphoneCall.getCallLog();
-        callLog = new MyCallLogs.CallLog(linphoneCallLog.getTo().getUserName(),
+        callLog = new MyCallLogs.CallLog(
+                ContactUltils.instance.getContactName(linphoneCallLog.getTo().getUserName(), this),
+                linphoneCallLog.getTo().getUserName(),
                 linphoneCallLog.getTimestamp(),
                 linphoneCallLog.getCallDuration(),
                 status);

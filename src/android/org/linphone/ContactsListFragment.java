@@ -1517,9 +1517,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     holder.cbxDelete.setVisibility(View.VISIBLE);
                     holder.imgCall.setVisibility(View.GONE);
                 } else {
-                    allExt.setVisibility(View.VISIBLE);
-                    onlExt.setVisibility(View.VISIBLE);
-                    offExt.setVisibility(View.VISIBLE);
 //                holder.imgCall.setVisibility(View.VISIBLE);
                     holder.cbxDelete.setVisibility(View.GONE);
                 }

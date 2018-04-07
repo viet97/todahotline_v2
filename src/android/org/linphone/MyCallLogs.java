@@ -34,18 +34,28 @@ public class MyCallLogs {
         public static final int MAY_BAN = 4;
         public static final int OFFLINE = 5;
         String phoneNumber;
+        String name;
         long time;
         int status;
         int duration;
 
-        public CallLog(String phoneNumber, long time, int duration, int status) {
+        public CallLog(String Name, String phoneNumber, long time, int duration, int status) {
             this.phoneNumber = phoneNumber;
+            this.name = Name;
             this.time = time;
             this.status = status;
             this.duration = duration;
         }
 
         public CallLog() {
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
 
         public String getPhoneNumber() {

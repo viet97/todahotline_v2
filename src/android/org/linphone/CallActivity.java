@@ -84,6 +84,7 @@ import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 import org.linphone.network.NetworkStateReceiver;
 import org.linphone.ui.AddressText;
 import org.linphone.ui.Numpad;
+import org.linphone.ultils.ContactUltils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -370,8 +371,10 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
         } else {
             userName = linphoneCallLog.getFrom().getUserName();
         }
-        MyCallLogs.CallLog callLog = new MyCallLogs.CallLog(userName,
-                linphoneCallLog.getTimestamp(),
+		MyCallLogs.CallLog callLog = new MyCallLogs.CallLog(
+				ContactUltils.instance.getContactName(userName, this),
+				userName,
+				linphoneCallLog.getTimestamp(),
                 linphoneCallLog.getCallDuration(),
                 status);
         MyCallLogs myCallLogs = DbContext.getInstance().getMyCallLogs(CallActivity.this);

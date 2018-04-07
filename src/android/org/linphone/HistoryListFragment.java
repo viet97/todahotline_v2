@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.linphone.core.CallDirection;
 import org.linphone.core.LinphoneAccountCreator;
@@ -33,6 +34,7 @@ import org.linphone.core.LinphoneCallLog.CallStatus;
 import org.linphone.core.LinphoneCore;
 import org.linphone.database.DbContext;
 import org.linphone.layoutXML.ExtendedEditText;
+import org.linphone.network.models.ContactResponse;
 import org.linphone.ultils.ContactUltils;
 
 import android.Manifest;
@@ -73,13 +75,16 @@ import static org.linphone.FragmentsAvailable.HISTORY_LIST;
 public class HistoryListFragment extends Fragment implements OnClickListener, OnItemClickListener, ContactsUpdatedListener {
 	private ListView historyList;
 	private LayoutInflater mInflater;
-    private TextView missedCalls, allCalls, noCallHistory, noMissedCallHistory;
+
+
+	private TextView missedCalls, allCalls, noCallHistory, noMissedCallHistory;
     private ImageView edit, selectAll, deselectAll, delete, cancel;
     private View allCallsSelected, missedCallsSelected;
 	private LinearLayout editList, topBar;
 	private boolean onlyDisplayMissedCalls, isEditMode;
 	private List<MyCallLogs.CallLog> mLogs;
 	private String TAG = "HistoryListFragment";
+	private ImageView clearSearchField;
 	private ExtendedEditText searchField;
 	TextWatcher twAllCall = new TextWatcher() {
 		@Override
@@ -94,7 +99,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 
 		@Override
 		public void afterTextChanged(Editable editable) {
-
+			searchHistory(editable.toString());
 		}
 	};
 	TextWatcher twMissedCall = new TextWatcher() {
@@ -109,16 +114,38 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 
 		@Override
 		public void afterTextChanged(final Editable editable) {
-
+			searchHistory(editable.toString());
 		}
 	};
 
+	private void searchHistory(String s) {
+
+		mLogs.clear();
+		ArrayList<MyCallLogs.CallLog> searchmLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+		for (MyCallLogs.CallLog callLog : searchmLogs) {
+			if (callLog.getPhoneNumber().toLowerCase(Locale.getDefault()).contains(s) || callLog.getName().toLowerCase(Locale.getDefault()).contains(s) ||
+					callLog.getPhoneNumber().toLowerCase(Locale.getDefault()).startsWith(s) || callLog.getName().toLowerCase(Locale.getDefault()).startsWith(s)) {
+				mLogs.add(callLog);
+			}
+		}
+		hideHistoryListAndDisplayMessageIfEmpty();
+		if (onlyDisplayMissedCalls) {
+			removeNotMissedCallsFromLogs();
+			if (mLogs.size() == 0) noMissedCallHistory.setVisibility(View.VISIBLE);
+		}
+
+		((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		mInflater = inflater;
 		View view = inflater.inflate(R.layout.history, container, false);
-
+		searchField = view.findViewById(R.id.searchField);
+		searchField.clearTextChangedListeners();
+		searchField.addTextChangedListener(twAllCall);
+		clearSearchField = (ImageView) view.findViewById(R.id.clearSearchField);
+		clearSearchField.setOnClickListener(this);
 		noCallHistory = (TextView) view.findViewById(R.id.no_call_history);
 		noMissedCallHistory = (TextView) view.findViewById(R.id.no_missed_call_history);
 
@@ -255,6 +282,11 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 		}
 
 		mLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+		try {
+			searchHistory(searchField.getText().toString());
+		} catch (Exception e) {
+			Log.d(TAG, "Exception: " + e.toString());
+		}
 		if (!hideHistoryListAndDisplayMessageIfEmpty()) {
 			historyList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 			historyList.setAdapter(new CallHistoryAdapter(getActivity().getApplicationContext()));
@@ -300,6 +332,10 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			quitEditMode();
 			return;
 		}
+		if (id == R.id.clearSearchField) {
+			searchField.setText("");
+			return;
+		}
 
 		if (id == R.id.delete) {
 			if(historyList.getCheckedItemCount() == 0) {
@@ -315,6 +351,9 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 		}
 
 		if (id == R.id.all_calls) {
+			searchField.clearTextChangedListeners();
+			searchField.addTextChangedListener(twAllCall);
+			searchField.setText("");
 			allCalls.setEnabled(false);
 			allCallsSelected.setVisibility(View.VISIBLE);
 			missedCallsSelected.setVisibility(View.INVISIBLE);
@@ -323,6 +362,9 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             refresh();
         }
 		if (id == R.id.missed_calls) {
+			searchField.clearTextChangedListeners();
+			searchField.addTextChangedListener(twMissedCall);
+			searchField.setText("");
 			allCalls.setEnabled(true);
 			allCallsSelected.setVisibility(View.INVISIBLE);
 			missedCallsSelected.setVisibility(View.VISIBLE);
