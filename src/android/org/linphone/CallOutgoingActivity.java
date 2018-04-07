@@ -312,20 +312,20 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
         int id = v.getId();
 
         if (id == R.id.micro) {
-//            isMicMuted = !isMicMuted;
-//            if(isMicMuted) {
-//                micro.setImageResource(R.drawable.micro_selected);
-//            } else {
-//                micro.setImageResource(R.drawable.micro_default);
-//            }
-//            LinphoneManager.getLc().muteMic(isMicMuted);
+            isMicMuted = !isMicMuted;
+            if (isMicMuted) {
+                micro.setImageResource(R.drawable.my_mic_off);
+            } else {
+                micro.setImageResource(R.drawable.my_mic);
+            }
+            LinphoneManager.getLc().muteMic(isMicMuted);
         }
         if (id == R.id.speaker) {
             isSpeakerEnabled = !isSpeakerEnabled;
             if(isSpeakerEnabled) {
-                speaker.setImageResource(R.drawable.speaker_on);
+                speaker.setImageResource(R.drawable.my_speaker_on);
             } else {
-                speaker.setImageResource(R.drawable.speaker_off);
+                speaker.setImageResource(R.drawable.my_speaker);
             }
             LinphoneManager.getLc().enableSpeaker(isSpeakerEnabled);
         }

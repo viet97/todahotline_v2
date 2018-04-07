@@ -193,10 +193,11 @@ public class DialerFragment extends Fragment {
 
 
     private void suggesDialer(String number) {
-        ArrayList<String> permissionsList = new ArrayList<>();
+
         int contacts = getActivity().getPackageManager().checkPermission(Manifest.permission.READ_CONTACTS, getActivity().getPackageName());
         if (contacts != PackageManager.PERMISSION_GRANTED) {
             // check READ_CONTACTS permission
+            ArrayList<String> permissionsList = new ArrayList<>();
             if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_CONTACTS) || ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
                 Log.i("[Permission] Asking for contacts");
                 permissionsList.add(Manifest.permission.READ_CONTACTS);
@@ -208,6 +209,7 @@ public class DialerFragment extends Fragment {
             }
         } else {
             if (DbContext.getInstance().getPhoneContacts(getActivity()).size() == 0) {
+                android.util.Log.d(TAG, "phoneContacts: ");
                 LinphoneActivity.instance.phoneContacts.clear();
                 LinphoneActivity.instance.phoneContacts = ContactUltils.instance.getContactsPhone(getActivity());
             }

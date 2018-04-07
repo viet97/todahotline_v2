@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 import android.Manifest;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -32,6 +34,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -98,11 +101,11 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private static final int PERMISSIONS_ENABLED_MIC = 204;
 
 	private static CallActivity instance;
-
+	private Thread thread;
 	private Handler mControlsHandler = new Handler();
 	private Runnable mControls;
 	private ImageView switchCamera;
-	private TextView missedChats;
+	private TextView missedChats, tvPause;
 	private RelativeLayout mActiveCallHeader, sideMenuContent, avatar_layout;
 	private ImageView pause, hangUp, dialer, video, micro, speaker, options, addCall, transfer, conference, conferenceStatus, contactPicture;
 	private ImageView audioRoute, routeSpeaker, routeEarpiece, routeBluetooth, menu, chat;
@@ -385,6 +388,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		conferenceList = (LinearLayout) findViewById(R.id.conference_list);
 
 		//TopBar
+		tvPause = findViewById(R.id.tv_pause);
+		tvPause.setVisibility(View.INVISIBLE);
 		video = (ImageView) findViewById(R.id.video);
 		video.setOnClickListener(this);
 		enabledVideoButton(false);
@@ -589,7 +594,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 
 		if (isSpeakerEnabled) {
-			speaker.setImageResource(R.drawable.my_speaker);
+			speaker.setImageResource(R.drawable.my_speaker_on);
 		} else {
 			speaker.setImageResource(R.drawable.my_speaker);
 		}
@@ -598,7 +603,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			isMicMuted = true;
 		}
 		if (isMicMuted) {
-			micro.setImageResource(R.drawable.my_mic);
+			micro.setImageResource(R.drawable.my_mic_off);
 		} else {
 			micro.setImageResource(R.drawable.my_mic);
 		}
@@ -706,11 +711,14 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 		else if (id == R.id.pause) {
 
-			if (LinphoneManager.getLc().getCurrentCall() != null)
+			if (LinphoneManager.getLc().getCurrentCall() != null) {
+				blinkPauseText();
 				pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
-            else
-                pauseOrResumeCall((LinphoneCall) v.getTag());
-        }
+			} else {
+
+				pauseOrResumeCall((LinphoneCall) v.getTag());
+			}
+		}
 		else if (id == R.id.hang_up) {
 			hangUp();
 		}
@@ -1237,8 +1245,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
             networkStateReceiver.addListener(this);
             this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
         }catch (Exception e){
-
-        }
+			android.util.Log.d(TAG, "Exception: " + e.toString());
+		}
 		super.onResume();
 
 		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
@@ -1861,5 +1869,20 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				}
 			}
 		}
+	}
+
+	private void blinkPauseText() {
+		Integer colorFrom = Color.RED;
+		Integer colorTo = Color.GREEN;
+		ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+		colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+			@Override
+			public void onAnimationUpdate(ValueAnimator animator) {
+				tvPause.setTextColor((Integer) animator.getAnimatedValue());
+			}
+
+		});
+		colorAnimation.start();
 	}
 }

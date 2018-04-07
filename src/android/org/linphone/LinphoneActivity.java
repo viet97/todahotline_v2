@@ -265,11 +265,10 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                     dialer.setVisibility(View.VISIBLE);
                     changeCurrentFragment(FragmentsAvailable.DIALER, getIntent().getExtras());
                 } else {
-                    changeCurrentFragment(FragmentsAvailable.HISTORY_LIST, getIntent().getExtras());
-                    dialer.setVisibility(View.GONE);
+                    currentFragment = (FragmentsAvailable) savedInstanceState.getSerializable("currentFragment");
                 }
             } catch (Exception e) {
-
+                android.util.Log.d(TAG, "Exception: " + e.toString());
             }
         } else {
             currentFragment = (FragmentsAvailable) savedInstanceState.getSerializable("currentFragment");
@@ -563,6 +562,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 //                    ll.setVisibility(View.VISIBLE);
                     transaction.replace(R.id.fragmentContainer2, new EmptyFragment());
                     emptyFragment = true;
+
                 }
 
                 if (newFragmentType == FragmentsAvailable.DIALER

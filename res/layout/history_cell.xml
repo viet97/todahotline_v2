@@ -94,14 +94,14 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_below="@id/sip_uri"
                 android:layout_toRightOf="@id/avatar_layout"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/content_description_call_direction"
-                android:padding="7dp"
                 android:src="@drawable/received_call" />
 
             <TextView
@@ -109,10 +109,9 @@
                 android:textSize="15sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/icon"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/avatar_layout"
                 android:ellipsize="end"
-                android:gravity="center_vertical"
                 android:lines="1"
                 android:maxLines="1"
                 android:textColor="@color/white" />
@@ -129,7 +128,6 @@
                 android:gravity="center_vertical"
                 android:lines="1"
                 android:maxLines="1"
-                android:text="12-12313"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
 

@@ -1546,36 +1546,38 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 //                        editIntent.putExtra("iddanhba", finalDanhBa.getIddanhba());
 //                        startActivity(editIntent);
 //                    }
-                    if (onlyDisplayLinphoneContacts == 0) {
-                        String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
-                        if (phoneNumber.contains("+84")) {
-                            phoneNumber = "0" + phoneNumber.substring(3);
-                        }
-                        String uri = "sip:" + phoneNumber + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                        LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, contacts.get(position).getFullName(), null);
-                    } else if (onlyDisplayLinphoneContacts == 1) {
-                        try {
-                            ContactResponse.DSDanhBa to;
-                            if (searchText.equals(""))
-                                to = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
-                            else
-                                to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
-                            String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                            LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
-                        } catch (Exception e) {
-                            Log.d(TAG, "Exception: " + e.toString());
-                        }
-                    } else {
-                        try {
-                            ContactResponse.DSDanhBa to;
-                            if (searchText.equals(""))
-                                to = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position);
-                            else
-                                to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
-                            String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                            LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
-                        } catch (Exception e) {
-                            Log.d(TAG, "Exception: " + e.toString());
+                    if (!isDeleteMode) {
+                        if (onlyDisplayLinphoneContacts == 0) {
+                            String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
+                            if (phoneNumber.contains("+84")) {
+                                phoneNumber = "0" + phoneNumber.substring(3);
+                            }
+                            String uri = "sip:" + phoneNumber + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                            LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, contacts.get(position).getFullName(), null);
+                        } else if (onlyDisplayLinphoneContacts == 1) {
+                            try {
+                                ContactResponse.DSDanhBa to;
+                                if (searchText.equals(""))
+                                    to = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
+                                else
+                                    to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+                                String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                                LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
+                            } catch (Exception e) {
+                                Log.d(TAG, "Exception: " + e.toString());
+                            }
+                        } else {
+                            try {
+                                ContactResponse.DSDanhBa to;
+                                if (searchText.equals(""))
+                                    to = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position);
+                                else
+                                    to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+                                String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                                LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
+                            } catch (Exception e) {
+                                Log.d(TAG, "Exception: " + e.toString());
+                            }
                         }
                     }
                 }
