@@ -2,6 +2,7 @@ package org.linphone.ultils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -9,8 +10,11 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 
+import org.linphone.PhoneContact;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
+
+import java.util.ArrayList;
 
 /**
  * Created by QuocVietDang1 on 3/26/2018.
@@ -18,7 +22,7 @@ import org.linphone.mediastream.Log;
 
 public class ContactUltils {
     public static final ContactUltils instance = new ContactUltils();
-    private Object TAG = "ContactUltils";
+    private String TAG = "ContactUltils";
 
     public String getContactName(final String phoneNumber, Context context) {
         int permissionGranted = context.getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, context.getPackageName());
@@ -54,6 +58,58 @@ public class ContactUltils {
                 return contactName;
         }
         return phoneNumber;
+    }
+
+    public ArrayList<PhoneContact> getContactsPhone(Context context) {
+        ArrayList<PhoneContact> phoneContacts = new ArrayList<>();
+        phoneContacts.clear();
+
+        int permissionGranted = context.getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, context.getPackageName());
+
+        if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.WRITE_CONTACTS);
+            org.linphone.mediastream.Log.i("[Permission] Asking for " + Manifest.permission.WRITE_CONTACTS);
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_CONTACTS}, 0);
+        } else {
+            try {
+                ContentResolver cr = context.getContentResolver();
+                Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                        null, null, null, null);
+
+                if ((cur != null ? cur.getCount() : 0) > 0) {
+                    while (cur != null && cur.moveToNext()) {
+                        String id = cur.getString(
+                                cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cur.getString(cur.getColumnIndex(
+                                ContactsContract.Contacts.DISPLAY_NAME));
+
+                        if (cur.getInt(cur.getColumnIndex(
+                                ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                            Cursor pCur = cr.query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                    new String[]{id}, null);
+                            while (pCur.moveToNext()) {
+                                String phoneNo = pCur.getString(pCur.getColumnIndex(
+                                        ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                phoneContacts.add(new PhoneContact(name, phoneNo));
+
+                            }
+                            pCur.close();
+                        }
+                    }
+                }
+                if (cur != null) {
+                    cur.close();
+                }
+                DbContext.getInstance().setPhoneContacts(phoneContacts, context);
+            } catch (Exception e) {
+                android.util.Log.d(TAG, "Exception: " + e.toString());
+            }
+
+        }
+        return phoneContacts;
     }
 
 }

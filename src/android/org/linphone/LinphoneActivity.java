@@ -139,12 +139,12 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private static final int PERMISSIONS_REQUEST_SYNC = 207;
     private static final int PERMISSIONS_REQUEST_CONTACTS = 208;
     private static final int PERMISSIONS_RECORD_AUDIO_ECHO_CANCELLER = 209;
-    private static final int PERMISSIONS_READ_EXTERNAL_STORAGE_DEVICE_RINGTONE = 210;
+    public static final int PERMISSIONS_READ_EXTERNAL_STORAGE_DEVICE_RINGTONE = 210;
     private static final int PERMISSIONS_RECORD_AUDIO_ECHO_TESTER = 211;
     private static final int ONLY_CALL = 2;
     private static final int ONLY_TAKECALL = 1;
     private static final int CALL_AND_TAKECALL = 3;
-    private static LinphoneActivity instance;
+    public static LinphoneActivity instance;
 
     private StatusFragment statusFragment;
     private TextView missedCalls, missedChats;
@@ -162,7 +162,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private OrientationEventListener mOrientationHelper;
     private LinphoneCoreListenerBase mListener;
     private LinearLayout mTabBar;
-    private ArrayList<PhoneContact> phoneContacts;
+    public ArrayList<PhoneContact> phoneContacts;
     private ProgressDialog dialogLogin;
     private DrawerLayout sideMenu;
     private RelativeLayout sideMenuContent, quitLayout, defaultAccount;
@@ -356,55 +356,6 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         mAlwaysChangingPhoneAngle = rotation;
     }
 
-    public void getContactsPhone() {
-        phoneContacts.clear();
-
-        int permissionGranted = this.getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, this.getPackageName());
-
-        if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.shouldShowRequestPermissionRationale((Activity) this, Manifest.permission.WRITE_CONTACTS);
-            org.linphone.mediastream.Log.i("[Permission] Asking for " + Manifest.permission.WRITE_CONTACTS);
-            ActivityCompat.requestPermissions((Activity) this, new String[]{Manifest.permission.WRITE_CONTACTS}, 0);
-        } else {
-            try {
-                ContentResolver cr = getContentResolver();
-                Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                        null, null, null, null);
-
-                if ((cur != null ? cur.getCount() : 0) > 0) {
-                    while (cur != null && cur.moveToNext()) {
-                        String id = cur.getString(
-                                cur.getColumnIndex(ContactsContract.Contacts._ID));
-                        String name = cur.getString(cur.getColumnIndex(
-                                ContactsContract.Contacts.DISPLAY_NAME));
-
-                        if (cur.getInt(cur.getColumnIndex(
-                                ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-                            Cursor pCur = cr.query(
-                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                    null,
-                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                    new String[]{id}, null);
-                            while (pCur.moveToNext()) {
-                                String phoneNo = pCur.getString(pCur.getColumnIndex(
-                                        ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                phoneContacts.add(new PhoneContact(name, phoneNo));
-
-                            }
-                            pCur.close();
-                        }
-                    }
-                }
-                if (cur != null) {
-                    cur.close();
-                }
-                DbContext.getInstance().setPhoneContacts(phoneContacts, this);
-            } catch (Exception e) {
-                android.util.Log.d(TAG, "Exception: " + e.toString());
-            }
-
-        }
-    }
 
     private void initButtons() {
         mTabBar = (LinearLayout) findViewById(R.id.footer);
@@ -1522,7 +1473,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
         //lay tat ca danh ba dien thoai
         if (DbContext.getInstance().getPhoneContacts(this).size() == 0) {
-            getContactsPhone();
+            phoneContacts = ContactUltils.instance.getContactsPhone(this);
         }
     }
 

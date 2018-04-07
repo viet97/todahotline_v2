@@ -63,6 +63,7 @@ import org.linphone.ui.CallButton;
 import org.linphone.ui.EraseButton;
 import org.linphone.ultils.ContactUltils;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -86,6 +87,7 @@ public class DialerFragment extends Fragment {
     private ArrayList<SuggestionDialer> suggestionDialers;
     private LayoutInflater mInflater;
     private SuggestionAdapter suggestionAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -191,17 +193,35 @@ public class DialerFragment extends Fragment {
 
 
     private void suggesDialer(String number) {
+        ArrayList<String> permissionsList = new ArrayList<>();
+        int contacts = getActivity().getPackageManager().checkPermission(Manifest.permission.READ_CONTACTS, getActivity().getPackageName());
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            // check READ_CONTACTS permission
+            if (LinphonePreferences.instance().firstTimeAskingForPermission(Manifest.permission.READ_CONTACTS) || ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
+                Log.i("[Permission] Asking for contacts");
+                permissionsList.add(Manifest.permission.READ_CONTACTS);
+            }
+            if (permissionsList.size() > 0) {
+                String[] permissions = new String[permissionsList.size()];
+                permissions = permissionsList.toArray(permissions);
+                ActivityCompat.requestPermissions(getActivity(), permissions, LinphoneActivity.PERMISSIONS_READ_EXTERNAL_STORAGE_DEVICE_RINGTONE);
+            }
+        } else {
+            if (DbContext.getInstance().getPhoneContacts(getActivity()).size() == 0) {
+                LinphoneActivity.instance.phoneContacts = ContactUltils.instance.getContactsPhone(getActivity());
+            }
+        }
         suggestionDialers.clear();
         Context context = getActivity();
         if (number.equals("")) {
             ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
             return;
-        }
+            }
         for (ContactResponse.DSDanhBa danhba : DbContext.getInstance().getContactResponse(context).getDsdanhba()) {
             if (danhba.getSodienthoai().contains(number)) {
                 suggestionDialers.add(new SuggestionDialer(danhba.getTenlienhe(), danhba.getSodienthoai()));
             }
-        }
+            }
         for (ContactResponse.DSDanhBa danhba : DbContext.getInstance().getCusContactResponse(context).getDsdanhba()) {
             if (danhba.getSodienthoai().contains(number)) {
                 suggestionDialers.add(new SuggestionDialer(danhba.getTenlienhe(), danhba.getSodienthoai()));
