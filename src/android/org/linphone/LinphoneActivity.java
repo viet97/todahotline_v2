@@ -1473,6 +1473,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
         //lay tat ca danh ba dien thoai
         if (DbContext.getInstance().getPhoneContacts(this).size() == 0) {
+            phoneContacts.clear();
             phoneContacts = ContactUltils.instance.getContactsPhone(this);
         }
     }

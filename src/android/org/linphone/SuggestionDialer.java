@@ -13,6 +13,15 @@ public class SuggestionDialer {
         this.ext = ext;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof SuggestionDialer) {
+            if (((SuggestionDialer) obj).getName().equals(this.getName()) && ((SuggestionDialer) obj).getExt().equals(this.getExt())) {
+                return true;
+            }
+        }
+        return false;
+    }
     public String getName() {
         return name;
     }

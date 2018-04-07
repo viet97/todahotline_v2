@@ -13,6 +13,7 @@ public class PhoneContact {
         this.number = number;
     }
 
+
     public String getName() {
         return name;
     }

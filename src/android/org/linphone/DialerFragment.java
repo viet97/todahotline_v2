@@ -208,6 +208,7 @@ public class DialerFragment extends Fragment {
             }
         } else {
             if (DbContext.getInstance().getPhoneContacts(getActivity()).size() == 0) {
+                LinphoneActivity.instance.phoneContacts.clear();
                 LinphoneActivity.instance.phoneContacts = ContactUltils.instance.getContactsPhone(getActivity());
             }
         }
@@ -216,31 +217,38 @@ public class DialerFragment extends Fragment {
         if (number.equals("")) {
             ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
             return;
-            }
+        }
         for (ContactResponse.DSDanhBa danhba : DbContext.getInstance().getContactResponse(context).getDsdanhba()) {
             if (danhba.getSodienthoai().contains(number)) {
                 suggestionDialers.add(new SuggestionDialer(danhba.getTenlienhe(), danhba.getSodienthoai()));
             }
-            }
+        }
         for (ContactResponse.DSDanhBa danhba : DbContext.getInstance().getCusContactResponse(context).getDsdanhba()) {
             if (danhba.getSodienthoai().contains(number)) {
-                suggestionDialers.add(new SuggestionDialer(danhba.getTenlienhe(), danhba.getSodienthoai()));
+                SuggestionDialer suggestionDialer = new SuggestionDialer(danhba.getTenlienhe(), danhba.getSodienthoai());
+                if (!suggestionDialers.contains(suggestionDialer))
+                    suggestionDialers.add(suggestionDialer);
             }
         }
         android.util.Log.d(TAG, "suggesDialer: " + DbContext.getInstance().getPhoneContacts(context).size());
         for (PhoneContact phoneContact : DbContext.getInstance().getPhoneContacts(context)) {
             if (phoneContact.getNumber().contains(number)) {
-                suggestionDialers.add(new SuggestionDialer(phoneContact.getName(), phoneContact.getNumber()));
+                SuggestionDialer suggestionDialer = new SuggestionDialer(phoneContact.getName(), phoneContact.getNumber());
+
+                if (!suggestionDialers.contains(suggestionDialer))
+                    suggestionDialers.add(suggestionDialer);
             }
         }
         for (MyCallLogs.CallLog callLog : DbContext.getInstance().getMyCallLogs(context).getCallLogs()) {
             if (callLog.getPhoneNumber().contains(number)) {
-                suggestionDialers.add(new SuggestionDialer(ContactUltils.instance.getContactName(callLog.getPhoneNumber(), context), callLog.getPhoneNumber()));
+                SuggestionDialer suggestionDialer = new SuggestionDialer(ContactUltils.instance.getContactName(callLog.getPhoneNumber(), context), callLog.getPhoneNumber());
+                android.util.Log.d(TAG, "suggesDialer: " + suggestionDialers.contains(suggestionDialer));
+                if (!suggestionDialers.contains(suggestionDialer))
+                    suggestionDialers.add(suggestionDialer);
+
             }
         }
-        ((BaseAdapter) lvSuggestion.getAdapter()).
-
-                notifyDataSetChanged();
+        ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
     }
 //        if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
 //            ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.WRITE_CONTACTS);
