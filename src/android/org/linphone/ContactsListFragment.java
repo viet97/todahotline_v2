@@ -1624,7 +1624,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 try {
                     holder.address.setText(contact.getNumbersOrAddresses().get(0).getValue());
                 } catch (Exception e) {
-
+                    Log.d(TAG, "Exception: " + e.toString());
                 }
 
                 holder.organization.setVisibility(View.GONE);

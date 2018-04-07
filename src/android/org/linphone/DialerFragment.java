@@ -392,12 +392,14 @@ public class DialerFragment extends Fragment {
         private class ViewHolder {
             public TextView tvName;
             public TextView tvExt;
+            public LinearLayout llSuggestion;
 
             //public ImageView friendStatus;
 
             public ViewHolder(View view) {
                 tvName = view.findViewById(R.id.tv_name);
                 tvExt = view.findViewById(R.id.tv_ext);
+                llSuggestion = view.findViewById(R.id.ll_suggestion);
             }
         }
 
@@ -433,7 +435,7 @@ public class DialerFragment extends Fragment {
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
-            SuggestionDialer suggestionDialer = suggestionDialers.get(position);
+            final SuggestionDialer suggestionDialer = suggestionDialers.get(position);
 
             holder.tvName.setText(suggestionDialer.getName());
 
@@ -444,7 +446,14 @@ public class DialerFragment extends Fragment {
             int startBuffColor = holder.tvExt.getText().toString().indexOf(searchNumber);
             int endBuffColor = startBuffColor + mAddress.getText().toString().length();
             s.setSpan(new ForegroundColorSpan(Color.GREEN), startBuffColor, endBuffColor, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+            holder.llSuggestion.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mAddress.setText(suggestionDialer.getExt());
+                    String uri = "sip:" + suggestionDialer.getExt() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                    LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, suggestionDialer.getName(), null);
+                }
+            });
 
             return view;
         }

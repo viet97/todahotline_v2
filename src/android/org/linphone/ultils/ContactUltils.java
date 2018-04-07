@@ -54,6 +54,13 @@ public class ContactUltils {
                 }
 
             }
+            if (contactName == null) {
+                try {
+                    contactName = DbContext.getInstance().getListCusContactTodaName(context).get(phoneNumber);
+                } catch (Exception e) {
+                    Log.d(TAG, "Exception: " + e.toString());
+                }
+            }
             if (contactName != null)
                 return contactName;
         }
