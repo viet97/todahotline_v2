@@ -201,6 +201,40 @@
             android:layout_height="match_parent">
 
             <CheckBox
+                android:id="@+id/all_ext"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginLeft="16dp"
+                android:button="@drawable/custom_tickbox"
+                android:text="Tất cả"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/onl_ext"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_toRightOf="@id/all_ext"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:button="@drawable/custom_tickbox"
+                android:text="Online"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:layout_toRightOf="@id/onl_ext"
+                android:id="@+id/off_ext"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:button="@drawable/custom_tickbox"
+                android:text="Offline"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <CheckBox
                 android:id="@+id/delete_all"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"

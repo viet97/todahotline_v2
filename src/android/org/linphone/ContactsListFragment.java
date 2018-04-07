@@ -88,6 +88,9 @@ import retrofit2.Response;
 import static org.linphone.FragmentsAvailable.CONTACTS_LIST;
 
 public class ContactsListFragment extends Fragment implements OnClickListener, OnItemClickListener, ContactsUpdatedListener, SwipeRefreshLayout.OnRefreshListener {
+    private static final int ALL_EXT = 1;
+    private static final int ONL_EXT = 2;
+    private static final int OFF_EXT = 3;
     private LayoutInflater mInflater;
     private ListView contactsList;
     private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
@@ -106,11 +109,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private String sipAddressToAdd, displayName = null;
     private ImageView clearSearchField;
     private ExtendedEditText searchField;
-    private CheckBox deleteAll;
+    private CheckBox deleteAll, allExt, onlExt, offExt;
     private ProgressBar contactsFetchInProgress;
     private String TAG = "ContactsListFragment";
     BroadcastReceiver receiverLoadData;
     private int lastID = 0;
+    private int extStatusCheckBox = 1;
+
     private ProgressDialog dialogSearch;
     private ProgressDialog dialogRemove;
     private String searchText = "";
@@ -224,6 +229,12 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             backDeleteMode = view.findViewById(R.id.back_delete_mode);
             deleteContact = view.findViewById(R.id.delete_contact);
             deleteAll = view.findViewById(R.id.delete_all);
+            allExt = view.findViewById(R.id.all_ext);
+            allExt.setOnClickListener(this);
+            onlExt = view.findViewById(R.id.onl_ext);
+            onlExt.setOnClickListener(this);
+            offExt = view.findViewById(R.id.off_ext);
+            offExt.setOnClickListener(this);
             addContacts = view.findViewById(R.id.add_contacts);
             rlCusContact.setVisibility(View.GONE);
             rlTodaContact.setVisibility(View.GONE);
@@ -330,6 +341,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             contactsFetchInProgress = (ProgressBar) view.findViewById(R.id.contactsFetchInProgress);
 //            contactsFetchInProgress.setVisibility(View.VISIBLE);
             refreshLayout.setOnRefreshListener(this);
+
             deleteAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -368,7 +380,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     deleteBar.setVisibility(View.GONE);
                     topbar.setVisibility(View.VISIBLE);
                     backDeleteMode.setVisibility(View.GONE);
-                    deleteAll.setVisibility(View.GONE);
+                    if (onlyDisplayLinphoneContacts == 1) {
+                        deleteAll.setVisibility(View.INVISIBLE);
+                    } else {
+                        deleteAll.setVisibility(View.GONE);
+                    }
                     listIdDelete.clear();
                     isDeleteMode = false;
                     addContacts.setVisibility(View.VISIBLE);
@@ -705,7 +721,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         if (id == R.id.all_contacts) {
             Log.d(TAG, "all_contacts: ");
-
+            // thay doi trang thai moi lan chuyen tab
+            deleteAll.setVisibility(View.GONE);
+            allExt.setVisibility(View.GONE);
+            onlExt.setVisibility(View.GONE);
+            offExt.setVisibility(View.GONE);
             onlyDisplayLinphoneContacts = 0;
             lastID = 0;
             isLoaded = false;
@@ -723,6 +743,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             changeAdapter();
         } else if (id == R.id.linphone_contacts) {
+            deleteAll.setVisibility(View.INVISIBLE);
+            allExt.setVisibility(View.VISIBLE);
+            onlExt.setVisibility(View.VISIBLE);
+            offExt.setVisibility(View.VISIBLE);
+            filtContactsByCheckbox(extStatusCheckBox);
             addContacts.setVisibility(View.VISIBLE);
             onlyDisplayLinphoneContacts = 1;
             lastID = 0;
@@ -816,6 +841,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             cusContactSelected.setVisibility(View.INVISIBLE);
 
         } else if (id == R.id.cus_contacts) {
+            deleteAll.setVisibility(View.GONE);
+            allExt.setVisibility(View.GONE);
+            onlExt.setVisibility(View.GONE);
+            offExt.setVisibility(View.GONE);
             addContacts.setVisibility(View.VISIBLE);
             onlyDisplayLinphoneContacts = 2;
             lastID = 0;
@@ -903,9 +932,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContacts.setEnabled(true);
             allContacts.setEnabled(true);
 
-        }
-
-        if (isEditMode) {
+        } else if (id == R.id.all_ext) {
+            filtContactsByCheckbox(ALL_EXT);
+        } else if (id == R.id.onl_ext) {
+            filtContactsByCheckbox(ONL_EXT);
+        } else if (id == R.id.off_ext) {
+            filtContactsByCheckbox(OFF_EXT);
+        } else if (isEditMode) {
             Log.d(TAG, "onClick: 418");
             deselectAll.setVisibility(View.GONE);
             selectAll.setVisibility(View.VISIBLE);
@@ -933,11 +966,36 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
     }
 
-    public void setWidthSearchField(int widthSearchField) {
-        ViewGroup.LayoutParams layoutParams = searchField.getLayoutParams();
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(layoutParams.width, layoutParams.height);
-        params.setMargins(10, 10, widthSearchField, 10);
-        searchField.setLayoutParams(params);
+    public void filtContactsByCheckbox(int status) {
+        extStatusCheckBox = status;
+        switch (status) {
+            case ALL_EXT:
+                allExt.setChecked(true);
+                onlExt.setChecked(false);
+                offExt.setChecked(false);
+                allExt.setEnabled(false);
+                onlExt.setEnabled(true);
+                offExt.setEnabled(true);
+                break;
+            case ONL_EXT:
+                allExt.setChecked(false);
+                onlExt.setChecked(true);
+                offExt.setChecked(false);
+                allExt.setEnabled(true);
+                onlExt.setEnabled(false);
+                offExt.setEnabled(true);
+                break;
+            case OFF_EXT:
+                allExt.setChecked(false);
+                onlExt.setChecked(false);
+                offExt.setChecked(true);
+                allExt.setEnabled(true);
+                onlExt.setEnabled(true);
+                offExt.setEnabled(false);
+                break;
+        }
+        changeAdapter();
+
     }
 
     public void changeAdapter() {
@@ -1398,20 +1456,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         public View getView(final int position, View convertView, ViewGroup parent) {
             View view = null;
-            Log.d(TAG, "onCheckedChanged: " + listIdDelete.toString());
-            final LinphoneContact contact = (LinphoneContact) getItem(position);
-//            if (contact == null) return null;
-            ViewHolder holder = null;
-            if (convertView != null) {
-                view = convertView;
-                holder = (ViewHolder) view.getTag();
-            } else {
-                view = mInflater.inflate(R.layout.contact_cell, parent, false);
-                holder = new ViewHolder(view);
-                view.setTag(holder);
-            }
-
-            // giu nguyen trang thai check box moi lan adapter thay doi
             ContactResponse.DSDanhBa danhBa = null;
             if (onlyDisplayLinphoneContacts != 0) {
                 if (searchText.equals("")) {
@@ -1421,79 +1465,114 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         danhBa = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position);
                 } else {
                     danhBa = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
-
-                }
-
-                if (listIdDelete.indexOf(danhBa.getIddanhba()) != -1) {
-                    Log.d(TAG, "getIddanhba: " + listIdDelete.toString());
-                    holder.cbxDelete.setChecked(true);
-                } else {
-                    holder.cbxDelete.setChecked(false);
                 }
             }
-
-            final ViewHolder finalHolder = holder;
-            if (isDeleteAll) {
-                holder.cbxDelete.setChecked(isDeleteAll);
+            Log.d(TAG, "onCheckedChanged: " + listIdDelete.toString());
+            final LinphoneContact contact = (LinphoneContact) getItem(position);
+//            if (contact == null) return null;
+            ViewHolder holder = null;
+            if (onlyDisplayLinphoneContacts == 1 && !isDeleteMode) {
+                switch (extStatusCheckBox) {
+                    case ONL_EXT:
+                        if (!danhBa.isStatus())
+                            return mInflater.inflate(R.layout.null_item, parent, false);
+                        break;
+                    case OFF_EXT:
+                        if (danhBa.isStatus())
+                            return mInflater.inflate(R.layout.null_item, parent, false);
+                        break;
+                }
             }
-
-            if (isDeleteMode) {
-                holder.cbxDelete.setVisibility(View.VISIBLE);
-                holder.imgCall.setVisibility(View.GONE);
+            if (convertView != null) {
+                view = convertView;
+                holder = (ViewHolder) view.getTag();
             } else {
-//                holder.imgCall.setVisibility(View.VISIBLE);
-                holder.cbxDelete.setVisibility(View.GONE);
+
+                view = mInflater.inflate(R.layout.contact_cell, parent, false);
+                holder = new ViewHolder(view);
+                view.setTag(holder);
             }
+            if (view.getId() == R.id.layout) {
 
-
-            holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    Log.d(TAG, "onLongClick: ");
-                    if (onlyDisplayLinphoneContacts != 0) {
-                        isDeleteMode = true;
-                        changeMode(finalHolder, isDeleteMode);
-                        addContacts.setVisibility(View.GONE);
+                // giu nguyen trang thai check box moi lan adapter thay doi
+                Log.d(TAG, "cbxDelete: " + holder.cbxDelete);
+                if (onlyDisplayLinphoneContacts != 0) {
+                    if (listIdDelete.indexOf(danhBa.getIddanhba()) != -1) {
+                        Log.d(TAG, "getIddanhba: " + listIdDelete.toString());
+                        holder.cbxDelete.setChecked(true);
+                    } else {
+                        holder.cbxDelete.setChecked(false);
                     }
-                    return true;
                 }
-            });
+
+                final ViewHolder finalHolder = holder;
+                if (isDeleteAll) {
+                    holder.cbxDelete.setChecked(isDeleteAll);
+                }
+
+                if (isDeleteMode) {
+                    allExt.setVisibility(View.GONE);
+                    onlExt.setVisibility(View.GONE);
+                    offExt.setVisibility(View.GONE);
+                    holder.cbxDelete.setVisibility(View.VISIBLE);
+                    holder.imgCall.setVisibility(View.GONE);
+                } else {
+                    allExt.setVisibility(View.VISIBLE);
+                    onlExt.setVisibility(View.VISIBLE);
+                    offExt.setVisibility(View.VISIBLE);
+//                holder.imgCall.setVisibility(View.VISIBLE);
+                    holder.cbxDelete.setVisibility(View.GONE);
+                }
+
+
+                holder.layout.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        Log.d(TAG, "onLongClick: ");
+                        if (onlyDisplayLinphoneContacts != 0) {
+                            isDeleteMode = true;
+                            changeMode(finalHolder, isDeleteMode);
+                            addContacts.setVisibility(View.GONE);
+                        }
+                        return true;
+                    }
+                });
 //            holder.swLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 //            holder.swLayout.addDrag(SwipeLayout.DragEdge.Left, view.findViewById(R.id.bottom_view));
 
 
-            holder.cbxDelete.setOnClickListener(new OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        Log.d(TAG, "onCheckedChanged: ");
-                                                        int iddanhba = 0;
-                                                        if (searchText.equals("")) {
-                                                            if (onlyDisplayLinphoneContacts == 1)
-                                                                iddanhba = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
-                                                            if (onlyDisplayLinphoneContacts == 2)
-                                                                iddanhba = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
+                holder.cbxDelete.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d(TAG, "onCheckedChanged: ");
+                        int iddanhba = 0;
+                        if (searchText.equals("")) {
+                            if (onlyDisplayLinphoneContacts == 1)
+                                iddanhba = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
+                            if (onlyDisplayLinphoneContacts == 2)
+                                iddanhba = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
 
-                                                        } else {
-                                                            iddanhba = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
-                                                        }
-                                                        if (finalHolder.cbxDelete.isChecked()) {
-                                                            finalHolder.cbxDelete.setChecked(true);
-                                                            listIdDelete.add(iddanhba);
-                                                            Log.d(TAG, "onCheckedChanged: " + listIdDelete.toString());
-                                                            notifyDataSetChanged();
-                                                        } else {
-                                                            finalHolder.cbxDelete.setChecked(false);
-                                                            listIdDelete.remove(listIdDelete.indexOf(iddanhba));
-                                                        }
-                                                        if (listIdDelete.size() == 0) {
-                                                            deleteContact.setVisibility(View.GONE);
-                                                        } else {
-                                                            deleteContact.setVisibility(View.VISIBLE);
+                        } else {
+                            iddanhba = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
+                        }
+                        if (finalHolder.cbxDelete.isChecked()) {
+                            finalHolder.cbxDelete.setChecked(true);
+                            listIdDelete.add(iddanhba);
+                            Log.d(TAG, "onCheckedChanged: " + listIdDelete.toString());
+                            notifyDataSetChanged();
+                        } else {
+                            finalHolder.cbxDelete.setChecked(false);
+                            listIdDelete.remove(listIdDelete.indexOf(iddanhba));
+                        }
+                        if (listIdDelete.size() == 0) {
+                            deleteContact.setVisibility(View.GONE);
+                        } else {
+                            deleteContact.setVisibility(View.VISIBLE);
+                        }
                                                         }
                                                     }
-                                                }
 
-            );
+                );
 //            holder.imgDelete.setOnClickListener(new OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -1524,10 +1603,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 //                    }
 //                }
 //            });
-            final ContactResponse.DSDanhBa finalDanhBa = danhBa;
-            holder.layout.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                final ContactResponse.DSDanhBa finalDanhBa = danhBa;
+                holder.layout.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 //                    LinphoneContact contact = (LinphoneContact) getItem(position);
 //                    ;
 //                    if (onlyDisplayLinphoneContacts == 0) {
@@ -1546,42 +1625,42 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 //                        editIntent.putExtra("iddanhba", finalDanhBa.getIddanhba());
 //                        startActivity(editIntent);
 //                    }
-                    if (!isDeleteMode) {
-                        if (onlyDisplayLinphoneContacts == 0) {
-                            String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
-                            if (phoneNumber.contains("+84")) {
-                                phoneNumber = "0" + phoneNumber.substring(3);
-                            }
-                            String uri = "sip:" + phoneNumber + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                            LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, contacts.get(position).getFullName(), null);
-                        } else if (onlyDisplayLinphoneContacts == 1) {
-                            try {
-                                ContactResponse.DSDanhBa to;
-                                if (searchText.equals(""))
-                                    to = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
-                                else
-                                    to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
-                                String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                                LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
-                            } catch (Exception e) {
-                                Log.d(TAG, "Exception: " + e.toString());
-                            }
-                        } else {
-                            try {
-                                ContactResponse.DSDanhBa to;
-                                if (searchText.equals(""))
-                                    to = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position);
-                                else
-                                    to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
-                                String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                                LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
-                            } catch (Exception e) {
-                                Log.d(TAG, "Exception: " + e.toString());
+                        if (!isDeleteMode) {
+                            if (onlyDisplayLinphoneContacts == 0) {
+                                String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
+                                if (phoneNumber.contains("+84")) {
+                                    phoneNumber = "0" + phoneNumber.substring(3);
+                                }
+                                String uri = "sip:" + phoneNumber + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                                LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, contacts.get(position).getFullName(), null);
+                            } else if (onlyDisplayLinphoneContacts == 1) {
+                                try {
+                                    ContactResponse.DSDanhBa to;
+                                    if (searchText.equals(""))
+                                        to = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
+                                    else
+                                        to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+                                    String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                                    LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
+                                } catch (Exception e) {
+                                    Log.d(TAG, "Exception: " + e.toString());
+                                }
+                            } else {
+                                try {
+                                    ContactResponse.DSDanhBa to;
+                                    if (searchText.equals(""))
+                                        to = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position);
+                                    else
+                                        to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+                                    String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
+                                    LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
+                                } catch (Exception e) {
+                                    Log.d(TAG, "Exception: " + e.toString());
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
 //            holder.imgCall.setOnClickListener(new OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -1621,94 +1700,94 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 //
 //                }
 //            });
-            if (onlyDisplayLinphoneContacts == 0 && contact != null) {
-                holder.name.setText(contact.getFullName());
-                try {
-                    holder.address.setText(contact.getNumbersOrAddresses().get(0).getValue());
-                } catch (Exception e) {
-                    Log.d(TAG, "Exception: " + e.toString());
-                }
+                if (onlyDisplayLinphoneContacts == 0 && contact != null) {
+                    holder.name.setText(contact.getFullName());
+                    try {
+                        holder.address.setText(contact.getNumbersOrAddresses().get(0).getValue());
+                    } catch (Exception e) {
+                        Log.d(TAG, "Exception: " + e.toString());
+                    }
 
-                holder.organization.setVisibility(View.GONE);
-            } else if (onlyDisplayLinphoneContacts == 1) {
-                try {
-                    Log.d(TAG, "getViewonlyDisplayLinphoneContacts: " + onlyDisplayLinphoneContacts);
-                    if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")) {
-                        ContactResponse.DSDanhBa danhba;
-                        if (searchText.equals(""))
-                            danhba = DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position);
+                    holder.organization.setVisibility(View.GONE);
+                } else if (onlyDisplayLinphoneContacts == 1) {
+                    try {
+                        Log.d(TAG, "getViewonlyDisplayLinphoneContacts: " + onlyDisplayLinphoneContacts);
+                        if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")) {
+                            ContactResponse.DSDanhBa danhba;
+                            if (searchText.equals(""))
+                                danhba = DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position);
+                            else
+                                danhba = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba().get(position);
+                            if (danhba.isStatus()) {
+                                holder.avatar.setImageResource(R.drawable.online_info_icon_medium);
+                            } else {
+                                holder.avatar.setImageResource(R.drawable.info_icon_medium);
+                            }
+                        }
+                        ArrayList<ContactResponse.DSDanhBa> dsDanhBa;
+                        if (searchField.length() == 0)
+                            dsDanhBa = DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba();
                         else
-                            danhba = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba().get(position);
-                        if (danhba.isStatus()) {
-                            holder.avatar.setImageResource(R.drawable.online_info_icon_medium);
-                        } else {
-                            holder.avatar.setImageResource(R.drawable.info_icon_medium);
+                            dsDanhBa = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba();
+                        holder.name.setText(dsDanhBa.get(position).getTenlienhe());
+                        holder.organization.setVisibility(View.VISIBLE);
+                        holder.address.setText(dsDanhBa.get(position).getSodienthoai());
+                        holder.organization.setText(dsDanhBa.get(position).getJob());
+                    } catch (Exception e) {
+
+                    }
+                } else {
+                    try {
+                        ArrayList<ContactResponse.DSDanhBa> dsDanhBa;
+                        if (searchField.length() == 0)
+                            dsDanhBa = DbContext.getInstance().getCusContactResponse(view.getContext()).getDsdanhba();
+                        else
+                            dsDanhBa = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba();
+                        holder.name.setText(dsDanhBa.get(position).getTenlienhe());
+                        holder.organization.setVisibility(View.VISIBLE);
+                        holder.address.setText(dsDanhBa.get(position).getSodienthoai());
+                        holder.organization.setText(dsDanhBa.get(position).getJob());
+                    } catch (Exception e) {
+
+                    }
+
+                }
+
+                if (!isSearchMode) {
+                    if (getPositionForSection(getSectionForPosition(position)) != position) {
+                        holder.separator.setVisibility(View.GONE);
+                    } else {
+                        holder.separator.setVisibility(View.GONE);
+                        String fullName = "";
+                        if (onlyDisplayLinphoneContacts == 0 && contact != null)
+                            fullName = contact.getFullName();
+                        else
+                            try {
+                                fullName = DbContext.getInstance().getContactResponse(context).getDsdanhba().get(position).getTenlienhe();
+                            } catch (Exception e) {
+
+                            }
+                        if (fullName != null && !fullName.isEmpty()) {
+                            holder.separatorText.setVisibility(View.GONE);
                         }
                     }
-                    ArrayList<ContactResponse.DSDanhBa> dsDanhBa;
-                    if (searchField.length() == 0)
-                        dsDanhBa = DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba();
-                    else
-                        dsDanhBa = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba();
-                    holder.name.setText(dsDanhBa.get(position).getTenlienhe());
-                    holder.organization.setVisibility(View.VISIBLE);
-                    holder.address.setText(dsDanhBa.get(position).getSodienthoai());
-                    holder.organization.setText(dsDanhBa.get(position).getJob());
-                } catch (Exception e) {
-
-                }
-            } else {
-                try {
-                    ArrayList<ContactResponse.DSDanhBa> dsDanhBa;
-                    if (searchField.length() == 0)
-                        dsDanhBa = DbContext.getInstance().getCusContactResponse(view.getContext()).getDsdanhba();
-                    else
-                        dsDanhBa = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba();
-                    holder.name.setText(dsDanhBa.get(position).getTenlienhe());
-                    holder.organization.setVisibility(View.VISIBLE);
-                    holder.address.setText(dsDanhBa.get(position).getSodienthoai());
-                    holder.organization.setText(dsDanhBa.get(position).getJob());
-                } catch (Exception e) {
-
-                }
-
-            }
-
-            if (!isSearchMode) {
-                if (getPositionForSection(getSectionForPosition(position)) != position) {
-                    holder.separator.setVisibility(View.GONE);
                 } else {
                     holder.separator.setVisibility(View.GONE);
-                    String fullName = "";
-                    if (onlyDisplayLinphoneContacts == 0 && contact != null)
-                        fullName = contact.getFullName();
-                    else
-                        try {
-                            fullName = DbContext.getInstance().getContactResponse(context).getDsdanhba().get(position).getTenlienhe();
-                        } catch (Exception e) {
-
-                        }
-                    if (fullName != null && !fullName.isEmpty()) {
-                        holder.separatorText.setVisibility(View.GONE);
+                }
+                holder.contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
+                if (contact != null) {
+                    if (contact.isInLinphoneFriendList()) {
+                        holder.linphoneFriend.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.linphoneFriend.setVisibility(View.GONE);
+                    }
+                    if (contact.hasPhoto()) {
+                        LinphoneUtils.setThumbnailPictureFromUri(LinphoneActivity.instance(), holder.contactPicture, contact.getThumbnailUri());
                     }
                 }
-            } else {
-                holder.separator.setVisibility(View.GONE);
-            }
-            holder.contactPicture.setImageBitmap(ContactsManager.getInstance().getDefaultAvatarBitmap());
-            if (contact != null) {
-                if (contact.isInLinphoneFriendList()) {
-                    holder.linphoneFriend.setVisibility(View.VISIBLE);
-                } else {
-                    holder.linphoneFriend.setVisibility(View.GONE);
-                }
-                if (contact.hasPhoto()) {
-                    LinphoneUtils.setThumbnailPictureFromUri(LinphoneActivity.instance(), holder.contactPicture, contact.getThumbnailUri());
-                }
-            }
-            boolean isOrgVisible = getResources().getBoolean(R.bool.display_contact_organization);
-            String org = "";
-            if (contact != null) org = contact.getOrganization();
+                boolean isOrgVisible = getResources().getBoolean(R.bool.display_contact_organization);
+                String org = "";
+                if (contact != null) org = contact.getOrganization();
 //            if (org != null && !org.isEmpty() && isOrgVisible) {
 //                holder.organization.setText(org);
 //                holder.organization.setVisibility(View.VISIBLE);
@@ -1716,37 +1795,37 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 //                holder.organization.setVisibility(View.GONE);
 //            }
 
-            if (isEditMode) {
-                holder.delete.setVisibility(View.VISIBLE);
-                holder.delete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        contactsList.setItemChecked(position, b);
-                        if (getNbItemsChecked() == getCount()) {
-                            deselectAll.setVisibility(View.VISIBLE);
-                            selectAll.setVisibility(View.GONE);
-                            enabledDeleteButton(true);
-                        } else {
-                            if (getNbItemsChecked() == 0) {
-                                deselectAll.setVisibility(View.GONE);
-                                selectAll.setVisibility(View.VISIBLE);
-                                enabledDeleteButton(false);
-                            } else {
-                                deselectAll.setVisibility(View.GONE);
-                                selectAll.setVisibility(View.VISIBLE);
+                if (isEditMode) {
+                    holder.delete.setVisibility(View.VISIBLE);
+                    holder.delete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            contactsList.setItemChecked(position, b);
+                            if (getNbItemsChecked() == getCount()) {
+                                deselectAll.setVisibility(View.VISIBLE);
+                                selectAll.setVisibility(View.GONE);
                                 enabledDeleteButton(true);
+                            } else {
+                                if (getNbItemsChecked() == 0) {
+                                    deselectAll.setVisibility(View.GONE);
+                                    selectAll.setVisibility(View.VISIBLE);
+                                    enabledDeleteButton(false);
+                                } else {
+                                    deselectAll.setVisibility(View.GONE);
+                                    selectAll.setVisibility(View.VISIBLE);
+                                    enabledDeleteButton(true);
+                                }
                             }
                         }
+                    });
+                    if (contactsList.isItemChecked(position)) {
+                        holder.delete.setChecked(true);
+                    } else {
+                        holder.delete.setChecked(false);
                     }
-                });
-                if (contactsList.isItemChecked(position)) {
-                    holder.delete.setChecked(true);
                 } else {
-                    holder.delete.setChecked(false);
+                    holder.delete.setVisibility(View.INVISIBLE);
                 }
-            } else {
-                holder.delete.setVisibility(View.INVISIBLE);
-            }
 
 			/*LinphoneFriend[] friends = LinphoneManager.getLc().getFriendList();
             if (!ContactsManager.getInstance().isContactPresenceDisabled() && friends != null) {
@@ -1764,7 +1843,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 					holder.friendStatus.setImageResource(R.drawable.call_quality_indicator_0);
 				}
 			}*/
-
+            }
             return view;
         }
 
