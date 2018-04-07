@@ -240,6 +240,12 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 	public void onResume() {
 		super.onResume();
 		ContactsManager.addContactsListener(this);
+        // xoa notifi cuoc goi nho moi vao man hinh lich su cuoc goi
+        try {
+            LinphoneService.instance().mNM.cancel(LinphoneService.MISSED_NOTIF_ID);
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
+        }
 
 		if (LinphoneActivity.isInstanciated()) {
 			LinphoneActivity.instance().selectMenu(FragmentsAvailable.HISTORY_LIST);

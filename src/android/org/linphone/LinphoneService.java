@@ -41,6 +41,7 @@ import org.linphone.mediastream.Log;
 import org.linphone.mediastream.Version;
 import org.linphone.myactivity.LoginActivity;
 import org.linphone.ui.LinphoneOverlay;
+import org.linphone.ultils.ContactUltils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -86,7 +87,7 @@ public final class LinphoneService extends Service {
     public static final String START_LINPHONE_LOGS = " ==== Phone information dump ====";
     public static final int IC_LEVEL_ORANGE = 0;
     /*private static final int IC_LEVEL_GREEN=1;
-	private static final int IC_LEVEL_RED=2;*/
+    private static final int IC_LEVEL_RED=2;*/
     //public static final int IC_LEVEL_OFFLINE=3;
 
     private static LinphoneService instance;
@@ -95,7 +96,7 @@ public final class LinphoneService extends Service {
     private final static int INCALL_NOTIF_ID = 2;
     private final static int MESSAGE_NOTIF_ID = 3;
     private final static int CUSTOM_NOTIF_ID = 4;
-    private final static int MISSED_NOTIF_ID = 5;
+    public final static int MISSED_NOTIF_ID = 5;
     private final static int SAS_NOTIF_ID = 6;
     private String TAG = "LinphoneService";
 
@@ -116,7 +117,7 @@ public final class LinphoneService extends Service {
 
     //	private boolean mTestDelayElapsed; // add a timer for testing
     private boolean mTestDelayElapsed = true; // no timer
-    private NotificationManager mNM;
+    public NotificationManager mNM;
 
     private Notification mNotif;
     private Notification mIncallNotif;
@@ -310,7 +311,7 @@ public final class LinphoneService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        android.util.Log.d(TAG, "onCreate: "+FirebaseInstanceId.getInstance().getToken());
+        android.util.Log.d(TAG, "onCreate: " + FirebaseInstanceId.getInstance().getToken());
         setupActivityMonitor();
         // In case restart after a crash. Main in LinphoneActivity
         mNotificationTitle = getString(R.string.service_name);
@@ -361,7 +362,7 @@ public final class LinphoneService extends Service {
         LinphoneManager.getLc().addListener(mListener = new LinphoneCoreListenerBase() {
             @Override
             public void callState(LinphoneCore lc, LinphoneCall call, LinphoneCall.State state, String message) {
-                android.util.Log.d(TAG, "callState: "+state.toString());
+                android.util.Log.d(TAG, "callState: " + state.toString());
                 if (instance == null) {
                     Log.i("Service not ready, discarding call state change to ", state.toString());
                     return;
@@ -389,15 +390,8 @@ public final class LinphoneService extends Service {
                         body = getString(R.string.missed_calls_notif_body).replace("%i", String.valueOf(missedCallCount));
                     } else {
                         LinphoneAddress address = call.getRemoteAddress();
-                        LinphoneContact c = ContactsManager.getInstance().findContactFromAddress(address);
-                        if (c != null) {
-                            body = c.getFullName();
-                        } else {
-                            body = address.getDisplayName();
-                            if (body == null) {
-                                body = address.asStringUriOnly();
-                            }
-                        }
+                        body = ContactUltils.instance.getContactName(address.getDisplayName(), getApplicationContext());
+
                     }
                     Intent missedCallNotifIntent = new Intent(LinphoneService.this, incomingReceivedActivity);
                     missedCallNotifIntent.putExtra("GoToHistory", true);
@@ -431,13 +425,13 @@ public final class LinphoneService extends Service {
 //					return;
 //				}
 
-                android.util.Log.d(TAG, "registrationState: "+LinphonePreferences.instance().getAccountCount());
-                if (!mDisableRegistrationStatus&&LinphonePreferences.instance().getAccountCount()>0) {
+                android.util.Log.d(TAG, "registrationState: " + LinphonePreferences.instance().getAccountCount());
+                if (!mDisableRegistrationStatus && LinphonePreferences.instance().getAccountCount() > 0) {
 //                    if (LinphoneLauncherActivity.isLinphoneActivity) {
-                        if (displayServiceNotification() && state == RegistrationState.RegistrationOk && LinphoneManager.getLc().getDefaultProxyConfig() != null && LinphoneManager.getLc().getDefaultProxyConfig().isRegistered()) {
-                            android.util.Log.d(TAG, "registrationState: RegistrationOk" + LinphonePreferences.instance().getAccountCount());
-                            sendNotification(IC_LEVEL_ORANGE, R.string.notification_registered);
-                        }
+                    if (displayServiceNotification() && state == RegistrationState.RegistrationOk && LinphoneManager.getLc().getDefaultProxyConfig() != null && LinphoneManager.getLc().getDefaultProxyConfig().isRegistered()) {
+                        android.util.Log.d(TAG, "registrationState: RegistrationOk" + LinphonePreferences.instance().getAccountCount());
+                        sendNotification(IC_LEVEL_ORANGE, R.string.notification_registered);
+                    }
 //                    }
 
                     if (displayServiceNotification() && (state == RegistrationState.RegistrationFailed || state == RegistrationState.RegistrationCleared) && (LinphoneManager.getLc().getDefaultProxyConfig() == null || !LinphoneManager.getLc().getDefaultProxyConfig().isRegistered())) {
