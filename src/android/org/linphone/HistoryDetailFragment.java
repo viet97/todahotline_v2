@@ -19,11 +19,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -31,7 +33,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.linphone.core.LinphoneAddress;
@@ -39,27 +47,45 @@ import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
+import org.linphone.ultils.ContactUltils;
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class HistoryDetailFragment extends Fragment implements OnClickListener {
 	private ImageView dialBack, chat, addToContacts, goToContact, back;
 	private View view;
+	private ListView lvDetailHistory;
 	private ImageView contactPicture, callDirection;
-	private TextView contactName, contactAddress, time, date,statusCall;
+	private TextView tvTitle, contactName, contactAddress, time, date, statusCall;
 	private String sipUri, displayName, pictureUri;
 	private LinphoneContact contact;
 	private String TAG = "HistoryDetailFragment";
-
+	private LayoutInflater mInflater;
+	private ArrayList<MyCallLogs.CallLog> listCallogs;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		sipUri = getArguments().getString("SipUri");
 		displayName = getArguments().getString("DisplayName");
 		pictureUri = getArguments().getString("PictureUri");
+		android.util.Log.d(TAG, "onCreateView: " + displayName);
 		String status = getArguments().getString("CallStatus");
 		String callTime = getArguments().getString("CallTime");
 		String callDate = getArguments().getString("CallDate");
+		mInflater = inflater;
 
 		view = inflater.inflate(R.layout.history_detail, container, false);
+		lvDetailHistory = view.findViewById(R.id.lv_history_detail);
+		addAllCallByAddress();
+		HistoryDetailAdapter historyDetailAdapter = new HistoryDetailAdapter(getActivity());
+		lvDetailHistory.setAdapter(historyDetailAdapter);
+		((BaseAdapter) lvDetailHistory.getAdapter()).notifyDataSetChanged();
+
+		tvTitle = view.findViewById(R.id.tv_title);
+		tvTitle.setText(displayName);
 
 		dialBack = (ImageView) view.findViewById(R.id.call);
 		dialBack.setOnClickListener(this);
@@ -81,7 +107,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 
 		goToContact = (ImageView) view.findViewById(R.id.goto_contact);
 		goToContact.setOnClickListener(this);
-
+		tvTitle = view.findViewById(R.id.tv_title);
 		contactPicture = (ImageView) view.findViewById(R.id.contact_picture);
 
 		contactName = (TextView) view.findViewById(R.id.contact_name);
@@ -97,29 +123,12 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		return view;
 	}
 
-	public String getContactName(final String phoneNumber, Context context) {
-		Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-
-		String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
-
-		String contactName = null;
-		Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
-
-		if (cursor != null) {
-			if (cursor.moveToFirst()) {
-				contactName = cursor.getString(0);
-			}
-			cursor.close();
+	public void addAllCallByAddress() {
+		listCallogs = new ArrayList<>();
+		for (MyCallLogs.CallLog c : DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs()) {
+			if (c.getPhoneNumber().equals(sipUri)) listCallogs.add(c);
 		}
-		if (contactName == null) {
-			try {
-				contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
-			} catch (Exception e) {
-
-			}
-		}
-
-		return contactName;
+		android.util.Log.d(TAG, "addAllCallByAddress: ");
 	}
 	private void displayHistory(String status, String callTime, String callDate) {
 		if (status.equals(getResources().getString(R.string.missed))) {
@@ -171,7 +180,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 				goToContact.setVisibility(View.GONE);
 			}
 		} else {
-			android.util.Log.d(TAG, "displayHistory: 132");
+			android.util.Log.d(TAG, "displayHistory:" + sipUri);
 			contactAddress.setText(sipUri);
 			contactName.setText(displayName == null ? LinphoneUtils.getAddressDisplayName(sipUri) : displayName);
 		}
@@ -224,6 +233,121 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 				LinphoneActivity.instance().displayContactsForEdition(uri);
 		} else if (id == R.id.goto_contact) {
 			LinphoneActivity.instance().displayContact(contact, false);
+		}
+	}
+
+	class HistoryDetailAdapter extends BaseAdapter {
+		private class ViewHolder {
+			TextView tvDate, tvType, tvDuration;
+			ImageView imgType;
+
+			public ViewHolder(View view) {
+				tvDate = view.findViewById(R.id.date);
+				tvDuration = view.findViewById(R.id.duration);
+				tvType = view.findViewById(R.id.type);
+				imgType = view.findViewById(R.id.icon);
+			}
+		}
+
+		HistoryDetailAdapter(Context aContext) {
+
+		}
+
+		public int getCount() {
+			return listCallogs.size();
+		}
+
+		public Object getItem(int position) {
+			return listCallogs.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@SuppressLint("SimpleDateFormat")
+		private String timestampToHumanDate(Calendar cal, MyCallLogs.CallLog callLog) {
+			SimpleDateFormat dateFormat;
+			String callDate = String.valueOf(callLog.getTime());
+			Long longDate = Long.parseLong(callDate);
+
+			String time = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_item_date_format));
+
+			if (isToday(cal)) {
+				return getString(R.string.today) + " " + time;
+			} else if (isYesterday(cal)) {
+				return getString(R.string.yesterday) + " " + time;
+			} else {
+				dateFormat = new SimpleDateFormat(getResources().getString(R.string.history_item_date_format));
+			}
+
+			return dateFormat.format(cal.getTime());
+		}
+
+		private boolean isSameDay(Calendar cal1, Calendar cal2) {
+			if (cal1 == null || cal2 == null) {
+				return false;
+			}
+
+			return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+					cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+					cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+		}
+
+		private boolean isToday(Calendar cal) {
+			return isSameDay(cal, Calendar.getInstance());
+		}
+
+		private boolean isYesterday(Calendar cal) {
+			Calendar yesterday = Calendar.getInstance();
+			yesterday.roll(Calendar.DAY_OF_MONTH, -1);
+			return isSameDay(cal, yesterday);
+		}
+
+
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			View view = null;
+			ViewHolder holder = null;
+
+			if (convertView != null) {
+				view = convertView;
+				holder = (ViewHolder) view.getTag();
+			} else {
+				view = mInflater.inflate(R.layout.history_detail_item, parent, false);
+				holder = new ViewHolder(view);
+				view.setTag(holder);
+			}
+			MyCallLogs.CallLog callLog = listCallogs.get(position);
+			if (callLog.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
+				holder.tvDuration.setVisibility(View.GONE);
+				holder.tvType.setText("Cuộc gọi nhỡ");
+				holder.imgType.setImageResource(R.drawable.my_missed_call);
+			} else if (callLog.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DEN) {
+				holder.tvType.setText("Cuộc gọi đến");
+				holder.imgType.setImageResource(R.drawable.my_incoming_call);
+			} else if (callLog.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DI) {
+				holder.tvType.setText("Cuộc gọi đi");
+				holder.imgType.setImageResource(R.drawable.my_outgoing_call);
+			} else if (callLog.getStatus() == MyCallLogs.CallLog.MAY_BAN) {
+				holder.tvType.setText("Máy bận");
+				holder.imgType.setImageResource(R.drawable.my_busy_call);
+				holder.tvDuration.setVisibility(View.GONE);
+			} else if (callLog.getStatus() == MyCallLogs.CallLog.OFFLINE) {
+				holder.tvType.setText("Offline");
+				holder.imgType.setImageResource(R.drawable.offline_ext);
+				holder.tvDuration.setVisibility(View.GONE);
+			}
+
+			String datetime;
+
+			Calendar logTime = Calendar.getInstance();
+			logTime.setTimeInMillis(callLog.getTime());
+			datetime = timestampToHumanDate(logTime, callLog);
+			holder.tvDate.setText(datetime);
+
+
+			holder.tvDuration.setText(LinphoneActivity.instance.secondsToDisplayableString(callLog.getDuration()));
+			return view;
 		}
 	}
 }

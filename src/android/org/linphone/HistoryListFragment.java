@@ -516,7 +516,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			String callDate = String.valueOf(log.getTime());
 			Long longDate = Long.parseLong(callDate);
 
-			String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_detail_date_format));
+			String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_date_format));
 //			if (datetime.length() > 0) {
 //				datetime = datetime.substring(0, datetime.length() - 2);
 //			}

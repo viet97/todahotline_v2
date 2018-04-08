@@ -604,7 +604,6 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     }
 
     public void displayHistoryDetail(String sipUri, MyCallLogs.CallLog log) {
-        LinphoneAddress lAddress;
         android.util.Log.d(TAG, "displayHistoryDetail: 610");
 //        try {
 //            lAddress = LinphoneCoreFactory.instance().createLinphoneAddress(sipUri);
@@ -662,7 +661,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     }
 
     @SuppressLint("SimpleDateFormat")
-    private String secondsToDisplayableString(int secs) {
+    public String secondsToDisplayableString(int secs) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         cal.set(0, 0, 0, 0, 0, secs);
