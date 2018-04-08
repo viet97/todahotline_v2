@@ -133,14 +133,18 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 			removeNotMissedCallsFromLogs();
 			if (mLogs.size() == 0) noMissedCallHistory.setVisibility(View.VISIBLE);
 		}
-
-		((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
+		try {
+			((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
+		} catch (Exception e) {
+			Log.d(TAG, "Exception: " + e.toString());
+		}
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		mInflater = inflater;
 		View view = inflater.inflate(R.layout.history, container, false);
+
 		searchField = view.findViewById(R.id.searchField);
 		searchField.clearTextChangedListeners();
 		searchField.addTextChangedListener(twAllCall);

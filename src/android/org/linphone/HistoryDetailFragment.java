@@ -142,9 +142,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
 		time.setText(callTime == null ? "" : callTime);
 		Long longDate = Long.parseLong(callDate);
 		String datetime = LinphoneUtils.timestampToHumanDate(getActivity(), longDate, getString(R.string.history_detail_date_format));
-		if (datetime.length() > 0) {
-			datetime = datetime.substring(0, datetime.length() - 2);
-		}
+
 		android.util.Log.d(TAG, "displayHistory: " + datetime);
 		date.setText(datetime);
 
