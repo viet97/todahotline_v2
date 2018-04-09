@@ -381,10 +381,14 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     topbar.setVisibility(View.VISIBLE);
                     backDeleteMode.setVisibility(View.GONE);
                     if (onlyDisplayLinphoneContacts == 1) {
+                        allExt.setVisibility(View.VISIBLE);
+                        onlExt.setVisibility(View.VISIBLE);
+                        offExt.setVisibility(View.VISIBLE);
                         deleteAll.setVisibility(View.INVISIBLE);
                     } else {
                         deleteAll.setVisibility(View.GONE);
                     }
+
                     listIdDelete.clear();
                     isDeleteMode = false;
                     addContacts.setVisibility(View.VISIBLE);
@@ -524,6 +528,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 DbContext.getInstance().setSearchContactResponse(contactResponse, getActivity());
 
                             }
+                            deleteAll.setChecked(false);
                             listIdDelete.clear();
                             changeAdapter();
                         } else {
@@ -1517,6 +1522,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     holder.cbxDelete.setVisibility(View.VISIBLE);
                     holder.imgCall.setVisibility(View.GONE);
                 } else {
+
 //                holder.imgCall.setVisibility(View.VISIBLE);
                     holder.cbxDelete.setVisibility(View.GONE);
                 }

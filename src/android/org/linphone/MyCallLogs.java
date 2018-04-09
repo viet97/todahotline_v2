@@ -50,6 +50,18 @@ public class MyCallLogs {
         public CallLog() {
         }
 
+        @Override
+        public boolean equals(Object obj) {
+            CallLog callLog = (CallLog) obj;
+            if (this.name.equals(((CallLog) obj).getName()) &&
+                    this.getDuration() == ((CallLog) obj).getDuration() &&
+                    this.phoneNumber.equals(((CallLog) obj).getPhoneNumber()) &&
+                    this.status == ((CallLog) obj).getStatus() &&
+                    this.time == ((CallLog) obj).getTime())
+                return true;
+            return false;
+        }
+
         public String getName() {
             return name;
         }
