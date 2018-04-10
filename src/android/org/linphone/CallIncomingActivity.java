@@ -241,7 +241,13 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
 
     public void addIncomingLog(LinphoneCall linphoneCall, int status) {
         LinphoneCallLog linphoneCallLog = linphoneCall.getCallLog();
+        ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(this).getCallLogs();
+
+        int id = 0;
+        if (currentCallLogs.size() > 0)
+            id = currentCallLogs.get(0).getId() + 1;
         MyCallLogs.CallLog callLog = new MyCallLogs.CallLog(
+                id,
                 ContactUltils.instance.getContactName(linphoneCallLog.getFrom().getUserName(), this),
                 linphoneCallLog.getFrom().getUserName(),
                 linphoneCallLog.getTimestamp(),

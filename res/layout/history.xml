@@ -142,7 +142,7 @@
 		android:button="@drawable/custom_tickbox"
 		android:text="chọn tất cả"
 		android:textColor="@android:color/white"
-		android:textSize="20sp"
+        android:textSize="15sp"
 		android:visibility="gone" />
 
 	<include layout="@layout/edit_list"/>

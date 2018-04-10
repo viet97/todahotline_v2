@@ -234,7 +234,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                 android.util.Log.d(TAG, "backImg: " + getCurrentFocus());
                 try {
                     if (firstTimeComeIn) {
-                        onBackPressed();
+                        finish();
                     } else if (getCurrentFocus() != null) {
                         try {
                             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -243,13 +243,13 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                             edPassOld.setFocusable(false);
                             edpassveri.setFocusable(false);
                         } catch (Exception e) {
-
+                            android.util.Log.d(TAG, "Exception: " + e.toString());
                         }
                     } else {
-                        onBackPressed();
+                        finish();
                     }
                 } catch (Exception e) {
-
+                    android.util.Log.d(TAG, "Exception: " + e.toString());
                 }
             }
         });

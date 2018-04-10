@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tắt âm"
-                    android:textColor="@color/white" />
+                    android:textColor="#b2b0a1" />
             </LinearLayout>
 
             <LinearLayout
@@ -90,13 +90,13 @@
                     android:layout_weight="1"
                     android:contentDescription="@string/content_description_toggle_speaker"
                     android:padding="10dp"
-                    android:src="@drawable/my_speaker" />
+                    android:src="@drawable/my_speaker_disable" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Âm thanh"
-                    android:textColor="@color/white" />
+                    android:textColor="#b2b0a1" />
             </LinearLayout>
 
             <LinearLayout
@@ -144,13 +144,13 @@
                     android:layout_weight="1"
                     android:contentDescription="@string/content_description_toggle_micro"
                     android:padding="10dp"
-                    android:src="@drawable/my_numpad" />
+                    android:src="@drawable/my_numpad_disable" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bàn phím"
-                    android:textColor="@color/white" />
+                    android:textColor="#b2b0a1" />
             </LinearLayout>
 
             <LinearLayout

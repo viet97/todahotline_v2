@@ -77,13 +77,13 @@
                             android:textSize="15sp" />
 
                         <TextView
-                            android:text="Tạm dừng"
                             android:id="@+id/tv_pause"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:paddingTop="5dp"
+                            android:text="Tạm dừng"
                             android:textColor="@color/white"
                             android:textSize="18sp" />
 
@@ -667,18 +667,34 @@
 
             </LinearLayout>
 
-            <org.linphone.ui.Numpad
-                android:id="@+id/numpad"
+            <LinearLayout
+
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id="@+id/ll_numpad"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@id/menu"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="50dp"
-                android:background="@color/colorF"
-                android:contentDescription="@string/content_description_numpad"
-                android:visibility="gone" />
+                android:layout_height="match_parent">
+
+                <TextView
+
+                    android:padding="8dp"
+                    android:textSize="18sp"
+                    android:visibility="invisible"
+                    android:id="@+id/tv_numpad"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <org.linphone.ui.Numpad
+                    android:id="@+id/numpad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorF"
+                    android:contentDescription="@string/content_description_numpad"
+                    android:visibility="visible" />
+            </LinearLayout>
 
         </RelativeLayout>
 

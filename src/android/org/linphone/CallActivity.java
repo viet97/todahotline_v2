@@ -44,7 +44,9 @@ import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -53,6 +55,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -100,7 +104,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private static final int PERMISSIONS_REQUEST_CAMERA = 202;
 	private static final int PERMISSIONS_ENABLED_CAMERA = 203;
 	private static final int PERMISSIONS_ENABLED_MIC = 204;
-
+	private LinearLayout llNumpad;
 	private static CallActivity instance;
 	private Thread thread;
 	private Handler mControlsHandler = new Handler();
@@ -365,13 +369,19 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
     public void addLog(LinphoneCall linphoneCall, int status) {
         LinphoneCallLog linphoneCallLog = linphoneCall.getCallLog();
-        String userName = "";
+		ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(this).getCallLogs();
+
+		int id = 0;
+		if (currentCallLogs.size() > 0)
+			id = currentCallLogs.get(0).getId() + 1;
+		String userName = "";
         if (status == MyCallLogs.CallLog.CUOC_GOI_DI) {
             userName = linphoneCallLog.getTo().getUserName();
         } else {
             userName = linphoneCallLog.getFrom().getUserName();
         }
 		MyCallLogs.CallLog callLog = new MyCallLogs.CallLog(
+				id,
 				ContactUltils.instance.getContactName(userName, this),
 				userName,
 				linphoneCallLog.getTimestamp(),
@@ -389,6 +399,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		container = (ViewGroup) findViewById(R.id.topLayout);
 		callsList = (LinearLayout) findViewById(R.id.calls_list);
 		conferenceList = (LinearLayout) findViewById(R.id.conference_list);
+		llNumpad = (LinearLayout) findViewById(R.id.ll_numpad);
 
 		//TopBar
 		tvPause = findViewById(R.id.tv_pause);
@@ -419,12 +430,24 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 		numpad = (Numpad) findViewById(R.id.numpad);
 		numpad.getBackground().setAlpha(240);
-		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.ABOVE,R.id.menu);
-		numpad.setLayoutParams(params);
 
 		addressText= findViewById(R.id.address_call);
+		addressText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+			}
+
+			@Override
+			public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable editable) {
+				((TextView) findViewById(R.id.tv_numpad)).setText(editable.toString());
+			}
+		});
 		numpad.setAddressWidget(addressText);
 		chat = (ImageView) findViewById(R.id.chat);
 		chat.setOnClickListener(this);
@@ -960,7 +983,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 		if (isSpeakerEnabled) {
 			LinphoneManager.getInstance().routeAudioToSpeaker();
-			speaker.setImageResource(R.drawable.my_speaker);
+			speaker.setImageResource(R.drawable.my_speaker_on);
 			LinphoneManager.getLc().enableSpeaker(isSpeakerEnabled);
 		} else {
 			Log.d("Toggle speaker_off off, routing backicon to earpiece");
@@ -1064,12 +1087,14 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	}
 
 	private void hideNumpad() {
+		android.util.Log.d(TAG, "hideNumpad: ");
 		if (numpad == null || numpad.getVisibility() != View.VISIBLE) {
 			return;
 		}
-
+		llNumpad.setVisibility(View.GONE);
 		dialer.setImageResource(R.drawable.my_numpad);
-		numpad.setVisibility(View.GONE);
+
+		findViewById(R.id.tv_numpad).setVisibility(View.GONE);
 	}
 
 	private void hideOrDisplayNumpad() {
@@ -1079,11 +1104,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			return;
 		}
 		android.util.Log.d(TAG, "hideOrDisplayNumpad: 1033");
-		if (numpad.getVisibility() == View.VISIBLE) {
+		if (llNumpad.getVisibility() == View.VISIBLE) {
 			hideNumpad();
 		} else {
-			dialer.setImageResource(R.drawable.dialer_alt_back);
-			numpad.setVisibility(View.VISIBLE);
+
+			llNumpad.setVisibility(View.VISIBLE);
+			animationTvNumpad();
 			android.util.Log.d(TAG, "hideOrDisplayNumpad: 1039");
 		}
 	}
@@ -1358,6 +1384,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		onBackPressed();
 		if (LinphoneUtils.onKeyVolumeAdjust(keyCode)) return true;
 		if (LinphoneUtils.onKeyBackGoHome(this, keyCode, event)) return true;
 		return super.onKeyDown(keyCode, event);
@@ -1365,12 +1392,17 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 	@Override // Never invoke actually
 	public void onBackPressed() {
-		if (dialog != null) {
-			acceptCallUpdate(false);
-			dialog.dismiss();
-			dialog = null;
+		android.util.Log.d(TAG, "onBackPressed: ");
+		if (llNumpad.getVisibility() == View.VISIBLE) {
+			hideNumpad();
+		} else {
+			if (dialog != null) {
+				acceptCallUpdate(false);
+				dialog.dismiss();
+				dialog = null;
+			}
+			return;
 		}
-		return;
 	}
 
 	public void bindAudioFragment(CallAudioFragment fragment) {
@@ -1874,6 +1906,14 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 	}
 
+	private void animationTvNumpad() {
+		Animation a = AnimationUtils.loadAnimation(this, R.anim.scale);
+		a.reset();
+		TextView tv = (TextView) findViewById(R.id.tv_numpad);
+		tv.clearAnimation();
+		tv.startAnimation(a);
+		tv.setVisibility(View.VISIBLE);
+	}
 	private void blinkPauseText() {
 		Integer colorFrom = Color.RED;
 		Integer colorTo = Color.GREEN;
@@ -1887,5 +1927,6 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 		});
 		colorAnimation.start();
+
 	}
 }

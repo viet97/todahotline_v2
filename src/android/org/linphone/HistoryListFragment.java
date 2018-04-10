@@ -64,7 +64,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
     private CheckBox deleteAll;
 
     private RelativeLayout deleteBar;
-    private ArrayList<Integer> listPositionDelete = new ArrayList<>();
+    private ArrayList<Integer> listIdDelete = new ArrayList<>();
     private boolean isDeleteMode = false;
     private boolean isDeleteAll = false;
     private TextView missedCalls, allCalls, noCallHistory, noMissedCallHistory;
@@ -341,7 +341,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             topBar.setVisibility(View.VISIBLE);
             backDeleteMode.setVisibility(View.GONE);
             deleteAll.setVisibility(View.GONE);
-            listPositionDelete.clear();
+            listIdDelete.clear();
             isDeleteMode = false;
             ((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
             return;
@@ -352,13 +352,13 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             deleteAll.setChecked(isDeleteAll);
 
             if (!isDeleteAll) {
-                listPositionDelete.clear();
+                listIdDelete.clear();
                 deleteContact.setVisibility(View.GONE);
             } else {
                 deleteContact.setVisibility(View.VISIBLE);
-                listPositionDelete.clear();
-                for (int i = 0; i < DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs().size(); i++) {
-                    listPositionDelete.add(i);
+                listIdDelete.clear();
+                for (MyCallLogs.CallLog callLog : DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs()) {
+                    listIdDelete.add(callLog.getId());
                 }
             }
 
@@ -374,26 +374,38 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
         if (id == R.id.delete_contact) {
             try {
                 MyCallLogs myCallLogs = new MyCallLogs();
+                ArrayList<MyCallLogs.CallLog> callLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
                 if (isDeleteAll) {
-
+                    for (MyCallLogs.CallLog callLog : new ArrayList<MyCallLogs.CallLog>(mLogs)) {
+                        callLogs.remove(callLogs.indexOf(callLog));
+                    }
+                    myCallLogs.setCallLogs(callLogs);
                     DbContext.getInstance().setMyCallLogs(myCallLogs, getActivity());
 
                 } else {
-                    ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
 
-                    for (int position : listPositionDelete) {
-                        currentCallLogs.remove(position);
+                    ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+                    Log.d(TAG, "onClick: " + listIdDelete.toString());
+
+                    for (MyCallLogs.CallLog callLog : new ArrayList<MyCallLogs.CallLog>(mLogs)) {
+                        Log.d(TAG, "onClick: " + callLog.getId());
+                        Log.d(TAG, "onClick: " + listIdDelete.indexOf(callLog.getId()));
+                        if (listIdDelete.indexOf(callLog.getId()) != -1) {
+                            currentCallLogs.remove(currentCallLogs.indexOf(callLog));
+                        }
                     }
+
                     myCallLogs.setCallLogs(currentCallLogs);
                     DbContext.getInstance().setMyCallLogs(myCallLogs, getActivity());
                 }
             } catch (Exception e) {
                 Log.d(TAG, "Exception: " + e.toString());
             }
-            mLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+            searchHistory(searchField.getText().toString());
             if (onlyDisplayMissedCalls) {
                 removeNotMissedCallsFromLogs();
             }
+            listIdDelete.clear();
             deleteAll.setChecked(false);
             hideHistoryListAndDisplayMessageIfEmpty();
             ((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
@@ -595,12 +607,13 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                     return true;
                 }
             });
+            Log.d(TAG, "getView: " + log.getId());
             //check all delete
             if (isDeleteAll) {
                 holder.cbxDelete.setChecked(isDeleteAll);
             }
-            Log.d(TAG, "getPosition: " + currentCallLogs.indexOf(log));
-            if (listPositionDelete.indexOf(currentCallLogs.indexOf(log)) != -1) {
+
+            if (listIdDelete.indexOf(log.getId()) != -1) {
                 holder.cbxDelete.setChecked(true);
             } else {
                 holder.cbxDelete.setChecked(false);
@@ -608,17 +621,16 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             holder.cbxDelete.setOnClickListener(new OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
-                                                        Log.d(TAG, "onCheckedChanged: ");
+
                                                         if (finalHolder.cbxDelete.isChecked()) {
                                                             finalHolder.cbxDelete.setChecked(true);
-                                                            listPositionDelete.add(currentCallLogs.indexOf(log));
-                                                            Log.d(TAG, "onCheckedChanged: " + listPositionDelete.toString());
+                                                            listIdDelete.add(log.getId());
                                                             notifyDataSetChanged();
                                                         } else {
                                                             finalHolder.cbxDelete.setChecked(false);
-                                                            listPositionDelete.remove(listPositionDelete.indexOf(currentCallLogs.indexOf(log)));
+                                                            listIdDelete.remove(listIdDelete.indexOf(log.getId()));
                                                         }
-                                                        if (listPositionDelete.size() == 0) {
+                                                        if (listIdDelete.size() == 0) {
                                                             deleteContact.setVisibility(View.GONE);
                                                         } else {
                                                             deleteContact.setVisibility(View.VISIBLE);
@@ -659,7 +671,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             } else {
                 separator.setVisibility(View.VISIBLE);
             }
-            Log.d(TAG, "getView: " + log.getStatus());
+
             if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DEN) {
                 holder.callDirection.setImageResource(R.drawable.my_incoming_call);
             } else if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DI) {
@@ -685,7 +697,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 //			}
             displayName = ContactUltils.instance.getContactName(log.getPhoneNumber(), view.getContext());
 
-            Log.d(TAG, "getView: " + displayName);
+
             if (displayName == null) {
                 holder.contact.setText(LinphoneUtils.getAddressDisplayName(log.getPhoneNumber()));
             } else {
@@ -728,9 +740,9 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                 holder.detail.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d(TAG, "onClick: 558");
+
                         if (LinphoneActivity.isInstanciated()) {
-                            Log.d(TAG, "onClick: 560");
+
                             LinphoneActivity.instance().displayHistoryDetail(log.getPhoneNumber(), log);
                         }
                     }
@@ -742,7 +754,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                         if (LinphoneActivity.isInstanciated() && !isDeleteMode) {
                             String address;
                             address = "sip:" + log.getPhoneNumber() + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                            Log.d(TAG, "onClick: " + address);
+
                             LinphoneActivity.instance().setAddresGoToDialerAndCall(address, ContactUltils.instance.getContactName(log.getPhoneNumber(), finalView.getContext()), null);
                         }
                     }

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.linphone.database.DbContext;
 import org.linphone.network.models.DSCongTyResponse;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  * Created by QuocVietDang1 on 3/22/2018.
  */
 public class MyCallLogs {
+
     private ArrayList<CallLog> callLogs = new ArrayList<>();
     public static final int MAX_LOG = 100;
     public MyCallLogs() {
@@ -33,18 +35,21 @@ public class MyCallLogs {
         public static final int CUOC_GOI_DEN = 3;
         public static final int MAY_BAN = 4;
         public static final int OFFLINE = 5;
+        private int id;
         String phoneNumber;
         String name;
         long time;
         int status;
         int duration;
+        private String TAG = "MyCallLogs";
 
-        public CallLog(String Name, String phoneNumber, long time, int duration, int status) {
+        public CallLog(int id, String Name, String phoneNumber, long time, int duration, int status) {
             this.phoneNumber = phoneNumber;
             this.name = Name;
             this.time = time;
             this.status = status;
             this.duration = duration;
+            this.id = id;
         }
 
         public CallLog() {
@@ -52,14 +57,23 @@ public class MyCallLogs {
 
         @Override
         public boolean equals(Object obj) {
-            CallLog callLog = (CallLog) obj;
-            if (this.name.equals(((CallLog) obj).getName()) &&
-                    this.getDuration() == ((CallLog) obj).getDuration() &&
-                    this.phoneNumber.equals(((CallLog) obj).getPhoneNumber()) &&
-                    this.status == ((CallLog) obj).getStatus() &&
-                    this.time == ((CallLog) obj).getTime())
-                return true;
+            try {
+                CallLog callLog = (CallLog) obj;
+                if (this.id == callLog.getId()) return true;
+            } catch (Exception e) {
+                Log.d(TAG, "Exception" + e.toString());
+                return false;
+            }
+
             return false;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
         }
 
         public String getName() {
