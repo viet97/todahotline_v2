@@ -28,21 +28,25 @@ import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.mediastream.Log;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.media.Image;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class Digit extends ImageButton implements AddressAware {
 
 	private AddressText mAddress;
+
 	private String TAG="DigitNumber";
 
 	public void setAddressWidget(AddressText address) {
@@ -92,8 +96,12 @@ public class Digit extends ImageButton implements AddressAware {
 		DialKeyListener lListener = new DialKeyListener();
 		setOnClickListener(lListener);
 		setOnTouchListener(lListener);
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		int height = displayMetrics.heightPixels;
+		int width = displayMetrics.widthPixels;
+		this.setPadding(width / 24, width / 24, width / 24, width / 24);
 
-		android.util.Log.d(TAG, "Digit: 92");
 	}
 
 	public Digit(Context context) {

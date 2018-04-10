@@ -599,35 +599,35 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (isLink) {
-            return;
-        }
-        if (currentFragment == firstFragment) {
-            LinphonePreferences.instance().firstLaunchSuccessful();
-            if (getResources().getBoolean(R.bool.assistant_cancel_move_to_back)) {
-                moveTaskToBack(true);
-            } else {
-                LinphonePreferences.instance().firstLaunchSuccessful();
-                startActivity(new Intent().setClass(this, LinphoneActivity.class));
-                finish();
-            }
-        } else if (currentFragment == AssistantFragmentsEnum.LOGIN
-                || currentFragment == AssistantFragmentsEnum.LINPHONE_LOGIN
-                || currentFragment == AssistantFragmentsEnum.CREATE_ACCOUNT
-                || currentFragment == AssistantFragmentsEnum.REMOTE_PROVISIONING) {
-            displayMenu();
-        } else if (currentFragment == AssistantFragmentsEnum.WELCOME) {
-            finish();
-        } else if (currentFragment == AssistantFragmentsEnum.COUNTRY_CHOOSER) {
-            if (lastFragment.equals(AssistantFragmentsEnum.LINPHONE_LOGIN)) {
-                displayLoginLinphone(null, null);
-            } else {
-                displayCreateAccount();
-            }
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (isLink) {
+//            return;
+//        }
+//        if (currentFragment == firstFragment) {
+//            LinphonePreferences.instance().firstLaunchSuccessful();
+//            if (getResources().getBoolean(R.bool.assistant_cancel_move_to_back)) {
+//                moveTaskToBack(true);
+//            } else {
+//                LinphonePreferences.instance().firstLaunchSuccessful();
+//                startActivity(new Intent().setClass(this, LinphoneActivity.class));
+//                finish();
+//            }
+//        } else if (currentFragment == AssistantFragmentsEnum.LOGIN
+//                || currentFragment == AssistantFragmentsEnum.LINPHONE_LOGIN
+//                || currentFragment == AssistantFragmentsEnum.CREATE_ACCOUNT
+//                || currentFragment == AssistantFragmentsEnum.REMOTE_PROVISIONING) {
+//            displayMenu();
+//        } else if (currentFragment == AssistantFragmentsEnum.WELCOME) {
+//            finish();
+//        } else if (currentFragment == AssistantFragmentsEnum.COUNTRY_CHOOSER) {
+//            if (lastFragment.equals(AssistantFragmentsEnum.LINPHONE_LOGIN)) {
+//                displayLoginLinphone(null, null);
+//            } else {
+//                displayCreateAccount();
+//            }
+//        }
+//    }
 
     public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

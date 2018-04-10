@@ -460,8 +460,6 @@ public class DialerFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     mAddress.setText(suggestionDialer.getExt());
-                    String uri = "sip:" + suggestionDialer.getExt() + "@" + LinphonePreferences.instance().getAccountDomain(0);
-                    LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, suggestionDialer.getName(), null);
                 }
             });
 
