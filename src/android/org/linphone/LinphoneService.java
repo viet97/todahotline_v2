@@ -127,7 +127,6 @@ public final class LinphoneService extends Service {
     private int mMsgNotifCount;
     private PendingIntent mNotifContentIntent;
     private String mNotificationTitle;
-    private boolean mDisableRegistrationStatus;
     private LinphoneCoreListenerBase mListener;
     public static int notifcationsPriority = (Version.sdkAboveOrEqual(Version.API16_JELLY_BEAN_41) ? Notification.PRIORITY_MIN : 0);
     private WindowManager mWindowManager;
@@ -413,7 +412,7 @@ public final class LinphoneService extends Service {
             @Override
             public void globalState(LinphoneCore lc, LinphoneCore.GlobalState state, String message) {
                 android.util.Log.d(TAG, "globalState: ");
-                if (!mDisableRegistrationStatus && state == GlobalState.GlobalOn && displayServiceNotification()) {
+                if (state == GlobalState.GlobalOn && displayServiceNotification()) {
 //					sendNotification(IC_LEVEL_ORANGE, R.string.notification_started);
                 }
             }
@@ -426,7 +425,7 @@ public final class LinphoneService extends Service {
 //				}
 
                 android.util.Log.d(TAG, "registrationState: " + LinphonePreferences.instance().getAccountCount());
-                if (!mDisableRegistrationStatus && LinphonePreferences.instance().getAccountCount() > 0) {
+                if (LinphonePreferences.instance().getAccountCount() > 0) {
 //                    if (LinphoneLauncherActivity.isLinphoneActivity) {
                     if (displayServiceNotification() && state == RegistrationState.RegistrationOk && LinphoneManager.getLc().getDefaultProxyConfig() != null && LinphoneManager.getLc().getDefaultProxyConfig().isRegistered()) {
                         android.util.Log.d(TAG, "registrationState: RegistrationOk" + LinphonePreferences.instance().getAccountCount());

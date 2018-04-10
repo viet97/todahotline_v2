@@ -423,6 +423,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 DialerFragment dialerFragment = DialerFragment.instance();
                 dialerSavedState = getFragmentManager().saveFragmentInstanceState(dialerFragment);
             } catch (Exception e) {
+                android.util.Log.d(TAG, "Exception: " + e.toString());
             }
         }
 
@@ -812,6 +813,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         } else if (id == R.id.contacts) {
             hideStatusBar();
             changeCurrentFragment(FragmentsAvailable.CONTACTS_LIST, null);
+            android.util.Log.d(TAG, "Contacts_Selected: 816");
             contacts_selected.setVisibility(View.VISIBLE);
         } else if (id == R.id.dialer) {
             changeCurrentFragment(FragmentsAvailable.DIALER, null);
@@ -859,11 +861,12 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 history_selected.setVisibility(View.VISIBLE);
                 hideStatusBar();
                 break;
-            case CONTACTS_LIST:
             case CONTACT_DETAIL:
                 hideStatusBar();
+                break;
             case CONTACT_EDITOR:
                 hideStatusBar();
+                android.util.Log.d(TAG, "Contacts_Selected: 869");
                 contacts_selected.setVisibility(View.VISIBLE);
                 break;
             case DIALER:
