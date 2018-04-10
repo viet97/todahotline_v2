@@ -944,7 +944,7 @@ public final class LinphoneService extends Service {
         mNotifContentIntent = PendingIntent.getActivity(this, 0, notifIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		/*if (mNotif != null) {
-			mNotif.contentIntent = mNotifContentIntent;
+            mNotif.contentIntent = mNotifContentIntent;
 		}
 		notifyWrapper(NOTIF_ID, mNotif);*/
     }
