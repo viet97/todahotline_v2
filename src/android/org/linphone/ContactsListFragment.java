@@ -32,6 +32,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -94,7 +95,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private LayoutInflater mInflater;
     private ListView contactsList;
     private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
-    private ImageView newContact, edit, selectAll, deselectAll, delete, cancel, backDeleteMode, deleteContact, addContacts;
+    private ImageView newContact, edit, selectAll, deselectAll, delete, cancel, backDeleteMode, deleteContact;
+    private ImageView addContacts;
     private RelativeLayout rlCusContact, rlTodaContact;
     private RelativeLayout rlNoResult, rlContact;
     private SwipeRefreshLayout refreshLayout;
@@ -152,6 +154,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         public void afterTextChanged(final Editable editable) {
 
             searchTodaOrCusContacts(searchField.getText().toString());
+            if (!isDeleteMode) addContacts.setVisibility(View.VISIBLE);
 
         }
     };
@@ -400,8 +403,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 @Override
                 public void onScrollStateChanged(AbsListView absListView, int scrollState) {
                     if (onlyDisplayLinphoneContacts != 0) {
-                        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                            if (!isDeleteMode)
+                        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && listIsAtTop() && !isDeleteMode) {
                                 addContacts.setVisibility(View.VISIBLE);
                         } else {
                             addContacts.setVisibility(View.GONE);
@@ -973,6 +975,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
     public void filtContactsByCheckbox(int status) {
         extStatusCheckBox = status;
+        if (!isDeleteMode) addContacts.setVisibility(View.VISIBLE);
         switch (status) {
             case ALL_EXT:
                 allExt.setChecked(true);

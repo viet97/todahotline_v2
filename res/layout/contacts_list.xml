@@ -254,12 +254,14 @@
                 android:layout_below="@id/delete_all"
                 android:visibility="gone">
 
+
                 <ListView
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
                     android:id="@+id/contactsList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:descendantFocusability="blocksDescendants"
-                    android:dividerHeight="1dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:scrollbars="none" />
@@ -317,9 +319,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:id="@+id/add_contacts"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/addcontact" />
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/addcontacts" />
         </RelativeLayout>
 
 

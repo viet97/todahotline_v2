@@ -55,6 +55,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -136,8 +137,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private boolean isConferenceRunning = false;
 	private LinphoneCoreListenerBase mListener;
 	private DrawerLayout sideMenu;
-
-	private Handler mHandler = new Handler();
+    private Animation anim;
+    private Handler mHandler = new Handler();
 	private Timer mTimer;
 	private TimerTask mTask;
 	private HashMap<String, String> mEncoderTexts;
@@ -741,8 +742,11 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				blinkPauseText();
 				pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
 			} else {
-
-				pauseOrResumeCall((LinphoneCall) v.getTag());
+                // xoa di chu tam dung
+                anim.cancel();
+                anim.reset();
+                tvPause.setVisibility(View.INVISIBLE);
+                pauseOrResumeCall((LinphoneCall) v.getTag());
 			}
 		}
 		else if (id == R.id.hang_up) {
@@ -1915,18 +1919,14 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		tv.setVisibility(View.VISIBLE);
 	}
 	private void blinkPauseText() {
-		Integer colorFrom = Color.RED;
-		Integer colorTo = Color.GREEN;
-		ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-		colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        TextView myText = (TextView) findViewById(R.id.tv_pause);
 
-			@Override
-			public void onAnimationUpdate(ValueAnimator animator) {
-				tvPause.setTextColor((Integer) animator.getAnimatedValue());
-			}
-
-		});
-		colorAnimation.start();
+        anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(1000); //You can manage the blinking time with this parameter
+        anim.setStartOffset(20);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+        myText.startAnimation(anim);
 
 	}
 }

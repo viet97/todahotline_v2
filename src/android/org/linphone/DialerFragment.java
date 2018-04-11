@@ -71,7 +71,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.zip.Inflater;
 
-import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 
 public class DialerFragment extends Fragment {
     private static DialerFragment instance;

@@ -16,7 +16,9 @@
 
     <color name="transparent">#00000000</color>
     <color name="account_inactive">#1874CD</color>
-
+    <color name="colorPrimary">#ffa645</color>
+    <color name="colorPrimaryDark">#3eb5c0</color>
+    <color name="colorAccent">#96c11f</color>
 
     <!--<color name="account_inactive">#FF646464</color>-->
     <color name="account_unregistered">#FFFFC200</color>

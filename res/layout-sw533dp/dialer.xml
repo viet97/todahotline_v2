@@ -59,6 +59,12 @@
 
 	</RelativeLayout>
 
+	<ListView
+		android:id="@+id/lv_suggestion"
+		android:layout_width="match_parent"
+		android:layout_height="200dp">
+
+	</ListView>
 	<org.linphone.ui.Numpad
         android:layout_weight="5"
 		android:id="@+id/numpad"
@@ -100,7 +106,7 @@
 			<org.linphone.ui.CallButton
                 android:layout_centerInParent="true"
 				android:id="@+id/call"
-				android:src="@drawable/call_audio_start"
+				android:src="@drawable/my_dialer_call"
 				android:contentDescription="@string/content_description_call"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
