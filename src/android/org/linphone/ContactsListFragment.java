@@ -1740,7 +1740,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         holder.address.setText(dsDanhBa.get(position).getSodienthoai());
                         holder.organization.setText(dsDanhBa.get(position).getJob());
                     } catch (Exception e) {
-
+                        Log.d(TAG, "Exception: " + e.toString());
                     }
                 } else {
                     try {
@@ -1752,9 +1752,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         holder.name.setText(dsDanhBa.get(position).getTenlienhe());
                         holder.organization.setVisibility(View.VISIBLE);
                         holder.address.setText(dsDanhBa.get(position).getSodienthoai());
-                        holder.organization.setText(dsDanhBa.get(position).getJob());
+                        holder.organization.setVisibility(View.GONE);
                     } catch (Exception e) {
-
+                        Log.d(TAG, "Exception: " + e.toString());
                     }
 
                 }

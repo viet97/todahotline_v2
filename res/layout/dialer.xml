@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
 	android:orientation="vertical">
 
+	<ListView
+		android:dividerHeight="1dp"
+		android:divider="@color/white"
+		android:layout_weight="4"
+		android:id="@+id/lv_suggestion"
+		android:layout_width="match_parent"
+		android:layout_height="0dp">
+
+	</ListView>
+
 	<RelativeLayout
 		android:id="@+id/dialer"
 		android:background="@color/colorH"
@@ -39,6 +49,8 @@
             android:src="@drawable/backspace"/>
 
 		<org.linphone.ui.AddressText
+			android:enabled="false"
+			android:gravity="center_horizontal"
 			android:id="@+id/address"
 			android:textColor="@color/white"
             android:background="@color/transparent"
@@ -59,12 +71,6 @@
 
 	</RelativeLayout>
 
-	<ListView
-		android:id="@+id/lv_suggestion"
-		android:layout_width="match_parent"
-		android:layout_height="120dp">
-
-	</ListView>
 	<org.linphone.ui.Numpad
 
 		android:layout_weight="5"
