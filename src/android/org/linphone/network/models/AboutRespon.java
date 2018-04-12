@@ -15,7 +15,7 @@ public class AboutRespon {
     @SerializedName("data")
     private Data data;
 
-    public boolean getStatus() {
+    public boolean isStatus() {
         return status;
     }
 

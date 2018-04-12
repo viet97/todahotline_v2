@@ -186,8 +186,8 @@ public class AboutFragment extends Fragment implements OnClickListener {
 				public void onResponse(Call<AboutRespon> call, Response<AboutRespon> response) {
 
 					AboutRespon aboutRespon = response.body();
-					if (aboutRespon.getStatus()) {
-                        try {
+					if (aboutRespon.isStatus()) {
+						try {
                             DbContext.getInstance().setAboutRespon(aboutRespon, getActivity());
                             setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
                         } catch (Exception e) {

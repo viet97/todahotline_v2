@@ -41,6 +41,7 @@ import org.linphone.network.UrlNetContext;
 import org.linphone.network.models.DSCongTyResponse;
 import org.linphone.network.models.VoidRespon;
 import org.linphone.tutorials.TutorialLauncherActivity;
+import org.linphone.ultils.ContactUltils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,7 +69,6 @@ public class LinphoneLauncherActivity extends Activity {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		}
 		setContentView(R.layout.launch_screen);
-
 		mHandler = new Handler();
 
 		Intent intent = getIntent();

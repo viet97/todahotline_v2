@@ -14,7 +14,9 @@ import org.linphone.PhoneContact;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by QuocVietDang1 on 3/26/2018.
@@ -67,6 +69,30 @@ public class ContactUltils {
         return phoneNumber;
     }
 
+    public String removeDiacriticalMarks(String string) {
+        return Normalizer.normalize(string, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    }
+
+    public String removeAccents(String s) {
+        try {
+            s = s.toLowerCase(Locale.getDefault());
+            StringBuilder stringBuilder = new StringBuilder(s);
+            for (int i = 0; i < stringBuilder.length(); i++) {
+                if (stringBuilder.charAt(i) == 'đ') {
+                    stringBuilder.setCharAt(i, 'd');
+                }
+            }
+
+            s = stringBuilder.toString();
+            s = removeDiacriticalMarks(s);
+
+            return s;
+        } catch (Exception e) {
+            android.util.Log.d(TAG, "Exception: " + e.toString());
+            return "";
+        }
+    }
     public ArrayList<PhoneContact> getContactsPhone(Context context) {
         ArrayList<PhoneContact> phoneContacts = new ArrayList<>();
         phoneContacts.clear();

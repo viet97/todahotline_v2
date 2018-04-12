@@ -69,6 +69,7 @@ import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
 import org.linphone.network.models.NonTodaContactsResponse;
 import org.linphone.network.models.VoidRespon;
+import org.linphone.ultils.ContactUltils;
 
 import java.lang.reflect.Array;
 import java.net.URLEncoder;
@@ -161,13 +162,20 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
     private void searchTodaOrCusContacts(String s) {
         searchText = s;
+        s = ContactUltils.instance.removeAccents(s);
+
         ArrayList<ContactResponse.DSDanhBa> dsDanhBa = null;
         ArrayList<ContactResponse.DSDanhBa> listSearchDanhBa = new ArrayList<>();
         if (onlyDisplayLinphoneContacts == 1) {
             dsDanhBa = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba();
             for (ContactResponse.DSDanhBa ds : dsDanhBa) {
-                if (ds.getSodienthoai().toLowerCase(Locale.getDefault()).contains(s) || ds.getJob().toLowerCase(Locale.getDefault()).contains(s) || ds.getTenlienhe().toLowerCase(Locale.getDefault()).contains(s) ||
-                        ds.getSodienthoai().toLowerCase(Locale.getDefault()).startsWith(s) || ds.getJob().toLowerCase(Locale.getDefault()).startsWith(s) || ds.getTenlienhe().toLowerCase(Locale.getDefault()).startsWith(s)) {
+                if (
+                        ContactUltils.instance.removeAccents(ds.getSodienthoai()).contains(s) ||
+                                ContactUltils.instance.removeAccents(ds.getJob()).contains(s) ||
+                                ContactUltils.instance.removeAccents(ds.getTenlienhe()).contains(s) ||
+                                ContactUltils.instance.removeAccents(ds.getSodienthoai()).startsWith(s) ||
+                                ContactUltils.instance.removeAccents(ds.getTenlienhe()).startsWith(s) ||
+                                ContactUltils.instance.removeAccents(ds.getJob()).startsWith(s)) {
                     listSearchDanhBa.add(ds);
                 }
             }
@@ -175,9 +183,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         } else if (onlyDisplayLinphoneContacts == 2) {
             dsDanhBa = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba();
             for (ContactResponse.DSDanhBa ds : dsDanhBa) {
-                if (ds.getSodienthoai().toLowerCase(Locale.getDefault()).contains(s) || ds.getTenlienhe().toLowerCase(Locale.getDefault()).contains(s) ||
-                        ds.getSodienthoai().toLowerCase(Locale.getDefault()).startsWith(s) || ds.getTenlienhe().toLowerCase(Locale.getDefault()).startsWith(s)) {
-
+                if (ContactUltils.instance.removeAccents(ds.getSodienthoai()).contains(s) ||
+                        ContactUltils.instance.removeAccents(ds.getTenlienhe()).contains(s) ||
+                        ContactUltils.instance.removeAccents(ds.getSodienthoai()).startsWith(s) ||
+                        ContactUltils.instance.removeAccents(ds.getTenlienhe()).startsWith(s)) {
                     listSearchDanhBa.add(ds);
                 }
             }
@@ -404,7 +413,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 public void onScrollStateChanged(AbsListView absListView, int scrollState) {
                     if (onlyDisplayLinphoneContacts != 0) {
                         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && listIsAtTop() && !isDeleteMode) {
-                                addContacts.setVisibility(View.VISIBLE);
+                            addContacts.setVisibility(View.VISIBLE);
                         } else {
                             addContacts.setVisibility(View.GONE);
                         }
