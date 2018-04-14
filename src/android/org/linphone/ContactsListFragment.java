@@ -580,7 +580,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
                                 Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-
+                        Log.d(TAG, "Exception: " + e.toString());
                     }
                 }
             });

@@ -6,8 +6,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import org.linphone.database.DbContext;
-
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
@@ -35,6 +33,7 @@ public class NetContext {
     private SharedPreferences prefRetrofit;
     private SharedPreferences.Editor prefRetrofitEditor;
     Gson gson = new Gson();
+    private String TAG = "NetContext";
 
     public static NetContext getInstance() {
         return instance;
@@ -44,7 +43,6 @@ public class NetContext {
     private long CONNECT_TIMEOUT = 8;
     private long READ_TIMEOUT = 8;
     private String BASE_URL = "";
-    private static final String TAG = "NetContext";
 
     public String getBASE_URL() {
         return BASE_URL;
@@ -65,15 +63,9 @@ public class NetContext {
     private NetContext() {
     }
 
-    public boolean isReady() {
-        return (retrofit != null);
-    }
-
     public void init(Context context) {
-        int positionSelected = context.getSharedPreferences("loginPrefs", context.MODE_PRIVATE).getInt("server",0);
-        String selectedBaseUrl  = DbContext.getInstance().getDsCongTy(context).getDscongty().get(positionSelected).getBaseURL();
-        Log.d(TAG, "init: "+selectedBaseUrl);
-        setBASE_URL(selectedBaseUrl);
+        prefRetrofit = context.getSharedPreferences(PREF_BASE_URL, Context.MODE_PRIVATE);
+
         try {
             OkHttpClient client = new OkHttpClient
                     .Builder()
@@ -88,11 +80,13 @@ public class NetContext {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         } catch (Exception e) {
-            Log.d(TAG, "init: "+e.toString());
+            Log.d(TAG, "Exception: " + e.toString());
         }
 
+        prefRetrofitEditor = prefRetrofit.edit();
+        prefRetrofitEditor.putString(PREF_BASE_URL, BASE_URL);
+        prefRetrofitEditor.apply();
     }
-
     public long getREAD_TIMEOUT() {
         return READ_TIMEOUT;
     }
@@ -164,7 +158,6 @@ public class NetContext {
 
 
     public <T> T create(Class<T> classz) {
-        Log.d(TAG, "create: "+retrofit);
         return retrofit.create(classz);
     }
 }

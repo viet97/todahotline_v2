@@ -62,11 +62,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-
+                        android:visibility="gone"
                         android:spinnerMode="dropdown"/>
 
                     <EditText
-                        android:visibility="gone"
                         android:textColorHint="@color/gray"
                         android:id="@+id/idct"
                         android:layout_width="match_parent"
@@ -207,7 +206,6 @@
                     android:textColor="@android:color/white" />
 
                 <ImageView
-                    android:visibility="gone"
                     android:id="@+id/config_url"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/btnLogin"
