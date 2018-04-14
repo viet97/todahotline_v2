@@ -409,7 +409,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                             }
                                         }
                                     } catch (Exception e) {
-
+                                        android.util.Log.d(TAG, "Exception: " + e);
                                     }
                                 }
 
@@ -465,8 +465,6 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
             } else if (passveri.trim().equals("")) {
                 focusEditext(edpassveri, this);
             }
-
-
             Toast.makeText(this, "Không được để trống nội dung.",
                     Toast.LENGTH_SHORT).show();
             return false;
