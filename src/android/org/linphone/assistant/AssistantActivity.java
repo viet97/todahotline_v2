@@ -426,7 +426,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                     }
                 });
             } catch (Exception e) {
-                android.util.Log.d(TAG, "initButtonChangePass: " + e);
+                android.util.Log.d(TAG, "Exception: " + e);
             }
         } catch (Exception e) {
             android.util.Log.d(TAG, "Exception: " + e);
@@ -448,8 +448,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
             URL = "/AppDoiMatKhau.aspx?idnhanvien=" + DbContext.getInstance().getLoginRespon(this).getData().getIdnhanvien()
                     + "&matkhaucu=" + getMd5Hash(passold)
                     + "&matkhaumoi=" + getMd5Hash(pass);
-            if (!NetContext.getInstance().getBASE_URL().equals("http://" + DEFAULT_BASE + "/"))
-                URL = "/todahotline" + URL;
+
         } catch (Exception e) {
             android.util.Log.d(TAG, "Exception: " + e);
         }

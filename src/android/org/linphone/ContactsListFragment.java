@@ -1231,6 +1231,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
         changeContactsToggle();
         invalidate();
+        addContacts.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -1299,6 +1300,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 if (!searchText.equals("")) {
                                     searchTodaOrCusContacts(searchField.getText().toString());
                                 }
+
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception: " + e.toString());
                             }
@@ -1308,6 +1310,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception: " + e.toString());
                             }
+                            addContacts.setVisibility(View.VISIBLE);
                             changeAdapter();
                         }
                     }
