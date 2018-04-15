@@ -340,7 +340,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                     + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
 
                                             final Service service = NetContext.instance.create(Service.class);
-                                            dialogLogin = ProgressDialog.show(AssistantActivity.this, "", "Đăng xuất...", true, false);
+                                            dialogLogin = ProgressDialog.show(AssistantActivity.this, "", "Đổi mật khẩu ...", true, false);
 
                                             service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
                                                 @Override
@@ -377,6 +377,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                         dialogLogin.cancel();
                                                         Toast.makeText(AssistantActivity.this, "Đổi mật khẩu thành công , bạn sẽ bị đăng xuất khỏi tài khoản.", Toast.LENGTH_SHORT).show();
 
+                                                        stopService(new Intent(Intent.ACTION_MAIN).setClass(AssistantActivity.this, LinphoneService.class));
                                                         Intent intent = new Intent(AssistantActivity.this, LoginActivity.class);
 //                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);

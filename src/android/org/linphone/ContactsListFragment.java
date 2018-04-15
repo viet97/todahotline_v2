@@ -33,6 +33,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.Space;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -93,6 +94,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private static final int ALL_EXT = 1;
     private static final int ONL_EXT = 2;
     private static final int OFF_EXT = 3;
+    private static final int LOCAL_CONTACT = 0;
+    private static final int TODA_CONTACT = 1;
+    private static final int CUS_CONTACT = 2;
     private LayoutInflater mInflater;
     private ListView contactsList;
     private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
@@ -102,7 +106,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     private RelativeLayout rlNoResult, rlContact;
     private SwipeRefreshLayout refreshLayout;
     private boolean isEditMode, isSearchMode;
-
+    private ArrayList<ContactResponse.DSDanhBa> dsDanhBas = new ArrayList<>();
     public static int onlyDisplayLinphoneContacts;
     private View allContactsSelected, linphoneContactsSelected, cusContactSelected;
     private LinearLayout editList, topbar;
@@ -195,9 +199,46 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         ContactResponse currentSearchResponse = DbContext.getInstance().getSearchContactResponse(getActivity());
         currentSearchResponse.setDsdanhba(listSearchDanhBa);
         DbContext.getInstance().setSearchContactResponse(currentSearchResponse, getActivity());
+        reloadListContacts();
         changeAdapter();
     }
 
+    private void reloadListContacts() {
+        Context context = getActivity();
+        dsDanhBas.clear();
+        ArrayList<ContactResponse.DSDanhBa> danhsach;
+        if (onlyDisplayLinphoneContacts != LOCAL_CONTACT) {
+            if (!searchField.getText().toString().equals("")) {
+                danhsach = DbContext.getInstance().getSearchContactResponse(context).getDsdanhba();
+                if (onlyDisplayLinphoneContacts == TODA_CONTACT) {
+                    if (extStatusCheckBox == ONL_EXT) {
+                        for (ContactResponse.DSDanhBa ds : danhsach) {
+                            if (ds.isStatus()) dsDanhBas.add(ds);
+                        }
+                    } else if (extStatusCheckBox == OFF_EXT) {
+                        for (ContactResponse.DSDanhBa ds : danhsach) {
+                            if (!ds.isStatus()) dsDanhBas.add(ds);
+                        }
+                    } else dsDanhBas = danhsach;
+                } else dsDanhBas = danhsach;
+            } else if (onlyDisplayLinphoneContacts == TODA_CONTACT) {
+                danhsach = DbContext.getInstance().getContactResponse(context).getDsdanhba();
+                if (extStatusCheckBox == ONL_EXT) {
+                    for (ContactResponse.DSDanhBa ds : danhsach) {
+                        if (ds.isStatus()) dsDanhBas.add(ds);
+                    }
+                } else if (extStatusCheckBox == OFF_EXT) {
+                    for (ContactResponse.DSDanhBa ds : danhsach) {
+                        if (!ds.isStatus()) dsDanhBas.add(ds);
+                    }
+                } else dsDanhBas = danhsach;
+            } else if (onlyDisplayLinphoneContacts == CUS_CONTACT) {
+                danhsach = DbContext.getInstance().getCusContactResponse(context).getDsdanhba();
+                dsDanhBas = danhsach;
+            }
+
+        }
+    }
     private boolean isLoaded = false;
 
 
@@ -365,21 +406,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     } else {
                         deleteContact.setVisibility(View.VISIBLE);
                         listIdDelete.clear();
-                        ArrayList<ContactResponse.DSDanhBa> listContact;
-                        if (onlyDisplayLinphoneContacts == 1) {
-                            if (searchText.equals(""))
-                                listContact = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba();
-                            else
-                                listContact = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba();
-                        } else {
-                            if (searchText.equals(""))
-                                listContact = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba();
-                            else
-                                listContact = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba();
-                        }
-
-                        for (ContactResponse.DSDanhBa danhba : listContact) {
-
+                        for (ContactResponse.DSDanhBa danhba : dsDanhBas) {
                             listIdDelete.add(danhba.getIddanhba());
                         }
                     }
@@ -541,6 +568,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             }
                             deleteAll.setChecked(false);
                             listIdDelete.clear();
+                            reloadListContacts();
                             changeAdapter();
                         } else {
 
@@ -550,7 +578,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                         "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
                                         Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
-
+                                Log.d(TAG, "Exception: " + e.toString());
                             }
                         }
                     } else {
@@ -608,52 +636,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
     }
 
-    public void getContactToda() {
-        try {
-
-            Service contactService = NetContext.instance.create(Service.class);
-            String urlContact;
-            if (onlyDisplayLinphoneContacts == 1)
-                urlContact = "AppDanhBa_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
-            else
-                urlContact = "AppDanhBaKhachHang_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdct()
-                        + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien() + "&lastID=" + lastID + "&timkiem=" + searchText;//lay tat ca danh ba ra
-
-            contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
-                @Override
-                public void onResponse(Call<ContactResponse> call, Response<ContactResponse> response) {
-                    ContactResponse contactResponse = new ContactResponse();
-                    contactResponse = response.body();
-                    if (contactResponse.getStatus()) {
-                        DbContext.getInstance().setContactResponse(contactResponse, getActivity());
-                        changeAdapter();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ContactResponse> call, Throwable t) {
-                    try {
-                        dialogSearch.cancel();
-
-                    } catch (Exception e) {
-
-                    }
-
-                    try {
-                        Toast.makeText(getActivity(),
-                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
-                                Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-
-                    }
-                }
-
-            });
-        } catch (Exception e) {
-            android.util.Log.d(TAG, "Exception: " + e);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -742,13 +724,15 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             allExt.setVisibility(View.GONE);
             onlExt.setVisibility(View.GONE);
             offExt.setVisibility(View.GONE);
-            onlyDisplayLinphoneContacts = 0;
+            onlyDisplayLinphoneContacts = LOCAL_CONTACT;
+
             lastID = 0;
             isLoaded = false;
             addContacts.setVisibility(View.GONE);
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
             searchField.setText("");
+            reloadListContacts();
             allContactsSelected.setVisibility(View.VISIBLE);
             allContacts.setEnabled(false);
             linphoneContacts.setTextColor(Color.parseColor("#ffffff"));
@@ -765,12 +749,14 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             offExt.setVisibility(View.VISIBLE);
             filtContactsByCheckbox(extStatusCheckBox);
             addContacts.setVisibility(View.VISIBLE);
-            onlyDisplayLinphoneContacts = 1;
+            onlyDisplayLinphoneContacts = TODA_CONTACT;
             lastID = 0;
             isLoaded = false;
             searchField.clearTextChangedListeners();
             searchField.setText("");
             searchText = "";
+            reloadListContacts();
+
             searchField.addTextChangedListener(twToda);
             changeAdapter();
 //            try {
@@ -862,13 +848,15 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             onlExt.setVisibility(View.GONE);
             offExt.setVisibility(View.GONE);
             addContacts.setVisibility(View.VISIBLE);
-            onlyDisplayLinphoneContacts = 2;
+            onlyDisplayLinphoneContacts = CUS_CONTACT;
+
             lastID = 0;
             isLoaded = false;
             searchText = "";
             searchField.clearTextChangedListeners();
             searchField.setText("");
             searchField.addTextChangedListener(twToda);
+            reloadListContacts();
             changeAdapter();
 //            try {
 //                dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tải...", true, false);
@@ -1011,6 +999,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 offExt.setEnabled(false);
                 break;
         }
+        reloadListContacts();
         changeAdapter();
 
     }
@@ -1034,7 +1023,6 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         contactsList.setAdapter(null);
         contactsList.setAdapter(adapter);
         ((ContactsListAdapter) contactsList.getAdapter()).notifyDataSetChanged();
-        Log.d(TAG, "changeAdapter: " + ((ContactsListAdapter) contactsList.getAdapter()).getCount());
         if (((ContactsListAdapter) contactsList.getAdapter()).getCount() == 0) {
             rlNoResult.setVisibility(View.VISIBLE);
             rlContact.setVisibility(View.GONE);
@@ -1311,6 +1299,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 Log.d(TAG, "Exception: " + e.toString());
                             }
                             addContacts.setVisibility(View.VISIBLE);
+                            reloadListContacts();
                             changeAdapter();
                         }
                     }
@@ -1423,38 +1412,12 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         public int getCount() {
             switch (ContactsListFragment.onlyDisplayLinphoneContacts) {
-                case 0:
-                    Log.d(TAG, "getCount: " + contacts.size());
+                case LOCAL_CONTACT:
                     return contacts.size();
 
-                case 1:
-                    if (searchField.length() == 0) {
-                        try {
-                            return DbContext.getInstance().getContactResponse(context).getDsdanhba().size();
-                        } catch (Exception e) {
-                            return 0;
-                        }
-                    } else {
-                        try {
-                            return DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().size();
-                        } catch (Exception e) {
-                            return 0;
-                        }
-                    }
                 default:
-                    if (searchField.length() == 0) {
-                        try {
-                            return DbContext.getInstance().getCusContactResponse(context).getDsdanhba().size();
-                        } catch (Exception e) {
-                            return 0;
-                        }
-                    } else {
-                        try {
-                            return DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().size();
-                        } catch (Exception e) {
-                            return 0;
-                        }
-                    }
+                    return dsDanhBas.size();
+
 
             }
 
@@ -1477,45 +1440,23 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         public View getView(final int position, View convertView, ViewGroup parent) {
             View view = null;
             ContactResponse.DSDanhBa danhBa = null;
-            if (onlyDisplayLinphoneContacts != 0) {
-                if (searchText.equals("")) {
-                    if (onlyDisplayLinphoneContacts == 1)
-                        danhBa = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
-                    if (onlyDisplayLinphoneContacts == 2)
-                        danhBa = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position);
-                } else {
-                    danhBa = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
-                }
+            if (onlyDisplayLinphoneContacts != LOCAL_CONTACT) {
+                danhBa = dsDanhBas.get(position);
             }
-            Log.d(TAG, "onCheckedChanged: " + listIdDelete.toString());
             final LinphoneContact contact = (LinphoneContact) getItem(position);
 //            if (contact == null) return null;
             ViewHolder holder = null;
-            if (onlyDisplayLinphoneContacts == 1 && !isDeleteMode) {
-                switch (extStatusCheckBox) {
-                    case ONL_EXT:
-                        if (!danhBa.isStatus())
-                            return mInflater.inflate(R.layout.null_item, parent, false);
-                        break;
-                    case OFF_EXT:
-                        if (danhBa.isStatus())
-                            return mInflater.inflate(R.layout.null_item, parent, false);
-                        break;
-                }
-            }
+
             if (convertView != null) {
                 view = convertView;
                 holder = (ViewHolder) view.getTag();
             } else {
-
                 view = mInflater.inflate(R.layout.contact_cell, parent, false);
                 holder = new ViewHolder(view);
                 view.setTag(holder);
             }
             if (view.getId() == R.id.layout) {
-
                 // giu nguyen trang thai check box moi lan adapter thay doi
-                Log.d(TAG, "cbxDelete: " + holder.cbxDelete);
                 if (onlyDisplayLinphoneContacts != 0) {
                     if (listIdDelete.indexOf(danhBa.getIddanhba()) != -1) {
                         Log.d(TAG, "getIddanhba: " + listIdDelete.toString());
@@ -1564,20 +1505,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     public void onClick(View view) {
                         Log.d(TAG, "onCheckedChanged: ");
                         int iddanhba = 0;
-                        if (searchText.equals("")) {
-                            if (onlyDisplayLinphoneContacts == 1)
-                                iddanhba = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
-                            if (onlyDisplayLinphoneContacts == 2)
-                                iddanhba = DbContext.getInstance().getCusContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
-
-                        } else {
-                            iddanhba = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position).getIddanhba();
-                        }
+                        iddanhba = dsDanhBas.get(position).getIddanhba();
                         if (finalHolder.cbxDelete.isChecked()) {
                             finalHolder.cbxDelete.setChecked(true);
                             listIdDelete.add(iddanhba);
                             Log.d(TAG, "onCheckedChanged: " + listIdDelete.toString());
-                            notifyDataSetChanged();
                         } else {
                             finalHolder.cbxDelete.setChecked(false);
                             listIdDelete.remove(listIdDelete.indexOf(iddanhba));
@@ -1654,10 +1586,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             } else if (onlyDisplayLinphoneContacts == 1) {
                                 try {
                                     ContactResponse.DSDanhBa to;
-                                    if (searchText.equals(""))
-                                        to = DbContext.getInstance().getContactResponse(getActivity()).getDsdanhba().get(position);
-                                    else
-                                        to = DbContext.getInstance().getSearchContactResponse(getActivity()).getDsdanhba().get(position);
+                                    to = dsDanhBas.get(position);
                                     String uri = "sip:" + to.getSodienthoai() + "@" + LinphonePreferences.instance().getAccountDomain(0);
                                     LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, to.getTenlienhe(), null);
                                 } catch (Exception e) {
@@ -1731,40 +1660,26 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     try {
                         Log.d(TAG, "getViewonlyDisplayLinphoneContacts: " + onlyDisplayLinphoneContacts);
                         if (DbContext.getInstance().getLoginRespon(view.getContext()).getData().getChophepxemonoffext().equals("true")) {
-                            ContactResponse.DSDanhBa danhba;
-                            if (searchText.equals(""))
-                                danhba = DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba().get(position);
-                            else
-                                danhba = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba().get(position);
-                            if (danhba.isStatus()) {
+                            if (danhBa.isStatus()) {
                                 holder.avatar.setImageResource(R.drawable.online_info_icon_medium);
                             } else {
                                 holder.avatar.setImageResource(R.drawable.info_icon_medium);
                             }
                         }
-                        ArrayList<ContactResponse.DSDanhBa> dsDanhBa;
-                        if (searchField.length() == 0)
-                            dsDanhBa = DbContext.getInstance().getContactResponse(view.getContext()).getDsdanhba();
-                        else
-                            dsDanhBa = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba();
-                        holder.name.setText(dsDanhBa.get(position).getTenlienhe());
+                        holder.name.setText(dsDanhBas.get(position).getTenlienhe());
                         holder.organization.setVisibility(View.VISIBLE);
-                        holder.address.setText(dsDanhBa.get(position).getSodienthoai());
-                        holder.organization.setText(dsDanhBa.get(position).getJob());
+                        holder.address.setText(dsDanhBas.get(position).getSodienthoai());
+                        holder.organization.setText(dsDanhBas.get(position).getJob());
                     } catch (Exception e) {
                         Log.d(TAG, "Exception: " + e.toString());
                     }
                 } else {
                     try {
-                        ArrayList<ContactResponse.DSDanhBa> dsDanhBa;
-                        if (searchField.length() == 0)
-                            dsDanhBa = DbContext.getInstance().getCusContactResponse(view.getContext()).getDsdanhba();
-                        else
-                            dsDanhBa = DbContext.getInstance().getSearchContactResponse(view.getContext()).getDsdanhba();
-                        holder.name.setText(dsDanhBa.get(position).getTenlienhe());
-                        holder.organization.setVisibility(View.VISIBLE);
-                        holder.address.setText(dsDanhBa.get(position).getSodienthoai());
+                        Log.d(TAG, "getViewonlyDisplayLinphoneContacts: " + onlyDisplayLinphoneContacts);
+                        holder.name.setText(dsDanhBas.get(position).getTenlienhe());
                         holder.organization.setVisibility(View.GONE);
+                        holder.address.setText(dsDanhBas.get(position).getSodienthoai());
+                        holder.organization.setText(dsDanhBas.get(position).getJob());
                     } catch (Exception e) {
                         Log.d(TAG, "Exception: " + e.toString());
                     }
@@ -1781,9 +1696,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             fullName = contact.getFullName();
                         else
                             try {
-                                fullName = DbContext.getInstance().getContactResponse(context).getDsdanhba().get(position).getTenlienhe();
+                                fullName = dsDanhBas.get(position).getTenlienhe();
                             } catch (Exception e) {
-
+                                Log.d(TAG, "Exception: " + e.toString());
                             }
                         if (fullName != null && !fullName.isEmpty()) {
                             holder.separatorText.setVisibility(View.GONE);

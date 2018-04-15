@@ -23,6 +23,7 @@ import android.widget.Toast;
 import org.linphone.assistant.AssistantActivity;
 import org.linphone.database.DbContext;
 import org.linphone.myactivity.InfoActivityMain;
+import org.linphone.myactivity.LoginActivity;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.AboutRespon;
@@ -329,13 +330,13 @@ public class Profile extends Fragment {
                         databasePref.clear();
                         databasePref.commit();
                         dialogLogin.cancel();
-//					stopService(new Intent(Intent.ACTION_MAIN).setClass(LinphoneActivity.this, LinphoneService.class));
-//					Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
+                        getActivity().stopService(new Intent(Intent.ACTION_MAIN).setClass(getActivity(), LinphoneService.class));
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
 //					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//					startActivity(intent);
-                        getActivity().finish();
+                        startActivity(intent);
+//                        getActivity().finish();
                     } catch (Exception e) {
-
+                        Log.d(TAG, "Exception: " + e.toString());
                     }
                 }
             }
@@ -345,7 +346,7 @@ public class Profile extends Fragment {
                 try {
                     dialogLogin.cancel();
                 } catch (Exception e) {
-
+                    Log.d(TAG, "Exception: " + e.toString());
                 }
                 Toast.makeText(getActivity(),
                         "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
