@@ -428,14 +428,19 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                                 if (respon.getStatus()) {
                                     NonTodaContactsResponse nonTodaContactsResponse = DbContext.getInstance().getNonTodaContactsResponse(NonTodaContacts.this);
                                     ContactResponse currentContact = DbContext.getInstance().getContactResponse(NonTodaContacts.this);
-                                    ArrayList<ContactResponse.DSDanhBa> dsDanhBas = currentContact.getDsdanhba();
-                                    for (NonTodaContactsResponse.DSDanhBaNonToda ds : new ArrayList<NonTodaContactsResponse.DSDanhBaNonToda>(listAddContacts)) {
-                                        nonTodaContactsResponse.getDsdanhba().remove(ds);
-                                        itemContactName.put(ds.getSodienthoai(), ds.getTennhanvien());
+                                    for (NonTodaContactsResponse.DSDanhBaNonToda ds : new ArrayList<>(nonTodaContactsResponse.getDsdanhba())) {
+                                        if (listIdAddContacts.indexOf(ds.getIdnhanvien()) != -1) {
+                                            nonTodaContactsResponse.getDsdanhba().remove(ds);
+                                            itemContactName.put(ds.getSodienthoai(), ds.getTennhanvien());
+                                        }
+                                        Log.d(TAG, "removeContacts: " + nonTodaContactsResponse.getDsdanhba().toString());
 
                                     }
+                                    Log.d(TAG, "CheckListContacts: " + nonTodaContactsResponse.getDsdanhba().toString());
+
                                     DbContext.getInstance().setNonTodaContactsResponse(nonTodaContactsResponse, NonTodaContacts.this);
                                     DbContext.getInstance().setListContactTodaName(itemContactName, NonTodaContacts.this);
+                                    Log.d(TAG, "CheckListContacts: " + DbContext.getInstance().getListContactTodaName(NonTodaContacts.this).toString());
                                     //add vao danh ba chinh
 
                                     //xoa ca du lieu trong data tim kiem

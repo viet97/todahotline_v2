@@ -79,7 +79,6 @@ public class LoginActivity extends Activity {
     AlertDialog.Builder loginError;
     private static SharedPreferences accountSelected, autoLogin, config, loginPreferences, listContactTodaPreferences;
     private SharedPreferences.Editor internalIpEditor, autoLoginEditor, configEditor, loginEditor, listContactTodaEditor;
-    private final String sharedPrefsFile = "vn.lachongmedia.tongdai_preferences";
     public static final String PREF_URLCONFIG = "urlconfig";
     public boolean isShowPassWord = false;
     private ProgressDialog dialogLogin;
