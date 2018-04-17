@@ -471,7 +471,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             });
             allContacts.callOnClick();
         } catch (Exception e) {
-            Log.d(TAG, "onCreateView: " + e);
+            Log.d(TAG, "Exception: " + e.toString());
         }
 //        changeAdapter();
         return view;
@@ -484,13 +484,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             try {
                 dialogRemove = ProgressDialog.show(getActivity(), "", "Đang xóa...", true, false);
             } catch (Exception e) {
-
+                Log.d(TAG, "Exception: " + e.toString());
             }
             String arrayContact = listIdDelete.toString();
             try {
                 arrayContact = URLEncoder.encode(arrayContact);
             } catch (Exception e) {
-
+                Log.d(TAG, "Exception: " + e.toString());
             }
             String deleteContactURL = "";
             if (onlyDisplayLinphoneContacts == 1) {
@@ -1219,7 +1219,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
         }
         changeContactsToggle();
         invalidate();
-        addContacts.setVisibility(View.VISIBLE);
+        if (onlyDisplayLinphoneContacts != 0) addContacts.setVisibility(View.VISIBLE);
     }
 
     @Override

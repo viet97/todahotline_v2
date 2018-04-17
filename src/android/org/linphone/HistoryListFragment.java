@@ -114,9 +114,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
         mLogs.clear();
         ArrayList<MyCallLogs.CallLog> searchmLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
         for (MyCallLogs.CallLog callLog : searchmLogs) {
-            if (ContactUltils.instance.removeAccents(callLog.getPhoneNumber()).contains(s) ||
-                    ContactUltils.instance.removeAccents(callLog.getName()).contains(s) ||
-                    ContactUltils.instance.removeAccents(callLog.getPhoneNumber()).startsWith(s) ||
+            if (ContactUltils.instance.removeAccents(callLog.getName()).contains(s) ||
                     ContactUltils.instance.removeAccents(callLog.getName()).startsWith(s)) {
                 mLogs.add(callLog);
             }

@@ -113,8 +113,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private ImageView switchCamera;
 	private TextView missedChats, tvPause;
 	private RelativeLayout mActiveCallHeader, sideMenuContent, avatar_layout;
-	private ImageView pause, hangUp, dialer, video, micro, speaker, options, addCall, transfer, conference, conferenceStatus, contactPicture;
-	private ImageView audioRoute, routeSpeaker, routeEarpiece, routeBluetooth, menu, chat;
+    public ImageView pause, hangUp, dialer, video, micro, speaker, options, addCall, transfer, conference, conferenceStatus, contactPicture;
+    private ImageView audioRoute, routeSpeaker, routeEarpiece, routeBluetooth, menu, chat;
 	private LinearLayout mNoCurrentCall, callInfo, mCallPaused;
 	private AddressText addressText;
 	private ProgressBar videoProgress;
@@ -739,13 +739,11 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		else if (id == R.id.pause) {
 
 			if (LinphoneManager.getLc().getCurrentCall() != null) {
-				blinkPauseText();
+
 				pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
 			} else {
                 // xoa di chu tam dung
-                anim.cancel();
-                anim.reset();
-                tvPause.setVisibility(View.INVISIBLE);
+
                 pauseOrResumeCall((LinphoneCall) v.getTag());
 			}
 		}
@@ -997,9 +995,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	}
 
 	public void pauseOrResumeCall(LinphoneCall call) {
-		android.util.Log.d(TAG, "pauseOrResumeCall: " + call);
+        // them chu tam  dung
+        blinkPauseText();
+        android.util.Log.d(TAG, "pauseOrResumeCall: " + call);
 		LinphoneCore lc = LinphoneManager.getLc();
 		if (call != null && LinphoneManager.getLc().getCurrentCall() == call) {
+
 			lc.pauseCall(call);
 			if (isVideoEnabled(LinphoneManager.getLc().getCurrentCall())) {
 				isVideoCallPaused = true;
@@ -1013,7 +1014,10 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				if (isVideoCallPaused) {
 					isVideoCallPaused = false;
 				}
-				pause.setImageResource(R.drawable.my_pause);
+                anim.cancel();
+                anim.reset();
+                tvPause.setVisibility(View.INVISIBLE);
+                pause.setImageResource(R.drawable.my_pause);
 			}
 		}
 	}
@@ -1472,7 +1476,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		callState.setOnClickListener(this);
 
 		if (call.getState() == State.Paused || call.getState() == State.PausedByRemote || call.getState() == State.Pausing) {
-			callState.setImageResource(R.drawable.pausepts);
+            android.util.Log.d(TAG, "displayCallStatusIconAndReturnCallPaused: " + call.getState());
+            callState.setImageResource(R.drawable.pausepts);
 			isCallPaused = true;
 			isInConference = false;
 		} else if (call.getState() == State.OutgoingInit || call.getState() == State.OutgoingProgress || call.getState() == State.OutgoingRinging) {
@@ -1918,7 +1923,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		tv.startAnimation(a);
 		tv.setVisibility(View.VISIBLE);
 	}
-	private void blinkPauseText() {
+
+    public void blinkPauseText() {
         TextView myText = (TextView) findViewById(R.id.tv_pause);
 
         anim = new AlphaAnimation(0.0f, 1.0f);
