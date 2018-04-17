@@ -249,7 +249,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
             networkStateReceiver.addListener(this);
             this.registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
         }catch (Exception e){
-
+            android.util.Log.d(TAG, "Exception: " + e.toString());
         }
         // Only one call ringing at a time is allowed
         if (LinphoneManager.getLcIfManagerNotDestroyedOrNull() != null) {

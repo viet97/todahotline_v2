@@ -38,6 +38,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -128,8 +129,8 @@ public class Digit extends ImageButton implements AddressAware {
 			}
 			return true;
 		}
-
 		public void onClick(View v) {
+
 			if (mPlayDtmf) {
 				if (!linphoneServiceReady()) return;
 				LinphoneCore lc = LinphoneManager.getLc();
@@ -190,6 +191,12 @@ public class Digit extends ImageButton implements AddressAware {
 		}
 
 		public boolean onTouch(View v, MotionEvent event) {
+			// them animation khi click vao ban phim
+			android.util.Log.d(TAG, "onTouch: " + event.getAction());
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.img_click));
+			}
+
 			if (!mPlayDtmf) return false;
 			if (!linphoneServiceReady()) return true;
 
