@@ -111,7 +111,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private Handler mControlsHandler = new Handler();
 	private Runnable mControls;
 	private ImageView switchCamera;
-	private TextView missedChats, tvPause;
+	public TextView missedChats, tvPause;
 	private RelativeLayout mActiveCallHeader, sideMenuContent, avatar_layout;
     public ImageView pause, hangUp, dialer, video, micro, speaker, options, addCall, transfer, conference, conferenceStatus, contactPicture;
     private ImageView audioRoute, routeSpeaker, routeEarpiece, routeBluetooth, menu, chat;
@@ -137,8 +137,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private boolean isConferenceRunning = false;
 	private LinphoneCoreListenerBase mListener;
 	private DrawerLayout sideMenu;
-    private Animation anim;
-    private Handler mHandler = new Handler();
+	public Animation anim;
+	private Handler mHandler = new Handler();
 	private Timer mTimer;
 	private TimerTask mTask;
 	private HashMap<String, String> mEncoderTexts;

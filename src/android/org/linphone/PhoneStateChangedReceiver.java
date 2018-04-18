@@ -23,28 +23,49 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.*;
+
+import org.linphone.core.LinphoneCall;
 
 /**
  * Pause current SIP calls when GSM phone rings or is active.
  */
 public class PhoneStateChangedReceiver extends BroadcastReceiver {
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		final String extraState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+    private String TAG = "PhoneStateReceiver";
 
-		if (!LinphoneManager.isInstanciated())
-			return;
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        final String extraState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
-		if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(extraState) || TelephonyManager.EXTRA_STATE_RINGING.equals(extraState)) {
-			LinphoneManager.getInstance().setCallGsmON(true);
+        if (!LinphoneManager.isInstanciated())
+            return;
 
-            if (LinphoneManager.getLc().getCurrentCall() != null) {
-                CallActivity.instance().pause.setTag(LinphoneManager.getLc().getCurrentCall());
-                CallActivity.instance().blinkPauseText();
+        if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(extraState) || TelephonyManager.EXTRA_STATE_RINGING.equals(extraState)) {
+            LinphoneManager.getInstance().setCallGsmON(true);
+            Log.d(TAG, "onReceive: 43");
+            try {
+                if (LinphoneManager.getLc().getCurrentCall() != null) {
+                    CallActivity.instance().pause.setTag(LinphoneManager.getLc().getCurrentCall());
+                    CallActivity.instance().blinkPauseText();
+                }
+            } catch (Exception e) {
+                Log.d(TAG, "Exception: " + e.toString());
             }
             LinphoneManager.getLc().pauseAllCalls();
         } else if (TelephonyManager.EXTRA_STATE_IDLE.equals(extraState)) {
-			LinphoneManager.getInstance().setCallGsmON(false);
+            Log.d(TAG, "onReceive: 50");
+            try {
+
+                LinphoneManager.getLc().resumeCall((LinphoneCall) CallActivity.instance().pause.getTag());
+                CallActivity.instance().anim.cancel();
+                CallActivity.instance().anim.reset();
+                CallActivity.instance().tvPause.setVisibility(android.view.View.INVISIBLE);
+                CallActivity.instance().pause.setImageResource(R.drawable.my_pause);
+            } catch (Exception e) {
+                Log.d(TAG, "Exception: " + e.toString());
+            }
+            LinphoneManager.getInstance().setCallGsmON(false);
         }
-	}
+    }
 }
