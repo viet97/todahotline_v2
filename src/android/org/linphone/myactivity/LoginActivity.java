@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import org.linphone.LinphoneActivity;
@@ -612,6 +613,7 @@ public class LoginActivity extends Activity {
         android.util.Log.d(TAG, "onDestroy: ");
 
         try {
+
             stopService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
 //            ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
 //            am.killBackgroundProcesses(getString(R.string.sync_account_type));
@@ -623,8 +625,8 @@ public class LoginActivity extends Activity {
             android.util.Log.d(TAG, "Exception: " + e.toString());
         }
 
-        Intent startService = new Intent("com.example.helloandroid.alarms");
-        sendBroadcast(startService);
+//        Intent startService = new Intent("com.example.helloandroid.alarms");
+//        sendBroadcast(startService);
     }
 
     public void saveCreatedAccount(String username, String userid, String password, String displayname, String ha1, String prefix, String domain, LinphoneAddress.TransportType transport) {

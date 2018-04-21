@@ -93,6 +93,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -374,6 +376,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                         SharedPreferences.Editor databasePref = getSharedPreferences(Pref_String_DB, MODE_PRIVATE).edit();
                                                         databasePref.clear();
                                                         databasePref.commit();
+                                                        FirebaseMessaging.getInstance().unsubscribeFromTopic("TodaPhone");
                                                         dialogLogin.cancel();
                                                         Toast.makeText(AssistantActivity.this, "Đổi mật khẩu thành công , bạn sẽ bị đăng xuất khỏi tài khoản.", Toast.LENGTH_SHORT).show();
 

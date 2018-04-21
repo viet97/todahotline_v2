@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import static android.content.Intent.ACTION_MAIN;
 import static java.lang.Thread.sleep;
@@ -18,7 +19,7 @@ public class StartServiceReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive: "+LinphoneService.isReady());
+        Toast.makeText(context, "2312321", Toast.LENGTH_SHORT).show();
 
         if (!LinphoneService.isReady()) {
             context.startService(new Intent(ACTION_MAIN).setClass(context, LinphoneService.class));

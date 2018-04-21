@@ -19,6 +19,7 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
     private final String TAG = "FirebaseDataReceiver";
 
     public void onReceive(Context context, Intent intent) {
+        Log.d(TAG, "onReceive: ");
         if (!LinphoneService.isReady()) {
             context.startService(new Intent(ACTION_MAIN).setClass(context, LinphoneService.class));
         }

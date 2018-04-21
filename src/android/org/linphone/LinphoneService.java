@@ -92,7 +92,7 @@ public final class LinphoneService extends Service {
 
     private static LinphoneService instance;
 
-    private final static int NOTIF_ID = 1;
+    public final static int NOTIF_ID = 1;
     private final static int INCALL_NOTIF_ID = 2;
     private final static int MESSAGE_NOTIF_ID = 3;
     private final static int CUSTOM_NOTIF_ID = 4;
@@ -832,6 +832,7 @@ public final class LinphoneService extends Service {
         try {
             bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         } catch (Exception e) {
+            android.util.Log.d(TAG, "Exception: " + e.toString());
         }
 
 

@@ -1978,6 +1978,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                     databasePref.clear();
                     databasePref.commit();
                     dialogLogin.cancel();
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("TodaPhone");
                     stopService(new Intent(Intent.ACTION_MAIN).setClass(LinphoneActivity.this, LinphoneService.class));
                     Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
 //                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
