@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.*;
+import android.view.View;
 
 import org.linphone.core.LinphoneCall;
 
@@ -48,6 +49,7 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
                 if (LinphoneManager.getLc().getCurrentCall() != null) {
                     CallActivity.instance().pause.setTag(LinphoneManager.getLc().getCurrentCall());
                     CallActivity.instance().blinkPauseText();
+                    CallActivity.instance().llSignal.setVisibility(View.GONE);
                 }
             } catch (Exception e) {
                 Log.d(TAG, "Exception: " + e.toString());
@@ -56,11 +58,11 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
         } else if (TelephonyManager.EXTRA_STATE_IDLE.equals(extraState)) {
             Log.d(TAG, "onReceive: 50");
             try {
-
                 LinphoneManager.getLc().resumeCall((LinphoneCall) CallActivity.instance().pause.getTag());
                 CallActivity.instance().anim.cancel();
                 CallActivity.instance().anim.reset();
-                CallActivity.instance().tvPause.setVisibility(android.view.View.INVISIBLE);
+                CallActivity.instance().tvPause.setVisibility(View.GONE);
+                CallActivity.instance().llSignal.setVisibility(View.VISIBLE);
                 CallActivity.instance().pause.setImageResource(R.drawable.my_pause);
             } catch (Exception e) {
                 Log.d(TAG, "Exception: " + e.toString());

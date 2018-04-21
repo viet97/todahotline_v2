@@ -87,6 +87,7 @@ import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 import org.linphone.network.NetworkStateReceiver;
+import org.linphone.network.connectivity.Connectivity;
 import org.linphone.ui.AddressText;
 import org.linphone.ui.Numpad;
 import org.linphone.ultils.ContactUltils;
@@ -111,7 +112,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private Handler mControlsHandler = new Handler();
 	private Runnable mControls;
 	private ImageView switchCamera;
-	public TextView missedChats, tvPause;
+	public TextView missedChats, tvPause, tvSignal;
 	private RelativeLayout mActiveCallHeader, sideMenuContent, avatar_layout;
     public ImageView pause, hangUp, dialer, video, micro, speaker, options, addCall, transfer, conference, conferenceStatus, contactPicture;
     private ImageView audioRoute, routeSpeaker, routeEarpiece, routeBluetooth, menu, chat;
@@ -122,7 +123,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private CallAudioFragment audioCallFragment;
 	private CallVideoFragment videoCallFragment;
 	private boolean isSpeakerEnabled = false, isMicMuted = false, isTransferAllowed, isVideoAsk;
-	private LinearLayout mControlsLayout;
+	public LinearLayout mControlsLayout, llSignal;
 	private Numpad numpad;
 	private int cameraNumber;
 	private CountDownTimer timer;
@@ -404,11 +405,13 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 		//TopBar
 		tvPause = findViewById(R.id.tv_pause);
-		tvPause.setVisibility(View.INVISIBLE);
+		tvPause.setVisibility(View.GONE);
 		video = (ImageView) findViewById(R.id.video);
 		video.setOnClickListener(this);
 		enabledVideoButton(false);
 
+		llSignal = findViewById(R.id.ll_signal);
+		tvSignal = findViewById(R.id.tv_signal);
 		videoProgress =  (ProgressBar) findViewById(R.id.video_in_progress);
 		videoProgress.setVisibility(View.GONE);
 
@@ -1007,6 +1010,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			}
             pause.setTag(call);
             pause.setImageResource(R.drawable.my_play);
+			llSignal.setVisibility(View.GONE);
 
 		} else if (call != null) {
 			if (call.getState() == State.Paused) {
@@ -1016,8 +1020,9 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				}
                 anim.cancel();
                 anim.reset();
-                tvPause.setVisibility(View.INVISIBLE);
-                pause.setImageResource(R.drawable.my_pause);
+				tvPause.setVisibility(View.GONE);
+				pause.setImageResource(R.drawable.my_pause);
+				llSignal.setVisibility(View.VISIBLE);
 			}
 		}
 	}
@@ -1741,8 +1746,26 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			}
 			formatText(dl, getString(R.string.call_stats_download),
 					String.valueOf((int) stats.getDownloadBandwidth()) + " kbits/s");
+			android.util.Log.d(TAG, "displayMediaStats: " + stats.getReceiverInterarrivalJitter() + " ms");
+
 			formatText(ul, getString(R.string.call_stats_upload),
 					String.valueOf((int) stats.getUploadBandwidth()) + " kbits/s");
+			android.util.Log.d(TAG, "displayMediaStats: " + stats.getSenderInterarrivalJitter() + " ms");
+			// netowrk signal
+			String networkSignal = Connectivity.getNetworkSignal(this);
+			int colorText;
+			if (networkSignal.equals(Connectivity.WEAK)) {
+				colorText = Color.RED;
+			} else if (networkSignal.equals(Connectivity.NORMAL)) {
+				colorText = Color.YELLOW;
+			} else if (networkSignal.equals(Connectivity.GOOD)) {
+				colorText = Color.GREEN;
+			} else {
+				colorText = Color.GREEN;
+			}
+			tvSignal.setText(networkSignal);
+			tvSignal.setTextColor(colorText);
+
 			if (isVideo) {
 				formatText(edl, getString(R.string.call_stats_estimated_download),
 						String.valueOf((int) stats.getEstimatedDownloadBandwidth()) + " kbits/s");
@@ -1770,9 +1793,11 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 				formatText(videoFpsReceived,
 						getString(R.string.call_stats_video_fps_received),
 						"\u2193 " + params.getReceivedFramerate());
+
 			} else {
 				formatText(jitterBuffer, getString(R.string.call_stats_jitter_buffer),
 						new DecimalFormat("##.##").format(stats.getJitterBufferSize()) + " ms");
+
 			}
 		} else {
 			layout.setVisibility(View.GONE);
@@ -1843,7 +1868,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 								if (params != null) {
 									LinphoneCallStats audioStats = call.getAudioStats();
 									LinphoneCallStats videoStats = null;
-
+									android.util.Log.d(TAG, "bandwidth: " + BandwidthManager.getInstance().getCurrentProfile());
 									if (params.getVideoEnabled())
 										videoStats = call.getVideoStats();
 
@@ -1926,8 +1951,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
     public void blinkPauseText() {
         TextView myText = (TextView) findViewById(R.id.tv_pause);
-
-        anim = new AlphaAnimation(0.0f, 1.0f);
+		tvPause.setVisibility(View.VISIBLE);
+		anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(1000); //You can manage the blinking time with this parameter
         anim.setStartOffset(20);
         anim.setRepeatMode(Animation.REVERSE);

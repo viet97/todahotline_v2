@@ -8,8 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,10 +53,15 @@ import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
 import org.linphone.network.models.NonTodaContactsResponse;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -264,12 +272,14 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         mPrefs = LinphonePreferences.instance();
         try {
+
             this.requestWindowFeature(Window.FEATURE_NO_TITLE);
             super.onCreate(savedInstanceState);
             internalIpEditor = getSharedPreferences("server", MODE_PRIVATE).edit();
             setContentView(R.layout.activity_login);
 
-
+            InternetSpeedTest internetSpeedTest = new InternetSpeedTest();
+            internetSpeedTest.execute("http://www.daycomsolutions.com/Support/BatchImage/HPIM0050w800.JPG");
             DbContext.getInstance().getListContactTodaName(this).clear();
             DbContext.getInstance().getListContactTodaJob().clear();
             mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -722,5 +732,56 @@ public class LoginActivity extends Activity {
         builder.show();
     }
 
+    private class InternetSpeedTest extends AsyncTask<String, Void, String> {
+
+        long startTime;
+        long endTime;
+        private long takenTime;
+
+        @Override
+        protected String doInBackground(String... paramVarArgs) {
+
+            startTime = System.currentTimeMillis();
+            android.util.Log.d(TAG, "doInBackground: StartTime" + startTime);
+
+            Bitmap bmp = null;
+            try {
+                URL ulrn = new URL(paramVarArgs[0]);
+                HttpURLConnection con = (HttpURLConnection) ulrn.openConnection();
+                InputStream is = con.getInputStream();
+                bmp = BitmapFactory.decodeStream(is);
+
+                Bitmap bitmap = bmp;
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 99, stream);
+                byte[] imageInByte = stream.toByteArray();
+                long lengthbmp = imageInByte.length;
+
+
+                if (null != bmp) {
+                    endTime = System.currentTimeMillis();
+                    Log.d(TAG, "doInBackground: EndTIme" + endTime);
+                    return lengthbmp + "";
+                }
+            } catch (Exception e) {
+                android.util.Log.d(TAG, "Exception: " + e.toString());
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            android.util.Log.d(TAG, "onPostExecute: " + result);
+            if (result != null) {
+                long dataSize = Integer.parseInt(result) / 1024;
+                takenTime = endTime - startTime;
+                double s = (double) takenTime / 1000;
+                double speed = dataSize / s;
+                android.util.Log.d(TAG, "onPostExecute: " + "" + new DecimalFormat("##.##").format(speed) + "kb/second");
+                new InternetSpeedTest().execute("http://www.daycomsolutions.com/Support/BatchImage/HPIM0050w800.JPG");
+            }
+        }
+    }
 
 }
