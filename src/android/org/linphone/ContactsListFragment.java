@@ -122,7 +122,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
     BroadcastReceiver receiverLoadData;
     private int lastID = 0;
     private int extStatusCheckBox = 1;
-
+    private LinearLayout llContainer;
     private ProgressDialog dialogSearch;
     private ProgressDialog dialogRemove;
     private String searchText = "";
@@ -719,6 +719,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         if (id == R.id.all_contacts) {
             Log.d(TAG, "all_contacts: ");
+
             // thay doi trang thai moi lan chuyen tab
             deleteAll.setVisibility(View.GONE);
             allExt.setVisibility(View.GONE);
@@ -1351,7 +1352,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             public RelativeLayout rlDeleteBar;
             public CheckBox cbxDelete;
             private boolean isChoose;
-
+            private RelativeLayout llContainer;
             //public ImageView friendStatus;
 
             public ViewHolder(View view) {
@@ -1368,6 +1369,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 cbxDelete = view.findViewById(R.id.cbx_delete);
                 layout = view.findViewById(R.id.layout);
                 avatar = view.findViewById(R.id.mask);
+                llContainer = view.findViewById(R.id.contacts_container);
                 //friendStatus = (ImageView) view.findViewById(R.id.friendStatus);
             }
         }
@@ -1456,6 +1458,15 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                 view.setTag(holder);
             }
             if (view.getId() == R.id.layout) {
+                if (onlyDisplayLinphoneContacts == 0) {
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.llContainer.getLayoutParams();
+                    layoutParams.setMargins(5, 24, 5, 24);
+                    holder.llContainer.setLayoutParams(layoutParams);
+                } else {
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.llContainer.getLayoutParams();
+                    layoutParams.setMargins(5, 12, 5, 12);
+                    holder.llContainer.setLayoutParams(layoutParams);
+                }
                 // giu nguyen trang thai check box moi lan adapter thay doi
                 if (onlyDisplayLinphoneContacts != 0) {
                     if (listIdDelete.indexOf(danhBa.getIddanhba()) != -1) {
