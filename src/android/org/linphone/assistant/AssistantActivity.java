@@ -235,82 +235,86 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
             public void onClick(View view) {
                 android.util.Log.d(TAG, "backImg: " + getCurrentFocus());
                 try {
-                    if (firstTimeComeIn) {
-                        finish();
-                    } else if (getCurrentFocus() != null) {
-                        try {
-                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                            edPass.setFocusable(false);
-                            edPassOld.setFocusable(false);
-                            edpassveri.setFocusable(false);
-                        } catch (Exception e) {
-                            android.util.Log.d(TAG, "Exception: " + e.toString());
-                        }
-                    } else {
-                        finish();
+//                    if (firstTimeComeIn) {
+//                        finish();
+//                    } else if (getCurrentFocus() != null) {
+//                        try {
+//                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+//                            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+//                            edPass.setFocusable(false);
+//                            edPassOld.setFocusable(false);
+//                            edpassveri.setFocusable(false);
+//                        } catch (Exception e) {
+//                            android.util.Log.d(TAG, "Exception: " + e.toString());
+//                        }
+//                    } else {
+                    if (AssistantActivity.this.getCurrentFocus() != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
+                        finish();
+//                    }
                 } catch (Exception e) {
                     android.util.Log.d(TAG, "Exception: " + e.toString());
                 }
             }
         });
-        edpassveri.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    edpassveri.setFocusableInTouchMode(true);
-                    edpassveri.setFocusable(true);
-                    edPassOld.setFocusableInTouchMode(true);
-                    edPassOld.setFocusable(true);
-                    edPass.setFocusableInTouchMode(true);
-                    edPass.setFocusable(true);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(edpassveri, InputMethodManager.SHOW_IMPLICIT);
-                    firstTimeComeIn = false;
-                } catch (Exception e) {
-
-                }
-
-            }
-        });
-        edPassOld.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
+//        edpassveri.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    edpassveri.setFocusableInTouchMode(true);
+//                    edpassveri.setFocusable(true);
+//                    edPassOld.setFocusableInTouchMode(true);
+//                    edPassOld.setFocusable(true);
+//                    edPass.setFocusableInTouchMode(true);
+//                    edPass.setFocusable(true);
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.showSoftInput(edpassveri, InputMethodManager.SHOW_IMPLICIT);
+//                    firstTimeComeIn = false;
+//                } catch (Exception e) {
 //
-                try {
-                    edPassOld.setFocusableInTouchMode(true);
-                    edPassOld.setFocusable(true);
-                    edPass.setFocusableInTouchMode(true);
-                    edPass.setFocusable(true);
-                    edpassveri.setFocusableInTouchMode(true);
-                    edpassveri.setFocusable(true);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(edPassOld, InputMethodManager.SHOW_IMPLICIT);
-                    firstTimeComeIn = false;
-                } catch (Exception e) {
-
-                }
-            }
-        });
-        edPass.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    edPass.setFocusableInTouchMode(true);
-                    edPass.setFocusable(true);
-                    edPassOld.setFocusableInTouchMode(true);
-                    edPassOld.setFocusable(true);
-                    edpassveri.setFocusableInTouchMode(true);
-                    edpassveri.setFocusable(true);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(edPass, InputMethodManager.SHOW_IMPLICIT);
-                    firstTimeComeIn = false;
-                } catch (Exception e) {
-
-                }
-            }
-        });
+//                }
+//
+//            }
+//        });
+//        edPassOld.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////
+//                try {
+//                    edPassOld.setFocusableInTouchMode(true);
+//                    edPassOld.setFocusable(true);
+//                    edPass.setFocusableInTouchMode(true);
+//                    edPass.setFocusable(true);
+//                    edpassveri.setFocusableInTouchMode(true);
+//                    edpassveri.setFocusable(true);
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.showSoftInput(edPassOld, InputMethodManager.SHOW_IMPLICIT);
+//                    firstTimeComeIn = false;
+//                } catch (Exception e) {
+//
+//                }
+//            }
+//        });
+//        edPass.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    edPass.setFocusableInTouchMode(true);
+//                    edPass.setFocusable(true);
+//                    edPassOld.setFocusableInTouchMode(true);
+//                    edPassOld.setFocusable(true);
+//                    edpassveri.setFocusableInTouchMode(true);
+//                    edpassveri.setFocusable(true);
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.showSoftInput(edPass, InputMethodManager.SHOW_IMPLICIT);
+//                    firstTimeComeIn = false;
+//                } catch (Exception e) {
+//
+//                }
+//            }
+//        });
 
     }
 

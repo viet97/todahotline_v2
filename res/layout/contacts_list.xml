@@ -36,7 +36,7 @@
             <View
                 android:id="@+id/all_contacts_select"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorA" />
         </com.andexert.library.RippleView>
@@ -67,7 +67,7 @@
             <View
                 android:id="@+id/linphone_contacts_select"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorA"
                 android:visibility="gone" />
@@ -99,7 +99,7 @@
             <View
                 android:id="@+id/cus_contacts_select"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorA"
                 android:visibility="gone" />
