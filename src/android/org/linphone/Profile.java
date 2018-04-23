@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +67,7 @@ public class Profile extends Fragment {
         // Required empty public constructor
     }
 
-    LinearLayout ll1, ll2, ll3;
+    RelativeLayout ll1, ll2, ll3;
     TextView tvName, tvSipAddress, tvJob;
 
     @Override

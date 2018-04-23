@@ -99,6 +99,8 @@ public class DialerFragment extends Fragment {
         lvSuggestion = view.findViewById(R.id.lv_suggestion);
         lvSuggestion.setAdapter(suggestionAdapter);
         mAddress = (AddressText) view.findViewById(R.id.address);
+        android.util.Log.d(TAG, "onCreateView: " + mAddress);
+
         mAddress.setDialerFragment(this);
         mAddress.addTextChangedListener(new TextWatcher() {
             @Override
@@ -138,6 +140,7 @@ public class DialerFragment extends Fragment {
 
         numpad = (AddressAware) view.findViewById(R.id.numpad);
         if (numpad != null) {
+            android.util.Log.d(TAG, "setAddressWidget: 141" + mAddress);
             numpad.setAddressWidget(mAddress);
         }
 

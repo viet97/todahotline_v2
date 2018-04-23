@@ -130,10 +130,11 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
                     finish();
                     return;
                 } else if (state == State.Error) {
+                    android.util.Log.d(TAG, "call.getErrorInfo().getReason(): " + call.getErrorInfo().getReason().toString());
+
                     // Convert LinphoneCore message 	for internalization
                     if (call.getErrorInfo().getReason() == Reason.Declined) {
                         displayCustomToast(getString(R.string.error_call_declined), Toast.LENGTH_SHORT);
-                        android.util.Log.d(TAG, "call.getErrorInfo().getReason(): " + call.getState());
                         decline();
                     } else if (call.getErrorInfo().getReason() == Reason.NotFound) {
                         displayCustomToast(getString(R.string.error_user_not_found), Toast.LENGTH_SHORT);

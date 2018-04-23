@@ -49,7 +49,9 @@ dependencies {
         compile fileTree(include: 'gcm.jar', dir: 'libs')
 //        compile 'com.android.support:support-v4:+'
     }
-//    compile project(':actionbarsherlock')
+    compile project(':RippleEffect-master')
+//    compile 'com.github.traex.rippleeffect:library:1.3'
+//    compile 'com.skyfishjy.ripplebackground:library:1.0.1'
     compile 'com.android.support:percent:26.+'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'

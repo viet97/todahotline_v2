@@ -41,7 +41,7 @@
 		android:layout_width="match_parent"
         android:layout_height="50dp">
 
-		<RelativeLayout
+        <com.andexert.library.RippleView
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">
@@ -60,9 +60,9 @@
 				android:layout_width="match_parent"
 				android:layout_height="5dp"
 				android:layout_alignParentBottom="true"/>
-		</RelativeLayout>
+        </com.andexert.library.RippleView>
 
-		<RelativeLayout
+        <com.andexert.library.RippleView
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="0.2">
@@ -83,7 +83,7 @@
 				android:layout_height="5dp"
 				android:visibility="gone"
 				android:layout_alignParentBottom="true"/>
-		</RelativeLayout>
+        </com.andexert.library.RippleView>
 
 		<View
 			android:visibility="gone"

@@ -38,13 +38,18 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class Digit extends ImageButton implements AddressAware {
+
+import com.andexert.library.RippleView;
+
+public class Digit extends RippleView implements AddressAware {
 
 	private AddressText mAddress;
 
@@ -99,7 +104,6 @@ public class Digit extends ImageButton implements AddressAware {
 		setOnTouchListener(lListener);
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		int height = displayMetrics.heightPixels;
 		int width = displayMetrics.widthPixels;
 		this.setPadding(width / 24, width / 24, width / 24, width / 24);
 
@@ -193,10 +197,13 @@ public class Digit extends ImageButton implements AddressAware {
 		public boolean onTouch(View v, MotionEvent event) {
 			// them animation khi click vao ban phim
 			android.util.Log.d(TAG, "onTouch: " + event.getAction());
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-				v.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.img_click));
-			}
-
+//            if (event.getAction()==MotionEvent.ACTION_DOWN){
+//                AlphaAnimation alphaAnim = new AlphaAnimation(1.0f, 0.5f);
+//                alphaAnim.setDuration(1000); //You can manage the blinking time with this parameter
+//                alphaAnim.setStartOffset(20);
+//                alphaAnim.setRepeatMode(Animation.REVERSE);
+//                v.startAnimation(alphaAnim);
+//            }
 			if (!mPlayDtmf) return false;
 			if (!linphoneServiceReady()) return true;
 

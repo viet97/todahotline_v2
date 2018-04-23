@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<integer name="RippleDuration">100</integer>
 	<style name="DialerDigit" parent="@android:style/TextAppearance.Medium">
 		<item name="android:layout_width">50dp</item>
 		<item name="android:layout_height">50dp</item>
@@ -7,11 +8,9 @@
 		<item name="android:layout_margin">25dp</item>
 	</style>
 	<style name="DialtactsDialpadButtonStyle">
-		<item name="android:scaleType">fitCenter</item>
 		<item name="android:layout_width">0dip</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_weight">1</item>
-		<item name="android:background">@drawable/transparent</item>
 	</style>
     <style name="DialerDigitTablet">
 		<item name="android:layout_width">0dip</item>

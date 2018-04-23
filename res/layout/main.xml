@@ -79,7 +79,8 @@
                 android:background="@drawable/bg_old"
 				android:layout_alignParentBottom="true"
 				android:orientation="horizontal">
-                <RelativeLayout
+
+				<com.andexert.library.RippleView
                     android:id="@+id/dialer"
                     android:background="@drawable/footer_button"
                     android:layout_weight="1"
@@ -101,9 +102,9 @@
                         android:layout_height="5dp"
                         android:layout_alignParentBottom="true"/>
 
-                </RelativeLayout>
+				</com.andexert.library.RippleView>
 
-				<RelativeLayout
+				<com.andexert.library.RippleView
 					android:id="@+id/history"
 					android:background="@drawable/footer_button"
 					android:layout_weight="1"
@@ -136,9 +137,9 @@
 						android:gravity="center"
 						android:visibility="gone"/>
 
-				</RelativeLayout>
+				</com.andexert.library.RippleView>
 
-				<RelativeLayout
+				<com.andexert.library.RippleView
 					android:id="@+id/contacts"
 					android:background="@drawable/footer_button"
 					android:layout_weight="1"
@@ -160,10 +161,10 @@
 						android:layout_height="5dp"
 						android:layout_alignParentBottom="true"
 						android:visibility="gone"/>
-				</RelativeLayout>
+				</com.andexert.library.RippleView>
 
 
-				<RelativeLayout
+				<com.andexert.library.RippleView
 					android:id="@+id/chat"
 					android:background="@drawable/footer_button"
 					android:layout_weight="1"
@@ -196,7 +197,7 @@
 						android:gravity="center"
 						android:visibility="gone"/>
 
-				</RelativeLayout>
+				</com.andexert.library.RippleView>
 			</LinearLayout>
 
 			<LinearLayout

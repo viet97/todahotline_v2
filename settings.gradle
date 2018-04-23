@@ -1,1 +1,2 @@
-include ':actionbarsherlock'
+include ':actionbarsherlock', ':RippleEffect', ':RippleEffect-master'
+project(':RippleEffect').projectDir = new File('RippleEffect-master/library')

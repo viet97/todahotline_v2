@@ -36,62 +36,67 @@ import android.widget.LinearLayout;
 
 public class Numpad extends LinearLayout implements AddressAware {
 
-	private final String TAG = "Numpad";
-	private boolean mPlayDtmf;
-	public void setPlayDtmf(boolean sendDtmf) {
-		this.mPlayDtmf = sendDtmf;
-	}
+    private final String TAG = "Numpad";
+    private boolean mPlayDtmf;
 
-	public Numpad(Context context, boolean playDtmf) {
-		super(context);
-		mPlayDtmf = playDtmf;
-		LayoutInflater.from(context).inflate(R.layout.numpad, this);
-		setLongClickable(true);
-		onFinishInflate();
-	}
+    public void setPlayDtmf(boolean sendDtmf) {
+        this.mPlayDtmf = sendDtmf;
+    }
 
-	public Numpad(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Numpad);
+    public Numpad(Context context, boolean playDtmf) {
+        super(context);
+        mPlayDtmf = playDtmf;
+        LayoutInflater.from(context).inflate(R.layout.numpad, this);
+        setLongClickable(true);
+        onFinishInflate();
+    }
+
+    public Numpad(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Numpad);
         mPlayDtmf = 1 == a.getInt(org.linphone.R.styleable.Numpad_play_dtmf, 1);
         a.recycle();
-		Log.d(TAG, "NumpadTablet: " + context.getResources().getBoolean(R.bool.isTablet));
-		if (context.getResources().getBoolean(R.bool.isTablet))
-			LayoutInflater.from(context).inflate(R.layout.numpad_table, this);
-		else
-			LayoutInflater.from(context).inflate(R.layout.numpad, this);
-		setLongClickable(true);
-	}
+        Log.d(TAG, "NumpadTablet: " + context.getResources().getBoolean(R.bool.isTablet));
+        if (context.getResources().getBoolean(R.bool.isTablet))
+            LayoutInflater.from(context).inflate(R.layout.numpad_table, this);
+        else
+            LayoutInflater.from(context).inflate(R.layout.numpad, this);
+        setLongClickable(true);
+    }
 
-	@Override
-	protected final void onFinishInflate() {
-		for (Digit v : retrieveChildren(this, Digit.class)) {
+    @Override
+    protected final void onFinishInflate() {
+        for (Digit v : retrieveChildren(this, Digit.class)) {
             //tat am banphim
 //			v.setPlayDtmf(mPlayDtmf);
         }
-		super.onFinishInflate();
-	}
-	public void setAddressWidget(AddressText address) {
-		for (AddressAware v : retrieveChildren(this, AddressAware.class)) {
-			v.setAddressWidget(address);
-		}
-	}
+        super.onFinishInflate();
+    }
+
+    public void setAddressWidget(AddressText address) {
+        Log.d(TAG, "setAddressWidget:75 " + retrieveChildren(this, AddressAware.class).size());
+        for (AddressAware v : retrieveChildren(this, AddressAware.class)) {
+            v.setAddressWidget(address);
+            android.util.Log.d(TAG, "setAddressWidget: 77" + address);
+        }
+    }
 
 
-	private final <T> Collection<T> retrieveChildren(ViewGroup viewGroup, Class<T> clazz) {
-		final Collection<T> views = new ArrayList<T>();
+    private final <T> Collection<T> retrieveChildren(ViewGroup viewGroup, Class<T> clazz) {
+        final Collection<T> views = new ArrayList<T>();
 
-		for (int i = 0; i < viewGroup.getChildCount(); i++) {
-			View v = viewGroup.getChildAt(i);
-			if (v instanceof ViewGroup) {
-				views.addAll(retrieveChildren((ViewGroup) v, clazz));
-			} else {
-				if (clazz.isInstance(v))
-					views.add(clazz.cast(v));
-			}
-		}
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View v = viewGroup.getChildAt(i);
 
-		return views;
-	}
+            if (v instanceof ViewGroup && !(v instanceof Digit)) {
+                views.addAll(retrieveChildren((ViewGroup) v, clazz));
+            } else {
+                if (clazz.isInstance(v))
+                    views.add(clazz.cast(v));
+            }
+        }
+
+        return views;
+    }
 
 }

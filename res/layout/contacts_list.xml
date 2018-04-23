@@ -11,7 +11,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <RelativeLayout
+        <com.andexert.library.RippleView
             android:id="@+id/rl_local_contact"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -39,7 +39,7 @@
                 android:layout_height="5dp"
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorA" />
-        </RelativeLayout>
+        </com.andexert.library.RippleView>
 
         <RelativeLayout
             android:id="@+id/rl_toda_contact"

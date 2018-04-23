@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 	Copyright (C) 2010 Regis Montoya (aka r3gis - www.r3gis.fr)
 
 	This file is part of CSipSimple.
@@ -21,54 +20,106 @@
 -->
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
-        <org.linphone.ui.Digit
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button1"
-            android:contentDescription="1"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_1" />
+            android:contentDescription="1">
 
-        <org.linphone.ui.Digit
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_1" />
+        </org.linphone.ui.Digit>
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button2"
-            android:contentDescription="2"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_2" />
+            android:contentDescription="2">
 
-        <org.linphone.ui.Digit
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_2" />
+        </org.linphone.ui.Digit>
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button3"
-            android:contentDescription="3"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_3" />
+            android:contentDescription="3">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_3" />
+        </org.linphone.ui.Digit>
     </TableRow>
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
-        <org.linphone.ui.Digit
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button4"
-            android:contentDescription="4"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_4" />
+            android:contentDescription="4">
 
-        <org.linphone.ui.Digit
+            <ImageView
+                android:id="@+id/imageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_4" />
+        </org.linphone.ui.Digit>
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button5"
-            android:contentDescription="5"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_5" />
+            android:contentDescription="5">
 
-        <org.linphone.ui.Digit
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_5" />
+        </org.linphone.ui.Digit>
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button6"
-            android:contentDescription="6"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_6" />
+            android:contentDescription="6">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_6" />
+
+        </org.linphone.ui.Digit>
     </TableRow>
 
     <TableRow
@@ -76,48 +127,97 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <org.linphone.ui.Digit
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button7"
-            android:contentDescription="7"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_7" />
+            android:contentDescription="7">
 
-        <org.linphone.ui.Digit
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_7" />
+        </org.linphone.ui.Digit>
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button8"
-            android:contentDescription="8"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_8" />
+            android:contentDescription="8">
 
-        <org.linphone.ui.Digit
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_8" />
+        </org.linphone.ui.Digit>
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button9"
-            android:contentDescription="9"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_9" />
+            android:contentDescription="9">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_9" />
+
+        </org.linphone.ui.Digit>
     </TableRow>
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
-        <org.linphone.ui.Digit
-            android:clickable="true"
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/buttonstar"
-            android:contentDescription="*"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_star" />
+            android:contentDescription="*">
 
-        <org.linphone.ui.Digit
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_star" />
+        </org.linphone.ui.Digit>
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/button0"
-            android:contentDescription="0"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_0" />
+            android:contentDescription="0">
 
-        <org.linphone.ui.Digit
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_0" />
+        </org.linphone.ui.Digit>
+
+        <org.linphone.ui.Digit xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/buttonpound"
-            android:contentDescription="#"
             style="@style/DialtactsDialpadButtonStyle"
-            android:src="@drawable/dial_num_pound" />
+            android:contentDescription="#">
+
+            <ImageView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dial_num_pound" />
+        </org.linphone.ui.Digit>
     </TableRow>
 
 </TableLayout>
