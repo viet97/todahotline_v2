@@ -2,6 +2,7 @@ package org.linphone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.telecom.Call;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -10,6 +11,9 @@ import org.linphone.database.DbContext;
 import org.linphone.network.models.DSCongTyResponse;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 /**
  * Created by QuocVietDang1 on 3/22/2018.
@@ -18,7 +22,34 @@ public class MyCallLogs {
 
     private ArrayList<CallLog> callLogs = new ArrayList<>();
     public static final int MAX_LOG = 100;
+
     public MyCallLogs() {
+    }
+
+    public ArrayList<CallLog> stackHistory() {
+        ArrayList<CallLog> callLogs = new ArrayList<>();
+        CallLog callLog = null;
+        for (int i = 0; i < this.getCallLogs().size(); i++) {
+            if (i == 0) {
+                callLogs.add(this.getCallLogs().get(i));
+            } else {
+                CallLog currentCallLog = this.getCallLogs().get(i);
+                int index = 0;
+                for (CallLog c : callLogs) {
+
+                    if (c.getPhoneNumber().equals(currentCallLog.getPhoneNumber()) && c.getName().equals(currentCallLog.getName())) {
+                        c.setCount(c.getCount() + 1);
+                        break;
+                    } else {
+                        index++;
+                    }
+                }
+                if (index == callLogs.size()) {
+                    callLogs.add(this.getCallLogs().get(i));
+                }
+            }
+        }
+        return callLogs;
     }
 
     public ArrayList<CallLog> getCallLogs() {
@@ -41,6 +72,7 @@ public class MyCallLogs {
         long time;
         int status;
         int duration;
+        int count;
         private String TAG = "MyCallLogs";
 
         public CallLog(int id, String Name, String phoneNumber, long time, int duration, int status) {
@@ -50,9 +82,11 @@ public class MyCallLogs {
             this.status = status;
             this.duration = duration;
             this.id = id;
+            this.count = 1;
         }
 
         public CallLog() {
+            this.count = 1;
         }
 
         @Override
@@ -116,13 +150,24 @@ public class MyCallLogs {
             this.duration = duration;
         }
 
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
         @Override
         public String toString() {
             return "CallLog{" +
-                    "phoneNumber='" + phoneNumber + '\'' +
+                    "id=" + id +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", name='" + name + '\'' +
                     ", time=" + time +
                     ", status=" + status +
                     ", duration=" + duration +
+                    ", count=" + count +
                     '}';
         }
     }

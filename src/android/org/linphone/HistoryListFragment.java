@@ -112,7 +112,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
     private void searchHistory(String s) {
         s = ContactUltils.instance.removeAccents(s);
         mLogs.clear();
-        ArrayList<MyCallLogs.CallLog> searchmLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+        ArrayList<MyCallLogs.CallLog> searchmLogs = DbContext.getInstance().getMyCallLogs(getActivity()).stackHistory();
         for (MyCallLogs.CallLog callLog : searchmLogs) {
             if (ContactUltils.instance.removeAccents(callLog.getName()).contains(s) ||
                     ContactUltils.instance.removeAccents(callLog.getName()).startsWith(s)) {
@@ -195,7 +195,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
     }
 
     public void refresh() {
-        mLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+        mLogs = DbContext.getInstance().getMyCallLogs(getActivity()).stackHistory();
     }
 
     private void selectAllList(boolean isSelectAll) {
@@ -289,7 +289,8 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             LinphoneActivity.instance().displayMissedCalls(0);
         }
 
-        mLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+        mLogs = DbContext.getInstance().getMyCallLogs(getActivity()).stackHistory();
+        Log.d(TAG, "onResume: " + DbContext.getInstance().getMyCallLogs(getActivity()).stackHistory());
         try {
             searchHistory(searchField.getText().toString());
         } catch (Exception e) {
@@ -508,6 +509,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             public ImageView contactPicture;
             public LinearLayout CallContact;
             public TextView date;
+            public TextView logCount;
 
             public ViewHolder(View view) {
                 cbxDelete = view.findViewById(R.id.cbx_delete);
@@ -518,6 +520,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                 contactPicture = (ImageView) view.findViewById(R.id.contact_picture);
                 CallContact = (LinearLayout) view.findViewById(R.id.history_click);
                 date = (TextView) view.findViewById(R.id.date_log);
+                logCount = (TextView) view.findViewById(R.id.log_count);
             }
         }
 
@@ -585,8 +588,9 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                 view.setTag(holder);
             }
 
+
             if (mLogs == null || mLogs.size() < position) return view;
-            final ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+            final ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(getActivity()).stackHistory();
             final MyCallLogs.CallLog log = mLogs.get(position);
             if (isDeleteMode) {
                 holder.cbxDelete.setVisibility(View.VISIBLE);
@@ -595,6 +599,14 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                 holder.detail.setVisibility(View.VISIBLE);
                 holder.cbxDelete.setVisibility(View.GONE);
             }
+
+            if (log.getCount() == 1) {
+                holder.logCount.setVisibility(View.GONE);
+            } else {
+                holder.logCount.setVisibility(View.VISIBLE);
+                holder.logCount.setText("(" + log.getCount() + ")");
+            }
+
             final ViewHolder finalHolder = holder;
             holder.CallContact.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

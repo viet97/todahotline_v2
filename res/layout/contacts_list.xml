@@ -41,7 +41,7 @@
                 android:background="@color/colorA" />
         </com.andexert.library.RippleView>
 
-        <RelativeLayout
+        <com.andexert.library.RippleView
             android:id="@+id/rl_toda_contact"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -71,9 +71,9 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorA"
                 android:visibility="gone" />
-        </RelativeLayout>
+        </com.andexert.library.RippleView>
 
-        <RelativeLayout
+        <com.andexert.library.RippleView
 
             android:id="@+id/rl_cus_contact"
             android:layout_width="0dp"
@@ -103,7 +103,7 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorA"
                 android:visibility="gone" />
-        </RelativeLayout>
+        </com.andexert.library.RippleView>
 
 
         <ImageView
