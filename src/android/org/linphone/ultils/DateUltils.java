@@ -9,7 +9,7 @@ import java.util.Calendar;
 public class DateUltils {
     public static final DateUltils instance = new DateUltils();
 
-    private boolean isSameDay(Calendar cal1, Calendar cal2) {
+    public boolean isSameDay(Calendar cal1, Calendar cal2) {
         if (cal1 == null || cal2 == null) {
             return false;
         }

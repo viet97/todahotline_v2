@@ -9,8 +9,10 @@ import com.google.gson.Gson;
 
 import org.linphone.database.DbContext;
 import org.linphone.network.models.DSCongTyResponse;
+import org.linphone.ultils.DateUltils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -36,8 +38,13 @@ public class MyCallLogs {
                 CallLog currentCallLog = this.getCallLogs().get(i);
                 int index = 0;
                 for (CallLog c : callLogs) {
-
-                    if (c.getPhoneNumber().equals(currentCallLog.getPhoneNumber()) && c.getName().equals(currentCallLog.getName())) {
+                    Calendar c1 = Calendar.getInstance();
+                    c1.setTimeInMillis(c.getTime());
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(currentCallLog.getTime());
+                    if (c.getPhoneNumber().equals(currentCallLog.getPhoneNumber()) &&
+                            c.getName().equals(currentCallLog.getName()) &&
+                            DateUltils.instance.isSameDay(c1, c2)) {
                         c.setCount(c.getCount() + 1);
                         break;
                     } else {

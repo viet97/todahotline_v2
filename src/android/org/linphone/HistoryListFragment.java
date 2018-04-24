@@ -65,6 +65,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 
     private RelativeLayout deleteBar;
     private ArrayList<Integer> listIdDelete = new ArrayList<>();
+    private ArrayList<MyCallLogs.CallLog> listCallLogDelete = new ArrayList<>();
     private boolean isDeleteMode = false;
     private boolean isDeleteAll = false;
     private TextView missedCalls, allCalls, noCallHistory, noMissedCallHistory;
@@ -343,6 +344,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             backDeleteMode.setVisibility(View.GONE);
             deleteAll.setVisibility(View.GONE);
             listIdDelete.clear();
+            listCallLogDelete.clear();
             isDeleteMode = false;
             ((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
             return;
@@ -354,12 +356,15 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 
             if (!isDeleteAll) {
                 listIdDelete.clear();
+                listCallLogDelete.clear();
                 deleteContact.setVisibility(View.GONE);
             } else {
                 deleteContact.setVisibility(View.VISIBLE);
                 listIdDelete.clear();
+                listCallLogDelete.clear();
                 for (MyCallLogs.CallLog callLog : DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs()) {
                     listIdDelete.add(callLog.getId());
+                    listCallLogDelete.add(callLog);
                 }
             }
 
@@ -377,7 +382,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                 MyCallLogs myCallLogs = new MyCallLogs();
                 ArrayList<MyCallLogs.CallLog> callLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
                 if (isDeleteAll) {
-                    for (MyCallLogs.CallLog callLog : new ArrayList<MyCallLogs.CallLog>(mLogs)) {
+                    for (MyCallLogs.CallLog callLog : new ArrayList<>(callLogs)) {
                         callLogs.remove(callLogs.indexOf(callLog));
                     }
                     myCallLogs.setCallLogs(callLogs);
@@ -388,13 +393,14 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                     ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
                     Log.d(TAG, "onClick: " + listIdDelete.toString());
 
-                    for (MyCallLogs.CallLog callLog : new ArrayList<MyCallLogs.CallLog>(mLogs)) {
-                        Log.d(TAG, "onClick: " + callLog.getId());
-                        Log.d(TAG, "onClick: " + listIdDelete.indexOf(callLog.getId()));
-                        if (listIdDelete.indexOf(callLog.getId()) != -1) {
-                            currentCallLogs.remove(currentCallLogs.indexOf(callLog));
+                    for (MyCallLogs.CallLog callLog : new ArrayList<>(currentCallLogs)) {
+                        for (MyCallLogs.CallLog c : listCallLogDelete) {
+                            if (c.getName().equals(callLog.getName()) && c.getPhoneNumber().equals(callLog.getPhoneNumber())) {
+                                currentCallLogs.remove(currentCallLogs.indexOf(callLog));
+                            }
                         }
                     }
+
 
                     myCallLogs.setCallLogs(currentCallLogs);
                     DbContext.getInstance().setMyCallLogs(myCallLogs, getActivity());
@@ -407,6 +413,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                 removeNotMissedCallsFromLogs();
             }
             listIdDelete.clear();
+            listCallLogDelete.clear();
             deleteAll.setChecked(false);
             hideHistoryListAndDisplayMessageIfEmpty();
             ((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
@@ -637,10 +644,12 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
                                                         if (finalHolder.cbxDelete.isChecked()) {
                                                             finalHolder.cbxDelete.setChecked(true);
                                                             listIdDelete.add(log.getId());
+                                                            listCallLogDelete.add(log);
                                                             notifyDataSetChanged();
                                                         } else {
                                                             finalHolder.cbxDelete.setChecked(false);
                                                             listIdDelete.remove(listIdDelete.indexOf(log.getId()));
+                                                            listCallLogDelete.remove(listCallLogDelete.indexOf(log));
                                                         }
                                                         if (listIdDelete.size() == 0) {
                                                             deleteContact.setVisibility(View.GONE);

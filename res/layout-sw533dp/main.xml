@@ -98,7 +98,7 @@
 						android:id="@+id/dialer_select"
 						android:background="@color/white"
 						android:layout_width="match_parent"
-						android:layout_height="5dp"
+						android:layout_height="1dp"
 						android:layout_alignParentBottom="true"/>
 
 				</RelativeLayout>
@@ -121,7 +121,7 @@
 						android:id="@+id/history_select"
 						android:background="@color/white"
 						android:layout_width="match_parent"
-						android:layout_height="5dp"
+						android:layout_height="1dp"
 						android:layout_alignParentBottom="true"
 						android:visibility="gone"/>
 
@@ -156,7 +156,7 @@
 						android:id="@+id/contacts_select"
 						android:background="@color/white"
 						android:layout_width="match_parent"
-						android:layout_height="5dp"
+						android:layout_height="1dp"
 						android:layout_alignParentBottom="true"
 						android:visibility="gone"/>
 				</RelativeLayout>
@@ -182,7 +182,7 @@
 						android:id="@+id/chat_select"
 						android:background="@color/white"
 						android:layout_width="match_parent"
-						android:layout_height="5dp"
+						android:layout_height="1dp"
 						android:layout_alignParentBottom="true"
 						android:visibility="gone"/>
 
