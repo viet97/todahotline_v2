@@ -28,16 +28,28 @@ public class MyCallLogs {
     public MyCallLogs() {
     }
 
-    public ArrayList<CallLog> stackHistory() {
-        ArrayList<CallLog> callLogs = new ArrayList<>();
-        CallLog callLog = null;
-        for (int i = 0; i < this.getCallLogs().size(); i++) {
+    public ArrayList<CallLog> stackHistory(boolean onlyDisplayMissedCalls) {
+        ArrayList<CallLog> results = new ArrayList<>();
+        ArrayList<CallLog> listCurrentCallLogs = new ArrayList<>();
+        if (onlyDisplayMissedCalls) {
+
+            for (MyCallLogs.CallLog log : this.getCallLogs()) {
+                if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
+                    listCurrentCallLogs.add(log);
+                }
+            }
+        } else {
+            listCurrentCallLogs = this.getCallLogs();
+        }
+
+        for (int i = 0; i < listCurrentCallLogs.size(); i++) {
+
             if (i == 0) {
-                callLogs.add(this.getCallLogs().get(i));
+                results.add(listCurrentCallLogs.get(i));
             } else {
-                CallLog currentCallLog = this.getCallLogs().get(i);
+                CallLog currentCallLog = listCurrentCallLogs.get(i);
                 int index = 0;
-                for (CallLog c : callLogs) {
+                for (CallLog c : results) {
                     Calendar c1 = Calendar.getInstance();
                     c1.setTimeInMillis(c.getTime());
                     Calendar c2 = Calendar.getInstance();
@@ -51,12 +63,12 @@ public class MyCallLogs {
                         index++;
                     }
                 }
-                if (index == callLogs.size()) {
-                    callLogs.add(this.getCallLogs().get(i));
+                if (index == results.size()) {
+                    results.add(listCurrentCallLogs.get(i));
                 }
             }
         }
-        return callLogs;
+        return results;
     }
 
     public ArrayList<CallLog> getCallLogs() {

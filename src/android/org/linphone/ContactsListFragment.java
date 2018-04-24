@@ -298,7 +298,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         rlTodaContact.setVisibility(View.VISIBLE);
                         break;
                     case 2:
-//                        rlCusContact.setVisibility(View.VISIBLE);
+                        rlCusContact.setVisibility(View.VISIBLE);
                         break;
                 }
 
