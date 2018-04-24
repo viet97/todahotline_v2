@@ -52,13 +52,16 @@
                 android:text="Tất cả"
                 android:textColor="@color/white"
 				android:layout_width="match_parent"
-				android:layout_height="match_parent"/>
+				android:layout_height="match_parent"
+				android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true" />
 
 			<View
 				android:id="@+id/all_calls_select"
 				android:background="@color/colorA"
 				android:layout_width="match_parent"
-				android:layout_height="5dp"
+				android:layout_height="1dp"
 				android:layout_alignParentBottom="true"/>
         </com.andexert.library.RippleView>
 
@@ -80,7 +83,7 @@
 				android:id="@+id/missed_calls_select"
 				android:background="@color/colorA"
 				android:layout_width="match_parent"
-				android:layout_height="5dp"
+				android:layout_height="1dp"
 				android:visibility="gone"
 				android:layout_alignParentBottom="true"/>
         </com.andexert.library.RippleView>

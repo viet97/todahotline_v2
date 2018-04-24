@@ -74,7 +74,7 @@
         </com.andexert.library.RippleView>
 
         <com.andexert.library.RippleView
-
+            android:visibility="gone"
             android:id="@+id/rl_cus_contact"
             android:layout_width="0dp"
             android:layout_height="match_parent"
