@@ -15,6 +15,8 @@
     <string name="about_text">GNU General Public License V2\n © 2010-2017 Belledonne Communications</string>
     <string name="about_link">www.linphone.org</string>
     <string name="sync_account_name">linphone contacts</string>
+    <string name="adminstrator_error">Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết</string>
+    <string name="network_error">Không có kết nối internet,vui lòng bật wifi hoặc 3g</string>
 
     <!-- Common -->
     <string name="username">Username</string>
@@ -494,4 +496,5 @@
     <string name="busy">Busy</string>
     <string name="offline">Offline</string>
     <string name="title_activity_hiha">HIha</string>
+    <string name="title_activity_new_message">NewMessageActivity</string>
 </resources>

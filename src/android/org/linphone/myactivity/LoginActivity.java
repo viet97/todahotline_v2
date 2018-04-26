@@ -164,7 +164,7 @@ public class LoginActivity extends Activity {
     public void getCusContactToda() {
         try {
             String urlContact;
-            urlContact = "AppDanhBaKhachHang.aspx?idct=" + DbContext.getInstance().getLoginRespon(this).getData().getIdct()
+            urlContact = "AppDanhBaKhachHang_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(this).getData().getIdct()
                     + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(this).getData().getIdnhanvien() + "&lastID=0" + "&timkiem=";//lay tat ca danh ba ra
             Service contactService = NetContext.instance.create(Service.class);
             android.util.Log.d(TAG, "getCusContactToda: " + urlContact);
@@ -279,8 +279,6 @@ public class LoginActivity extends Activity {
             internalIpEditor = getSharedPreferences("server", MODE_PRIVATE).edit();
             setContentView(R.layout.activity_login);
 
-            InternetSpeedTest internetSpeedTest = new InternetSpeedTest();
-            internetSpeedTest.execute("http://www.daycomsolutions.com/Support/BatchImage/HPIM0050w800.JPG");
             DbContext.getInstance().getListContactTodaName(this).clear();
             DbContext.getInstance().getListContactTodaJob().clear();
             mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -517,9 +515,10 @@ public class LoginActivity extends Activity {
                             public void onResponse(Call<LoginRespon> call, Response<LoginRespon> response) {
                                 LoginRespon loginRespon = response.body();
                                 android.util.Log.d(TAG, "onResponse:512 " + response.body());
-                                if (dialogLogin.isShowing())
-                                    dialogLogin.cancel();
+
                                 try {
+                                    if (dialogLogin.isShowing())
+                                        dialogLogin.cancel();
                                     if (loginRespon.getStatus()) {
                                         loginEditor.apply();
                                         autoLoginEditor = autoLogin.edit();
@@ -734,56 +733,5 @@ public class LoginActivity extends Activity {
         builder.show();
     }
 
-    private class InternetSpeedTest extends AsyncTask<String, Void, String> {
-
-        long startTime;
-        long endTime;
-        private long takenTime;
-
-        @Override
-        protected String doInBackground(String... paramVarArgs) {
-
-            startTime = System.currentTimeMillis();
-            android.util.Log.d(TAG, "doInBackground: StartTime" + startTime);
-
-            Bitmap bmp = null;
-            try {
-                URL ulrn = new URL(paramVarArgs[0]);
-                HttpURLConnection con = (HttpURLConnection) ulrn.openConnection();
-                InputStream is = con.getInputStream();
-                bmp = BitmapFactory.decodeStream(is);
-
-                Bitmap bitmap = bmp;
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 99, stream);
-                byte[] imageInByte = stream.toByteArray();
-                long lengthbmp = imageInByte.length;
-
-
-                if (null != bmp) {
-                    endTime = System.currentTimeMillis();
-                    Log.d(TAG, "doInBackground: EndTIme" + endTime);
-                    return lengthbmp + "";
-                }
-            } catch (Exception e) {
-                android.util.Log.d(TAG, "Exception: " + e.toString());
-            }
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            android.util.Log.d(TAG, "onPostExecute: " + result);
-            if (result != null) {
-                long dataSize = Integer.parseInt(result) / 1024;
-                takenTime = endTime - startTime;
-                double s = (double) takenTime / 1000;
-                double speed = dataSize / s;
-                android.util.Log.d(TAG, "onPostExecute: " + "" + new DecimalFormat("##.##").format(speed) + "kb/second");
-                new InternetSpeedTest().execute("http://www.daycomsolutions.com/Support/BatchImage/HPIM0050w800.JPG");
-            }
-        }
-    }
 
 }

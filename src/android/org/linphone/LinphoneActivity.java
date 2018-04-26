@@ -75,6 +75,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.todahotline.MessageListFragment;
 
 import org.linphone.LinphoneManager.AddressType;
 import org.linphone.assistant.AssistantActivity;
@@ -148,8 +149,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     private StatusFragment statusFragment;
     private TextView missedCalls, missedChats;
-    private RelativeLayout contacts, history, dialer, chat;
-    private View contacts_selected, history_selected, dialer_selected, chat_selected;
+    private RelativeLayout contacts, history, dialer, chat, message;
+    private View contacts_selected, history_selected, dialer_selected, chat_selected, message_selected;
     private RelativeLayout mTopBar;
     private ImageView cancel;
     private FragmentsAvailable pendingFragmentTransaction, currentFragment;
@@ -371,12 +372,14 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         dialer.setOnClickListener(this);
         chat = (RelativeLayout) findViewById(R.id.chat);
         chat.setOnClickListener(this);
+        message = findViewById(R.id.message);
+        message.setOnClickListener(this);
 
         history_selected = findViewById(R.id.history_select);
         contacts_selected = findViewById(R.id.contacts_select);
         dialer_selected = findViewById(R.id.dialer_select);
         chat_selected = findViewById(R.id.chat_select);
-
+        message_selected = findViewById(R.id.message_select);
         missedCalls = (TextView) findViewById(R.id.missed_calls);
         missedChats = (TextView) findViewById(R.id.missed_chats);
     }
@@ -470,6 +473,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             case CHAT:
                 fragment = new ChatFragment();
                 break;
+            case MESSAGE:
+                fragment = new MessageListFragment();
             default:
                 break;
         }
@@ -826,6 +831,10 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
             hideTopBar();
             displayDialer();
+        } else if (id == R.id.message) {
+            hideStatusBar();
+            changeCurrentFragment(FragmentsAvailable.MESSAGE, null);
+            message_selected.setVisibility(View.VISIBLE);
         }
     }
 
@@ -834,6 +843,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         contacts_selected.setVisibility(View.GONE);
         dialer_selected.setVisibility(View.GONE);
         chat_selected.setVisibility(View.GONE);
+        message_selected.setVisibility(View.GONE);
     }
 
     public void hideTabBar(Boolean hide) {
@@ -883,6 +893,9 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             case CHAT_LIST:
             case CHAT:
                 chat_selected.setVisibility(View.VISIBLE);
+                break;
+            case MESSAGE:
+                message_selected.setVisibility(View.VISIBLE);
                 break;
         }
     }

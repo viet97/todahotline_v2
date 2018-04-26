@@ -1,5 +1,6 @@
 package org.linphone.database;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -15,6 +16,7 @@ import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.DSCongTyResponse;
 import org.linphone.network.models.LoginRespon;
+import org.linphone.network.models.MessagesListResponse;
 import org.linphone.network.models.NonTodaContactsResponse;
 
 import java.util.ArrayList;
@@ -28,8 +30,8 @@ public class DbContext {
     public static final String PREFS_CALL_lOG = "CallLog";
     private static final String Pref_String_DB = "DbContext";
     private int idCallLog;
-    private static SharedPreferences callLogsPref, DBDsCongTyResponse, DBaboutRespon, DBloginResponse, DBcontactResponse, DBcuscontactResponse, DBlistContactTodaName, DBlistCusContactTodaName, DBnonTodaContacts, DBsearchcontactResponse, DBsearchNonTodacontactResponse, DBPhoneContacts;
-    private SharedPreferences.Editor callLogsPrefEditor, DBDsCongTyResponseEditor, DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBcuscontactResponseEditor, DBlistContactTodaNameEditor, DBlistCusContactTodaNameEditor, DBnonTodaContactsEditor, DBsearchcontactResponseEditor, DBsearchNonTodacontactResponseEditor, DBPhoneContactsEditor;
+    private static SharedPreferences callLogsPref, DBDsCongTyResponse, DBaboutRespon, DBloginResponse, DBcontactResponse, DBcuscontactResponse, DBlistContactTodaName, DBlistCusContactTodaName, DBnonTodaContacts, DBsearchcontactResponse, DBsearchNonTodacontactResponse, DBPhoneContacts, DBMessagesListResponse;
+    private SharedPreferences.Editor callLogsPrefEditor, DBDsCongTyResponseEditor, DBaboutResponEditor, DBloginResponseEditor, DBcontactResponseEditor, DBcuscontactResponseEditor, DBlistContactTodaNameEditor, DBlistCusContactTodaNameEditor, DBnonTodaContactsEditor, DBsearchcontactResponseEditor, DBsearchNonTodacontactResponseEditor, DBPhoneContactsEditor, DBMessagesListResponseEditor;
     private Context context;
     private static final DbContext instance = new DbContext();
     private AboutRespon aboutRespon;
@@ -38,6 +40,7 @@ public class DbContext {
     private ArrayList<PhoneContact> phoneContacts;
     private NonTodaContactsResponse nonTodaContactsResponse, searchNonTodaContactResponse;
     private DSCongTyResponse dsCongTyResponse;
+    private MessagesListResponse messagesListResponse;
     private ContactResponse contactResponse,cusContactResponse,searchContactResponse;
     private HashMap<String, String> listContactTodaName;
     private HashMap<String, String> listCusContactTodaName;
@@ -48,6 +51,7 @@ public class DbContext {
     private String TAG = "DbContext";
 
     public DbContext() {
+        this.messagesListResponse = new MessagesListResponse();
         this.phoneContacts = new ArrayList<>();
         this.nonTodaContactsResponse = new NonTodaContactsResponse();
         this.searchNonTodaContactResponse = new NonTodaContactsResponse();
@@ -129,6 +133,36 @@ public class DbContext {
         return myCallLogs;
     }
 
+    public void setMessagesList(MessagesListResponse messagesListResponse, Context context) {
+        try {
+            if (context != null) {
+                DBMessagesListResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                DBMessagesListResponseEditor = DBMessagesListResponse.edit();
+                String DbMessageListStr = gson.toJson(messagesListResponse);
+
+                DBMessagesListResponseEditor.putString("DBMessagesListResponse", DbMessageListStr);
+                DBMessagesListResponseEditor.commit();
+                this.messagesListResponse = messagesListResponse;
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
+        }
+    }
+
+    public MessagesListResponse getMessagesList(Context context) {
+        try {
+            if (context != null) {
+                DBMessagesListResponse = context.getSharedPreferences(Pref_String_DB, Context.MODE_PRIVATE);
+                String DBMessagesListStr = DBMessagesListResponse.getString("DBMessagesListResponse", null);
+                if (DBMessagesListStr != null) {
+                    this.messagesListResponse = gson.fromJson(DBMessagesListStr, MessagesListResponse.class);
+                }
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
+        }
+        return messagesListResponse;
+    }
     public void setPhoneContacts(ArrayList<PhoneContact> phoneContacts, Context context) {
         try {
             if (context != null) {

@@ -32,7 +32,8 @@ public enum FragmentsAvailable {
 	ACCOUNT_SETTINGS,
 	SETTINGS,
 	CHAT_LIST,
-	CHAT;
+    CHAT,
+    MESSAGE;
 
 	public boolean shouldAnimate() {
 		return true;

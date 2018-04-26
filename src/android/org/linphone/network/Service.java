@@ -5,6 +5,7 @@ import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.DSCongTyResponse;
 import org.linphone.network.models.LoginRespon;
+import org.linphone.network.models.MessagesListResponse;
 import org.linphone.network.models.NonTodaContactsResponse;
 import org.linphone.network.models.VoidRespon;
 
@@ -20,6 +21,9 @@ public interface Service {
 
     @GET
     Call<LoginRespon> login(@Url String url);
+
+    @GET
+    Call<MessagesListResponse> getListMessages(@Url String url);
 
     @GET
     Call<Void> test(@Url String url);
