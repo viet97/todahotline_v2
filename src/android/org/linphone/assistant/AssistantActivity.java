@@ -54,6 +54,7 @@ import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.VoidRespon;
 import org.linphone.tools.OpenH264DownloadHelper;
+import org.linphone.ultils.KeyBoardUltils;
 
 import android.Manifest;
 import android.app.Activity;
@@ -360,10 +361,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                         dialogLogin.cancel();
                                                     } else {
 
-                                                        if (getCurrentFocus() != null) {
-                                                            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                                                            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                                                        }
+                                                        KeyBoardUltils.getInstance().hideKeyBoard(AssistantActivity.this);
                                                         LinphoneActivity.instance().finish();
                                                         if (LinphonePreferences.instance().getAccountCount() > 0) {
                                                             LinphonePreferences.instance().setAccountEnabled(0, false);

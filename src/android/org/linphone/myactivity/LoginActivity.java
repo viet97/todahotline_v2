@@ -53,6 +53,7 @@ import org.linphone.network.Service;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
 import org.linphone.network.models.NonTodaContactsResponse;
+import org.linphone.ultils.KeyBoardUltils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -326,11 +327,7 @@ public class LoginActivity extends Activity {
                 NetContext.getInstance().setBASE_URL(urlConfig);
 
 
-
-            if (getCurrentFocus() != null) {
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            }
+            KeyBoardUltils.getInstance().hideKeyBoard(this);
 
             //long accountId = 0;
             loginError = new AlertDialog.Builder(this);

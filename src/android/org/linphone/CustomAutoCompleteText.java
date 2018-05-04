@@ -35,6 +35,8 @@ public class CustomAutoCompleteText extends TokenCompleteTextView<ContactRespons
     protected ContactResponse.DSDanhBa defaultObject(String s) {
         ContactResponse.DSDanhBa defaultValue = new ContactResponse.DSDanhBa();
         defaultValue.setTenlienhe(s);
+        // object khong hop le set id = -1
+        defaultValue.setIddanhba(-1);
         return defaultValue;
     }
 

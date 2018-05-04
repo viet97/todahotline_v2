@@ -43,6 +43,7 @@
         </ListView>
 
         <TextView
+            android:scrollbarFadeDuration="0"
             android:gravity="center"
             android:text="Không có dữ liệu"
             android:textColor="@color/white"
