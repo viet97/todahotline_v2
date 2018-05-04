@@ -5,11 +5,53 @@
     android:background="@drawable/bg_old"
     tools:context="com.todahotline.MessageListFragment">
 
-    <ListView
-        android:id="@+id/message_list"
+    <RelativeLayout
+        android:background="@drawable/bg_old"
+        android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="60dp">
 
-    </ListView>
+        <TextView
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:text="Danh sách tin nhắn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/new_message"
+            android:padding="16dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/new_message"
+            android:layout_width="55dp"
+            android:layout_height="57dp" />
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_below="@id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/message_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+        </ListView>
+
+        <TextView
+            android:gravity="center"
+            android:text="Không có dữ liệu"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:id="@+id/tv_empty"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </RelativeLayout>

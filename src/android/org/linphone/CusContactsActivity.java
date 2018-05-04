@@ -140,7 +140,7 @@ public class CusContactsActivity extends Activity implements View.OnClickListene
                             } else {
                                 try {
                                     Toast.makeText(CusContactsActivity.this,
-                                            "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                            getString(R.string.adminstrator_error),
                                             Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
                                     Log.d(TAG, "Exception: " + e.toString());
@@ -150,7 +150,7 @@ public class CusContactsActivity extends Activity implements View.OnClickListene
                             Log.d(TAG, "onResponse: " + response.body());
                             try {
                                 Toast.makeText(CusContactsActivity.this,
-                                        "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                        getString(R.string.adminstrator_error),
                                         Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception: " + e.toString());
@@ -168,7 +168,7 @@ public class CusContactsActivity extends Activity implements View.OnClickListene
                         }
                         try {
                             Toast.makeText(CusContactsActivity.this,
-                                    "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                    getString(R.string.network_error),
                                     Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             Log.d(TAG, "Exception: " + e.toString());
@@ -237,7 +237,7 @@ public class CusContactsActivity extends Activity implements View.OnClickListene
                             } else {
                                 try {
                                     Toast.makeText(CusContactsActivity.this,
-                                            "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                            getString(R.string.adminstrator_error),
                                             Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
                                     Log.d(TAG, "Exception: " + e.toString());
@@ -247,7 +247,7 @@ public class CusContactsActivity extends Activity implements View.OnClickListene
                             Log.d(TAG, "onResponse: " + response.body());
                             try {
                                 Toast.makeText(CusContactsActivity.this,
-                                        "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                        getString(R.string.adminstrator_error),
                                         Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception: " + e.toString());
@@ -265,7 +265,7 @@ public class CusContactsActivity extends Activity implements View.OnClickListene
                         }
                         try {
                             Toast.makeText(CusContactsActivity.this,
-                                    "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                    getString(R.string.network_error),
                                     Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             Log.d(TAG, "Exception: " + e.toString());

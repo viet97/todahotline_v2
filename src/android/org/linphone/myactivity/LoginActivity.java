@@ -77,7 +77,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends Activity {
     private static String TODA = "";
-    public static String DEFAULT_BASE = "42.112.31.63:10001";
+    public static String DEFAULT_BASE = "118.70.171.240:6969";
     public static EditText et_username, et_password, et_idct;
     private Button bt_login;
     private CheckBox cbx_remember;
@@ -107,7 +107,7 @@ public class LoginActivity extends Activity {
     public void getContactToda() {
         try {
             Service contactService = NetContext.instance.create(Service.class);
-            String urlContact = "AppDanhBa.aspx?idct=" + DbContext.getInstance().getLoginRespon(this).getData().getIdct()
+            String urlContact = "AppDanhBa_v2.aspx?idct=" + DbContext.getInstance().getLoginRespon(this).getData().getIdct()
                     + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(this).getData().getIdnhanvien() + "&page=-1";//lay tat ca danh ba ra
             android.util.Log.d("GetconTact", "getContactToda: " + urlContact);
             contactService.getDanhBa(urlContact).enqueue(new Callback<ContactResponse>() {
@@ -148,10 +148,10 @@ public class LoginActivity extends Activity {
                 public void onFailure(Call<ContactResponse> call, Throwable t) {
                     try {
                         Toast.makeText(LoginActivity.this,
-                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                getString(R.string.network_error),
                                 Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-
+                        android.util.Log.d(TAG, "Exception: " + e);
                     }
                 }
 
@@ -181,7 +181,6 @@ public class LoginActivity extends Activity {
                             itemCusContactName.put(ds.getSodienthoai(), ds.getTenlienhe());
                         }
                         DbContext.getInstance().setListCusContactTodaName(itemCusContactName, LoginActivity.this);
-
                     }
                 }
 
@@ -190,7 +189,7 @@ public class LoginActivity extends Activity {
 
                     try {
                         Toast.makeText(LoginActivity.this,
-                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                getString(R.string.network_error),
                                 Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         android.util.Log.d(TAG, "Exception: " + e.toString());
@@ -246,7 +245,7 @@ public class LoginActivity extends Activity {
 
                     try {
                         Toast.makeText(LoginActivity.this,
-                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                getString(R.string.network_error),
                                 Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         android.util.Log.d(TAG, "Exception: " + e.toString());
@@ -323,15 +322,10 @@ public class LoginActivity extends Activity {
             //loginMess = new Dialog(this);
             //loginMess.setCancelable(false);
             String s = config.getString(PREF_URLCONFIG, "");
-            if (!s.equals(DEFAULT_BASE)) {
                 String urlConfig = "http://" + s + TODA;
                 NetContext.getInstance().setBASE_URL(urlConfig);
 
-            } else {
-                String urlConfig = "http://" + s + TODA;
-                NetContext.getInstance().setBASE_URL(urlConfig);
 
-            }
 
             if (getCurrentFocus() != null) {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -410,6 +404,7 @@ public class LoginActivity extends Activity {
         } catch (Exception e) {
             android.util.Log.d(TAG, "Exception: " + e);
         }
+
     }
 
 
@@ -428,17 +423,11 @@ public class LoginActivity extends Activity {
         et_config.setText(config.getString(PREF_URLCONFIG, DEFAULT_BASE));
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                if (!et_config.getText().toString().equals(DEFAULT_BASE)) {
                     String urlConfig = "http://" + et_config.getText() + TODA;
                     NetContext.getInstance().setBASE_URL(urlConfig);
                     configEditor.putString(PREF_URLCONFIG, et_config.getText().toString());
                     configEditor.commit();
-                } else {
-                    String urlConfig = "http://" + et_config.getText() + TODA;
-                    NetContext.getInstance().setBASE_URL(urlConfig);
-                    configEditor.putString(PREF_URLCONFIG, et_config.getText().toString());
-                    configEditor.commit();
-                }
+
 
             }
         })
@@ -610,7 +599,7 @@ public class LoginActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         android.util.Log.d(TAG, "onDestroy: ");
-
+        int accountCount = LinphonePreferences.instance().getAccountCount();
         try {
 
             stopService(new Intent(Intent.ACTION_MAIN).setClass(this, LinphoneService.class));
@@ -623,9 +612,10 @@ public class LoginActivity extends Activity {
         } catch (Exception e) {
             android.util.Log.d(TAG, "Exception: " + e.toString());
         }
-
+//        if (accountCount>0) {
 //        Intent startService = new Intent("com.example.helloandroid.alarms");
 //        sendBroadcast(startService);
+//        }
     }
 
     public void saveCreatedAccount(String username, String userid, String password, String displayname, String ha1, String prefix, String domain, LinphoneAddress.TransportType transport) {

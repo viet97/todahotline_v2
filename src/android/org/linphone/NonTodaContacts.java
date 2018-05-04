@@ -78,23 +78,16 @@ import static org.linphone.FragmentsAvailable.CONTACTS_LIST;
 public class NonTodaContacts extends Activity implements OnClickListener, OnItemClickListener, ContactsUpdatedListener, SwipeRefreshLayout.OnRefreshListener {
     private LayoutInflater mInflater;
     private ListView contactsList;
-    private TextView allContacts, linphoneContacts, cusContacts, noSipContact, noContact;
-    private ImageView newContact, edit, selectAll, deselectAll, delete, cancel, backDeleteMode, deleteContact;
-    private RelativeLayout rlCusContact, rlLocalContact, rlTodaContact;
+
     private RelativeLayout rlNoResult, rlContact;
     private SwipeRefreshLayout refreshLayout;
     private boolean isEditMode, isSearchMode;
 
-    public static int onlyDisplayLinphoneContacts;
-    private View allContactsSelected, linphoneContactsSelected, cusContactSelected;
-    private LinearLayout editList, topbar;
-    private RelativeLayout deleteBar;
-    private int lastKnownPosition;
+
     private boolean editOnClick = false, editConsumed = false, onlyDisplayChatAddress = false;
-    private String sipAddressToAdd, displayName = null;
+    private String sipAddressToAdd;
     private ImageView clearSearchField, backImg;
     private ExtendedEditText searchField;
-    private CheckBox deleteAll;
     private ImageView completeAddBtn;
     private ProgressBar contactsFetchInProgress;
     private String TAG = "NonTodaContacts";
@@ -151,7 +144,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
             rlContact = findViewById(R.id.rl_contactlist);
             clearSearchField = findViewById(R.id.clearSearchFieldNonToda);
             rlNoResult = findViewById(R.id.rl_no_result);
-            rlTodaContact = findViewById(R.id.rl_toda_contact);
+
             refreshLayout = findViewById(R.id.refresh_layout);
             completeAddBtn = findViewById(R.id.complete_add_contact);
             searchField = findViewById(R.id.searchField);
@@ -226,15 +219,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
         return nb;
     }
 
-    public void enabledDeleteButton(Boolean enabled) {
-        if (enabled) {
-            delete.setEnabled(true);
-        } else {
-            if (getNbItemsChecked() == 0) {
-                delete.setEnabled(false);
-            }
-        }
-    }
+
 
 
     public void changeAdapter() {
@@ -265,7 +250,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
             editConsumed = true;
             LinphoneActivity.instance().editContact(contact, sipAddressToAdd);
         } else {
-            lastKnownPosition = contactsList.getFirstVisiblePosition();
+
             LinphoneActivity.instance().displayContact(contact, onlyDisplayChatAddress);
         }
     }
@@ -363,7 +348,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
 
                     try {
                         Toast.makeText(NonTodaContacts.this,
-                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                getString(R.string.network_error),
                                 Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
 
@@ -459,7 +444,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                                 } else {
                                     try {
                                         Toast.makeText(NonTodaContacts.this,
-                                                "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                                getString(R.string.adminstrator_error),
                                                 Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         Log.d(TAG, "Exception: " + e.toString());
@@ -469,7 +454,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                                 Log.d(TAG, "onResponse: " + response.body());
                                 try {
                                     Toast.makeText(NonTodaContacts.this,
-                                            "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                            getString(R.string.adminstrator_error),
                                             Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
                                     Log.d(TAG, "Exception: " + e.toString());
@@ -487,7 +472,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                             }
                             try {
                                 Toast.makeText(NonTodaContacts.this,
-                                        "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                        getString(R.string.network_error),
                                         Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception: " + e.toString());
@@ -703,54 +688,9 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
 //                holder.organization.setVisibility(View.GONE);
 //            }
 
-            if (isEditMode) {
-                finalHolder.delete.setVisibility(View.VISIBLE);
-                finalHolder.delete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        contactsList.setItemChecked(position, b);
-                        if (getNbItemsChecked() == getCount()) {
-                            deselectAll.setVisibility(View.VISIBLE);
-                            selectAll.setVisibility(View.GONE);
-                            enabledDeleteButton(true);
-                        } else {
-                            if (getNbItemsChecked() == 0) {
-                                deselectAll.setVisibility(View.GONE);
-                                selectAll.setVisibility(View.VISIBLE);
-                                enabledDeleteButton(false);
-                            } else {
-                                deselectAll.setVisibility(View.GONE);
-                                selectAll.setVisibility(View.VISIBLE);
-                                enabledDeleteButton(true);
-                            }
-                        }
-                    }
-                });
-                if (contactsList.isItemChecked(position)) {
-                    finalHolder.delete.setChecked(true);
-                } else {
-                    finalHolder.delete.setChecked(false);
-                }
-            } else {
-                finalHolder.delete.setVisibility(View.INVISIBLE);
-            }
 
-			/*LinphoneFriend[] friends = LinphoneManager.getLc().getFriendList();
-            if (!ContactsManager.getInstance().isContactPresenceDisabled() && friends != null) {
-				holder.friendStatus.setVisibility(View.VISIBLE);
-				PresenceActivityType presenceActivity = friends[0].getPresenceModel().NonTodaContacts.this.getType();
-				if (presenceActivity == PresenceActivityType.Online) {
-					holder.friendStatus.setImageResource(R.drawable.led_connected);
-				} else if (presenceActivity == PresenceActivityType.Busy) {
-					holder.friendStatus.setImageResource(R.drawable.led_error);
-				} else if (presenceActivity == PresenceActivityType.Away) {
-					holder.friendStatus.setImageResource(R.drawable.led_inprogress);
-				} else if (presenceActivity == PresenceActivityType.Offline) {
-					holder.friendStatus.setImageResource(R.drawable.led_disconnected);
-				} else {
-					holder.friendStatus.setImageResource(R.drawable.call_quality_indicator_0);
-				}
-			}*/
+            finalHolder.delete.setVisibility(View.INVISIBLE);
+
 
             return view;
         }

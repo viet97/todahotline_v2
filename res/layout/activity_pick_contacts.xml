@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_old"
+    android:orientation="vertical">
+
+
+    <!--<include layout="@layout/edit_list" />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/back_add_contact"
+            android:padding="8dp"
+            android:src="@drawable/backicon"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="Danh sách liên hệ"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:id="@+id/complete_add_contact"
+            android:src="@drawable/complete_add_contacts"
+            android:layout_alignParentBottom="true"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_searchfield"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <org.linphone.layoutXML.ExtendedEditText
+            android:id="@+id/searchField"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/resizable_textfield"
+            android:contentDescription="@string/content_description_search_contact"
+            android:hint="Nhập để tìm kiếm"
+            android:inputType="textPersonName"
+            android:textColor="@android:color/black"
+            android:textCursorDrawable="@null" />
+
+        <ImageView
+            android:layout_alignRight="@+id/searchField"
+            android:id="@+id/clearSearchFieldNonToda"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:src="@drawable/clean_field_default" />
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <CheckBox
+                android:id="@+id/pick_all"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:button="@drawable/custom_tickbox"
+                android:text="chọn tất cả"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_contactlist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/pick_all"
+                android:visibility="gone">
+
+                <ListView
+                    android:id="@+id/contactsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:descendantFocusability="blocksDescendants"
+                    android:dividerHeight="1dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:scrollbars="none" />
+
+                <ProgressBar
+                    android:id="@+id/contactsFetchInProgress"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/noSipContact"
+                    style="@style/font6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="@string/no_sip_contact"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/noContact"
+                    style="@style/font6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:text="@string/no_contact"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_no_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Không tìm thấy kết quả"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</LinearLayout>

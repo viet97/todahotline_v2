@@ -1,16 +1,24 @@
 package org.linphone.network;
 
 
+
 import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.DSCongTyResponse;
+import org.linphone.network.models.DetailMessageListResponse;
 import org.linphone.network.models.LoginRespon;
 import org.linphone.network.models.MessagesListResponse;
 import org.linphone.network.models.NonTodaContactsResponse;
 import org.linphone.network.models.VoidRespon;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Url;
 
 /**
@@ -18,12 +26,21 @@ import retrofit2.http.Url;
  */
 
 public interface Service {
+    @Multipart
+    @POST
+    Call<VoidRespon> sendSMSWithAttachment(@Url String url, @Part MultipartBody.Part[] file);
+
+    @POST
+    Call<VoidRespon> sendSMS(@Url String url);
 
     @GET
     Call<LoginRespon> login(@Url String url);
 
     @GET
     Call<MessagesListResponse> getListMessages(@Url String url);
+
+    @GET
+    Call<DetailMessageListResponse> getDetailListMessages(@Url String url);
 
     @GET
     Call<Void> test(@Url String url);

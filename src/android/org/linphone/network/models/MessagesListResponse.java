@@ -1,7 +1,10 @@
 package org.linphone.network.models;
 
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -76,7 +79,7 @@ public class MessagesListResponse {
         @SerializedName("TrangThaiDoc")
         int TrangThaiDoc;
 
-        public class DSNguoiNhan {
+        public class DSNguoiNhan implements Serializable {
             @SerializedName("ID_NguoiNhan")
             int ID_NguoiNhan;
             @SerializedName("TenNguoiNhan")

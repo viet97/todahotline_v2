@@ -2,6 +2,7 @@ package org.linphone.network.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -85,7 +86,7 @@ public class ContactResponse {
 
     }
 
-    public static class DSDanhBa {
+    public static class DSDanhBa implements Serializable {
         public int getIddanhba() {
             return iddanhba;
         }
@@ -177,6 +178,11 @@ public class ContactResponse {
 
         public void setSodienthoai(String sodienthoai) {
             this.sodienthoai = sodienthoai;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return (this.tenlienhe.equals(((DSDanhBa) obj).getTenlienhe()) ? true : false);
         }
 
         @Override

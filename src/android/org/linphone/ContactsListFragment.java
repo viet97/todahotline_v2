@@ -575,7 +575,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             try {
                                 listIdDelete.clear();
                                 Toast.makeText(getActivity(),
-                                        "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                        getString(R.string.adminstrator_error),
                                         Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception: " + e.toString());
@@ -585,7 +585,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         try {
                             listIdDelete.clear();
                             Toast.makeText(getActivity(),
-                                    "Có lỗi xảy ra, vui lòng liên hệ với quản trị viên để biết thêm chi tiết",
+                                    getString(R.string.adminstrator_error),
                                     Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
 
@@ -605,7 +605,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     try {
                         listIdDelete.clear();
                         Toast.makeText(getActivity(),
-                                "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                getString(R.string.network_error),
                                 Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Log.d(TAG, "Exception: " + e.toString());
@@ -1276,6 +1276,11 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     public void onResponse(Call<ContactResponse> call, Response<ContactResponse> response) {
                         ContactResponse contactResponse;
                         contactResponse = response.body();
+                        try {
+                            refreshLayout.setRefreshing(false);
+                        } catch (Exception e) {
+                            Log.d(TAG, "Exception: " + e.toString());
+                        }
                         if (contactResponse.getStatus()) {
 
                             try {
@@ -1294,11 +1299,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                 Log.d(TAG, "Exception: " + e.toString());
                             }
 
-                            try {
-                                refreshLayout.setRefreshing(false);
-                            } catch (Exception e) {
-                                Log.d(TAG, "Exception: " + e.toString());
-                            }
+
                             addContacts.setVisibility(View.VISIBLE);
                             reloadListContacts();
                             changeAdapter();
@@ -1315,7 +1316,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
                         try {
                             Toast.makeText(getActivity(),
-                                    "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                    getString(R.string.network_error),
                                     Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
 

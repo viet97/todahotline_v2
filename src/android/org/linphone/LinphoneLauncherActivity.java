@@ -108,8 +108,8 @@ public class LinphoneLauncherActivity extends Activity {
 						try {
 							DbContext.getInstance().setDsCongty(dsCongTyResponse,LinphoneLauncherActivity.this);
 							Log.d("LinphoneLaunched", "onResponse: "+DbContext.getInstance().getDsCongTy(LinphoneLauncherActivity.this).toString());
-							NetContext.getInstance().setBASE_URL(dsCongTyResponse.getDscongty().get(0).getBaseURL());
-							onServiceReady();
+//							NetContext.getInstance().setBASE_URL(dsCongTyResponse.getDscongty().get(0).getBaseURL());
+                            onServiceReady();
 						} catch (Exception e) {
                             finish();
                             android.util.Log.d("LinphoneLaunched", "onResponse: " + e.toString());
@@ -120,8 +120,8 @@ public class LinphoneLauncherActivity extends Activity {
 				@Override
 				public void onFailure(Call<DSCongTyResponse> call, Throwable t) {
 					Toast.makeText(LinphoneLauncherActivity.this,
-							"Không có kết nối internet,vui lòng bật wifi hoặc 3g",
-							Toast.LENGTH_SHORT).show();
+                            getString(R.string.network_error),
+                            Toast.LENGTH_SHORT).show();
                     finish();
 
 				}
@@ -142,8 +142,8 @@ public class LinphoneLauncherActivity extends Activity {
 					} else {
 						try {
 							DbContext.getInstance().setDsCongty(dsCongTyResponse,LinphoneLauncherActivity.this);
-							NetContext.getInstance().setBASE_URL(dsCongTyResponse.getDscongty().get(0).getBaseURL());
-							startService(new Intent(ACTION_MAIN).setClass(LinphoneLauncherActivity.this, LinphoneService.class));
+//							NetContext.getInstance().setBASE_URL(dsCongTyResponse.getDscongty().get(0).getBaseURL());
+                            startService(new Intent(ACTION_MAIN).setClass(LinphoneLauncherActivity.this, LinphoneService.class));
 //            Intent startService = new Intent("com.example.helloandroid.alarms");
 //            sendBroadcast(startService);
 							mServiceThread = new ServiceWaitThread();
@@ -158,8 +158,8 @@ public class LinphoneLauncherActivity extends Activity {
 				@Override
 				public void onFailure(Call<DSCongTyResponse> call, Throwable t) {
 					Toast.makeText(LinphoneLauncherActivity.this,
-							"Không có kết nối internet,vui lòng bật wifi hoặc 3g",
-							Toast.LENGTH_SHORT).show();
+                            getString(R.string.network_error),
+                            Toast.LENGTH_SHORT).show();
                     finish();
                 }
             });
@@ -184,8 +184,10 @@ public class LinphoneLauncherActivity extends Activity {
 		} else if (getResources().getBoolean(R.bool.display_sms_remote_provisioning_activity) && LinphonePreferences.instance().isFirstRemoteProvisioning()) {
 			classToStart = RemoteProvisioningActivity.class;
 		} else {
-			classToStart = LoginActivity.class;
-		}
+            if (LinphonePreferences.instance().getAccountCount() > 0) {
+                classToStart = LinphoneActivity.class;
+            } else classToStart = LoginActivity.class;
+        }
 
 		// We need LinphoneService to start bluetoothManager
 		if (Version.sdkAboveOrEqual(Version.API11_HONEYCOMB_30)) {

@@ -48,6 +48,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
+import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -76,6 +77,7 @@ import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.todahotline.MessageListFragment;
+import com.todahotline.NewMessageActivity;
 
 import org.linphone.LinphoneManager.AddressType;
 import org.linphone.assistant.AssistantActivity;
@@ -223,7 +225,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             if (LinphonePreferences.instance().getAccountCount() > 0) {
                 LinphonePreferences.instance().firstLaunchSuccessful();
             } else {
-                startActivity(new Intent().setClass(this, AssistantActivity.class));
+//                startActivity(new Intent().setClass(this, AssistantActivity.class));
                 finish();
                 return;
             }
@@ -354,6 +356,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             LinphoneManager.getLc().setDeviceRotation(rotation);
         }
         mAlwaysChangingPhoneAngle = rotation;
+//        startActivity(new Intent(this,NewMessageActivity.class));
     }
 
 
@@ -521,7 +524,9 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         if (newFragmentType != FragmentsAvailable.DIALER
                 && newFragmentType != FragmentsAvailable.CONTACTS_LIST
                 && newFragmentType != FragmentsAvailable.CHAT_LIST
-                && newFragmentType != FragmentsAvailable.HISTORY_LIST) {
+                && newFragmentType != FragmentsAvailable.HISTORY_LIST
+                && newFragmentType != FragmentsAvailable.ABOUT
+                && newFragmentType != FragmentsAvailable.MESSAGE) {
             transaction.addToBackStack(newFragmentType.toString());
         } else {
             while (fm.getBackStackEntryCount() > 0) {
@@ -1503,10 +1508,10 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
+        NetContext.getInstance().setBASE_URL("http://" + getSharedPreferences(LoginActivity.PREF_URLCONFIG, MODE_PRIVATE).getString(LoginActivity.PREF_URLCONFIG, NetContext.getInstance().BASE_URL));
         NetContext.getInstance().init(this);
 
         LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
@@ -1690,7 +1695,9 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             if (currentFragment == FragmentsAvailable.DIALER
                     || currentFragment == FragmentsAvailable.CONTACTS_LIST
                     || currentFragment == FragmentsAvailable.HISTORY_LIST
-                    || currentFragment == FragmentsAvailable.CHAT_LIST) {
+                    || currentFragment == FragmentsAvailable.CHAT_LIST
+                    || currentFragment == FragmentsAvailable.ABOUT
+                    || currentFragment == FragmentsAvailable.MESSAGE) {
                 onBackPressed();
             }
         }
@@ -1954,75 +1961,87 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     }
 
     private void logoutAct() {
-        dialogLogin = ProgressDialog.show(LinphoneActivity.this, "", "Đăng xuất...", true, false);
-        String logoutURL = KEY_FUNC_URL
-                + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(LinphoneActivity.this).getData().getIdnhanvien()
-                + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
+        try {
+            dialogLogin = ProgressDialog.show(LinphoneActivity.this, "", "Đăng xuất...", true, false);
+            String logoutURL = KEY_FUNC_URL
+                    + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(LinphoneActivity.this).getData().getIdnhanvien()
+                    + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
 
-        final Service service = NetContext.instance.create(Service.class);
-        service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
-            @Override
-            public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
-
-                VoidRespon voidRespon = response.body();
-                boolean logOutResponse = voidRespon.getStatus();
-                if (!logOutResponse) {
-                    dialogLogin.cancel();
-                    Toast.makeText(LinphoneActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
-                } else {
+            final Service service = NetContext.instance.create(Service.class);
+            service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
+                @Override
+                public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
+                    try {
+                        VoidRespon voidRespon = response.body();
+                        boolean logOutResponse = voidRespon.getStatus();
+                        if (!logOutResponse) {
+                            dialogLogin.cancel();
+                            Toast.makeText(LinphoneActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                        } else {
 //                    try {
-                    SharedPreferences.Editor autoLoginEditor = getApplicationContext().getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
-                    autoLoginEditor.putBoolean("AutoLogin", false);
-                    autoLoginEditor.commit();
-                    if (LinphonePreferences.instance().getAccountCount() > 0) {
-                        LinphonePreferences.instance().setAccountEnabled(0, false);
-                        int accountNumber = LinphonePreferences.instance().getAccountCount();
-                        while (accountNumber >= 0) {
-                            LinphonePreferences.instance().deleteAccount(accountNumber);
-                            accountNumber--;
-                        }
-                    }
+                            SharedPreferences.Editor autoLoginEditor = getApplicationContext().getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
+                            autoLoginEditor.putBoolean("AutoLogin", false);
+                            autoLoginEditor.commit();
+                            if (LinphonePreferences.instance().getAccountCount() > 0) {
+                                LinphonePreferences.instance().setAccountEnabled(0, false);
+                                int accountNumber = LinphonePreferences.instance().getAccountCount();
+                                while (accountNumber >= 0) {
+                                    LinphonePreferences.instance().deleteAccount(accountNumber);
+                                    accountNumber--;
+                                }
+                            }
 
 //                    LocalBroadcastManager.getInstance(SipHome.this).unregisterReceiver(statusReceiver);
 
 //                                        finish();
 //                                        android.util.Log.d("SipHome", "registerBroadcasts: " + StaticForDynamicReceiver4.getInstance().deviceStateReceiver);
-                    SharedPreferences.Editor databasePref = getSharedPreferences(Pref_String_DB, MODE_PRIVATE).edit();
-                    databasePref.clear();
-                    databasePref.commit();
-                    dialogLogin.cancel();
-                    FirebaseMessaging.getInstance().unsubscribeFromTopic("TodaPhone");
-                    stopService(new Intent(Intent.ACTION_MAIN).setClass(LinphoneActivity.this, LinphoneService.class));
-                    Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
+                            SharedPreferences.Editor databasePref = getSharedPreferences(Pref_String_DB, MODE_PRIVATE).edit();
+                            databasePref.clear();
+                            databasePref.commit();
+                            dialogLogin.cancel();
+                            FirebaseMessaging.getInstance().unsubscribeFromTopic("TodaPhone");
+                            stopService(new Intent(Intent.ACTION_MAIN).setClass(LinphoneActivity.this, LinphoneService.class));
+                            Intent intent = new Intent(LinphoneActivity.this, LoginActivity.class);
 //                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                            startActivity(intent);
 //                        quit();
 
 //                    } catch (Exception e) {
 //                        android.util.Log.d(TAG, "Exception: "+e.toString());
 //                    }
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(LinphoneActivity.this,
+                                getString(R.string.adminstrator_error),
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<VoidRespon> call, Throwable t) {
-                try {
-                    dialogLogin.cancel();
-                } catch (Exception e) {
+                @Override
+                public void onFailure(Call<VoidRespon> call, Throwable t) {
+                    try {
+                        dialogLogin.cancel();
+                    } catch (Exception e) {
 
+                    }
+                    Toast.makeText(LinphoneActivity.this,
+                            getString(R.string.network_error),
+                            Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(LinphoneActivity.this,
-                        "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
-                        Toast.LENGTH_SHORT).show();
-            }
 
-        });
+            });
+        } catch (Exception e) {
+            Toast.makeText(LinphoneActivity.this,
+                    getString(R.string.adminstrator_error),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onBackPressed() {
         int count = getFragmentManager().getBackStackEntryCount();
         if (count > 0) {
+            android.util.Log.d(TAG, "countcount: ");
             getFragmentManager().popBackStackImmediate();
         } else {
             AlertDialog.Builder builder;

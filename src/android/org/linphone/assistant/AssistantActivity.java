@@ -400,7 +400,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
 
                                                     }
                                                     Toast.makeText(AssistantActivity.this,
-                                                            "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                                            getString(R.string.network_error),
                                                             Toast.LENGTH_SHORT).show();
                                                 }
 
@@ -424,7 +424,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                 @Override
                                 public void onFailure(Call<VoidRespon> call, Throwable t) {
                                     Toast.makeText(AssistantActivity.this,
-                                            "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                                            getString(R.string.network_error),
                                             Toast.LENGTH_SHORT).show();
 
                                 }

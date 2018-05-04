@@ -1,9 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context="com.todahotline.DetailMessageListActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ListView
+        android:id="@+id/attachment_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent"
+        android:padding="4dp"
+
+        />
+
+    <RelativeLayout
+        android:id="@+id/rl_input"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@id/attachment_list">
+
+        <ImageButton
+            android:padding="16dp"
+            android:id="@+id/messageSendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bubble_circle"
+            android:src="@drawable/ic_send" />
+
+        <android.support.v4.widget.Space
+            android:id="@+id/sendButtonSpace"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_toLeftOf="@id/messageSendButton"
+            android:layout_toStartOf="@id/messageSendButton" />
+
+        <ImageButton
+            android:padding="16dp"
+            android:id="@+id/attachmentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bubble_circle"
+            android:src="@drawable/ic_add_attachment" />
+
+        <android.support.v4.widget.Space
+            android:id="@+id/attachmentButtonSpace"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_toEndOf="@id/attachmentButton"
+            android:layout_toRightOf="@id/attachmentButton" />
+
+        <EditText
+            android:id="@+id/messageInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/attachmentButtonSpace"
+            android:layout_toLeftOf="@id/sendButtonSpace"
+            android:layout_toRightOf="@id/attachmentButtonSpace"
+            android:layout_toStartOf="@id/sendButtonSpace"
+            android:inputType="textAutoCorrect|textAutoComplete|textMultiLine|textCapSentences"
+            android:textColor="@color/black" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/bg_old"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:src="@drawable/back_delete_mode" />
+
+        <TextView
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:id="@+id/tv_users"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_above="@id/rl_input"
+        android:layout_below="@id/ll_title"
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        android:background="@color/transparent">
+
+        <ListView
+            android:id="@+id/detail_messages_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

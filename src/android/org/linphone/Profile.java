@@ -353,7 +353,7 @@ public class Profile extends Fragment {
                     Log.d(TAG, "Exception: " + e.toString());
                 }
                 Toast.makeText(getActivity(),
-                        "Không có kết nối internet,vui lòng bật wifi hoặc 3g",
+                        getString(R.string.network_error),
                         Toast.LENGTH_SHORT).show();
             }
 

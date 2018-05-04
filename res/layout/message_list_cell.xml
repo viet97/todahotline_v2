@@ -6,23 +6,27 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/layout"
         android:layout_marginTop="8dp"
+        android:id="@+id/layout"
         android:padding="10dp"
         android:background="@drawable/round_message_item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/img_message"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/menu_disabled" />
+            android:src="@drawable/message" />
 
         <TextView
+            android:textSize="13sp"
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

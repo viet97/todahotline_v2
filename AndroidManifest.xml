@@ -243,6 +243,11 @@
                 android:resource="@xml/authenticator" />
         </service>
 
+        <receiver android:name=".DownloadBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".firebase.FirebaseDataReceiver"
             android:exported="true"
@@ -405,8 +410,9 @@
         <activity android:name=".CusContactsActivity" />
         <activity
             android:name="com.todahotline.NewMessageActivity"
-            android:label="@string/title_activity_new_message"></activity>
-        <activity android:name="com.todahotline.DetailMessageListActivity"></activity>
+            android:label="@string/title_activity_new_message" />
+        <activity android:name="com.todahotline.DetailMessageListActivity" />
+        <activity android:name="com.todahotline.PickContactsActivity"></activity>
     </application>
 
 </manifest>

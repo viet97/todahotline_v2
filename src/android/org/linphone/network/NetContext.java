@@ -42,7 +42,7 @@ public class NetContext {
     private Retrofit retrofit;
     private long CONNECT_TIMEOUT = 8;
     private long READ_TIMEOUT = 8;
-    private String BASE_URL = "";
+    public String BASE_URL = "";
 
     public String getBASE_URL() {
         return BASE_URL;
