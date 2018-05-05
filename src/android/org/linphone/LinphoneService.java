@@ -425,7 +425,7 @@ public final class LinphoneService extends Service {
 //				}
 
                 android.util.Log.d(TAG, "registrationState: " + LinphonePreferences.instance().getAccountCount());
-                if (LinphonePreferences.instance().getAccountCount() > 0) {
+//                if (LinphonePreferences.instance().getAccountCount() > 0) {
 //                    if (LinphoneLauncherActivity.isLinphoneActivity) {
                     if (displayServiceNotification() && state == RegistrationState.RegistrationOk && LinphoneManager.getLc().getDefaultProxyConfig() != null && LinphoneManager.getLc().getDefaultProxyConfig().isRegistered()) {
                         android.util.Log.d(TAG, "registrationState: RegistrationOk" + LinphonePreferences.instance().getAccountCount());
@@ -440,11 +440,11 @@ public final class LinphoneService extends Service {
 
                     if (displayServiceNotification() && state == RegistrationState.RegistrationNone) {
                         android.util.Log.d(TAG, "registrationState: RegistrationNone" + LinphonePreferences.instance().getAccountCount());
-                        sendNotification(IC_LEVEL_ORANGE, R.string.notification_register_failure);
-//						sendNotification(IC_LEVEL_ORANGE, R.string.notification_started);
+//                        sendNotification(IC_LEVEL_ORANGE, R.string.notification_register_failure);
+                        sendNotification(IC_LEVEL_ORANGE, R.string.notification_started);
                     }
                 }
-            }
+//            }
         });
 
 
@@ -817,7 +817,7 @@ public final class LinphoneService extends Service {
             content = LinphonePreferences.instance().getAccountDisplayName(0);
 
             icon = R.drawable.ic_fiber_manual_record_black_24dp;
-        } else {
+        } else if (textId == R.string.notification_register_failure) {
             if (LinphonePreferences.instance().getAccountCount() > 0) {
                 notificationIntent = new Intent(LinphoneService.this, incomingReceivedActivity);
             } else {
@@ -827,6 +827,13 @@ public final class LinphoneService extends Service {
             notificationIntent.putExtra("Notification", true);
             icon = R.drawable.ic_fiber_manual_record_black_124dp;
             content = "Mất kết nối tới máy chủ";
+        }
+        if (textId == R.string.notification_started) {
+            notificationIntent = new Intent(LinphoneService.this, LoginActivity.class);
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.putExtra("Notification", true);
+            icon = R.drawable.ic_fiber_manual_record_black_124dp;
+            content = "Tài khoản chưa đăng nhập";
         }
         Bitmap bm = null;
         try {

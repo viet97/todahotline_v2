@@ -388,7 +388,7 @@ public class LoginActivity extends Activity {
             autoLogin = getSharedPreferences("AutoLogin", MODE_PRIVATE);
 
             //tu dong dang nhap khi tat nong app
-            if (LoginActivity.ACCOUNT_ID > 0 || autoLogin.getBoolean("AutoLogin", false)) {
+            if (autoLogin.getBoolean("AutoLogin", false)) {
                 accountSelected = getSharedPreferences("AccountSelected", MODE_PRIVATE);
                 ACCOUNT_ID = accountSelected.getLong("AccountSelected", 0);
                 android.util.Log.d(TAG, "onCreate: " + ACCOUNT_ID);

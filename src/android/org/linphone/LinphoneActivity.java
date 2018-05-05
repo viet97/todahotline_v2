@@ -1960,7 +1960,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         }
     }
 
-    private void logoutAct() {
+    public void logoutAct() {
         try {
             dialogLogin = ProgressDialog.show(LinphoneActivity.this, "", "Đăng xuất...", true, false);
             String logoutURL = KEY_FUNC_URL
