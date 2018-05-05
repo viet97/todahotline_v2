@@ -1589,11 +1589,16 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 //                    }
                         if (!isDeleteMode) {
                             if (onlyDisplayLinphoneContacts == 0) {
+
                                 String phoneNumber = contacts.get(position).getNumbersOrAddresses().get(0).getValue();
+
                                 if (phoneNumber.contains("+84")) {
                                     phoneNumber = "0" + phoneNumber.substring(3);
                                 }
+                                // xóa hết dấu cách trong số điện thoại
+                                phoneNumber = phoneNumber.replaceAll(" ", "");
                                 String uri = "sip:" + phoneNumber + "@" + LinphonePreferences.instance().getAccountDomain(0);
+
                                 LinphoneActivity.instance().setAddresGoToDialerAndCall(uri, contacts.get(position).getFullName(), null);
                             } else if (onlyDisplayLinphoneContacts == 1) {
                                 try {
