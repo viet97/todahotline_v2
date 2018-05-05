@@ -7,10 +7,25 @@
     android:layout_height="match_parent"
 	android:orientation="vertical">
 
+	<RelativeLayout
+		android:visibility="invisible"
+		android:background="@drawable/bg_old"
+		android:id="@+id/rl_title"
+		android:layout_width="match_parent"
+		android:layout_height="60dp">
+
+		<ImageView
+			android:layout_centerVertical="true"
+			android:id="@+id/back_suggest_mode"
+			android:padding="8dp"
+			android:src="@drawable/back_delete_mode"
+			android:layout_width="50dp"
+			android:layout_height="50dp" />
+	</RelativeLayout>
 	<ListView
 		android:dividerHeight="1dp"
 		android:divider="@color/white"
-		android:layout_weight="4"
+		android:layout_weight="3"
 		android:id="@+id/lv_suggestion"
 		android:layout_width="match_parent"
 		android:layout_height="0dp">

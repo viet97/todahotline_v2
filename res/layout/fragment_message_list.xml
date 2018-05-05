@@ -11,7 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="60dp">
 
+        <ImageButton
+            android:id="@+id/delete_messages"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/transparent"
+            android:padding="8dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_delete_black_24dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/back_delete_mode"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back_delete_mode"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
         <TextView
+            android:id="@+id/title"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:layout_centerInParent="true"
@@ -28,6 +48,19 @@
             android:layout_height="57dp" />
     </RelativeLayout>
 
+    <CheckBox
+        android:layout_below="@id/rl_searchfield"
+        android:id="@+id/delete_all"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="16dp"
+        android:button="@drawable/custom_tickbox"
+        android:text="chọn tất cả"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:visibility="gone" />
     <RelativeLayout
         android:layout_below="@id/rl_title"
         android:id="@+id/rl_searchfield"
@@ -60,7 +93,7 @@
     </RelativeLayout>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
-        android:layout_below="@id/rl_searchfield"
+        android:layout_below="@id/delete_all"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

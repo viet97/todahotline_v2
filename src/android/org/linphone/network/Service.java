@@ -39,6 +39,9 @@ public interface Service {
     Call<VoidRespon> docTinNhan(@Url String url);
 
     @GET
+    Call<VoidRespon> xoaTinNhan(@Url String url);
+
+    @GET
     Call<MessagesListResponse> getListMessages(@Url String url);
 
     @GET

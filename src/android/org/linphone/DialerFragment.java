@@ -80,7 +80,8 @@ public class DialerFragment extends Fragment {
     private ListView lvSuggestion;
     private AddressText mAddress;
     private CallButton mCall;
-    private ImageView mAddContact;
+    private ImageView mAddContact, backSuggestMode;
+    private RelativeLayout rlTitle;
     private OnClickListener addContactListener, cancelListener, transferListener;
     private boolean shouldEmptyAddressField = true;
     private ArrayList<SuggestionDialer> suggestionDialers;
@@ -99,23 +100,36 @@ public class DialerFragment extends Fragment {
         lvSuggestion = view.findViewById(R.id.lv_suggestion);
         lvSuggestion.setAdapter(suggestionAdapter);
         mAddress = (AddressText) view.findViewById(R.id.address);
+        rlTitle = view.findViewById(R.id.rl_title);
+        backSuggestMode = view.findViewById(R.id.back_suggest_mode);
         android.util.Log.d(TAG, "onCreateView: " + mAddress);
 
+        backSuggestMode.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                suggestionDialers.clear();
+                rlTitle.setVisibility(View.INVISIBLE);
+                mAddress.setText("");
+                ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
+            }
+        });
         mAddress.setDialerFragment(this);
         mAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                android.util.Log.d(TAG, "beforeTextChanged: ");
 
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                android.util.Log.d(TAG, "onTextChanged: ");
                 suggesDialer(charSequence.toString());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                android.util.Log.d(TAG, "afterTextChanged: ");
             }
         });
         EraseButton erase = (EraseButton) view.findViewById(R.id.erase);
@@ -219,6 +233,7 @@ public class DialerFragment extends Fragment {
         suggestionDialers.clear();
         Context context = getActivity();
         if (number.equals("")) {
+            rlTitle.setVisibility(View.INVISIBLE);
             ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
             return;
         }
@@ -252,6 +267,10 @@ public class DialerFragment extends Fragment {
 
             }
         }
+        android.util.Log.d(TAG, "suggesDialer: " + mAddress.getText().toString());
+
+
+        rlTitle.setVisibility(View.VISIBLE);
         ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
     }
 //        if (permissionGranted != PackageManager.PERMISSION_GRANTED) {

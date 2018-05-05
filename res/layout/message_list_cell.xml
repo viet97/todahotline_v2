@@ -34,6 +34,7 @@
             android:layout_alignParentTop="true" />
 
         <LinearLayout
+            android:id="@+id/ll_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -43,6 +44,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_marginRight="40dp"
                 android:id="@+id/tv_users"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,6 +53,7 @@
                 android:textColor="@color/black" />
 
             <TextView
+                android:layout_marginRight="40dp"
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,11 +61,24 @@
                 android:maxLines="1" />
 
             <TextView
+                android:layout_marginRight="40dp"
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1" />
         </LinearLayout>
+
+        <CheckBox
+
+            android:id="@+id/delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/content_description_delete"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:visibility="gone" />
     </RelativeLayout>
 </RelativeLayout>
