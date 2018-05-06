@@ -42,6 +42,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -108,7 +110,7 @@ public class DialerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 suggestionDialers.clear();
-                rlTitle.setVisibility(View.INVISIBLE);
+                showTopbar(false);
                 mAddress.setText("");
                 ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
             }
@@ -207,7 +209,25 @@ public class DialerFragment extends Fragment {
         return view;
     }
 
-
+    private void showTopbar(boolean isShow) {
+        if (isShow) {
+            if (rlTitle.getVisibility() != View.VISIBLE) {
+                Animation a = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_topbar_dialer);
+                a.reset();
+                rlTitle.clearAnimation();
+                rlTitle.startAnimation(a);
+                rlTitle.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (rlTitle.getVisibility() == View.VISIBLE) {
+                Animation a = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_hide_topbar_dialer);
+                a.reset();
+                rlTitle.clearAnimation();
+                rlTitle.startAnimation(a);
+                rlTitle.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
     private void suggesDialer(String number) {
 
         int contacts = getActivity().getPackageManager().checkPermission(Manifest.permission.READ_CONTACTS, getActivity().getPackageName());
@@ -233,7 +253,7 @@ public class DialerFragment extends Fragment {
         suggestionDialers.clear();
         Context context = getActivity();
         if (number.equals("")) {
-            rlTitle.setVisibility(View.INVISIBLE);
+            showTopbar(false);
             ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
             return;
         }
@@ -270,7 +290,7 @@ public class DialerFragment extends Fragment {
         android.util.Log.d(TAG, "suggesDialer: " + mAddress.getText().toString());
 
 
-        rlTitle.setVisibility(View.VISIBLE);
+        showTopbar(true);
         ((BaseAdapter) lvSuggestion.getAdapter()).notifyDataSetChanged();
     }
 //        if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
