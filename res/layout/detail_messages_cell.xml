@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:background="@drawable/detail_round_message"
         android:orientation="vertical"
         android:id="@+id/layout"
         android:layout_marginTop="8dp"
@@ -14,13 +13,12 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:textColor="@color/white"
+
             android:id="@+id/tv_nguoigui"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:textColor="@color/white"
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -32,7 +30,6 @@
 
         <TextView
             android:textSize="13sp"
-            android:textColor="@color/white"
             android:gravity="right"
             android:id="@+id/tv_time"
             android:layout_width="match_parent"
@@ -42,11 +39,29 @@
     </LinearLayout>
 
     <CheckBox
-
+        android:layout_marginTop="16dp"
         android:id="@+id/delete"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/content_description_delete"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="14dp"
+        android:button="@drawable/custom_tickbox"
+
+        android:visibility="gone" />
+
+    <CheckBox
+        android:layout_marginTop="16dp"
+        android:id="@+id/delete_receive"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:button="@drawable/cbx_detail_message_list"
+
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/content_description_delete"
