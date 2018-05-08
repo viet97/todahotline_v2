@@ -31,6 +31,11 @@ public class MessagesListResponse {
         @SerializedName("ThoiGianTinNhanCuoi")
         String ThoiGianTinNhanCuoi;
 
+        @Override
+        public boolean equals(Object obj) {
+            return this.getID_TinNhan() == ((Data) obj).getID_TinNhan();
+        }
+
         public class NguoiGui {
             @SerializedName("ID_NguoiGui")
             int ID_NguoiGui;

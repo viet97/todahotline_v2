@@ -70,6 +70,11 @@ public class DetailMessageListResponse {
         @SerializedName("TrangThaiDoc")
         int TrangThaiDoc;
 
+        @Override
+        public boolean equals(Object obj) {
+            return (this.getID_TinNhan_NoiDung() == ((TinNhan) obj).getID_TinNhan_NoiDung());
+        }
+
         public class NguoiGui {
             @SerializedName("ID_NguoiGui")
             int ID_NguoiGui;

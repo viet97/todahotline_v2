@@ -83,8 +83,8 @@
                 android:button="@drawable/custom_tickbox"
                 android:text="chọn tất cả"
                 android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:visibility="gone" />
+                android:textSize="15sp"
+                android:visibility="visible" />
 
             <RelativeLayout
                 android:id="@+id/rl_contactlist"

@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
-        <!--<item android:state_checked="true" android:state_focused="true"-->
-            <!--android:drawable="@drawable/checkbox_on_background_focus_yellow" />-->
-        <!--<item android:state_checked="false" android:state_focused="true"-->
-            <!--android:drawable="@drawable/checkbox_off_background_focus_yellow" />-->
-        <!--<item android:state_checked="false"-->
-            <!--android:drawable="@drawable/checkbox_off_background" />-->
-        <!--<item android:state_checked="true"-->
-            <!--android:drawable="@drawable/checkbox_on_background" />-->
-    <!--</selector>-->
+    <item android:state_checked="true" android:drawable="@drawable/check_box_ticked" android:state_focused="false"></item>
+    <item android:state_checked="true" android:drawable="@drawable/check_box_ticked" android:state_focused="true"></item>
+    <item android:state_checked="false" android:drawable="@drawable/check_box" android:state_focused="false"></item>
+    <item android:state_checked="false" android:drawable="@drawable/check_box" android:state_focused="true"></item>
 </selector>

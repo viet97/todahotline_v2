@@ -56,6 +56,7 @@ import org.linphone.layoutXML.ExtendedEditText;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.ContactResponse;
+import org.linphone.network.models.MessagesListResponse;
 import org.linphone.network.models.NonTodaContactsResponse;
 import org.linphone.network.models.VoidRespon;
 import org.linphone.ultils.ContactUltils;
@@ -91,7 +92,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
     private ImageView completeAddBtn;
     private ProgressBar contactsFetchInProgress;
     private String TAG = "NonTodaContacts";
-
+    private CheckBox pickAll;
     private Timer timer = new Timer();
     private int lastID = 0;
     private ProgressDialog dialogSearch;
@@ -144,7 +145,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
             rlContact = findViewById(R.id.rl_contactlist);
             clearSearchField = findViewById(R.id.clearSearchFieldNonToda);
             rlNoResult = findViewById(R.id.rl_no_result);
-
+            pickAll = findViewById(R.id.pick_all);
             refreshLayout = findViewById(R.id.refresh_layout);
             completeAddBtn = findViewById(R.id.complete_add_contact);
             searchField = findViewById(R.id.searchField);
@@ -157,6 +158,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
             completeAddBtn.setOnClickListener(this);
             clearSearchField.setOnClickListener(this);
             backImg.setOnClickListener(this);
+            pickAll.setOnClickListener(this);
             contactsList.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -316,6 +318,12 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                 public void onResponse(Call<NonTodaContactsResponse> call, Response<NonTodaContactsResponse> response) {
                     NonTodaContactsResponse nonTodaContactsResponse;
                     nonTodaContactsResponse = response.body();
+
+                    try {
+                        refreshLayout.setRefreshing(false);
+                    } catch (Exception e) {
+                        Log.d(TAG, "Exception: " + e.toString());
+                    }
                     if (nonTodaContactsResponse.isStatus()) {
                         try {
                             DbContext.getInstance().setNonTodaContactsResponse(nonTodaContactsResponse, NonTodaContacts.this);
@@ -326,11 +334,6 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                             Log.d(TAG, "Exception: " + e.toString());
                         }
 
-                        try {
-                            refreshLayout.setRefreshing(false);
-                        } catch (Exception e) {
-                            Log.d(TAG, "Exception: " + e.toString());
-                        }
                         changeAdapter();
                     }
 
@@ -485,6 +488,27 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
 
 
             }
+        } else if (id == R.id.pick_all) {
+            listAddContacts.clear();
+            listIdAddContacts.clear();
+            if (pickAll.isChecked()) {
+                ArrayList<NonTodaContactsResponse.DSDanhBaNonToda> ds;
+                if (searchField.getText().toString().equals("")) {
+                    ds = DbContext.getInstance().getNonTodaContactsResponse(this).getDsdanhba();
+                } else {
+                    ds = DbContext.getInstance().getSearchNonTodaContactResponse(this).getDsdanhba();
+                }
+                if (ds != null) {
+                    for (NonTodaContactsResponse.DSDanhBaNonToda danhBa : ds) {
+                        danhBa.setChoose(true);
+                        listIdAddContacts.add(danhBa.getIdnhanvien());
+                        listAddContacts.add(danhBa);
+                    }
+                    Log.d(TAG, "onClick: " + listAddContacts.size());
+                }
+            }
+
+            ((BaseAdapter) contactsList.getAdapter()).notifyDataSetChanged();
         }
     }
 
@@ -562,10 +586,13 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
         }
 
         public int getCount() {
-            if (searchText.equals(""))
-                return DbContext.getInstance().getNonTodaContactsResponse(NonTodaContacts.this).getDsdanhba().size();
-            return DbContext.getInstance().getSearchNonTodaContactResponse(NonTodaContacts.this).getDsdanhba().size();
-
+            try {
+                if (searchText.equals(""))
+                    return DbContext.getInstance().getNonTodaContactsResponse(NonTodaContacts.this).getDsdanhba().size();
+                return DbContext.getInstance().getSearchNonTodaContactResponse(NonTodaContacts.this).getDsdanhba().size();
+            } catch (Exception e) {
+                return 0;
+            }
         }
 
         public Object getItem(int position) {

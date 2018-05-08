@@ -1514,6 +1514,11 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         NetContext.getInstance().setBASE_URL("http://" + getSharedPreferences(LoginActivity.PREF_URLCONFIG, MODE_PRIVATE).getString(LoginActivity.PREF_URLCONFIG, NetContext.getInstance().BASE_URL));
         NetContext.getInstance().init(this);
 
+        //tranh bi crash luc dang xuat khi ma linphonemanager ko dc khoi tao
+        if (!LinphoneManager.isInstanciated()) {
+            LinphoneManager.createAndStart(this);
+        }
+
         LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
         if (lc != null) {
             lc.addListener(mListener);
@@ -1582,6 +1587,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 goToDialerFragment();
             }
         }
+
+
     }
 
     @Override

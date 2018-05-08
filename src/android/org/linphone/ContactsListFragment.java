@@ -360,28 +360,28 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             deleteContact.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlertDialog.Builder builder;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
-                    } else {
-                        builder = new AlertDialog.Builder(getActivity());
-                    }
+//                    AlertDialog.Builder builder;
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                        builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+//                    } else {
+//                        builder = new AlertDialog.Builder(getActivity());
+//                    }
                     try {
-                        builder.setTitle("Xóa")
-                                .setMessage("Bạn có thật sự muốn xóa những liên hệ này ?")
-                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
+//                        builder.setTitle("Xóa")
+//                                .setMessage("Bạn có thật sự muốn xóa những liên hệ này ?")
+//                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
                                         deleteArrayContact();
-                                    }
-
-                                })
-                                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // do nothing
-                                    }
-                                })
-                                .setIcon(R.drawable.ic_delete_black_24dp)
-                                .show();
+//                                    }
+//
+//                                })
+//                                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        // do nothing
+//                                    }
+//                                })
+//                                .setIcon(R.drawable.ic_delete_black_24dp)
+//                                .show();
 
                     } catch (Exception e) {
 

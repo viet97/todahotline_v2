@@ -115,7 +115,7 @@ public class NonTodaContactsResponse {
     }
 
     @SerializedName("dsdanhba")
-    private ArrayList<DSDanhBaNonToda> dsdanhba;
+    private ArrayList<DSDanhBaNonToda> dsdanhba = new ArrayList<>();
 
     public boolean isStatus() {
         return status;

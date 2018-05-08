@@ -204,35 +204,35 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
         myCallLogs.setCallLogs(callLogs);
         DbContext.getInstance().setMyCallLogs(myCallLogs, CallOutgoingActivity.this);
     }
-    public String getContactName(final String phoneNumber, Context context) {
-        android.util.Log.d(TAG, "getContactName: " + DbContext.getInstance().getListContactTodaName(context).toString());
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-
-        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
-
-        String contactName = null;
-        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                contactName = cursor.getString(0);
-            }
-            cursor.close();
-        }
-        if (contactName == null) {
-            try {
-                if (ContactsListFragment.onlyDisplayLinphoneContacts == 1) {
-                    contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
-                } else if (ContactsListFragment.onlyDisplayLinphoneContacts == 2) {
-                    contactName = DbContext.getInstance().getListCusContactTodaName(context).get(phoneNumber);
-                }
-            } catch (Exception e) {
-                android.util.Log.d(TAG, "getContactName: ");
-            }
-        }
-
-        return contactName;
-    }
+//    public String getContactName(final String phoneNumber, Context context) {
+//        android.util.Log.d(TAG, "getContactName: " + DbContext.getInstance().getListContactTodaName(context).toString());
+//        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+//
+//        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+//
+//        String contactName = null;
+//        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+//
+//        if (cursor != null) {
+//            if (cursor.moveToFirst()) {
+//                contactName = cursor.getString(0);
+//            }
+//            cursor.close();
+//        }
+//        if (contactName == null) {
+//            try {
+//                if (ContactsListFragment.onlyDisplayLinphoneContacts == 1) {
+//                    contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+//                } else if (ContactsListFragment.onlyDisplayLinphoneContacts == 2) {
+//                    contactName = DbContext.getInstance().getListCusContactTodaName(context).get(phoneNumber);
+//                }
+//            } catch (Exception e) {
+//                android.util.Log.d(TAG, "getContactName: ");
+//            }
+//        }
+//
+//        return contactName;
+//    }
 
     @Override
     protected void onResume() {
