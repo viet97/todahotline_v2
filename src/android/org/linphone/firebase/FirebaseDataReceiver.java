@@ -11,6 +11,7 @@ import com.google.firebase.messaging.*;
 
 import org.linphone.*;
 import org.linphone.R;
+import org.linphone.core.LinphoneCore;
 
 import static android.content.Intent.ACTION_MAIN;
 
@@ -25,7 +26,6 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
     private final String MESSAGE_TYPE = "TinNhan";
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive: " + intent.getExtras().get("type").toString());
-
         if (intent.getExtras().get("type").toString().equals(LOGOUT_TYPE)) {
             Log.d(TAG, "onReceive123112: " + LinphonePreferences.instance().getAccountCount());
             SharedPreferences.Editor autoLoginEditor = context.getSharedPreferences("AutoLogin", context.MODE_PRIVATE).edit();

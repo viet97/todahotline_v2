@@ -58,20 +58,20 @@ public class GCMService extends GCMBaseIntentService {
 		initLogger(context);
 		Log.d("[Push Notification] Received");
 
-		if (!LinphoneService.isReady()) {
-			startService(new Intent(ACTION_MAIN).setClass(this, LinphoneService.class));
-		} else if (LinphoneManager.isInstanciated() && LinphoneManager.getLc().getCallsNb() == 0) {
-			UIThreadDispatcher.dispatch(new Runnable(){
-				@Override
-				public void run() {
-					if (LinphoneManager.isInstanciated() && LinphoneManager.getLc().getCallsNb() == 0){
-						LinphoneManager.getLc().setNetworkReachable(false);
-						LinphoneManager.getLc().setNetworkReachable(true);
-					}
-				}
-			});
-		}
-	}
+//		if (!LinphoneService.isReady()) {
+//			startService(new Intent(ACTION_MAIN).setClass(this, LinphoneService.class));
+//		} else if (LinphoneManager.isInstanciated() && LinphoneManager.getLc().getCallsNb() == 0) {
+//			UIThreadDispatcher.dispatch(new Runnable(){
+//				@Override
+//				public void run() {
+//					if (LinphoneManager.isInstanciated() && LinphoneManager.getLc().getCallsNb() == 0){
+//						LinphoneManager.getLc().setNetworkReachable(false);
+//						LinphoneManager.getLc().setNetworkReachable(true);
+//					}
+//				}
+//			});
+//		}
+    }
 
 	@Override
 	protected void onRegistered(Context context, final String regId) {
