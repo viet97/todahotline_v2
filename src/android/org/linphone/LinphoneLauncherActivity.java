@@ -60,6 +60,7 @@ public class LinphoneLauncherActivity extends Activity {
 	private ServiceWaitThread mServiceThread;
 	private String addressToCall;
 	private Uri uriToResolve;
+	private String TAG = "LinphoneLauncherActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +176,7 @@ public class LinphoneLauncherActivity extends Activity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+
 	}
 
 	protected void onServiceReady() {

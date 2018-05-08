@@ -172,10 +172,11 @@
 					android:layout_height="match_parent">
 
 					<ImageView
+                        android:id="@+id/message_icon"
 						android:src="@drawable/message_footer"
 						android:contentDescription="@string/content_description_chat_button"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
 						android:padding="15dp"
 						android:layout_alignParentTop="true"
 						android:layout_alignParentLeft="true"

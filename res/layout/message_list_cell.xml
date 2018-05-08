@@ -53,6 +53,8 @@
 
             <TextView
                 android:id="@+id/tv_title"
+                android:textSize="18sp"
+                android:textColor="@color/detail_message_cell_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"

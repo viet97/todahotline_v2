@@ -228,6 +228,7 @@ public class DialerFragment extends Fragment {
             }
         }
     }
+
     private void suggesDialer(String number) {
 
         int contacts = getActivity().getPackageManager().checkPermission(Manifest.permission.READ_CONTACTS, getActivity().getPackageName());
@@ -244,10 +245,11 @@ public class DialerFragment extends Fragment {
                 ActivityCompat.requestPermissions(getActivity(), permissions, LinphoneActivity.PERMISSIONS_READ_EXTERNAL_STORAGE_DEVICE_RINGTONE);
             }
         } else {
-            if (DbContext.getInstance().getPhoneContacts(getActivity()).size() == 0) {
-                android.util.Log.d(TAG, "phoneContacts: ");
-                LinphoneActivity.instance.phoneContacts.clear();
-                LinphoneActivity.instance.phoneContacts = ContactUltils.instance.getContactsPhone(getActivity());
+            if (LinphoneActivity.instance.phoneContacts != null) {
+                if (DbContext.getInstance().getPhoneContacts(getActivity()).size() == 0) {
+
+                    LinphoneActivity.instance.phoneContacts = ContactUltils.instance.getContactsPhone(getActivity());
+                }
             }
         }
         suggestionDialers.clear();

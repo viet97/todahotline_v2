@@ -165,7 +165,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private OrientationEventListener mOrientationHelper;
     private LinphoneCoreListenerBase mListener;
     private LinearLayout mTabBar;
-    public ArrayList<PhoneContact> phoneContacts;
+    public ArrayList<PhoneContact> phoneContacts = new ArrayList<>();
     private ProgressDialog dialogLogin;
     private DrawerLayout sideMenu;
     private RelativeLayout sideMenuContent, quitLayout, defaultAccount;
@@ -175,6 +175,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private List<String> sideMenuItems;
     private boolean callTransfer = false;
     private boolean isOnBackground = false;
+    public ImageView messageIcon;
 
     public String mAddressWaitingToBeCalled;
 
@@ -377,7 +378,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         chat.setOnClickListener(this);
         message = findViewById(R.id.message);
         message.setOnClickListener(this);
-
+        messageIcon = findViewById(R.id.message_icon);
         history_selected = findViewById(R.id.history_select);
         contacts_selected = findViewById(R.id.contacts_select);
         dialer_selected = findViewById(R.id.dialer_select);
@@ -1624,9 +1625,6 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        android.util.Log.d(TAG, "onNewIntent: ");
-
-
         if (getCurrentFragment() == FragmentsAvailable.SETTINGS) {
             if (fragment instanceof SettingsFragment) {
                 ((SettingsFragment) fragment).closePreferenceScreen();
