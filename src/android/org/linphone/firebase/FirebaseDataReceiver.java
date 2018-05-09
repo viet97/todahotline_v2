@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.google.firebase.messaging.*;
+import com.todahotline.DetailMessageListActivity;
+import com.todahotline.MessageListFragment;
 
 import org.linphone.*;
 import org.linphone.R;
@@ -47,7 +50,16 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
         }
         if (intent.getExtras().get("type").toString().equals(MESSAGE_TYPE)) {
             if (LinphoneActivity.instance != null) {
-                LinphoneActivity.instance().messageIcon.setImageResource(R.drawable.new_message_noti);
+                if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
+                    LinphoneActivity.instance().messageIcon.setImageResource(R.drawable.new_message_noti);
+                } else {
+                    if (LinphoneActivity.instance.getFragment() != null) {
+                        ((MessageListFragment) LinphoneActivity.instance().getFragment()).getMessagesList();
+                    }
+                }
+                if (DetailMessageListActivity.instance != null) {
+                    DetailMessageListActivity.instance.refreshData();
+                }
             }
         } else {
             if (!LinphoneService.isReady()) {

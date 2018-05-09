@@ -179,6 +179,9 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     public String mAddressWaitingToBeCalled;
 
+    public Fragment getFragment() {
+        return this.fragment;
+    }
     static final boolean isInstanciated() {
         return instance != null;
     }
@@ -534,12 +537,12 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         }
-
+        currentFragment = newFragmentType;
         transaction.replace(R.id.fragmentContainer, newFragment, newFragmentType.toString());
         transaction.commitAllowingStateLoss();
         fm.executePendingTransactions();
 
-        currentFragment = newFragmentType;
+
     }
 
     private void changeFragmentForTablets(Fragment newFragment, FragmentsAvailable newFragmentType, boolean withoutAnimation) {

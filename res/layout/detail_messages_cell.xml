@@ -23,7 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ListView
+        <org.linphone.ui.ExpandedListView
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:layout_marginTop="8dp"
             android:id="@+id/attachment_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

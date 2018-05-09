@@ -125,6 +125,8 @@ public class DetailMessageListResponse {
             String PathFile;
             @SerializedName("ID_TinNhan_NoiDung")
             int ID_TinNhan_NoiDung;
+            @SerializedName("FileName")
+            String FileName;
 
             public int getID_TinNhan_NoiDung_File() {
                 return ID_TinNhan_NoiDung_File;
@@ -132,6 +134,14 @@ public class DetailMessageListResponse {
 
             public void setID_TinNhan_NoiDung_File(int ID_TinNhan_NoiDung_File) {
                 this.ID_TinNhan_NoiDung_File = ID_TinNhan_NoiDung_File;
+            }
+
+            public String getFileName() {
+                return FileName;
+            }
+
+            public void setFileName(String fileName) {
+                FileName = fileName;
             }
 
             public String getPathFile() {

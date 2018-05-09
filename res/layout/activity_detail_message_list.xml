@@ -15,7 +15,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
         android:padding="4dp"
-
         />
     <RelativeLayout
         android:id="@+id/rl_input"
