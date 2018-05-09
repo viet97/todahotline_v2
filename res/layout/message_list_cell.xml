@@ -22,8 +22,7 @@
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/message" />
+            android:layout_marginLeft="5dp" />
 
         <TextView
             android:textSize="13sp"
