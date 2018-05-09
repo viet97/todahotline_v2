@@ -1627,6 +1627,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     @Override
     protected void onNewIntent(Intent intent) {
+        android.util.Log.d(TAG, "FCMCHECKKING: ");
         super.onNewIntent(intent);
         if (getCurrentFragment() == FragmentsAvailable.SETTINGS) {
             if (fragment instanceof SettingsFragment) {

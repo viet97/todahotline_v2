@@ -674,6 +674,11 @@ public class LoginActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        android.util.Log.d(TAG, "FCMCHECKKING: ");
+        super.onNewIntent(intent);
+    }
 
     /**
      * Apply default settings for a new account to check very basic coherence of settings and auto-modify settings missing

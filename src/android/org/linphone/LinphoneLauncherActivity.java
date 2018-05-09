@@ -175,6 +175,7 @@ public class LinphoneLauncherActivity extends Activity {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
+		android.util.Log.d(TAG, "FCMCHECKKING: ");
 		super.onNewIntent(intent);
 
 	}
