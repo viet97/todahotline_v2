@@ -1,11 +1,14 @@
 package org.linphone.ultils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 
+import org.linphone.LinphoneUtils;
 import org.linphone.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by QuocVietDang1 on 4/23/2018.
@@ -24,20 +27,34 @@ public class DateUltils {
         return isSameDay(cal, yesterday);
     }
 
+    public static String timestampToHumanDate(Context context, long timestamp, String format) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+
+            SimpleDateFormat dateFormat;
+            dateFormat = new SimpleDateFormat(format, Locale.getDefault());
+
+            return dateFormat.format(cal.getTime());
+        } catch (NumberFormatException nfe) {
+            return String.valueOf(timestamp);
+        }
+    }
     @SuppressLint("SimpleDateFormat")
-    private String timestampToHumanDate(long time) {
+    public String timestampToHumanDate(long time, Context context) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
         SimpleDateFormat dateFormat;
+        String datetime = LinphoneUtils.timestampToHumanDate(context, time, context.getString(R.string.history_detail_date_format));
         if (isToday(cal)) {
-            return String.valueOf(R.string.today);
+            return context.getString(R.string.today) + " " + datetime;
         } else if (isYesterday(cal)) {
-            return String.valueOf(R.string.yesterday);
+            return context.getString(R.string.yesterday) + " " + datetime;
         } else {
-            dateFormat = new SimpleDateFormat(String.valueOf(R.string.history_date_format));
+            dateFormat = new SimpleDateFormat(context.getString(R.string.history_date_format));
         }
 
-        return dateFormat.format(cal.getTime());
+        return dateFormat.format(cal.getTime()) + " " + datetime;
     }
     public boolean isSameDay(Calendar cal1, Calendar cal2) {
         if (cal1 == null || cal2 == null) {

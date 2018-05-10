@@ -554,7 +554,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
         }
 
         @SuppressLint("SimpleDateFormat")
-        private String timestampToHumanDate(Calendar cal) {
+        public String timestampToHumanDate(Calendar cal) {
             SimpleDateFormat dateFormat;
             if (isToday(cal)) {
                 return getString(R.string.today);

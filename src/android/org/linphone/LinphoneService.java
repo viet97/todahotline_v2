@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.linphone.assistant.AssistantActivity;
 import org.linphone.compatibility.Compatibility;
@@ -42,6 +44,7 @@ import org.linphone.mediastream.Version;
 import org.linphone.myactivity.LoginActivity;
 import org.linphone.ui.LinphoneOverlay;
 import org.linphone.ultils.ContactUltils;
+import org.linphone.ultils.DateUltils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -392,6 +395,11 @@ public final class LinphoneService extends Service {
                         body = ContactUltils.instance.getContactName(address.getDisplayName(), getApplicationContext());
 
                     }
+                    Calendar currentTime = Calendar.getInstance();
+                    currentTime.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
+                    String lastTime = DateUltils.instance.timestampToHumanDate(currentTime.getTimeInMillis(), getApplicationContext());
+                    body = body + " - " + lastTime;
+                    currentTime.getTime();
                     Intent missedCallNotifIntent = new Intent(LinphoneService.this, incomingReceivedActivity);
                     missedCallNotifIntent.putExtra("GoToHistory", true);
                     PendingIntent intent = PendingIntent.getActivity(LinphoneService.this, 0, missedCallNotifIntent, PendingIntent.FLAG_UPDATE_CURRENT);
