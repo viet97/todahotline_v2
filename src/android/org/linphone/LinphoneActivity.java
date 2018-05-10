@@ -148,7 +148,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private static final int ONLY_TAKECALL = 1;
     private static final int CALL_AND_TAKECALL = 3;
     public static LinphoneActivity instance;
-
+    public static final String HAS_NEW_MESSAGE = "NewMessage";
     private StatusFragment statusFragment;
     private TextView missedCalls, missedChats;
     private RelativeLayout contacts, history, dialer, chat, message;
@@ -361,6 +361,11 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         }
         mAlwaysChangingPhoneAngle = rotation;
 //        startActivity(new Intent(this,NewMessageActivity.class));
+
+        // chuyen den man hinh tin nhan khi co tin nhan moi
+        moveWhenGotNewMessage(getIntent());
+
+
     }
 
 
@@ -1515,6 +1520,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     protected void onResume() {
         super.onResume();
+        android.util.Log.d(TAG, "onResume: ");
         NetContext.getInstance().setBASE_URL("http://" + getSharedPreferences(LoginActivity.PREF_URLCONFIG, MODE_PRIVATE).getString(LoginActivity.PREF_URLCONFIG, NetContext.getInstance().BASE_URL));
         NetContext.getInstance().init(this);
 
@@ -1595,6 +1601,14 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     }
 
+    public void moveWhenGotNewMessage(Intent intent) {
+        try {
+            if (intent.getBooleanExtra(HAS_NEW_MESSAGE, false))
+                message.performClick();
+        } catch (Exception e) {
+            android.util.Log.d(TAG, "Exception: " + e.toString());
+        }
+    }
     @Override
     protected void onDestroy() {
         if (mOrientationHelper != null) {
@@ -1629,6 +1643,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     protected void onNewIntent(Intent intent) {
         android.util.Log.d(TAG, "FCMCHECKKING: ");
         super.onNewIntent(intent);
+        moveWhenGotNewMessage(intent);
         if (getCurrentFragment() == FragmentsAvailable.SETTINGS) {
             if (fragment instanceof SettingsFragment) {
                 ((SettingsFragment) fragment).closePreferenceScreen();
@@ -1974,7 +1989,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             dialogLogin = ProgressDialog.show(LinphoneActivity.this, "", "Đăng xuất...", true, false);
             String logoutURL = KEY_FUNC_URL
                     + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(LinphoneActivity.this).getData().getIdnhanvien()
-                    + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
+                    + "&hinhthucdangxuat=0"
+                    + "&imei=" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);      //0 la chu dong  1 la bi dong
 
             final Service service = NetContext.instance.create(Service.class);
             service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {

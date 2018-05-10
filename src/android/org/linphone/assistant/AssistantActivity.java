@@ -76,6 +76,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -344,7 +345,8 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
 //                                        logout.logout(0);
                                             String logoutURL = KEY_FUNC_URL
                                                     + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(context).getData().getIdnhanvien()
-                                                    + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
+                                                    + "&hinhthucdangxuat=0"
+                                                    + "&imei=" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);      //0 la chu dong  1 la bi dong
 
                                             final Service service = NetContext.instance.create(Service.class);
                                             dialogLogin = ProgressDialog.show(AssistantActivity.this, "", "Đổi mật khẩu ...", true, false);

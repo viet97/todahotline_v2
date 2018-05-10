@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -295,7 +296,8 @@ public class Profile extends Fragment {
     private void logoutAct() {
         String logoutURL = KEY_FUNC_URL
                 + "&idnhanvien=" + DbContext.getInstance().getLoginRespon(getActivity()).getData().getIdnhanvien()
-                + "&hinhthucdangxuat=0";      //0 la chu dong  1 la bi dong
+                + "&hinhthucdangxuat=0"
+                + "&imei=" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);      //0 la chu dong  1 la bi dong
         dialogLogin = ProgressDialog.show(getActivity(), "", "Đăng xuất...", true, false);
 
         final Service service = NetContext.instance.create(Service.class);

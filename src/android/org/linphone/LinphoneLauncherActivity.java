@@ -73,6 +73,7 @@ public class LinphoneLauncherActivity extends Activity {
 		mHandler = new Handler();
 
 		Intent intent = getIntent();
+
 		if (intent != null) {
 			String action = intent.getAction();
 			if (Intent.ACTION_CALL.equals(action)) {
@@ -175,7 +176,6 @@ public class LinphoneLauncherActivity extends Activity {
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		android.util.Log.d(TAG, "FCMCHECKKING: ");
 		super.onNewIntent(intent);
 
 	}
@@ -202,6 +202,15 @@ public class LinphoneLauncherActivity extends Activity {
 			public void run() {
 				Intent newIntent = new Intent(LinphoneLauncherActivity.this, classToStart);
 				Intent intent = getIntent();
+				// khi co tin nhan moi thi chuyen sang luon tab tin nhan
+				try {
+					if (intent.hasExtra("type")) {
+						Log.d(TAG, "NewMessage: ");
+						newIntent.putExtra(LinphoneActivity.HAS_NEW_MESSAGE, true);
+					}
+				} catch (Exception e) {
+					Log.d(TAG, "Exception: " + e.toString());
+				}
 				String stringFileShared = null;
 				String stringUriFileShared = null;
 				Uri fileUri = null;

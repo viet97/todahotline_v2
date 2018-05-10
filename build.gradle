@@ -21,7 +21,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
         if (googleFile.exists()) {
-            classpath 'com.google.gms:google-services:3.0.0'
+            classpath 'com.google.gms:google-services:3.1.0'
         }
 
     }
@@ -33,6 +33,9 @@ allprojects {
         mavenCentral()
         mavenLocal()
         google()
+        maven {
+            url "https://maven.google.com" // Google's Maven repository
+        }
     }
 }
 
@@ -44,7 +47,7 @@ dependencies {
         exclude module: 'support-annotations'
     }
     if (firebaseEnable()) {
-        compile 'com.google.firebase:firebase-messaging:11.+'
+        compile 'com.google.firebase:firebase-messaging:15.0.2'
     } else {
         compile fileTree(include: 'gcm.jar', dir: 'libs')
 //        compile 'com.android.support:support-v4:+'
