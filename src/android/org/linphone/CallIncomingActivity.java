@@ -220,11 +220,12 @@ public class CallIncomingActivity extends LinphoneGenericActivity implements Lin
         mListener = new LinphoneCoreListenerBase() {
             @Override
             public void callState(LinphoneCore lc, LinphoneCall call, State state, String message) {
-                android.util.Log.d(TAG, "callState: " + state + "      " + alreadyAcceptedOrDeniedCall);
+                android.util.Log.d(TAG, "callStateInComing: " + state + "      " + alreadyAcceptedOrDeniedCall);
                 if (call == mCall && State.CallEnd == state) {
-                    if (!alreadyAcceptedOrDeniedCall)
-                        addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_NHO);
-                    else addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_DEN);
+//                    if (!alreadyAcceptedOrDeniedCall)
+//                        addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_NHO);
+//                    else
+//                        addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_DEN);
                     finish();
                 }
 

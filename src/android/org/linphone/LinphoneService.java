@@ -27,6 +27,7 @@ import java.util.Date;
 
 import org.linphone.assistant.AssistantActivity;
 import org.linphone.compatibility.Compatibility;
+import org.linphone.core.CallDirection;
 import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCall;
 import org.linphone.core.LinphoneCall.State;
@@ -43,6 +44,7 @@ import org.linphone.mediastream.Log;
 import org.linphone.mediastream.Version;
 import org.linphone.myactivity.LoginActivity;
 import org.linphone.ui.LinphoneOverlay;
+import org.linphone.ultils.CallLogUltils;
 import org.linphone.ultils.ContactUltils;
 import org.linphone.ultils.DateUltils;
 
@@ -102,7 +104,7 @@ public final class LinphoneService extends Service {
     public final static int MISSED_NOTIF_ID = 5;
     private final static int SAS_NOTIF_ID = 6;
     private String TAG = "LinphoneService";
-
+    public ArrayList<String> listMissedCalls = new ArrayList<>();
     public static boolean isReady() {
         return instance != null && instance.mTestDelayElapsed;
     }
@@ -364,7 +366,6 @@ public final class LinphoneService extends Service {
         LinphoneManager.getLc().addListener(mListener = new LinphoneCoreListenerBase() {
             @Override
             public void callState(LinphoneCore lc, LinphoneCall call, LinphoneCall.State state, String message) {
-                android.util.Log.d(TAG, "callState: " + state.toString());
                 if (instance == null) {
                     Log.i("Service not ready, discarding call state change to ", state.toString());
                     return;
@@ -376,6 +377,15 @@ public final class LinphoneService extends Service {
                 }
 
                 if (state == State.CallEnd || state == State.CallReleased || state == State.Error) {
+                    if (state == State.CallEnd && call.getCallLog().getStatus() != CallStatus.Missed) {
+
+                        if (call.getDirection() == CallDirection.Incoming) {
+                            CallLogUltils.instance.addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_DEN, getApplicationContext());
+                        } else {
+                            CallLogUltils.instance.addOutGoingLog(call, MyCallLogs.CallLog.CUOC_GOI_DI, getApplicationContext());
+
+                        }
+                    }
                     if (LinphoneManager.isInstanciated() && LinphoneManager.getLc() != null && LinphoneManager.getLc().getCallsNb() == 0) {
                         if (LinphoneActivity.isInstanciated() && LinphoneActivity.instance().getStatusFragment() != null) {
                             removeSasNotification();
@@ -384,10 +394,12 @@ public final class LinphoneService extends Service {
                     }
                     destroyOverlay();
                 }
-
                 if (state == State.CallEnd && call.getCallLog().getStatus() == CallStatus.Missed) {
+                    listMissedCalls.add(call.getCallLog().getFrom().getUserName());
+                    android.util.Log.d(TAG, "callState: " + listMissedCalls.toString());
                     int missedCallCount = LinphoneManager.getLcIfManagerNotDestroyedOrNull().getMissedCallsCount();
                     String body;
+                    CallLogUltils.instance.addIncomingLog(call, MyCallLogs.CallLog.CUOC_GOI_NHO, getApplicationContext());
                     if (missedCallCount > 1) {
                         body = getString(R.string.missed_calls_notif_body).replace("%i", String.valueOf(missedCallCount));
                     } else {
@@ -414,6 +426,19 @@ public final class LinphoneService extends Service {
                 } else {
                     if (getResources().getBoolean(R.bool.enable_call_notification))
                         refreshIncallIcon(LinphoneManager.getLc().getCurrentCall());
+                }
+
+                if (state == LinphoneCall.State.OutgoingInit) {
+                    if (listMissedCalls.indexOf(call.getCallLog().getTo().getUserName()) != -1) {
+
+                        try {
+                            LinphoneService.instance().mNM.cancel(LinphoneService.MISSED_NOTIF_ID);
+                            LinphoneManager.getLc().resetMissedCallsCount();
+                            listMissedCalls.clear();
+                        } catch (Exception e) {
+                            android.util.Log.d(TAG, "Exception: " + e.toString());
+                        }
+                    }
                 }
             }
 

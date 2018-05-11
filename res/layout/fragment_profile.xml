@@ -284,7 +284,7 @@
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Phiên bản : 1.3.0.9"
+            android:text="Phiên bản : 1.3.1.0"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white"
             android:textStyle="normal" />

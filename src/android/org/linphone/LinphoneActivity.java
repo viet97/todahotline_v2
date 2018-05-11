@@ -828,6 +828,13 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             changeCurrentFragment(FragmentsAvailable.HISTORY_LIST, null);
             history_selected.setVisibility(View.VISIBLE);
             LinphoneManager.getLc().resetMissedCallsCount();
+            try {
+                if (LinphoneService.isReady()) {
+                    LinphoneService.instance().listMissedCalls.clear();
+                }
+            } catch (Exception e) {
+                android.util.Log.d(TAG, "Exception: " + e.toString());
+            }
             displayMissedCalls(0);
         } else if (id == R.id.contacts) {
             hideStatusBar();
@@ -1036,7 +1043,16 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             missedCalls.setText(missedCallsCount + "");
             missedCalls.setVisibility(View.VISIBLE);
         } else {
-            if (LinphoneManager.isInstanciated()) LinphoneManager.getLc().resetMissedCallsCount();
+            if (LinphoneManager.isInstanciated()) {
+                LinphoneManager.getLc().resetMissedCallsCount();
+                try {
+                    if (LinphoneService.isReady()) {
+                        LinphoneService.instance().listMissedCalls.clear();
+                    }
+                } catch (Exception e) {
+                    android.util.Log.d(TAG, "Exception: " + e.toString());
+                }
+            }
             missedCalls.clearAnimation();
             missedCalls.setVisibility(View.GONE);
         }

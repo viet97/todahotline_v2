@@ -195,11 +195,11 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			public void callState(LinphoneCore lc, final LinphoneCall call, LinphoneCall.State state, String message) {
                 if (state == State.CallEnd) {
                     android.util.Log.d(TAG, "callState: " + call.getDirection().toString().equals(CallDirection.Incoming));
-                    if (call.getDirection().equals(CallDirection.Incoming)) {
-                        addLog(call, MyCallLogs.CallLog.CUOC_GOI_DEN);
-                    } else {
-                        addLog(call, MyCallLogs.CallLog.CUOC_GOI_DI);
-                    }
+//                    if (call.getDirection().equals(CallDirection.Incoming)) {
+//                        addLog(call, MyCallLogs.CallLog.CUOC_GOI_DEN);
+//                    } else {
+//                        addLog(call, MyCallLogs.CallLog.CUOC_GOI_DI);
+//                    }
                 }
                 if (LinphoneManager.getLc().getCallsNb() == 0) {
 

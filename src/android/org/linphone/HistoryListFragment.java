@@ -73,7 +73,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
     private View allCallsSelected, missedCallsSelected;
     private LinearLayout editList, topBar;
     private boolean onlyDisplayMissedCalls, isEditMode;
-    private List<MyCallLogs.CallLog> mLogs;
+    private List<MyCallLogs.CallLog> mLogs = new ArrayList<>();
     private String TAG = "HistoryListFragment";
     private ImageView clearSearchField;
     private ExtendedEditText searchField;
@@ -111,22 +111,26 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 
 
     private void searchHistory(String s) {
-        s = ContactUltils.instance.removeAccents(s);
-        mLogs.clear();
-        ArrayList<MyCallLogs.CallLog> searchmLogs = DbContext.getInstance().getMyCallLogs(getActivity()).stackHistory(onlyDisplayMissedCalls);
-        for (MyCallLogs.CallLog callLog : searchmLogs) {
-            if (ContactUltils.instance.removeAccents(callLog.getName()).contains(s) ||
-                    ContactUltils.instance.removeAccents(callLog.getName()).startsWith(s)) {
-                mLogs.add(callLog);
-            }
-        }
-        hideHistoryListAndDisplayMessageIfEmpty();
-        if (onlyDisplayMissedCalls) {
-            removeNotMissedCallsFromLogs();
-            if (mLogs.size() == 0) noMissedCallHistory.setVisibility(View.VISIBLE);
-        }
         try {
-            ((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
+            s = ContactUltils.instance.removeAccents(s);
+            mLogs.clear();
+            ArrayList<MyCallLogs.CallLog> searchmLogs = DbContext.getInstance().getMyCallLogs(getActivity()).stackHistory(onlyDisplayMissedCalls);
+            for (MyCallLogs.CallLog callLog : searchmLogs) {
+                if (ContactUltils.instance.removeAccents(callLog.getName()).contains(s) ||
+                        ContactUltils.instance.removeAccents(callLog.getName()).startsWith(s)) {
+                    mLogs.add(callLog);
+                }
+            }
+            hideHistoryListAndDisplayMessageIfEmpty();
+            if (onlyDisplayMissedCalls) {
+                removeNotMissedCallsFromLogs();
+                if (mLogs.size() == 0) noMissedCallHistory.setVisibility(View.VISIBLE);
+            }
+            try {
+                ((BaseAdapter) historyList.getAdapter()).notifyDataSetChanged();
+            } catch (Exception e) {
+                Log.d(TAG, "Exception: " + e.toString());
+            }
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.toString());
         }
@@ -280,6 +284,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
         // xoa notifi cuoc goi nho moi vao man hinh lich su cuoc goi
         try {
             LinphoneService.instance().mNM.cancel(LinphoneService.MISSED_NOTIF_ID);
+
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.toString());
         }
@@ -390,19 +395,19 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 //
 //                } else {
 
-                    ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
+                ArrayList<MyCallLogs.CallLog> currentCallLogs = DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs();
 
-                    for (MyCallLogs.CallLog callLog : new ArrayList<>(currentCallLogs)) {
-                        for (MyCallLogs.CallLog c : listCallLogDelete) {
-                            if (c.getName().equals(callLog.getName()) && c.getPhoneNumber().equals(callLog.getPhoneNumber())) {
-                                if (onlyDisplayMissedCalls) {
-                                    if (callLog.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
-                                        currentCallLogs.remove(currentCallLogs.indexOf(callLog));
-                                    }
-                                } else {
+                for (MyCallLogs.CallLog callLog : new ArrayList<>(currentCallLogs)) {
+                    for (MyCallLogs.CallLog c : listCallLogDelete) {
+                        if (c.getName().equals(callLog.getName()) && c.getPhoneNumber().equals(callLog.getPhoneNumber())) {
+                            if (onlyDisplayMissedCalls) {
+                                if (callLog.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
                                     currentCallLogs.remove(currentCallLogs.indexOf(callLog));
                                 }
+                            } else {
+                                currentCallLogs.remove(currentCallLogs.indexOf(callLog));
                             }
+                        }
 //                        }
                     }
 
@@ -646,7 +651,6 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
             holder.cbxDelete.setOnClickListener(new OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
-
                                                         if (finalHolder.cbxDelete.isChecked()) {
                                                             finalHolder.cbxDelete.setChecked(true);
                                                             listIdDelete.add(log.getId());
