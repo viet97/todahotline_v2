@@ -80,6 +80,7 @@
             android:textColorHint="@color/white" />
 
         <EditText
+            android:inputType="textMultiLine"
             android:id="@+id/et_content"
             android:layout_width="match_parent"
             android:layout_height="120dp"
