@@ -48,6 +48,7 @@ import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.ultils.ContactUltils;
+import org.linphone.ultils.DateUltils;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -65,6 +66,7 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
     private String TAG = "HistoryDetailFragment";
     private LayoutInflater mInflater;
     private ArrayList<MyCallLogs.CallLog> listCallogs;
+    String callDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,9 +77,8 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
         android.util.Log.d(TAG, "onCreateView: " + displayName);
         String status = getArguments().getString("CallStatus");
         String callTime = getArguments().getString("CallTime");
-        String callDate = getArguments().getString("CallDate");
+        callDate = getArguments().getString("CallDate");
         mInflater = inflater;
-
         view = inflater.inflate(R.layout.history_detail, container, false);
         lvDetailHistory = view.findViewById(R.id.lv_history_detail);
         addAllCallByAddress();
@@ -127,7 +128,12 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
     public void addAllCallByAddress() {
         listCallogs = new ArrayList<>();
         for (MyCallLogs.CallLog c : DbContext.getInstance().getMyCallLogs(getActivity()).getCallLogs()) {
-            if (c.getPhoneNumber().equals(sipUri)) listCallogs.add(c);
+            Calendar cal1 = Calendar.getInstance();
+            Calendar cal2 = Calendar.getInstance();
+            cal1.setTimeInMillis(c.getTime());
+            cal2.setTimeInMillis(Long.parseLong(callDate));
+            if (c.getPhoneNumber().equals(sipUri) && DateUltils.instance.isSameDay(cal1, cal2))
+                listCallogs.add(c);
         }
         android.util.Log.d(TAG, "addAllCallByAddress: ");
     }

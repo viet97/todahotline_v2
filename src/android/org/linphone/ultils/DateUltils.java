@@ -43,6 +43,22 @@ public class DateUltils {
             return String.valueOf(timestamp);
         }
     }
+
+    public String timestampToHumanDateMessList(long time, Context context) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time);
+        SimpleDateFormat dateFormat;
+        String datetime = LinphoneUtils.timestampToHumanDate(context, time, context.getString(R.string.history_detail_date_format));
+        if (isToday(cal)) {
+            return context.getString(R.string.today);
+        } else if (isYesterday(cal)) {
+            return context.getString(R.string.yesterday);
+        } else {
+            dateFormat = new SimpleDateFormat(context.getString(R.string.history_date_format));
+        }
+
+        return dateFormat.format(cal.getTime());
+    }
     @SuppressLint("SimpleDateFormat")
     public String timestampToHumanDate(long time, Context context) {
         Calendar cal = Calendar.getInstance();
