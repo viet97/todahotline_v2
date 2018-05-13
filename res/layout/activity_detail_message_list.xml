@@ -167,7 +167,7 @@
 
     <TextView
         android:gravity="center"
-        android:text="Không có kết quả"
+        android:text="Không có tin nhắn"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:id="@+id/tv_empty"

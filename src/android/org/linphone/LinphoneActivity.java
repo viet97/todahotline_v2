@@ -1308,7 +1308,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     protected void onPause() {
         getIntent().putExtra("PreviousActivity", 0);
-
+        MyApplication.activityPaused();
         LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
         if (lc != null) {
             lc.removeListener(mListener);
@@ -1536,6 +1536,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     protected void onResume() {
         super.onResume();
+        MyApplication.activityResumed();
         android.util.Log.d(TAG, "onResume: ");
         NetContext.getInstance().setBASE_URL("http://" + getSharedPreferences(LoginActivity.PREF_URLCONFIG, MODE_PRIVATE).getString(LoginActivity.PREF_URLCONFIG, NetContext.getInstance().BASE_URL));
         NetContext.getInstance().init(this);

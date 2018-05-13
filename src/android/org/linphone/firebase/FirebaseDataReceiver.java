@@ -57,9 +57,14 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
                 }
             }
             if (intent.getExtras().get("type").toString().equals(MESSAGE_TYPE)) {
+
                 if (LinphoneActivity.instance != null) {
-                    if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
+                    if (!MyApplication.isActivityVisible()) {
                         createOwnMessageNoti(context);
+                    } else {
+                        if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
+                            createOwnMessageNoti(context);
+                        }
                     }
                 } else {
                     createOwnMessageNoti(context);

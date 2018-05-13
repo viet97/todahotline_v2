@@ -1909,8 +1909,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
             hangUp();
 			Toast.makeText(CallActivity.this, "Mất kết nối đến tổng đài", Toast.LENGTH_SHORT).show();
 		}catch (Exception e){
-
-		}
+            android.util.Log.d(TAG, "networkUnavailable: " + e.toString());
+        }
 	}
 
 	////Earset Connectivity Broadcast innerClass

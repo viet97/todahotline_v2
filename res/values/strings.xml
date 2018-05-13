@@ -4,7 +4,7 @@
     <!-- Custom -->
     <string name="app_name">Toda Phone</string>
     <string name="message_noti_title">Tin nhắn mới</string>
-    <string name="message_noti_content">Có tin nhắn mới.Clickc vào để đọc !</string>
+    <string name="message_noti_content">Có tin nhắn mới.Click vào để đọc !</string>
     <string name="service_name">Toda Phone</string>
     <string name="addressbook_label">Linphone</string>
     <string name="notification_title">Linphone</string>
