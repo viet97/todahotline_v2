@@ -39,14 +39,13 @@ public class CustomArrayAdapter extends ArrayAdapter<ContactResponse.DSDanhBa> {
         @Override
         protected FilterResults performFiltering(CharSequence s) {
             try {
-                String keyWord = s.toString();
-                s = ContactUltils.instance.removeAccents(keyWord);
-                if (s != null) {
-                    Log.d(TAG, "performFiltering: s != null");
+                String keyWord;
+                keyWord = ContactUltils.instance.removeAccents(s.toString());
+                if (keyWord != null) {
                     result.clear();
 
                     for (ContactResponse.DSDanhBa ds : suggestions) {
-                        Log.d(TAG, "performFiltering: " + ds.getSodienthoai());
+
                         if (ContactUltils.instance.removeAccents(ds.getSodienthoai()).contains(keyWord) ||
                                 ContactUltils.instance.removeAccents(ds.getJob()).contains(keyWord) ||
                                 ContactUltils.instance.removeAccents(ds.getTenlienhe()).contains(keyWord) ||
