@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.*;
 import com.todahotline.DetailMessageListActivity;
@@ -20,9 +21,20 @@ import com.todahotline.MessageListFragment;
 import org.linphone.*;
 import org.linphone.R;
 import org.linphone.core.LinphoneCore;
+import org.linphone.database.DbContext;
+import org.linphone.network.NetContext;
+import org.linphone.network.Service;
+import org.linphone.network.models.DetailMessageListResponse;
+import org.linphone.network.models.MessagesListResponse;
+import org.linphone.network.models.VoidRespon;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Intent.ACTION_MAIN;
 
@@ -63,6 +75,8 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
                 if (DetailMessageListActivity.instance != null) {
                     if (Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()) != DetailMessageListActivity.instance.IDTinNhan) {
                         createOwnMessageNoti(context);
+                    } else {
+                        readMessage(context, Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()));
                     }
                 } else {
                     if (LinphoneActivity.instance != null) {
@@ -100,6 +114,32 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.toString());
         }
+    }
+
+    private void readMessage(final Context context, int IDTinNhan) {
+        final String url = "AppDocTinNhan.aspx?idnhanvien=" + DbContext.getInstance().getLoginRespon(context).getData().getIdnhanvien() + "&idtinnhan=" + IDTinNhan;
+
+
+        Service service = NetContext.getInstance().create(Service.class);
+        service.docTinNhan(url).enqueue(new Callback<VoidRespon>() {
+            @Override
+            public void onResponse(Call<VoidRespon> call, Response<VoidRespon> response) {
+                try {
+                    if (response == null) {
+                        Toast.makeText(context, context.getString(R.string.adminstrator_error), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context, context.getString(R.string.adminstrator_error), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VoidRespon> call, Throwable t) {
+
+                Toast.makeText(context, context.getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     private void createOwnMessageNoti(Context context) {
