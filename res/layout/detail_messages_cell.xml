@@ -24,8 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <org.linphone.ui.ExpandedListView
-            android:visibility="gone"
+        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+
             android:divider="@null"
             android:dividerHeight="0dp"
             android:layout_marginTop="8dp"

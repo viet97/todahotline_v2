@@ -1535,6 +1535,7 @@
     <orderEntry type="library" exported="" name="common-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="1_common-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.3.0" level="project" />
+    <orderEntry type="library" exported="" name="expandableheightlistview-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="design-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-impl-15.0.2" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-26.1.0" level="project" />
@@ -1569,5 +1570,6 @@
     <orderEntry type="library" exported="" name="jackson-core-2.8.9" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
     <orderEntry type="module" module-name="RippleEffectModule" exported="" />
+    <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />
   </component>
 </module>
