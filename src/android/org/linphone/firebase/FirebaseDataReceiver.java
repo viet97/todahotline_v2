@@ -34,10 +34,13 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
     private final String TAG = "FirebaseDataReceiver";
     private final String LOGOUT_TYPE = "DangXuat";
     private final String MESSAGE_TYPE = "TinNhan";
+    private final String ID_TinNhan = "ID_TinNhan";
+    private final String SoTinNhanChuaDoc = "SoTinNhanChuaDoc";
     public static final int MESSAGE_ID_NOTI = 50;
 
     public void onReceive(Context context, Intent intent) {
         try {
+            Log.d(TAG, "TinNhan: " + intent.getExtras().get("sotinnhanchuadoc"));
             if (intent.getExtras().get("type").toString().equals(LOGOUT_TYPE)) {
                 SharedPreferences.Editor autoLoginEditor = context.getSharedPreferences("AutoLogin", context.MODE_PRIVATE).edit();
                 autoLoginEditor.putBoolean("AutoLogin", false);
@@ -57,18 +60,25 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
                 }
             }
             if (intent.getExtras().get("type").toString().equals(MESSAGE_TYPE)) {
-
-                if (LinphoneActivity.instance != null) {
-                    if (!MyApplication.isActivityVisible()) {
+                if (DetailMessageListActivity.instance != null) {
+                    if (Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()) != DetailMessageListActivity.instance.IDTinNhan) {
                         createOwnMessageNoti(context);
-                    } else {
-                        if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
-                            createOwnMessageNoti(context);
-                        }
                     }
                 } else {
-                    createOwnMessageNoti(context);
+                    if (LinphoneActivity.instance != null) {
+                        if (!MyApplication.isActivityVisible()) {
+                            createOwnMessageNoti(context);
+                        } else {
+                            if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
+                                createOwnMessageNoti(context);
+                            }
+                        }
+                    } else {
+                        createOwnMessageNoti(context);
+                    }
+
                 }
+
 
                 if (LinphoneActivity.instance != null) {
                     if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
