@@ -12,6 +12,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
+import android.view.*;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.*;
@@ -57,21 +59,20 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
                 SharedPreferences.Editor autoLoginEditor = context.getSharedPreferences("AutoLogin", context.MODE_PRIVATE).edit();
                 autoLoginEditor.putBoolean("AutoLogin", false);
                 autoLoginEditor.commit();
-                if (LinphonePreferences.instance().getAccountCount() > 0) {
-                    int accountNumber = LinphonePreferences.instance().getAccountCount();
-                    while (accountNumber >= 0) {
-                        LinphonePreferences.instance().deleteAccount(accountNumber);
-                        accountNumber--;
-                    }
-                }
+//                if (LinphonePreferences.instance().getAccountCount() > 0) {
+//                    int accountNumber = LinphonePreferences.instance().getAccountCount();
+//                    while (accountNumber >= 0) {
+//                        LinphonePreferences.instance().deleteAccount(accountNumber);
+//                        accountNumber--;
+//                    }
+//                }
                 if (LinphoneActivity.instance != null) {
-                    LinphoneActivity.instance().logoutAct();
+                    LinphoneActivity.instance().logoutAct(false);
                 } else {
                     com.google.firebase.messaging.FirebaseMessaging.getInstance().unsubscribeFromTopic("TodaPhone");
                     context.stopService(new Intent(Intent.ACTION_MAIN).setClass(context, LinphoneService.class));
                 }
-            }
-            if (intent.getExtras().get("type").toString().equals(MESSAGE_TYPE)) {
+            } else if (intent.getExtras().get("type").toString().equals(MESSAGE_TYPE)) {
                 if (LinphoneActivity.instance != null) {
                     if (!MyApplication.isActivityVisible()) {
                         if (!MyApplication.isDetailMessageVisible()) {
@@ -98,8 +99,12 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
 
 
                 if (LinphoneActivity.instance != null) {
+                    int soTinNhanChuaDoc = Integer.parseInt(intent.getExtras().get(SoTinNhanChuaDoc).toString());
                     if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
-                        LinphoneActivity.instance().messageIcon.setImageResource(R.drawable.new_message_noti);
+//                        LinphoneActivity.instance().messageIcon.setImageResource(R.drawable.new_message_noti);
+                        DbContext.getInstance().getLoginRespon(context).getData().setSoTinNhanChuaDoc(soTinNhanChuaDoc);
+                        LinphoneActivity.instance.newMessages.setText(String.valueOf(soTinNhanChuaDoc));
+                        LinphoneActivity.instance.newMessages.setVisibility(View.VISIBLE);
                     } else {
                         if (LinphoneActivity.instance.getFragment() != null) {
                             ((MessageListFragment) LinphoneActivity.instance().getFragment()).getMessagesList();
@@ -121,7 +126,7 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
 
     private void readMessage(final Context context, int IDTinNhan) {
         final String url = "AppDocTinNhan.aspx?idnhanvien=" + DbContext.getInstance().getLoginRespon(context).getData().getIdnhanvien() + "&idtinnhan=" + IDTinNhan;
-
+        Log.d(TAG, "DADOCTINNHAN: ");
 
         Service service = NetContext.getInstance().create(Service.class);
         service.docTinNhan(url).enqueue(new Callback<VoidRespon>() {

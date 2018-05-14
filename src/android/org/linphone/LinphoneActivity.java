@@ -150,7 +150,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     public static LinphoneActivity instance;
     public static final String HAS_NEW_MESSAGE = "NewMessage";
     private StatusFragment statusFragment;
-    private TextView missedCalls, missedChats;
+    public TextView missedCalls, missedChats, newMessages;
     private RelativeLayout contacts, history, dialer, chat, message;
     private View contacts_selected, history_selected, dialer_selected, chat_selected, message_selected;
     private RelativeLayout mTopBar;
@@ -182,6 +182,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     public Fragment getFragment() {
         return this.fragment;
     }
+
     static final boolean isInstanciated() {
         return instance != null;
     }
@@ -362,6 +363,14 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         mAlwaysChangingPhoneAngle = rotation;
 //        startActivity(new Intent(this,NewMessageActivity.class));
 
+        //hien thi so tin nhan moi chua doc
+        int newMessageCount = DbContext.getInstance().getLoginRespon(this).getData().getSoTinNhanChuaDoc();
+        if (newMessageCount != 0) {
+            newMessages.setVisibility(View.VISIBLE);
+            newMessages.setText(String.valueOf(newMessageCount));
+        } else {
+            newMessages.setVisibility(View.GONE);
+        }
         // chuyen den man hinh tin nhan khi co tin nhan moi
         moveWhenGotNewMessage(getIntent());
 
@@ -394,6 +403,9 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         message_selected = findViewById(R.id.message_select);
         missedCalls = (TextView) findViewById(R.id.missed_calls);
         missedChats = (TextView) findViewById(R.id.missed_chats);
+        newMessages = (TextView) findViewById(R.id.new_messages);
+        // hien thi so tin nhan chua doc o main
+
     }
 
     private boolean isTablet() {
@@ -1533,6 +1545,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -1626,6 +1639,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             android.util.Log.d(TAG, "Exception: " + e.toString());
         }
     }
+
     @Override
     protected void onDestroy() {
         if (mOrientationHelper != null) {
@@ -2001,7 +2015,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         }
     }
 
-    public void logoutAct() {
+    public void logoutAct(final boolean needDeleteAccount) {
         try {
             dialogLogin = ProgressDialog.show(LinphoneActivity.this, "", "Đăng xuất...", true, false);
             String logoutURL = KEY_FUNC_URL
@@ -2024,12 +2038,18 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                             SharedPreferences.Editor autoLoginEditor = getApplicationContext().getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();
                             autoLoginEditor.putBoolean("AutoLogin", false);
                             autoLoginEditor.commit();
-                            if (LinphonePreferences.instance().getAccountCount() > 0) {
-                                LinphonePreferences.instance().setAccountEnabled(0, false);
-                                int accountNumber = LinphonePreferences.instance().getAccountCount();
-                                while (accountNumber >= 0) {
-                                    LinphonePreferences.instance().deleteAccount(accountNumber);
-                                    accountNumber--;
+                            if (needDeleteAccount) {
+                                if (LinphonePreferences.instance().getAccountCount() > 0) {
+                                    LinphonePreferences.instance().setAccountEnabled(0, false);
+                                    int accountNumber = LinphonePreferences.instance().getAccountCount();
+                                    while (accountNumber >= 0) {
+                                        LinphonePreferences.instance().deleteAccount(accountNumber);
+                                        accountNumber--;
+                                    }
+                                }
+                            } else {
+                                if (LinphonePreferences.instance().getAccountCount() > 0) {
+                                    LinphonePreferences.instance().setAccountEnabled(0, false);
                                 }
                             }
 
@@ -2097,7 +2117,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                     .setMessage("Bạn có thật sự muốn đăng xuất ?")
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            logoutAct();
+                            logoutAct(true);
                         }
                     })
                     .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {

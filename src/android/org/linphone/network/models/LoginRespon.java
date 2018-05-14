@@ -43,8 +43,11 @@ public class LoginRespon {
     }
 
     public static class Data {
+
         @SerializedName("idct")
         private int idct;
+        @SerializedName("SoTinNhanChuaDoc")
+        private int SoTinNhanChuaDoc;
         @SerializedName("idnhanvien")
         private int idnhanvien;
         @SerializedName("anhdaidien")
@@ -112,6 +115,14 @@ public class LoginRespon {
 
         public ArrayList<Data.DSloaidanhba> getDsloaidanhba() {
             return dsloaidanhba;
+        }
+
+        public int getSoTinNhanChuaDoc() {
+            return SoTinNhanChuaDoc;
+        }
+
+        public void setSoTinNhanChuaDoc(int soTinNhanChuaDoc) {
+            SoTinNhanChuaDoc = soTinNhanChuaDoc;
         }
 
         public void setDsloaidanhba(ArrayList<Data.DSloaidanhba> dsloaidanhba) {

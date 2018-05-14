@@ -22,6 +22,8 @@ public class MessagesListResponse {
     public class Data {
         @SerializedName("ID_TinNhan")
         int ID_TinNhan;
+        @SerializedName("SoTinNhanChuaDoc")
+        int SoTinNhanChuaDoc;
         @SerializedName("TieuDe")
         String TieuDe;
         @SerializedName("ID_TinNhan_NoiDung")
@@ -34,6 +36,14 @@ public class MessagesListResponse {
         @Override
         public boolean equals(Object obj) {
             return this.getID_TinNhan() == ((Data) obj).getID_TinNhan();
+        }
+
+        public int getSoTinNhanChuaDoc() {
+            return SoTinNhanChuaDoc;
+        }
+
+        public void setSoTinNhanChuaDoc(int soTinNhanChuaDoc) {
+            SoTinNhanChuaDoc = soTinNhanChuaDoc;
         }
 
         public class NguoiGui {
