@@ -72,25 +72,28 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
                 }
             }
             if (intent.getExtras().get("type").toString().equals(MESSAGE_TYPE)) {
-                if (DetailMessageListActivity.instance != null) {
-                    if (Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()) != DetailMessageListActivity.instance.IDTinNhan) {
-                        createOwnMessageNoti(context);
-                    } else {
-                        readMessage(context, Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()));
-                    }
-                } else {
-                    if (LinphoneActivity.instance != null) {
-                        if (!MyApplication.isActivityVisible()) {
+                if (LinphoneActivity.instance != null) {
+                    if (!MyApplication.isActivityVisible()) {
+                        if (!MyApplication.isDetailMessageVisible()) {
                             createOwnMessageNoti(context);
+                            if (DetailMessageListActivity.instance != null) {
+                                DetailMessageListActivity.instance.IDTinNhanMoi = Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString());
+                            }
                         } else {
-                            if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
+                            if (Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()) != DetailMessageListActivity.instance.IDTinNhan) {
                                 createOwnMessageNoti(context);
+
+                            } else {
+                                readMessage(context, Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()));
                             }
                         }
                     } else {
-                        createOwnMessageNoti(context);
+                        if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
+                            createOwnMessageNoti(context);
+                        }
                     }
-
+                } else {
+                    createOwnMessageNoti(context);
                 }
 
 

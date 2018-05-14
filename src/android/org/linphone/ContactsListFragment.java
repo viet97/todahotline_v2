@@ -938,10 +938,13 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             allContacts.setEnabled(true);
 
         } else if (id == R.id.all_ext) {
+            onRefresh();
             filtContactsByCheckbox(ALL_EXT);
         } else if (id == R.id.onl_ext) {
+            onRefresh();
             filtContactsByCheckbox(ONL_EXT);
         } else if (id == R.id.off_ext) {
+            onRefresh();
             filtContactsByCheckbox(OFF_EXT);
         } else if (isEditMode) {
             Log.d(TAG, "onClick: 418");
@@ -1200,7 +1203,9 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
     @Override
     public void onResume() {
-
+        if (onlyDisplayLinphoneContacts != 0) {
+            onRefresh();
+        }
         ContactsManager.addContactsListener(this);
         super.onResume();
         getActivity().registerReceiver(receiverLoadData, new IntentFilter("AddContacts"));
@@ -1277,6 +1282,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                         ContactResponse contactResponse;
                         contactResponse = response.body();
                         try {
+                            if (refreshLayout.isRefreshing())
                             refreshLayout.setRefreshing(false);
                         } catch (Exception e) {
                             Log.d(TAG, "Exception: " + e.toString());
@@ -1309,9 +1315,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     @Override
                     public void onFailure(Call<ContactResponse> call, Throwable t) {
                         try {
-                            refreshLayout.setRefreshing(false);
+                            if (refreshLayout.isRefreshing())
+                                refreshLayout.setRefreshing(false);
                         } catch (Exception e) {
-
+                            Log.d(TAG, "Exception: " + e.toString());
                         }
 
                         try {
@@ -1319,7 +1326,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                                     getString(R.string.network_error),
                                     Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-
+                            Log.d(TAG, "Exception: " + e.toString());
                         }
                     }
 
