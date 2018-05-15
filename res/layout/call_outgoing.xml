@@ -10,7 +10,7 @@
         android:padding="16dp"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:text="Đang gọi ..."
+        android:text="@string/calling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -130,7 +130,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tắt âm"
+                    android:text="@string/micro"
                     android:textColor="#b2b0a1" />
             </LinearLayout>
 
@@ -153,7 +153,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Âm thanh"
+                    android:text="@string/speaker"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -176,7 +176,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chuyển cuộc gọi"
+                    android:text="@string/transfer"
                     android:textColor="#b2b0a1" />
             </LinearLayout>
 
@@ -207,7 +207,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bàn phím"
+                    android:text="@string/dialpad"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -254,7 +254,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tạm giữ"
+                    android:text="@string/hold"
                     android:textColor="#b2b0a1" />
             </LinearLayout>
         </LinearLayout>

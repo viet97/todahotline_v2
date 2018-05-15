@@ -72,6 +72,18 @@
     <string name="require_info">Không được để trống nội dung</string>
     <string name="atleast_8char_password">Mật khẩu cần dài ít nhất 8 kí tự</string>
     <string name="no_space_in_password">Mật khẩu không được có khoảng trắng</string>
+    <string name="offline_ext_message">không kết nối tới tổng đài</string>
+    <string name="good_network">tốt</string>
+    <string name="weak_network">kém</string>
+    <string name="very_good_network">rất tốt</string>
+    <string name="normal_network">trung bình</string>
+    <string name="receiving_call">Cuộc gọi đến...</string>
+    <string name="calling">Đang gọi...</string>
+    <string name="micro">Tắt âm</string>
+    <string name="speaker">Âm thanh</string>
+    <string name="transfer">Chuyển cuộc gọi</string>
+    <string name="hold">Tạm giữ</string>
+    <string name="dialpad">Bàn phím</string>
 
 
     <!-- Common -->

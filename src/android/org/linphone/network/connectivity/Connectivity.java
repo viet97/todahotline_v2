@@ -8,6 +8,8 @@ import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import org.linphone.R;
+
 /**
  * Created by QuocVietDang1 on 4/20/2018.
  */
@@ -99,59 +101,59 @@ public class Connectivity {
             Log.d(TAG, "getConnectionFast: " + level);
             switch (level) {
                 case 1:
-                    return WEAK;
+                    return context.getString(R.string.weak_network);
                 case 2:
-                    return WEAK;
+                    return context.getString(R.string.weak_network);
                 case 3:
-                    return WEAK;
+                    return context.getString(R.string.weak_network);
                 case 4:
-                    return GOOD;
+                    return context.getString(R.string.good_network);
                 default:
-                    return GOOD;
+                    return context.getString(R.string.good_network);
             }
         } else if (type == ConnectivityManager.TYPE_MOBILE) {
             switch (subType) {
                 case TelephonyManager.NETWORK_TYPE_1xRTT:
-                    return WEAK; // ~ 50-100 kbps
+                    return context.getString(R.string.weak_network); // ~ 50-100 kbps
                 case TelephonyManager.NETWORK_TYPE_CDMA:
-                    return WEAK; // ~ 14-64 kbps
+                    return context.getString(R.string.weak_network); // ~ 14-64 kbps
                 case TelephonyManager.NETWORK_TYPE_EDGE:
-                    return WEAK; // ~ 50-100 kbps
+                    return context.getString(R.string.weak_network); // ~ 50-100 kbps
                 case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                    return GOOD; // ~ 400-1000 kbps
+                    return context.getString(R.string.good_network); // ~ 400-1000 kbps
                 case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                    return GOOD; // ~ 600-1400 kbps
+                    return context.getString(R.string.good_network); // ~ 600-1400 kbps
                 case TelephonyManager.NETWORK_TYPE_GPRS:
-                    return WEAK; // ~ 100 kbps
+                    return context.getString(R.string.weak_network); // ~ 100 kbps
                 case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    return EXCELENT; // ~ 2-14 Mbps
+                    return context.getString(R.string.very_good_network); // ~ 2-14 Mbps
                 case TelephonyManager.NETWORK_TYPE_HSPA:
-                    return EXCELENT; // ~ 700-1700 kbps
+                    return context.getString(R.string.very_good_network); // ~ 700-1700 kbps
                 case TelephonyManager.NETWORK_TYPE_HSUPA:
-                    return EXCELENT; // ~ 1-23 Mbps
+                    return context.getString(R.string.very_good_network); // ~ 1-23 Mbps
                 case TelephonyManager.NETWORK_TYPE_UMTS:
-                    return GOOD; // ~ 400-7000 kbps
+                    return context.getString(R.string.good_network); // ~ 400-7000 kbps
             /*
              * Above API level 7, make sure to set android:targetSdkVersion
              * to appropriate level to use these
              */
                 case TelephonyManager.NETWORK_TYPE_EHRPD: // API level 11
-                    return EXCELENT; // ~ 1-2 Mbps
+                    return context.getString(R.string.very_good_network); // ~ 1-2 Mbps
                 case TelephonyManager.NETWORK_TYPE_EVDO_B: // API level 9
-                    return EXCELENT; // ~ 5 Mbps
+                    return context.getString(R.string.very_good_network); // ~ 5 Mbps
                 case TelephonyManager.NETWORK_TYPE_HSPAP: // API level 13
-                    return EXCELENT; // ~ 10-20 Mbps
+                    return context.getString(R.string.very_good_network); // ~ 10-20 Mbps
                 case TelephonyManager.NETWORK_TYPE_IDEN: // API level 8
-                    return WEAK; // ~25 kbps
+                    return context.getString(R.string.weak_network); // ~25 kbps
                 case TelephonyManager.NETWORK_TYPE_LTE: // API level 11
-                    return EXCELENT; // ~ 10+ Mbps
+                    return context.getString(R.string.very_good_network);// ~ 10+ Mbps
                 // Unknown
                 case TelephonyManager.NETWORK_TYPE_UNKNOWN:
                 default:
-                    return WEAK;
+                    return context.getString(R.string.weak_network);
             }
         }
-        return WEAK;
+        return context.getString(R.string.weak_network);
     }
 
 }

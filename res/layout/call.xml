@@ -83,7 +83,7 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:paddingTop="5dp"
-                            android:text="Tạm dừng"
+                            android:text="@string/hold"
                             android:textColor="@color/white"
                             android:textSize="18sp" />
 
@@ -261,7 +261,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tắt âm"
+                            android:text="@string/micro"
                             android:textColor="@color/white" />
                     </LinearLayout>
 
@@ -284,7 +284,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Âm thanh"
+                            android:text="@string/speaker"
                             android:textColor="@color/white" />
                     </LinearLayout>
 
@@ -307,7 +307,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Chuyển cuộc gọi"
+                            android:text="@string/transfer"
                             android:textColor="@color/white" />
                     </LinearLayout>
 
@@ -338,7 +338,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Bàn phím"
+                            android:text="@string/dialpad"
                             android:textColor="@color/white" />
                     </LinearLayout>
 
@@ -385,7 +385,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tạm giữ"
+                            android:text="@string/hold"
                             android:textColor="@color/white" />
                     </LinearLayout>
                 </LinearLayout>
