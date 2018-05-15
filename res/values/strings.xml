@@ -32,7 +32,7 @@
     <string name="new_message_to_hint">Tới</string>
     <string name="new_message_title_hint">Chủ đề</string>
     <string name="new_message_content_hint">Nội dung</string>
-    <string name="new_message_attach_files">Chọn tện</string>
+    <string name="new_message_attach_files">Chọn tệp</string>
     <string name="no_result_search">Không có kết quả</string>
     <string name="all_calls">Tất cả</string>
     <string name="missed_calls">Cuộc gọi nhỡ</string>
@@ -75,7 +75,7 @@
     <string name="require_info">Không được để trống nội dung</string>
     <string name="atleast_8char_password">Mật khẩu cần dài ít nhất 8 kí tự</string>
     <string name="no_space_in_password">Mật khẩu không được có khoảng trắng</string>
-    <string name="offline_ext_message">không kết nối tới tổng đài</string>
+    <string name="offline_ext_message"> không kết nối tới tổng đài</string>
     <string name="good_network">tốt</string>
     <string name="weak_network">kém</string>
     <string name="very_good_network">rất tốt</string>

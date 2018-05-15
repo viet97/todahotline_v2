@@ -32,7 +32,6 @@ public class MyCallLogs {
         ArrayList<CallLog> results = new ArrayList<>();
         ArrayList<CallLog> listCurrentCallLogs = new ArrayList<>();
         if (onlyDisplayMissedCalls) {
-
             for (MyCallLogs.CallLog log : this.getCallLogs()) {
                 if (log.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
                     listCurrentCallLogs.add(log);
@@ -55,7 +54,6 @@ public class MyCallLogs {
                     Calendar c2 = Calendar.getInstance();
                     c2.setTimeInMillis(currentCallLog.getTime());
                     if (c.getPhoneNumber().equals(currentCallLog.getPhoneNumber()) &&
-                            c.getName().equals(currentCallLog.getName()) &&
                             DateUltils.instance.isSameDay(c1, c2)) {
                         c.setCount(c.getCount() + 1);
                         break;

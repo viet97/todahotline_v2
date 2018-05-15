@@ -22,6 +22,8 @@ public class MessagesListResponse {
     public class Data {
         @SerializedName("ID_TinNhan")
         int ID_TinNhan;
+        @SerializedName("CoFile")
+        boolean CoFile;
         @SerializedName("SoTinNhanChuaDoc")
         int SoTinNhanChuaDoc;
         @SerializedName("TieuDe")
@@ -40,6 +42,14 @@ public class MessagesListResponse {
 
         public int getSoTinNhanChuaDoc() {
             return SoTinNhanChuaDoc;
+        }
+
+        public boolean isCoFile() {
+            return CoFile;
+        }
+
+        public void setCoFile(boolean coFile) {
+            CoFile = coFile;
         }
 
         public void setSoTinNhanChuaDoc(int soTinNhanChuaDoc) {

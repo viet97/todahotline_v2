@@ -6,21 +6,21 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_alignParentTop="true"
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/separator_text"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:textStyle="bold"
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <!--<ImageView-->
         <!--android:layout_width="match_parent"-->
@@ -28,17 +28,18 @@
         <!--android:background="@color/colorE" />-->
 
     </LinearLayout>
+
     <RelativeLayout
-        android:layout_below="@id/separator"
-        android:layout_marginTop="8dp"
         android:id="@+id/layout"
-        android:padding="10dp"
-        android:background="@drawable/round_message_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/separator"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_message_item"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/img_message"
@@ -47,14 +48,35 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true" />
 
+        <ImageView
+            android:visibility="visible"
+            android:id="@+id/img_attach_file"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginRight="2dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignTop="@id/tv_time"
+            android:layout_toLeftOf="@id/tv_time"
+            android:src="@drawable/is_attachment_files" />
+
         <TextView
-            android:textSize="13sp"
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:textSize="13sp" />
 
+        <TextView
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/badge_background"
+            android:id="@+id/tv_badge"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="13sp" />
         <LinearLayout
             android:id="@+id/ll_main"
             android:layout_width="wrap_content"
@@ -75,12 +97,12 @@
 
             <TextView
                 android:id="@+id/tv_title"
-                android:textSize="18sp"
-                android:textColor="@color/detail_message_cell_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="@color/detail_message_cell_color"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_content"
