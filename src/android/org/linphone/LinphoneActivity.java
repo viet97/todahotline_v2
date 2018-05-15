@@ -105,6 +105,7 @@ import org.linphone.myactivity.LoginActivity;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.VoidRespon;
+import org.linphone.notice.DisplayNotice;
 import org.linphone.purchase.InAppPurchaseActivity;
 import org.linphone.ui.AddressText;
 import org.linphone.ultils.ContactUltils;
@@ -199,6 +200,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         super.onCreate(savedInstanceState);
         FirebaseMessaging.getInstance().subscribeToTopic("TodaPhone");
         phoneContacts = new ArrayList<>();
+
+
 //        auto save login
 //        AlarmManager alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 //        Intent intent = new Intent(this, StartServiceReceiver.class);
@@ -259,13 +262,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
         initButtons();
         initSideMenu();
-        try {
-            if (DbContext.getInstance().getLoginRespon(this).getData().getDsquyen().get(0).getIdcauhinh() != ONLY_TAKECALL) {
-                dialer.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
 
-        }
         currentFragment = FragmentsAvailable.EMPTY;
         if (savedInstanceState == null) {
             try {
@@ -1550,6 +1547,17 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     protected void onResume() {
         super.onResume();
         MyApplication.activityResumed();
+        try {
+            if (DbContext.getInstance().getLoginRespon(this).getData().getDsquyen().get(0).getIdcauhinh() != ONLY_TAKECALL) {
+                dialer.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            android.util.Log.d(TAG, "Exception: " + e.toString());
+        }
+        // fix bux 30s drop cuoc goi den
+        if (LinphonePreferences.instance() != null)
+            LinphonePreferences.instance().setPushNotificationEnabled(false);
+
         android.util.Log.d(TAG, "onResume: ");
         NetContext.getInstance().setBASE_URL("http://" + getSharedPreferences(LoginActivity.PREF_URLCONFIG, MODE_PRIVATE).getString(LoginActivity.PREF_URLCONFIG, NetContext.getInstance().BASE_URL));
         NetContext.getInstance().init(this);
@@ -2086,9 +2094,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                     } catch (Exception e) {
 
                     }
-                    Toast.makeText(LinphoneActivity.this,
-                            getString(R.string.network_error),
-                            Toast.LENGTH_SHORT).show();
+
+                    DisplayNotice.displayOnFailure(LinphoneActivity.this);
                 }
 
             });
@@ -2113,14 +2120,14 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 builder = new AlertDialog.Builder(LinphoneActivity.this);
             }
 //            try {
-            builder.setTitle("Đăng xuất")
-                    .setMessage("Bạn có thật sự muốn đăng xuất ?")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            builder.setTitle(getString(R.string.dialog_logout_title))
+                    .setMessage(getString(R.string.dialog_logout_message_builder))
+                    .setPositiveButton(getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             logoutAct(true);
                         }
                     })
-                    .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // do nothing
                         }

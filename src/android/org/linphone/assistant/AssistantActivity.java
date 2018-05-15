@@ -53,6 +53,7 @@ import org.linphone.myactivity.LoginActivity;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.VoidRespon;
+import org.linphone.notice.DisplayNotice;
 import org.linphone.tools.OpenH264DownloadHelper;
 import org.linphone.ultils.KeyBoardUltils;
 
@@ -349,7 +350,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                     + "&imei=" + Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);      //0 la chu dong  1 la bi dong
 
                                             final Service service = NetContext.instance.create(Service.class);
-                                            dialogLogin = ProgressDialog.show(AssistantActivity.this, "", "Đổi mật khẩu ...", true, false);
+                                            dialogLogin = ProgressDialog.show(AssistantActivity.this, "", getString(R.string.changing_pass_message), true, false);
 
                                             service.dangxuat(logoutURL).enqueue(new Callback<VoidRespon>() {
                                                 @Override
@@ -382,7 +383,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                         databasePref.commit();
                                                         FirebaseMessaging.getInstance().unsubscribeFromTopic("TodaPhone");
                                                         dialogLogin.cancel();
-                                                        Toast.makeText(AssistantActivity.this, "Đổi mật khẩu thành công , bạn sẽ bị đăng xuất khỏi tài khoản.", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(AssistantActivity.this, getString(R.string.change_password_successfull), Toast.LENGTH_SHORT).show();
 
                                                         stopService(new Intent(Intent.ACTION_MAIN).setClass(AssistantActivity.this, LinphoneService.class));
                                                         Intent intent = new Intent(AssistantActivity.this, LoginActivity.class);
@@ -399,19 +400,17 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                     } catch (Exception e) {
 
                                                     }
-                                                    Toast.makeText(AssistantActivity.this,
-                                                            getString(R.string.network_error),
-                                                            Toast.LENGTH_SHORT).show();
+                                                    DisplayNotice.displayOnFailure(AssistantActivity.this);
                                                 }
 
                                             });
 
                                         } else {
                                             if (!passold.equals(currentPass)) {
-                                                Toast.makeText(AssistantActivity.this, "Mật khẩu cũ không đúng. Vui lòng nhập lại.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(AssistantActivity.this, R.string.wrong_old_password, Toast.LENGTH_SHORT).show();
                                             } else {
                                                 if (!pass.equals(passveri)) {
-                                                    Toast.makeText(AssistantActivity.this, "Mật khẩu xác nhận không đúng. Vui lòng nhập lại.", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AssistantActivity.this, getString(R.string.wrong_verify_password), Toast.LENGTH_SHORT).show();
                                                 } else
                                                     Toast.makeText(AssistantActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
                                             }
@@ -423,9 +422,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
 
                                 @Override
                                 public void onFailure(Call<VoidRespon> call, Throwable t) {
-                                    Toast.makeText(AssistantActivity.this,
-                                            getString(R.string.network_error),
-                                            Toast.LENGTH_SHORT).show();
+                                    DisplayNotice.displayOnFailure(AssistantActivity.this);
 
                                 }
                             });
@@ -473,19 +470,19 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
             } else if (passveri.trim().equals("")) {
                 focusEditext(edpassveri, this);
             }
-            Toast.makeText(this, "Không được để trống nội dung.",
+            Toast.makeText(this, getString(R.string.require_info),
                     Toast.LENGTH_SHORT).show();
             return false;
         } else if (!pass.equals(passveri)) {
-            Toast.makeText(this, "Mật khẩu xác nhận không chính xác",
+            Toast.makeText(this, getString(R.string.wrong_verify_password),
                     Toast.LENGTH_SHORT).show();
             return false;
         } else if (passveri.length() < 8) {
-            Toast.makeText(this, "Mật khẩu cần dài ít nhất 8 kí tự",
+            Toast.makeText(this, getString(R.string.atleast_8char_password),
                     Toast.LENGTH_SHORT).show();
             return false;
         } else if (passveri.contains(" ") || pass.contains(" ")) {
-            Toast.makeText(this, "Mật khẩu không được có khoảng trắng",
+            Toast.makeText(this, getString(R.string.no_space_in_password),
                     Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -534,7 +531,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                 dialogLogout.cancel();
             }
         } catch (Exception e) {
-
+            android.util.Log.d(TAG, "Exception: " + e.toString());
         }
 
         super.onPause();
@@ -731,7 +728,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
             lc.setDefaultProxyConfig(proxyConfig);
 
             if (LinphonePreferences.instance() != null)
-                LinphonePreferences.instance().setPushNotificationEnabled(true);
+                LinphonePreferences.instance().setPushNotificationEnabled(false);
 
             if (ContactsManager.getInstance() != null)
                 ContactsManager.getInstance().fetchContactsAsync();

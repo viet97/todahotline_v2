@@ -54,9 +54,11 @@ import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
+import org.linphone.network.connectivity.Connectivity;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
 import org.linphone.network.models.NonTodaContactsResponse;
+import org.linphone.notice.DisplayNotice;
 import org.linphone.ultils.KeyBoardUltils;
 
 import java.io.ByteArrayOutputStream;
@@ -151,13 +153,7 @@ public class LoginActivity extends Activity {
 
                 @Override
                 public void onFailure(Call<ContactResponse> call, Throwable t) {
-                    try {
-                        Toast.makeText(LoginActivity.this,
-                                getString(R.string.network_error),
-                                Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        android.util.Log.d(TAG, "Exception: " + e);
-                    }
+                    DisplayNotice.displayOnFailure(LoginActivity.this);
                 }
 
             });
@@ -191,14 +187,7 @@ public class LoginActivity extends Activity {
 
                 @Override
                 public void onFailure(Call<ContactResponse> call, Throwable t) {
-
-                    try {
-                        Toast.makeText(LoginActivity.this,
-                                getString(R.string.network_error),
-                                Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        android.util.Log.d(TAG, "Exception: " + e.toString());
-                    }
+                    DisplayNotice.displayOnFailure(LoginActivity.this);
                 }
 
             });
@@ -248,13 +237,7 @@ public class LoginActivity extends Activity {
                 @Override
                 public void onFailure(Call<NonTodaContactsResponse> call, Throwable t) {
 
-                    try {
-                        Toast.makeText(LoginActivity.this,
-                                getString(R.string.network_error),
-                                Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        android.util.Log.d(TAG, "Exception: " + e.toString());
-                    }
+                    DisplayNotice.displayOnFailure(LoginActivity.this);
                 }
             });
         } catch (Exception e) {
@@ -263,15 +246,7 @@ public class LoginActivity extends Activity {
 
     }
 
-    public Animation getBlinkAnimation() {
-        Animation animation = new AlphaAnimation(1, 0);         // Change alpha from fully visible to invisible
-        animation.setDuration(300);                             // duration - half a second
-        animation.setInterpolator(new LinearInterpolator());    // do not alter animation rate
-        animation.setRepeatCount(Animation.INFINITE);                            // Repeat animation infinitely
-        animation.setRepeatMode(Animation.REVERSE);             // Reverse animation at the end so the button will fade back in
 
-        return animation;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -449,7 +424,7 @@ public class LoginActivity extends Activity {
 
     public void loginAct() {
         if (!config.getString(PREF_URLCONFIG, "").equals("")) {
-            dialogLogin = ProgressDialog.show(LoginActivity.this, "", "Đăng nhập...", true, false);
+            dialogLogin = ProgressDialog.show(LoginActivity.this, "", getString(R.string.dialog_login_message), true, false);
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
 
@@ -473,7 +448,7 @@ public class LoginActivity extends Activity {
                         } catch (Exception e) {
                             android.util.Log.d(TAG, "Exception: " + e);
                         }
-                        Toast.makeText(getBaseContext(), "Không có kết nối mạng", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.adminstrator_error), Toast.LENGTH_SHORT).show();
                     } else if (et_password.getText().toString().equals("")
                             || et_username.getText().toString().equals("")) {
                         try {
@@ -482,7 +457,7 @@ public class LoginActivity extends Activity {
                         } catch (Exception e) {
                             android.util.Log.d(TAG, "Exception: " + e);
                         }
-                        Toast.makeText(getBaseContext(), "Thông tin đăng nhập không được để trống", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), getString(R.string.empty_info_login), Toast.LENGTH_SHORT).show();
                     } else {
                         NetContext.getInstance().init(LoginActivity.this);
                         android.util.Log.d(TAG, "run: " + NetContext.getInstance().getBASE_URL());
@@ -568,7 +543,7 @@ public class LoginActivity extends Activity {
                                             e.printStackTrace();
                                         }
                                     } else {
-                                        messegeDialog(loginRespon.getMsg());
+                                        Toast.makeText(LoginActivity.this, loginRespon.getMsg(), Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (Exception e) {
                                     if (dialogLogin.isShowing())
@@ -578,6 +553,7 @@ public class LoginActivity extends Activity {
 
                             @Override
                             public void onFailure(Call<LoginRespon> call, Throwable t) {
+                                DisplayNotice.displayOnFailure(LoginActivity.this);
                                 android.util.Log.d(TAG, "onFailure: ");
                                 autoLoginEditor = autoLogin.edit();
                                 autoLoginEditor.putBoolean("AutoLogin", false);
@@ -714,20 +690,6 @@ public class LoginActivity extends Activity {
         return to;
     }
 
-    public void messegeDialog(String text) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setTitle("Thông Báo");
-        builder.setMessage(text);
-        builder.setPositiveButton("Đóng", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.create();
-        builder.show();
-    }
 
 
 }

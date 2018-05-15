@@ -59,6 +59,7 @@ import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.MessagesListResponse;
 import org.linphone.network.models.NonTodaContactsResponse;
 import org.linphone.network.models.VoidRespon;
+import org.linphone.notice.DisplayNotice;
 import org.linphone.ultils.ContactUltils;
 
 import java.net.URLEncoder;
@@ -210,20 +211,6 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
         changeAdapter();
     }
 
-    public int getNbItemsChecked() {
-        int size = contactsList.getAdapter().getCount();
-        int nb = 0;
-        for (int i = 0; i < size; i++) {
-            if (contactsList.isItemChecked(i)) {
-                nb++;
-            }
-        }
-        return nb;
-    }
-
-
-
-
     public void changeAdapter() {
 
         NonTodaContactsAdapter adapter;
@@ -346,16 +333,10 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                         refreshLayout.setRefreshing(false);
                         dialogSearch.cancel();
                     } catch (Exception e) {
-
+                        Log.d(TAG, "Exception: " + e.toString());
                     }
 
-                    try {
-                        Toast.makeText(NonTodaContacts.this,
-                                getString(R.string.network_error),
-                                Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-
-                    }
+                    DisplayNotice.displayOnFailure(NonTodaContacts.this);
                 }
             });
         } catch (Exception e) {
@@ -376,10 +357,10 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
         } else if (id == R.id.complete_add_contact) {
             Log.d(TAG, "complete_add_contact: ");
             if (listAddContacts.size() == 0) {
-                Toast.makeText(NonTodaContacts.this, "Chưa có liên hệ nào được chọn", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NonTodaContacts.this, getString(R.string.no_contacts_picked), Toast.LENGTH_SHORT).show();
             } else {
                 try {
-                    dialogSearch = ProgressDialog.show(NonTodaContacts.this, "", "Đang Thêm...", true, false);
+                    dialogSearch = ProgressDialog.show(NonTodaContacts.this, "", getString(R.string.dialog_add_message), true, false);
                     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
                     String listAddContactsNonToda = ow.writeValueAsString(listAddContacts);
                     listAddContactsNonToda = listAddContactsNonToda.replaceAll(" ", "");
@@ -439,7 +420,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                                     listIdAddContacts.clear();
                                     try {
                                         Toast.makeText(NonTodaContacts.this,
-                                                "Thêm danh bạ thành công",
+                                                getString(R.string.add_contacts_successfull),
                                                 Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         Log.d(TAG, "Exception: " + e.toString());
@@ -473,13 +454,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception: " + e.toString());
                             }
-                            try {
-                                Toast.makeText(NonTodaContacts.this,
-                                        getString(R.string.network_error),
-                                        Toast.LENGTH_SHORT).show();
-                            } catch (Exception e) {
-                                Log.d(TAG, "Exception: " + e.toString());
-                            }
+                            DisplayNotice.displayOnFailure(NonTodaContacts.this);
                         }
                     });
                 } catch (Exception e) {

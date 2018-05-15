@@ -23,7 +23,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="15dp"
-                android:text="Trên máy"
+                android:text="@string/local_contacts"
                 android:textColor="@color/white" />
             <!--<ImageView-->
             <!--android:id="@+id/all_contacts"-->
@@ -53,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="15dp"
-                android:text="Nội bộ"
+                android:text="@string/privated_contacts"
                 android:textColor="@color/white" />
             <!--<ImageView-->
             <!--android:id="@+id/linphone_contacts"-->
@@ -173,7 +173,7 @@
             android:layout_height="40dp"
             android:background="@drawable/resizable_textfield"
             android:contentDescription="@string/content_description_search_contact"
-            android:hint="Nhập để tìm kiếm"
+            android:hint="@string/search_hint_text"
             android:inputType="textPersonName"
             android:textColor="@android:color/black"
             android:textCursorDrawable="@null" />
@@ -207,7 +207,7 @@
                 android:layout_height="25dp"
                 android:layout_marginLeft="16dp"
                 android:button="@drawable/custom_tickbox"
-                android:text="Tất cả"
+                android:text="@string/all_ext_fillter"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
@@ -243,7 +243,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginRight="16dp"
                 android:button="@drawable/custom_tickbox"
-                android:text="chọn tất cả"
+                android:text="@string/all_ext_fillter"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:visibility="gone" />
@@ -309,7 +309,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Không tìm thấy kết quả"
+                    android:text="@string/no_result_search"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>

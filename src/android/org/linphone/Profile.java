@@ -32,6 +32,7 @@ import org.linphone.network.NetContext;
 import org.linphone.network.Service;
 import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.VoidRespon;
+import org.linphone.notice.DisplayNotice;
 import org.linphone.ultils.StringUltils;
 
 import retrofit2.Call;
@@ -282,7 +283,7 @@ public class Profile extends Fragment {
 
                 @Override
                 public void onFailure(Call<AboutRespon> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Lỗi! Không thể kết nối tới máy chủ, vui lòng thử lại sau.", Toast.LENGTH_LONG).show();
+                    DisplayNotice.displayOnFailure(getActivity());
                     Log.d("LoggerInterceptor", "onFailure: " + t.toString());
                     Log.d("LoggerInterceptor", "onFailure: " + call.toString());
                 }
@@ -354,9 +355,7 @@ public class Profile extends Fragment {
                 } catch (Exception e) {
                     Log.d(TAG, "Exception: " + e.toString());
                 }
-                Toast.makeText(getActivity(),
-                        getString(R.string.network_error),
-                        Toast.LENGTH_SHORT).show();
+                DisplayNotice.displayOnFailure(getActivity());
             }
 
         });

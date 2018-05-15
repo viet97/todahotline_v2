@@ -49,7 +49,7 @@
             <TextView
                 android:gravity="center"
 				android:id="@+id/all_calls"
-                android:text="Tất cả"
+				android:text="@string/all_calls"
                 android:textColor="@color/white"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
@@ -73,7 +73,7 @@
             <TextView
 				android:gravity="center"
                 android:id="@+id/missed_calls"
-                android:text="Cuộc gọi nhỡ"
+				android:text="@string/missed_calls"
                 android:textColor="@color/white"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"/>
@@ -119,7 +119,7 @@
 			android:layout_height="40dp"
 			android:background="@drawable/resizable_textfield"
 			android:contentDescription="@string/content_description_search_contact"
-			android:hint="Nhập để tìm kiếm"
+			android:hint="@string/search_hint_text"
 			android:inputType="textPersonName"
 			android:textColor="@android:color/black"
 			android:textCursorDrawable="@null" />
@@ -144,7 +144,7 @@
 		android:layout_marginBottom="8dp"
 		android:layout_marginRight="16dp"
 		android:button="@drawable/custom_tickbox"
-		android:text="chọn tất cả"
+		android:text="@string/all_ext_fillter"
 		android:textColor="@android:color/white"
         android:textSize="15sp"
 		android:visibility="gone" />

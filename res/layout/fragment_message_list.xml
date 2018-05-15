@@ -36,7 +36,7 @@
             android:textSize="16sp"
             android:textColor="@color/white"
             android:layout_centerInParent="true"
-            android:text="Danh sách tin nhắn"
+            android:text="@string/message_list_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -58,7 +58,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginRight="16dp"
         android:button="@drawable/custom_tickbox"
-        android:text="chọn tất cả"
+        android:text="@string/pick_all_cbx"
         android:textColor="@android:color/white"
         android:textSize="15sp"
         android:visibility="gone" />
@@ -76,7 +76,7 @@
             android:layout_height="40dp"
             android:background="@drawable/resizable_textfield"
             android:contentDescription="@string/content_description_search_contact"
-            android:hint="Nhập để tìm kiếm"
+            android:hint="@string/search_hint_text"
             android:inputType="textPersonName"
             android:textColor="@android:color/black"
             android:textCursorDrawable="@null" />
@@ -111,7 +111,7 @@
 
     <TextView
         android:gravity="center"
-        android:text="Không có tin nhắn"
+        android:text="@string/no_message"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:id="@+id/tv_empty"

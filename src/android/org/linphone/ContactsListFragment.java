@@ -66,10 +66,12 @@ import org.linphone.database.DbContext;
 import org.linphone.layoutXML.ExtendedEditText;
 import org.linphone.network.NetContext;
 import org.linphone.network.Service;
+import org.linphone.network.connectivity.Connectivity;
 import org.linphone.network.models.ContactResponse;
 import org.linphone.network.models.LoginRespon;
 import org.linphone.network.models.NonTodaContactsResponse;
 import org.linphone.network.models.VoidRespon;
+import org.linphone.notice.DisplayNotice;
 import org.linphone.ultils.ContactUltils;
 
 import java.lang.reflect.Array;
@@ -479,10 +481,10 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
     private void deleteArrayContact() {
         if (listIdDelete.size() == 0) {
-            Toast.makeText(getActivity(), "Chưa có liên hệ nào được chọn.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.no_contacts_picked), Toast.LENGTH_SHORT).show();
         } else {
             try {
-                dialogRemove = ProgressDialog.show(getActivity(), "", "Đang xóa...", true, false);
+                dialogRemove = ProgressDialog.show(getActivity(), "", getString(R.string.removing_message_dialog), true, false);
             } catch (Exception e) {
                 Log.d(TAG, "Exception: " + e.toString());
             }
@@ -744,6 +746,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             changeAdapter();
         } else if (id == R.id.linphone_contacts) {
+            onRefresh();
             deleteAll.setVisibility(View.INVISIBLE);
             allExt.setVisibility(View.VISIBLE);
             onlExt.setVisibility(View.VISIBLE);
@@ -1321,13 +1324,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                             Log.d(TAG, "Exception: " + e.toString());
                         }
 
-                        try {
-                            Toast.makeText(getActivity(),
-                                    getString(R.string.network_error),
-                                    Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            Log.d(TAG, "Exception: " + e.toString());
-                        }
+                        DisplayNotice.displayOnFailure(getActivity());
                     }
 
                 });

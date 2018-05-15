@@ -73,7 +73,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="2"
                         android:background="#0000"
-                        android:hint="Mã công ty"
+                        android:hint="@string/et_idct_login_hint"
                         android:singleLine="true"
                         android:textColor="#000000"
                         android:textCursorDrawable="@null" />
@@ -114,7 +114,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_weight="2"
                         android:background="#0000"
-                        android:hint="Tên Đăng Nhập"
+                        android:hint="@string/et_user_login_hint"
                         android:singleLine="true"
                         android:textColor="#000000"
                         android:textCursorDrawable="@null" />
@@ -161,7 +161,7 @@
                             android:layout_centerInParent="true"
                             android:layout_marginLeft="5dp"
                             android:background="#0000"
-                            android:hint="Mật Khẩu"
+                            android:hint="@string/et_password_login_hint"
                             android:inputType="textPassword"
                             android:singleLine="true"
                             android:textColor="#000000"
@@ -189,7 +189,7 @@
                     android:layout_below="@+id/llpa"
                     android:layout_margin="16dp"
                     android:button="@drawable/custom_tickbox"
-                    android:text="Ghi nhớ đăng nhập"
+                    android:text="@string/remember_login_cbx"
                     android:textColor="@android:color/white" />
 
                 <Button
@@ -202,7 +202,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_margin="16dp"
                     android:background="@drawable/button_login"
-                    android:text="Đăng nhập"
+                    android:text="@string/login_button"
                     android:textColor="@android:color/white" />
 
                 <ImageView

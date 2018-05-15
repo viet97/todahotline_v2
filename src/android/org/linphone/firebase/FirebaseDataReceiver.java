@@ -29,6 +29,7 @@ import org.linphone.network.Service;
 import org.linphone.network.models.DetailMessageListResponse;
 import org.linphone.network.models.MessagesListResponse;
 import org.linphone.network.models.VoidRespon;
+import org.linphone.notice.DisplayNotice;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -144,7 +145,7 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
             @Override
             public void onFailure(Call<VoidRespon> call, Throwable t) {
 
-                Toast.makeText(context, context.getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+                DisplayNotice.displayOnFailure(context);
 
             }
         });

@@ -103,11 +103,11 @@ public class Connectivity {
                 case 2:
                     return WEAK;
                 case 3:
-                    return NORMAL;
+                    return WEAK;
                 case 4:
                     return GOOD;
                 default:
-                    return EXCELENT;
+                    return GOOD;
             }
         } else if (type == ConnectivityManager.TYPE_MOBILE) {
             switch (subType) {
@@ -122,7 +122,7 @@ public class Connectivity {
                 case TelephonyManager.NETWORK_TYPE_EVDO_A:
                     return GOOD; // ~ 600-1400 kbps
                 case TelephonyManager.NETWORK_TYPE_GPRS:
-                    return NORMAL; // ~ 100 kbps
+                    return WEAK; // ~ 100 kbps
                 case TelephonyManager.NETWORK_TYPE_HSDPA:
                     return EXCELENT; // ~ 2-14 Mbps
                 case TelephonyManager.NETWORK_TYPE_HSPA:
@@ -148,10 +148,10 @@ public class Connectivity {
                 // Unknown
                 case TelephonyManager.NETWORK_TYPE_UNKNOWN:
                 default:
-                    return NORMAL;
+                    return WEAK;
             }
         }
-        return NORMAL;
+        return WEAK;
     }
 
 }
