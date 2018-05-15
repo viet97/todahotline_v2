@@ -423,10 +423,18 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
                     topbar.setVisibility(View.VISIBLE);
                     backDeleteMode.setVisibility(View.GONE);
                     if (onlyDisplayLinphoneContacts == 1) {
-                        allExt.setVisibility(View.VISIBLE);
-                        onlExt.setVisibility(View.VISIBLE);
-                        offExt.setVisibility(View.VISIBLE);
-                        deleteAll.setVisibility(View.INVISIBLE);
+                        if (DbContext.getInstance().getLoginRespon(getActivity()).getData().getChophepxemonoffext().equals("true")) {
+                            allExt.setVisibility(View.VISIBLE);
+                            onlExt.setVisibility(View.VISIBLE);
+                            offExt.setVisibility(View.VISIBLE);
+                            deleteAll.setVisibility(View.INVISIBLE);
+                        } else {
+                            allExt.setVisibility(View.GONE);
+                            onlExt.setVisibility(View.GONE);
+                            offExt.setVisibility(View.GONE);
+                            deleteAll.setVisibility(View.GONE);
+                        }
+
                     } else {
                         deleteAll.setVisibility(View.GONE);
                     }
@@ -747,11 +755,17 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             changeAdapter();
         } else if (id == R.id.linphone_contacts) {
-
-            deleteAll.setVisibility(View.INVISIBLE);
-            allExt.setVisibility(View.VISIBLE);
-            onlExt.setVisibility(View.VISIBLE);
-            offExt.setVisibility(View.VISIBLE);
+            if (DbContext.getInstance().getLoginRespon(getActivity()).getData().getChophepxemonoffext().equals("true")) {
+                deleteAll.setVisibility(View.INVISIBLE);
+                allExt.setVisibility(View.VISIBLE);
+                onlExt.setVisibility(View.VISIBLE);
+                offExt.setVisibility(View.VISIBLE);
+            } else {
+                deleteAll.setVisibility(View.GONE);
+                allExt.setVisibility(View.GONE);
+                onlExt.setVisibility(View.GONE);
+                offExt.setVisibility(View.GONE);
+            }
             filtContactsByCheckbox(extStatusCheckBox);
             addContacts.setVisibility(View.VISIBLE);
             onlyDisplayLinphoneContacts = TODA_CONTACT;

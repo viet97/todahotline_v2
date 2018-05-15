@@ -19,7 +19,7 @@
 
 
     <string name="message_noti_title">Tin nhắn mới</string>
-    <string name="message_noti_content">Có tin nhắn mới.Click vào để đọc !</string>
+    <string name="message_noti_content">Có %s tin nhắn mới chưa đọc.Click vào để đọc !</string>
     <string name="adminstrator_error">Không thể kết nối tới máy chủ</string>
     <string name="network_error">Không có kết nối internet,vui lòng bật wifi hoặc 3g</string>
     <string name="nontoda_contacts_title">Danh sách liên hệ</string>

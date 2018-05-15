@@ -55,6 +55,7 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
 
     public void onReceive(Context context, Intent intent) {
         try {
+            int soTinNhanChuaDoc = Integer.parseInt(intent.getExtras().get(SoTinNhanChuaDoc).toString());
             if (intent.getExtras().get("type").toString().equals(LOGOUT_TYPE)) {
                 SharedPreferences.Editor autoLoginEditor = context.getSharedPreferences("AutoLogin", context.MODE_PRIVATE).edit();
                 autoLoginEditor.putBoolean("AutoLogin", false);
@@ -76,13 +77,13 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
                 if (LinphoneActivity.instance != null) {
                     if (!MyApplication.isActivityVisible()) {
                         if (!MyApplication.isDetailMessageVisible()) {
-                            createOwnMessageNoti(context);
+                            createOwnMessageNoti(context, soTinNhanChuaDoc);
                             if (DetailMessageListActivity.instance != null) {
                                 DetailMessageListActivity.instance.IDTinNhanMoi = Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString());
                             }
                         } else {
                             if (Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()) != DetailMessageListActivity.instance.IDTinNhan) {
-                                createOwnMessageNoti(context);
+                                createOwnMessageNoti(context, soTinNhanChuaDoc);
 
                             } else {
                                 readMessage(context, Integer.parseInt(intent.getExtras().get(ID_TinNhan).toString()));
@@ -90,16 +91,16 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
                         }
                     } else {
                         if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
-                            createOwnMessageNoti(context);
+                            createOwnMessageNoti(context, soTinNhanChuaDoc);
                         }
                     }
                 } else {
-                    createOwnMessageNoti(context);
+                    createOwnMessageNoti(context, soTinNhanChuaDoc);
                 }
 
 
                 if (LinphoneActivity.instance != null) {
-                    int soTinNhanChuaDoc = Integer.parseInt(intent.getExtras().get(SoTinNhanChuaDoc).toString());
+
                     Log.d(TAG, "TinNhan: " + soTinNhanChuaDoc);
 
                     if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
@@ -152,7 +153,7 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
         });
     }
 
-    private void createOwnMessageNoti(Context context) {
+    private void createOwnMessageNoti(Context context, int soTinNhanChuaDoc) {
         if (LinphoneActivity.instance == null) {
             Intent intent;
             PendingIntent pendingIntent;
@@ -166,7 +167,7 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
             NotificationCompat.Builder notificationBuilder = null;
 
             notificationBuilder = new NotificationCompat.Builder(context)
-                    .setContentTitle(context.getString(R.string.message_noti_title))
+                    .setContentTitle(String.format(context.getString(R.string.message_noti_content), String.valueOf(soTinNhanChuaDoc)))
                     .setSmallIcon(R.drawable.new_email_notification)
                     .setContentText(context.getString(R.string.message_noti_content))
                     .setAutoCancel(true)
@@ -195,7 +196,7 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
             notificationBuilder = new NotificationCompat.Builder(context)
                     .setContentTitle(context.getString(R.string.message_noti_title))
                     .setSmallIcon(R.drawable.new_email_notification)
-                    .setContentText(context.getString(R.string.message_noti_content))
+                    .setContentText(String.format(context.getString(R.string.message_noti_content), String.valueOf(soTinNhanChuaDoc)))
                     .setAutoCancel(true)
                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                     .setContentIntent(pendingIntent);
