@@ -393,6 +393,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             searchField = view.findViewById(R.id.searchField);
             searchField.clearTextChangedListeners();
             searchField.addTextChangedListener(twLocal);
+            searchField.setOnClickListener(this);
             contactsFetchInProgress = (ProgressBar) view.findViewById(R.id.contactsFetchInProgress);
 //            contactsFetchInProgress.setVisibility(View.VISIBLE);
             refreshLayout.setOnRefreshListener(this);
@@ -746,7 +747,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             linphoneContactsSelected.setVisibility(View.INVISIBLE);
             changeAdapter();
         } else if (id == R.id.linphone_contacts) {
-            onRefresh();
+
             deleteAll.setVisibility(View.INVISIBLE);
             allExt.setVisibility(View.VISIBLE);
             onlExt.setVisibility(View.VISIBLE);
@@ -754,6 +755,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             filtContactsByCheckbox(extStatusCheckBox);
             addContacts.setVisibility(View.VISIBLE);
             onlyDisplayLinphoneContacts = TODA_CONTACT;
+
             lastID = 0;
             isLoaded = false;
             searchField.clearTextChangedListeners();
@@ -762,6 +764,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             reloadListContacts();
 
             searchField.addTextChangedListener(twToda);
+            onRefresh();
             changeAdapter();
 //            try {
 //                dialogSearch = ProgressDialog.show(getActivity(), "", "Đang tải...", true, false);
@@ -974,6 +977,8 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
             Log.d(TAG, "onClick: 439");
             searchField.setText("");
             searchText = "";
+        } else if (id == R.id.searchField) {
+            onRefresh();
         }
     }
 

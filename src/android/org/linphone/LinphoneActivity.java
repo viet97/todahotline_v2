@@ -1549,6 +1549,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         MyApplication.activityResumed();
         try {
             if (DbContext.getInstance().getLoginRespon(this).getData().getDsquyen().get(0).getIdcauhinh() != ONLY_TAKECALL) {
+                dialer.setVisibility(View.VISIBLE);
+            } else {
                 dialer.setVisibility(View.GONE);
             }
         } catch (Exception e) {

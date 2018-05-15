@@ -3,8 +3,7 @@
 
     <!-- Custom -->
     <string name="app_name">Toda Phone</string>
-    <string name="message_noti_title">Tin nhắn mới</string>
-    <string name="message_noti_content">Có tin nhắn mới.Click vào để đọc !</string>
+
     <string name="service_name">Toda Phone</string>
     <string name="addressbook_label">Linphone</string>
     <string name="notification_title">Linphone</string>
@@ -17,6 +16,10 @@
     <string name="about_text">GNU General Public License V2\n © 2010-2017 Belledonne Communications</string>
     <string name="about_link">www.linphone.org</string>
     <string name="sync_account_name">linphone contacts</string>
+
+
+    <string name="message_noti_title">Tin nhắn mới</string>
+    <string name="message_noti_content">Có tin nhắn mới.Click vào để đọc !</string>
     <string name="adminstrator_error">Không thể kết nối tới máy chủ</string>
     <string name="network_error">Không có kết nối internet,vui lòng bật wifi hoặc 3g</string>
     <string name="nontoda_contacts_title">Danh sách liên hệ</string>
@@ -84,7 +87,19 @@
     <string name="transfer">Chuyển cuộc gọi</string>
     <string name="hold">Tạm giữ</string>
     <string name="dialpad">Bàn phím</string>
-
+    <string name="no_call_history">Không có cuộc gọi nào</string>
+    <string name="no_missed_call_history">Không có cuộc gọi nhỡ nào</string>
+    <string name="incoming_call">Cuộc gọi đến</string>
+    <string name="outgoing_call">Cuộc gọi đi</string>
+    <string name="today">Hôm nay</string>
+    <string name="yesterday">Hôm qua</string>
+    <string name="missed_calls_notif_title">Cuộc gọi nhỡ</string>
+    <string name="missed_calls_notif_body">%i cuộc gọi nhỡ</string>
+    <string name="incall_notif_active">Đang gọi</string>
+    <string name="incall_notif_paused">Tạm giữ</string>
+    <string name="error_network_unreachable">Mất kết nối đến tổng đài</string>
+    <string name="error_call_declined">Kết thúc</string>
+    <string name="error_user_busy">Máy bận</string>
 
     <!-- Common -->
     <string name="username">Username</string>
@@ -219,12 +234,8 @@
     <string name="address_bar_hint"></string>
 
     <!-- History -->
-    <string name="no_call_history">Không có cuộc gọi nào</string>
-    <string name="no_missed_call_history">Không có cuộc gọi nhỡ nào</string>
-    <string name="delete_history_log">Do you want to delete selected call log?</string>
-    <string name="today">Hôm nay</string>
-    <string name="yesterday">Hôm qua</string>
 
+    <string name="delete_history_log">Do you want to delete selected call log?</string>
     <!-- Contacts -->
     <string name="no_contact">No contact in your address book.</string>
     <string name="no_sip_contact">No SIP contact in your address book.</string>
@@ -275,8 +286,7 @@
     <string name="quit">Đăng xuất</string>
 
     <!-- Call -->
-    <string name="incoming_call">Cuộc gọi đến</string>
-    <string name="outgoing_call">Cuộc gọi đi</string>
+
     <string name="add_video_dialog">Your caller would like to turn on video</string>
     <string name="no_current_call">No active call</string>
     <string name="call_paused_by_remote">Your caller paused the call</string>
@@ -310,25 +320,19 @@
     <string name="menu_reset_log">Reset log</string>
 
     <!-- Service -->
-    <string name="incall_notif_active">Đang gọi</string>
-    <string name="incall_notif_paused">Tạm giữ</string>
+
     <string name="incall_notif_video">Video capturing call ongoing</string>
     <string name="notification_started">started</string>
     <string name="unread_messages">%i unread messages</string>
-    <string name="missed_calls_notif_title">Cuộc gọi nhỡ</string>
-    <string name="missed_calls_notif_body">%i cuộc gọi nhỡ</string>
 
     <!-- Errors -->
     <string name="skipable_error_service_not_ready">Warning: service is not ready</string>
     <string name="error">Error</string>
     <string name="warning_wrong_destination_address">Cannot build destination address from %s</string>
     <string name="error_unknown">Unknown error</string>
-    <string name="error_call_declined">Kết thúc</string>
-    <string name="error_user_busy">Máy bận</string>
     <string name="error_user_not_found">User not found</string>
     <string name="error_incompatible_media">Incompatible media parameters</string>
     <string name="error_low_bandwidth">Your caller has low bandwidth, video cannot be started</string>
-    <string name="error_network_unreachable">Mất kết nối đến tổng đài</string>
     <string name="error_bad_credentials">Bad credentials</string>
     <string name="error_unauthorized">Unauthorized</string>
     <string name="error_io_error">Network error</string>

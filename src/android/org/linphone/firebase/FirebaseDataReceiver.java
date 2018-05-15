@@ -55,7 +55,6 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
 
     public void onReceive(Context context, Intent intent) {
         try {
-            Log.d(TAG, "TinNhan: " + intent.getExtras().get("sotinnhanchuadoc"));
             if (intent.getExtras().get("type").toString().equals(LOGOUT_TYPE)) {
                 SharedPreferences.Editor autoLoginEditor = context.getSharedPreferences("AutoLogin", context.MODE_PRIVATE).edit();
                 autoLoginEditor.putBoolean("AutoLogin", false);
@@ -101,6 +100,8 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
 
                 if (LinphoneActivity.instance != null) {
                     int soTinNhanChuaDoc = Integer.parseInt(intent.getExtras().get(SoTinNhanChuaDoc).toString());
+                    Log.d(TAG, "TinNhan: " + soTinNhanChuaDoc);
+
                     if (LinphoneActivity.instance.getCurrentFragment() != FragmentsAvailable.MESSAGE) {
 //                        LinphoneActivity.instance().messageIcon.setImageResource(R.drawable.new_message_noti);
                         DbContext.getInstance().getLoginRespon(context).getData().setSoTinNhanChuaDoc(soTinNhanChuaDoc);
