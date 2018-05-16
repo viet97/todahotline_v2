@@ -167,9 +167,9 @@ public class FirebaseDataReceiver extends WakefulBroadcastReceiver {
             NotificationCompat.Builder notificationBuilder = null;
 
             notificationBuilder = new NotificationCompat.Builder(context)
-                    .setContentTitle(String.format(context.getString(R.string.message_noti_content), String.valueOf(soTinNhanChuaDoc)))
+                    .setContentTitle(context.getString(R.string.message_noti_title))
                     .setSmallIcon(R.drawable.new_email_notification)
-                    .setContentText(context.getString(R.string.message_noti_content))
+                    .setContentText(String.format(context.getString(R.string.message_noti_content), String.valueOf(soTinNhanChuaDoc)))
                     .setAutoCancel(true)
                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                     .setContentIntent(pendingIntent);

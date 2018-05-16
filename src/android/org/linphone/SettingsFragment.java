@@ -66,6 +66,7 @@ public class SettingsFragment extends PreferencesListFragment {
 	private Handler mHandler = new Handler();
 	private LinphoneCoreListenerBase mListener;
 	private PreferenceScreen currentPreferenceScreen;
+	private static final int LIMIT_BITRATE = 64;
 	private Preference.OnPreferenceClickListener prefClickListener = new Preference.OnPreferenceClickListener() {
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
@@ -73,6 +74,7 @@ public class SettingsFragment extends PreferencesListFragment {
 			return false;
 		}
 	};
+	private String TAG = "SettingsFragment";
 
 	public SettingsFragment() {
 		super(R.xml.preferences);
@@ -535,6 +537,22 @@ public class SettingsFragment extends PreferencesListFragment {
 			}
 
 			codec.setSummary(pt.getRate() + " Hz");
+
+			// set codec g711
+			if (codec.getTitle().equals("PCMU") || codec.getTitle().equals("PCMA")) {
+				try {
+					lc.enablePayloadType(pt, true);
+				} catch (LinphoneCoreException e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					lc.enablePayloadType(pt, false);
+				} catch (LinphoneCoreException e) {
+					e.printStackTrace();
+				}
+			}
+
 			codec.setChecked(lc.isPayloadTypeEnabled(pt));
 
 			codec.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -565,6 +583,9 @@ public class SettingsFragment extends PreferencesListFragment {
 		adaptiveRateControl.setChecked(mPrefs.isAdaptiveRateControlEnabled());
 
 		ListPreference bitrateLimit = (ListPreference) findPreference(getString(R.string.pref_codec_bitrate_limit_key));
+		//set 64kb Codec bitrate limit
+		mPrefs.setCodecBitrateLimit(LIMIT_BITRATE);
+		android.util.Log.d(TAG, "initAudioSettings: " + mPrefs.getCodecBitrateLimit());
 		bitrateLimit.setSummary(String.valueOf(mPrefs.getCodecBitrateLimit()));
 		bitrateLimit.setValue(String.valueOf(mPrefs.getCodecBitrateLimit()));
 	}
@@ -627,19 +648,24 @@ public class SettingsFragment extends PreferencesListFragment {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				synchronized (SettingsFragment.this) {
-					int recordAudio = getActivity().getPackageManager().checkPermission(Manifest.permission.RECORD_AUDIO, getActivity().getPackageName());
-					if (recordAudio == PackageManager.PERMISSION_GRANTED) {
-						if (LinphoneManager.getInstance().getEchoTesterStatus())
-							stopEchoTester();
-						else
-							startEchoTester();
-					} else {
-						LinphoneActivity.instance().checkAndRequestRecordAudioPermissionsForEchoTester();
+					//set 64kb Codec bitrate limit
+					mPrefs.setCodecBitrateLimit(LIMIT_BITRATE);
+					LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
+					int bitrate = LIMIT_BITRATE;
+
+					for (final PayloadType pt : lc.getAudioCodecs()) {
+						if (lc.payloadTypeIsVbr(pt)) {
+							lc.setPayloadTypeBitrate(pt, bitrate);
+						}
 					}
-				}
-				return true;
+
+					preference.setSummary(String.valueOf(bitrate));
+					android.util.Log.d(TAG, "onPreferenceChange: " + String.valueOf(bitrate));
+					return true;
 			}
-		});
+			}
+																							  }
+		);
 	}
 
 	public void startEchoTester() {
