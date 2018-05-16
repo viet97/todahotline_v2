@@ -1497,6 +1497,23 @@
         <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/res" />
       </configuration>
     </facet>
+    <facet type="android-gradle" name="Android-Gradle">
+      <configuration>
+        <option name="GRADLE_PROJECT_PATH" value=":" />
+      </configuration>
+    </facet>
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="SELECTED_BUILD_VARIANT" value="debug" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
+        <afterSyncTasks>
+          <task>generateDebugSources</task>
+        </afterSyncTasks>
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/res" />
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/bin/intermediates/classes/debug" />
@@ -1601,6 +1618,7 @@
     <orderEntry type="library" exported="" name="firebase-measurement-connector-impl-15.0.0" level="project" />
     <orderEntry type="library" exported="" name="tokenautocomplete-2.0.8" level="project" />
     <orderEntry type="library" exported="" name="jjwt-0.9.0" level="project" />
+    <orderEntry type="library" exported="" name="material-1.2.4" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-15.0.2" level="project" />
     <orderEntry type="library" exported="" name="play-services-basement-15.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="espresso-idling-resource-3.0.2" level="project" />
@@ -1623,6 +1641,7 @@
     <orderEntry type="library" exported="" name="expandableheightlistview-1.0.0" level="project" />
     <orderEntry type="library" exported="" name="design-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-impl-15.0.2" level="project" />
+    <orderEntry type="library" exported="" name="cardview-v7-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-media-compat-26.1.0" level="project" />
     <orderEntry type="library" exported="" name="constraint-layout-1.0.2" level="project" />

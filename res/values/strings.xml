@@ -100,6 +100,7 @@
     <string name="error_network_unreachable">Mất kết nối đến tổng đài</string>
     <string name="error_call_declined">Kết thúc</string>
     <string name="error_user_busy">Máy bận</string>
+    <string name="language_setting">Tiếng Anh</string>
 
     <!-- Common -->
     <string name="username">Username</string>

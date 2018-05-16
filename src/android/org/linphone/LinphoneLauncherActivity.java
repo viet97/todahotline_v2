@@ -43,6 +43,8 @@ import org.linphone.network.models.VoidRespon;
 import org.linphone.tutorials.TutorialLauncherActivity;
 import org.linphone.ultils.ContactUltils;
 
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,7 +76,8 @@ public class LinphoneLauncherActivity extends Activity {
 
 		Intent intent = getIntent();
 
-		if (intent != null) {
+
+        if (intent != null) {
 			String action = intent.getAction();
 			if (Intent.ACTION_CALL.equals(action)) {
 				if (intent.getData() != null) {

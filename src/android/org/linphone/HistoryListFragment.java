@@ -283,6 +283,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
         ContactsManager.addContactsListener(this);
         // xoa notifi cuoc goi nho moi vao man hinh lich su cuoc goi
         try {
+
             LinphoneService.instance().mNM.cancel(LinphoneService.MISSED_NOTIF_ID);
 
         } catch (Exception e) {
@@ -291,6 +292,7 @@ public class HistoryListFragment extends Fragment implements OnClickListener, On
 
         if (LinphoneActivity.isInstanciated()) {
             LinphoneActivity.instance().selectMenu(FragmentsAvailable.HISTORY_LIST);
+            LinphoneActivity.instance().history.performClick();
             LinphoneActivity.instance().hideTabBar(false);
             LinphoneActivity.instance().displayMissedCalls(0);
         }

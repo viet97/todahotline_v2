@@ -75,6 +75,7 @@
 
 
             <CheckBox
+                android:layout_marginBottom="10dp"
                 android:id="@+id/pick_all"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"

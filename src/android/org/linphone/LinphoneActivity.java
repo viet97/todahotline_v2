@@ -150,9 +150,10 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     private static final int CALL_AND_TAKECALL = 3;
     public static LinphoneActivity instance;
     public static final String HAS_NEW_MESSAGE = "NewMessage";
+    public static final String CHANGE_LANGUAGE = "ChangeLanguage";
     private StatusFragment statusFragment;
     public TextView missedCalls, missedChats, newMessages;
-    private RelativeLayout contacts, history, dialer, chat, message;
+    public RelativeLayout contacts, history, dialer, profile, message;
     private View contacts_selected, history_selected, dialer_selected, chat_selected, message_selected;
     private RelativeLayout mTopBar;
     private ImageView cancel;
@@ -368,6 +369,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         } else {
             newMessages.setVisibility(View.GONE);
         }
+        // chuyen den man hinh setting khi thay doi ngon ngu
+        moveWhenChangeLanguage(getIntent());
         // chuyen den man hinh tin nhan khi co tin nhan moi
         moveWhenGotNewMessage(getIntent());
 
@@ -388,8 +391,8 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         contacts.setOnClickListener(this);
         dialer = (RelativeLayout) findViewById(R.id.dialer);
         dialer.setOnClickListener(this);
-        chat = (RelativeLayout) findViewById(R.id.chat);
-        chat.setOnClickListener(this);
+        profile = (RelativeLayout) findViewById(R.id.chat);
+        profile.setOnClickListener(this);
         message = findViewById(R.id.message);
         message.setOnClickListener(this);
         messageIcon = findViewById(R.id.message_icon);
@@ -1641,6 +1644,14 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
 
     }
 
+    public void moveWhenChangeLanguage(Intent intent) {
+        try {
+            if (intent.getBooleanExtra(CHANGE_LANGUAGE, false))
+                profile.performClick();
+        } catch (Exception e) {
+            android.util.Log.d(TAG, "Exception: " + e.toString());
+        }
+    }
     public void moveWhenGotNewMessage(Intent intent) {
         try {
             if (intent.getBooleanExtra(HAS_NEW_MESSAGE, false))

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.rey.material.widget.Switch;
 
 import org.linphone.assistant.AssistantActivity;
 import org.linphone.database.DbContext;
@@ -34,6 +35,8 @@ import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.VoidRespon;
 import org.linphone.notice.DisplayNotice;
 import org.linphone.ultils.StringUltils;
+
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +51,7 @@ public class Profile extends Fragment {
 
 
     private String Pref_String_DB = "baseUrl";
+    private String Pref_Language_DB = "language";
     public static final String KEY_FUNC_URL = "AppLogOut.aspx?";
     private ProgressDialog dialogLogin;
     private String TAG = "Profile";
@@ -64,6 +68,7 @@ public class Profile extends Fragment {
     TextView website;
     TextView email;
     ImageView backImg;
+    Switch switchLanguage;
 
     public Profile() {
         // Required empty public constructor
@@ -83,6 +88,7 @@ public class Profile extends Fragment {
         tvName = view.findViewById(R.id.tv_profilename);
         tvJob = view.findViewById(R.id.tv_job);
         tvSipAddress = view.findViewById(R.id.tv_sipAddress);
+        switchLanguage = view.findViewById(R.id.switch_language);
         try {
             tvName.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getTennhanvien());
             tvSipAddress.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getSomayle());
@@ -95,6 +101,8 @@ public class Profile extends Fragment {
         } catch (Exception e) {
             Log.d(TAG, "Exception: " + e.toString());
         }
+
+
         try {
 
             tenlienhe = (TextView) view.findViewById(R.id.tv_tenlienhe);
@@ -115,6 +123,42 @@ public class Profile extends Fragment {
         } catch (Exception e) {
             Log.d("Info", "Exception: " + e);
         }
+        switchLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: " + switchLanguage.isChecked());
+                if (!switchLanguage.isChecked()) {
+                    switchLanguage.setChecked(false);
+                    Locale myLocale = new Locale("vi");
+                    //saveLocale(lang, activity);
+                    Locale.setDefault(myLocale);
+                    android.content.res.Configuration config = new android.content.res.Configuration();
+                    config.locale = myLocale;
+                    getActivity().getResources().updateConfiguration(config,
+                            getActivity().getResources().getDisplayMetrics());
+                    SharedPreferences.Editor languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE).edit();
+                    languagePrefs.putBoolean("en", false);
+                    languagePrefs.commit();
+                    getActivity().recreate();
+
+                } else {
+                    switchLanguage.setChecked(true);
+                    Locale myLocale = new Locale("en");
+                    //saveLocale(lang, activity);
+                    switchLanguage.setChecked(false);
+                    Locale.setDefault(myLocale);
+                    android.content.res.Configuration config = new android.content.res.Configuration();
+                    config.locale = myLocale;
+                    getActivity().getResources().updateConfiguration(config,
+                            getActivity().getResources().getDisplayMetrics());
+                    SharedPreferences.Editor languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE).edit();
+                    languagePrefs.putBoolean("en", true);
+                    languagePrefs.commit();
+                    getActivity().recreate();
+                }
+            }
+        });
+
 
         ll1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,6 +302,27 @@ public class Profile extends Fragment {
         String URL = "AppLienHe.aspx";
         return URL;
 
+    }
+
+    private void restartActivity() {
+        Intent intent = getActivity().getIntent();
+        intent.putExtra(LinphoneActivity.CHANGE_LANGUAGE, true);
+        getActivity().finish();
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            SharedPreferences languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE);
+            if (switchLanguage.isChecked() != languagePrefs.getBoolean("en", false)) {
+                switchLanguage.setChecked(languagePrefs.getBoolean("en", false));
+            }
+            Log.d(TAG, "onResume: " + switchLanguage.isChecked());
+        } catch (Exception e) {
+            Log.d(TAG, "Exception: " + e.toString());
+        }
     }
 
     public void getAbout() {

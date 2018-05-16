@@ -1243,6 +1243,7 @@ public class ContactsListFragment extends Fragment implements OnClickListener, O
 
         if (LinphoneActivity.isInstanciated()) {
             LinphoneActivity.instance().selectMenu(FragmentsAvailable.CONTACTS_LIST);
+            LinphoneActivity.instance().contacts.performClick();
             LinphoneActivity.instance().hideTabBar(false);
         }
         changeContactsToggle();
