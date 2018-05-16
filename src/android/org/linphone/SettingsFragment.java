@@ -585,7 +585,7 @@ public class SettingsFragment extends PreferencesListFragment {
 		ListPreference bitrateLimit = (ListPreference) findPreference(getString(R.string.pref_codec_bitrate_limit_key));
 		//set 64kb Codec bitrate limit
 		mPrefs.setCodecBitrateLimit(LIMIT_BITRATE);
-		android.util.Log.d(TAG, "initAudioSettings: " + mPrefs.getCodecBitrateLimit());
+
 		bitrateLimit.setSummary(String.valueOf(mPrefs.getCodecBitrateLimit()));
 		bitrateLimit.setValue(String.valueOf(mPrefs.getCodecBitrateLimit()));
 	}

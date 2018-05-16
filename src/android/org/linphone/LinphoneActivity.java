@@ -47,6 +47,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.CheckBoxPreference;
 import android.provider.ContactsContract;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
@@ -98,6 +99,7 @@ import org.linphone.core.LinphoneCoreException;
 import org.linphone.core.LinphoneCoreFactory;
 import org.linphone.core.LinphoneCoreListenerBase;
 import org.linphone.core.LinphoneProxyConfig;
+import org.linphone.core.PayloadType;
 import org.linphone.core.Reason;
 import org.linphone.database.DbContext;
 import org.linphone.mediastream.Log;
@@ -1642,6 +1644,27 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         }
 
 
+        for (final PayloadType pt : lc.getAudioCodecs()) {
+            CheckBoxPreference codec = new CheckBoxPreference(this);
+            codec.setTitle(pt.getMime());
+            if (codec.getTitle().equals("PCMA") || codec.getTitle().equals("PCMU")) {
+                try {
+                    lc.enablePayloadType(pt, true);
+                } catch (LinphoneCoreException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    lc.enablePayloadType(pt, false);
+                } catch (LinphoneCoreException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            /* Special case */
+        }
+        LinphonePreferences.instance().setCodecBitrateLimit(64);
+        android.util.Log.d(TAG, "onResume: " + LinphonePreferences.instance().getCodecBitrateLimit());
     }
 
     public void moveWhenChangeLanguage(Intent intent) {
