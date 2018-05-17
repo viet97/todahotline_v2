@@ -7,12 +7,20 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.StringRes;
 import android.text.Spannable;
 import android.util.Log;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -23,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.pepperonas.materialdialog.MaterialDialog;
 import com.rey.material.widget.Switch;
 
 import org.linphone.assistant.AssistantActivity;
@@ -36,6 +45,7 @@ import org.linphone.network.models.VoidRespon;
 import org.linphone.notice.DisplayNotice;
 import org.linphone.ultils.StringUltils;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -50,14 +60,21 @@ import retrofit2.Response;
 public class Profile extends Fragment {
 
 
-    private String Pref_String_DB = "baseUrl";
-    private String Pref_Language_DB = "language";
+    private static final String Pref_String_DB = "baseUrl";
+    public static final String Pref_Language_DB = "language";
+    private static final String Pref_Codec_DB = "codec";
+    private static final int ENGLISH_SELECTED = 0;
+    private static final int VIETNAMESE_SELECTED = 1;
+    private static final int G729_SELECTED = 0;
+    private static final int G711_SELECTED = 1;
     public static final String KEY_FUNC_URL = "AppLogOut.aspx?";
     private ProgressDialog dialogLogin;
     private String TAG = "Profile";
     private String idnv;
     private int idct;
     private String IPSV;
+    private int languageSelected = 0;
+    private int codecSelected = 0;
 
     TextView tenlienhe;
     TextView diachi;
@@ -68,13 +85,13 @@ public class Profile extends Fragment {
     TextView website;
     TextView email;
     ImageView backImg;
-    Switch switchLanguage;
+
 
     public Profile() {
         // Required empty public constructor
     }
 
-    RelativeLayout ll1, ll2, ll3;
+    RelativeLayout ll1, ll2, ll3, ll4, ll5;
     TextView tvName, tvSipAddress, tvJob;
 
     @Override
@@ -85,10 +102,11 @@ public class Profile extends Fragment {
         ll1 = view.findViewById(R.id.llprofile_info);
         ll2 = view.findViewById(R.id.llprofile_changepass);
         ll3 = view.findViewById(R.id.llprofile_logout);
+        ll4 = view.findViewById(R.id.ll_switch_language);
+        ll5 = view.findViewById(R.id.ll_switch_codecs);
         tvName = view.findViewById(R.id.tv_profilename);
         tvJob = view.findViewById(R.id.tv_job);
         tvSipAddress = view.findViewById(R.id.tv_sipAddress);
-        switchLanguage = view.findViewById(R.id.switch_language);
         try {
             tvName.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getTennhanvien());
             tvSipAddress.setText(DbContext.getInstance().getLoginRespon(getActivity()).getData().getSomayle());
@@ -123,41 +141,37 @@ public class Profile extends Fragment {
         } catch (Exception e) {
             Log.d("Info", "Exception: " + e);
         }
-        switchLanguage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: " + switchLanguage.isChecked());
-                if (!switchLanguage.isChecked()) {
-                    switchLanguage.setChecked(false);
-                    Locale myLocale = new Locale("vi");
-                    //saveLocale(lang, activity);
-                    Locale.setDefault(myLocale);
-                    android.content.res.Configuration config = new android.content.res.Configuration();
-                    config.locale = myLocale;
-                    getActivity().getResources().updateConfiguration(config,
-                            getActivity().getResources().getDisplayMetrics());
-                    SharedPreferences.Editor languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE).edit();
-                    languagePrefs.putBoolean("en", false);
-                    languagePrefs.commit();
-                    getActivity().recreate();
 
-                } else {
-                    switchLanguage.setChecked(true);
-                    Locale myLocale = new Locale("en");
-                    //saveLocale(lang, activity);
-                    switchLanguage.setChecked(false);
-                    Locale.setDefault(myLocale);
-                    android.content.res.Configuration config = new android.content.res.Configuration();
-                    config.locale = myLocale;
-                    getActivity().getResources().updateConfiguration(config,
-                            getActivity().getResources().getDisplayMetrics());
-                    SharedPreferences.Editor languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE).edit();
-                    languagePrefs.putBoolean("en", true);
-                    languagePrefs.commit();
-                    getActivity().recreate();
-                }
-            }
-        });
+//                Log.d(TAG, "onClick: " + switchLanguage.isChecked());
+//                if (!switchLanguage.isChecked()) {
+//                    switchLanguage.setChecked(false);
+//                    Locale myLocale = new Locale("vi");
+//                    //saveLocale(lang, activity);
+//                    Locale.setDefault(myLocale);
+//                    android.content.res.Configuration config = new android.content.res.Configuration();
+//                    config.locale = myLocale;
+//                    getActivity().getResources().updateConfiguration(config,
+//                            getActivity().getResources().getDisplayMetrics());
+//                    SharedPreferences.Editor languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE).edit();
+//                    languagePrefs.putBoolean("en", false);
+//                    languagePrefs.commit();
+//                    getActivity().recreate();
+//
+//                } else {
+//                    switchLanguage.setChecked(true);
+//                    Locale myLocale = new Locale("en");
+//                    //saveLocale(lang, activity);
+//                    switchLanguage.setChecked(false);
+//                    Locale.setDefault(myLocale);
+//                    android.content.res.Configuration config = new android.content.res.Configuration();
+//                    config.locale = myLocale;
+//                    getActivity().getResources().updateConfiguration(config,
+//                            getActivity().getResources().getDisplayMetrics());
+//                    SharedPreferences.Editor languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE).edit();
+//                    languagePrefs.putBoolean("en", true);
+//                    languagePrefs.commit();
+//                    getActivity().recreate();
+//                }
 
 
         ll1.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +226,23 @@ public class Profile extends Fragment {
                 } catch (Exception e) {
                     Log.d("SipHome", "Exception: " + e);
                 }
+            }
+        });
+
+        ll4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] ITEMSLANGUE = new String[]{getString(R.string.EngLish), getString(R.string.Vietnamese)};
+
+                showMaterialDialogListSingleChoiceLanguage(getString(R.string.Language), ITEMSLANGUE);
+            }
+        });
+
+        ll5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] ITEMSCODECS = new String[]{"G729", "G711"};
+                showMaterialDialogListSingleChoiceCodec(getString(R.string.Codec), ITEMSCODECS);
             }
         });
         return view;
@@ -304,25 +335,106 @@ public class Profile extends Fragment {
 
     }
 
-    private void restartActivity() {
-        Intent intent = getActivity().getIntent();
-        intent.putExtra(LinphoneActivity.CHANGE_LANGUAGE, true);
-        getActivity().finish();
-        startActivity(intent);
+    private void showMaterialDialogListSingleChoiceLanguage(String title, String[] ITEMS) {
+        final SharedPreferences languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE);
+        languageSelected = languagePrefs.getInt(Pref_Language_DB, ENGLISH_SELECTED);
+
+
+        new MaterialDialog.Builder(getActivity())
+                .title(title)
+                .message(null)
+                .positiveText(getActivity().getString(R.string.confirm_dialog))
+                .negativeText(getActivity().getString(R.string.cancel_dialog))
+                .listItemsSingleSelection(false, ITEMS)
+                .selection(languageSelected)
+                .itemClickListener(new MaterialDialog.ItemClickListener() {
+                    @Override
+                    public void onClick(View v, int position, long id) {
+                        super.onClick(v, position, id);
+                        languageSelected = position;
+                    }
+                })
+
+                .buttonCallback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        Locale myLocale;
+                        if (languageSelected == 0) {
+                            myLocale = new Locale("en");
+                            //saveLocale(lang, activity);
+
+
+                        } else {
+                            myLocale = new Locale("vi");
+                            //saveLocale(lang, activity);
+
+
+                        }
+                        Locale.setDefault(myLocale);
+                        android.content.res.Configuration config = new android.content.res.Configuration();
+                        config.locale = myLocale;
+                        getActivity().getResources().updateConfiguration(config,
+                                getActivity().getResources().getDisplayMetrics());
+
+                        getActivity().recreate();
+
+                        SharedPreferences.Editor edit = languagePrefs.edit();
+                        edit.putInt(Pref_Language_DB, languageSelected);
+                        edit.commit();
+                    }
+
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        languageSelected = languagePrefs.getInt(Pref_Language_DB, 0);
+                    }
+                })
+                .show();
     }
+
+    private void showMaterialDialogListSingleChoiceCodec(String title, String[] ITEMS) {
+        new MaterialDialog.Builder(getActivity())
+                .title(title)
+                .message(null)
+                .positiveText(getActivity().getString(R.string.confirm_dialog))
+                .negativeText(getActivity().getString(R.string.cancel_dialog))
+                .listItemsSingleSelection(false, ITEMS)
+                .selection(languageSelected)
+                .itemClickListener(new MaterialDialog.ItemClickListener() {
+                    @Override
+                    public void onClick(View v, int position, long id) {
+                        super.onClick(v, position, id);
+                        languageSelected = position;
+                    }
+                })
+                .showListener(new MaterialDialog.ShowListener() {
+                    @Override
+                    public void onShow(AlertDialog dialog) {
+                        super.onShow(dialog);
+                    }
+                })
+                .buttonCallback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                    }
+
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                    }
+                })
+                .show();
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
-        try {
-            SharedPreferences languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE);
-            if (switchLanguage.isChecked() != languagePrefs.getBoolean("en", false)) {
-                switchLanguage.setChecked(languagePrefs.getBoolean("en", false));
-            }
-            Log.d(TAG, "onResume: " + switchLanguage.isChecked());
-        } catch (Exception e) {
-            Log.d(TAG, "Exception: " + e.toString());
-        }
+
     }
 
     public void getAbout() {

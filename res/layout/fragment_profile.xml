@@ -27,11 +27,12 @@
             android:layout_marginTop="4dp"
             android:textColor="@color/white"
             android:textSize="18sp" />
+
         <TextView
             android:id="@+id/tv_job"
-            android:layout_below="@id/tv_profilename"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tv_profilename"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="4dp"
             android:textColor="@color/white"
@@ -64,11 +65,12 @@
         android:orientation="vertical">
 
         <com.andexert.library.RippleView
-            android:visibility="gone"
             android:id="@+id/llprofile_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
+
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="30dp"
@@ -91,15 +93,14 @@
             android:layout_height="1dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/white">
-        </LinearLayout>
+            android:background="@color/white"></LinearLayout>
 
         <com.andexert.library.RippleView
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:id="@+id/llprofile_changepass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -110,51 +111,17 @@
                 android:src="@drawable/changepassicon" />
 
             <TextView
-                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:layout_toEndOf="@id/img_changePassword"
                 android:layout_marginLeft="24dp"
+                android:layout_toEndOf="@id/img_changePassword"
                 android:text="@string/change_password"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </com.andexert.library.RippleView>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@color/white">
-        </LinearLayout>
 
-        <com.andexert.library.RippleView
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            android:id="@+id/llprofile_logout"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/img_logOut"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/exit" />
-
-            <TextView
-                android:layout_toEndOf="@id/img_logOut"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="24dp"
-                android:text="@string/log_out"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-        </com.andexert.library.RippleView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -163,11 +130,12 @@
             android:background="@color/white"></LinearLayout>
 
         <com.andexert.library.RippleView
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:id="@+id/llprofile_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -178,25 +146,15 @@
                 android:src="@drawable/exit" />
 
             <TextView
-                android:layout_toEndOf="@id/img_logOut"
-                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:layout_marginLeft="24dp"
-                android:text="@string/language_setting"
+                android:layout_toEndOf="@id/img_logOut"
+                android:text="@string/log_out"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
-
-            <com.rey.material.widget.Switch
-                android:id="@+id/switch_language"
-                android:layout_marginRight="16dp"
-                style="@style/Material.Widget.Switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:checked="false"
-                android:layout_alignParentRight="true" />
         </com.andexert.library.RippleView>
 
         <LinearLayout
@@ -205,9 +163,79 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="@color/white">
+
         </LinearLayout>
 
+        <com.andexert.library.RippleView
+            android:id="@+id/ll_switch_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/img_language"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/exit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="24dp"
+                android:layout_toEndOf="@id/img_language"
+                android:text="@string/Language"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </com.andexert.library.RippleView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/white">
+
+        </LinearLayout>
+
+        <com.andexert.library.RippleView
+            android:visibility="gone"
+            android:id="@+id/ll_switch_codecs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_codecs"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/exit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="24dp"
+                android:layout_toEndOf="@id/img_codecs"
+                android:text="@string/Codec"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </com.andexert.library.RippleView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/white"></LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
@@ -215,107 +243,107 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:layout_marginTop="8dp"
             android:id="@+id/llabout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="30dp"
+            android:layout_marginTop="8dp"
             android:orientation="vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:weightSum="6">
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/logo"
                 android:layout_width="200dp"
                 android:layout_height="60dp"
-                android:layout_marginBottom="70dp"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/logolachong" />
+                android:layout_marginBottom="70dp"
+                android:background="@drawable/logolachong"
+                android:visibility="gone" />
 
             <TextView
-                android:layout_below="@+id/logo"
                 android:id="@+id/tv_tenlienhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/logo"
                 android:layout_weight="1"
                 android:lines="1"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_below="@+id/tv_tenlienhe"
                 android:id="@+id/tv_tenlienhe2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_tenlienhe"
                 android:lines="1"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_diachi"
-                android:layout_below="@+id/tv_tenlienhe2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_tenlienhe2"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_below="@+id/tv_diachi"
                 android:id="@+id/tv_dienthoai1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_diachi"
                 android:autoLink="phone"
                 android:textColor="@color/white"
                 android:textColorLink="@color/white"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_below="@+id/tv_dienthoai1"
                 android:id="@+id/tv_dienthoai2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_dienthoai1"
                 android:autoLink="phone"
                 android:textColor="@color/white"
                 android:textColorLink="@color/white"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_below="@+id/tv_dienthoai2"
                 android:id="@+id/tv_hotline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_dienthoai2"
                 android:autoLink="phone"
                 android:textColor="@color/white"
                 android:textColorLink="@color/white"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_below="@+id/tv_hotline"
                 android:id="@+id/tv_cskh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_hotline"
                 android:autoLink="phone"
                 android:textColor="@color/white"
                 android:textColorLink="@color/white"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_below="@+id/tv_cskh"
                 android:id="@+id/tv_website"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_cskh"
                 android:autoLink="web"
                 android:textColor="@color/white"
                 android:textColorLink="@color/white"
                 android:textSize="15sp" />
 
             <TextView
-                android:layout_below="@+id/tv_website"
                 android:id="@+id/tv_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_website"
                 android:textColor="@color/white"
                 android:textColorLink="@color/white"
                 android:textSize="15sp" />
@@ -323,11 +351,11 @@
         </RelativeLayout>
 
         <TextView
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:text="@string/version"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white"

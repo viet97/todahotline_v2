@@ -23,7 +23,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public class LinphoneGenericActivity extends Activity {
+public class LinphoneGenericActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
