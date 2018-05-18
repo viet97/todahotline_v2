@@ -204,7 +204,7 @@
             <CheckBox
                 android:id="@+id/all_ext"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:button="@drawable/custom_tickbox"
                 android:text="@string/all_ext_fillter"
@@ -214,7 +214,7 @@
             <CheckBox
                 android:id="@+id/onl_ext"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/all_ext"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
@@ -227,7 +227,7 @@
                 android:layout_toRightOf="@id/onl_ext"
                 android:id="@+id/off_ext"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
                 android:button="@drawable/custom_tickbox"
@@ -238,7 +238,7 @@
             <CheckBox
                 android:id="@+id/delete_all"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="8dp"
                 android:layout_marginRight="16dp"

@@ -140,7 +140,7 @@
         android:button="@drawable/cbx_detail_message_list"
         android:id="@+id/delete_all"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="24dp"
         android:layout_alignParentRight="true"
         android:layout_below="@id/ll_title"
         android:layout_marginRight="16dp"

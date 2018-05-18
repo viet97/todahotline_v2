@@ -53,7 +53,7 @@
         android:layout_below="@id/rl_searchfield"
         android:id="@+id/delete_all"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="16dp"
