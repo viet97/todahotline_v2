@@ -1643,28 +1643,11 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             }
         }
 
-
-        for (final PayloadType pt : lc.getAudioCodecs()) {
-            CheckBoxPreference codec = new CheckBoxPreference(this);
-            codec.setTitle(pt.getMime());
-            if (codec.getTitle().equals("PCMA") || codec.getTitle().equals("PCMU")) {
-                try {
-                    lc.enablePayloadType(pt, true);
-                } catch (LinphoneCoreException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    lc.enablePayloadType(pt, false);
-                } catch (LinphoneCoreException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            /* Special case */
-        }
+        //set codec bitrate limit 64kb
         LinphonePreferences.instance().setCodecBitrateLimit(64);
-        android.util.Log.d(TAG, "onResume: " + LinphonePreferences.instance().getCodecBitrateLimit());
+        for (final PayloadType pt : lc.getAudioCodecs()) {
+            android.util.Log.d(TAG, "onResume: " + pt.getMime() + " " + lc.isPayloadTypeEnabled(pt));
+        }
     }
 
     public void moveWhenChangeLanguage(Intent intent) {

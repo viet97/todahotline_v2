@@ -203,7 +203,6 @@
         </LinearLayout>
 
         <com.andexert.library.RippleView
-            android:visibility="gone"
             android:id="@+id/ll_switch_codecs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

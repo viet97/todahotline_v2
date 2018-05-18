@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
@@ -35,6 +36,9 @@ import com.pepperonas.materialdialog.MaterialDialog;
 import com.rey.material.widget.Switch;
 
 import org.linphone.assistant.AssistantActivity;
+import org.linphone.core.LinphoneCore;
+import org.linphone.core.LinphoneCoreException;
+import org.linphone.core.PayloadType;
 import org.linphone.database.DbContext;
 import org.linphone.myactivity.InfoActivityMain;
 import org.linphone.myactivity.LoginActivity;
@@ -62,7 +66,7 @@ public class Profile extends Fragment {
 
     private static final String Pref_String_DB = "baseUrl";
     public static final String Pref_Language_DB = "language";
-    private static final String Pref_Codec_DB = "codec";
+    public static final String Pref_Codec_DB = "codec";
     private static final int ENGLISH_SELECTED = 0;
     private static final int VIETNAMESE_SELECTED = 1;
     private static final int G729_SELECTED = 0;
@@ -360,7 +364,7 @@ public class Profile extends Fragment {
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
                         Locale myLocale;
-                        if (languageSelected == 0) {
+                        if (languageSelected == ENGLISH_SELECTED) {
                             myLocale = new Locale("en");
                             //saveLocale(lang, activity);
 
@@ -388,25 +392,27 @@ public class Profile extends Fragment {
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        languageSelected = languagePrefs.getInt(Pref_Language_DB, 0);
+                        languageSelected = languagePrefs.getInt(Pref_Language_DB, ENGLISH_SELECTED);
                     }
                 })
                 .show();
     }
 
     private void showMaterialDialogListSingleChoiceCodec(String title, String[] ITEMS) {
+        final SharedPreferences codecPrefs = getActivity().getSharedPreferences(Pref_Codec_DB, getActivity().MODE_PRIVATE);
+        codecSelected = codecPrefs.getInt(Pref_Codec_DB, G729_SELECTED);
         new MaterialDialog.Builder(getActivity())
                 .title(title)
                 .message(null)
                 .positiveText(getActivity().getString(R.string.confirm_dialog))
                 .negativeText(getActivity().getString(R.string.cancel_dialog))
                 .listItemsSingleSelection(false, ITEMS)
-                .selection(languageSelected)
+                .selection(codecSelected)
                 .itemClickListener(new MaterialDialog.ItemClickListener() {
                     @Override
                     public void onClick(View v, int position, long id) {
                         super.onClick(v, position, id);
-                        languageSelected = position;
+                        codecSelected = position;
                     }
                 })
                 .showListener(new MaterialDialog.ShowListener() {
@@ -419,12 +425,41 @@ public class Profile extends Fragment {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         super.onPositive(dialog);
+                        LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
+                        if (codecSelected == G729_SELECTED) {
+                            for (final PayloadType pt : lc.getAudioCodecs()) {
+                                if (pt.getMime().equals("G729")) {
+                                    try {
+                                        lc.enablePayloadType(pt, true);
+                                    } catch (LinphoneCoreException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        } else {
+                            if (codecSelected == G711_SELECTED) {
+                                for (final PayloadType pt : lc.getAudioCodecs()) {
+                                    if (pt.getMime().equals("G729")) {
+                                        try {
+                                            lc.enablePayloadType(pt, false);
+                                        } catch (LinphoneCoreException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        SharedPreferences.Editor edit = codecPrefs.edit();
+                        edit.putInt(Pref_Codec_DB, codecSelected);
+                        edit.commit();
                     }
 
 
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
+                        codecSelected = codecPrefs.getInt(Pref_Codec_DB, G729_SELECTED);
                     }
                 })
                 .show();

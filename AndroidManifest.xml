@@ -162,7 +162,7 @@
             android:configChanges="orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/CallTheme">
+            android:theme="@style/NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
