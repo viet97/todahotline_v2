@@ -382,7 +382,7 @@ public class Profile extends Fragment {
                                 getActivity().getResources().getDisplayMetrics());
 
                         getActivity().recreate();
-
+                        LinphoneActivity.instance().newMessages.setVisibility(View.GONE);
                         SharedPreferences.Editor edit = languagePrefs.edit();
                         edit.putInt(Pref_Language_DB, languageSelected);
                         edit.commit();
@@ -428,25 +428,39 @@ public class Profile extends Fragment {
                         LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
                         if (codecSelected == G729_SELECTED) {
                             for (final PayloadType pt : lc.getAudioCodecs()) {
-                                if (pt.getMime().equals("G729")) {
+                                if (pt.getMime().equals("G729") || pt.getMime().equals("PCMU")) {
                                     try {
                                         lc.enablePayloadType(pt, true);
                                     } catch (LinphoneCoreException e) {
                                         e.printStackTrace();
                                     }
                                 }
-
+                                if (pt.getMime().equals("PCMA")) {
+                                    try {
+                                        lc.enablePayloadType(pt, false);
+                                    } catch (LinphoneCoreException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             }
                         } else {
                             if (codecSelected == G711_SELECTED) {
                                 for (final PayloadType pt : lc.getAudioCodecs()) {
-                                    if (pt.getMime().equals("G729")) {
+                                    if (pt.getMime().equals("G729") || pt.getMime().equals("PCMU")) {
                                         try {
                                             lc.enablePayloadType(pt, false);
                                         } catch (LinphoneCoreException e) {
                                             e.printStackTrace();
                                         }
                                     }
+                                    if (pt.getMime().equals("PCMA")) {
+                                        try {
+                                            lc.enablePayloadType(pt, true);
+                                        } catch (LinphoneCoreException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
                                 }
                             }
                         }
@@ -522,7 +536,7 @@ public class Profile extends Fragment {
                 boolean logOutResponse = voidRespon.getStatus();
                 if (!logOutResponse) {
                     dialogLogin.cancel();
-                    Toast.makeText(getActivity(), voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.occured_error), Toast.LENGTH_SHORT).show();
                 } else {
 
                     try {
@@ -530,7 +544,6 @@ public class Profile extends Fragment {
                             LinphonePreferences.instance().setAccountEnabled(0, false);
                             int accountNumber = LinphonePreferences.instance().getAccountCount();
                             while (accountNumber >= 0) {
-
                                 LinphonePreferences.instance().deleteAccount(accountNumber);
                                 accountNumber--;
                             }

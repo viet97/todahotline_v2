@@ -543,7 +543,7 @@ public class LoginActivity extends Activity {
                                             e.printStackTrace();
                                         }
                                     } else {
-                                        Toast.makeText(LoginActivity.this, loginRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, getString(R.string.occured_error), Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (Exception e) {
                                     if (dialogLogin.isShowing())

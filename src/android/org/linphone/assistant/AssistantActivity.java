@@ -360,7 +360,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                     boolean logOutResponse = voidRespon.getStatus();
                                                     if (!logOutResponse) {
                                                         android.util.Log.d(TAG, "onResponse: " + passold + currentPass);
-                                                        Toast.makeText(AssistantActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(AssistantActivity.this, getString(R.string.occured_error), Toast.LENGTH_SHORT).show();
                                                         dialogLogin.cancel();
                                                     } else {
 
@@ -412,7 +412,7 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
                                                 if (!pass.equals(passveri)) {
                                                     Toast.makeText(AssistantActivity.this, getString(R.string.wrong_verify_password), Toast.LENGTH_SHORT).show();
                                                 } else
-                                                    Toast.makeText(AssistantActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AssistantActivity.this, getString(R.string.occured_error), Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     } catch (Exception e) {

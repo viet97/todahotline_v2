@@ -108,8 +108,8 @@ public class LinphoneLauncherActivity extends Activity {
 					DSCongTyResponse dsCongTyResponse = response.body();
 					boolean dsCongTyResponseStatus = dsCongTyResponse.isStatus();
 					if (!dsCongTyResponseStatus) {
-						Toast.makeText(LinphoneLauncherActivity.this, dsCongTyResponse.getMsg(), Toast.LENGTH_SHORT).show();
-					} else {
+                        Toast.makeText(LinphoneLauncherActivity.this, getString(R.string.occured_error), Toast.LENGTH_SHORT).show();
+                    } else {
 						try {
 							DbContext.getInstance().setDsCongty(dsCongTyResponse,LinphoneLauncherActivity.this);
 							Log.d("LinphoneLaunched", "onResponse: "+DbContext.getInstance().getDsCongTy(LinphoneLauncherActivity.this).toString());
@@ -143,8 +143,8 @@ public class LinphoneLauncherActivity extends Activity {
 					Log.d("234234", "onResponse: "+dsCongTyResponse.toString());
 					boolean dsCongTyResponseStatus = dsCongTyResponse.isStatus();
 					if (!dsCongTyResponseStatus) {
-						Toast.makeText(LinphoneLauncherActivity.this, dsCongTyResponse.getMsg(), Toast.LENGTH_SHORT).show();
-					} else {
+                        Toast.makeText(LinphoneLauncherActivity.this, getString(R.string.occured_error), Toast.LENGTH_SHORT).show();
+                    } else {
 						try {
 							DbContext.getInstance().setDsCongty(dsCongTyResponse,LinphoneLauncherActivity.this);
 //							NetContext.getInstance().setBASE_URL(dsCongTyResponse.getDscongty().get(0).getBaseURL());

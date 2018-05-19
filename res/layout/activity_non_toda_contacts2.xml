@@ -21,7 +21,7 @@
         <TextView
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:text="Danh sách liên hệ"
+            android:text="@string/nontoda_contacts_title"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -49,7 +49,7 @@
             android:layout_height="40dp"
             android:background="@drawable/resizable_textfield"
             android:contentDescription="@string/content_description_search_contact"
-            android:hint="Nhập để tìm kiếm"
+            android:hint="@string/search_hint_text"
             android:inputType="textPersonName"
             android:textColor="@android:color/black"
             android:textCursorDrawable="@null" />
@@ -81,7 +81,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
                 android:button="@drawable/custom_tickbox"
-                android:text="chọn tất cả"
+                android:text="@string/pick_all_cbx"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:visibility="visible" />
@@ -146,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Không tìm thấy kết quả"
+                    android:text="@string/no_result_search"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>

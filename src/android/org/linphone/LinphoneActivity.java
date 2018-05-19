@@ -138,7 +138,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     public static final String PREF_FIRST_LAUNCH = "pref_first_launch";
     public static final String KEY_FUNC_URL = "AppLogOut.aspx?";
     public static final String TAG = "LinphoneActivity";
-    private String Pref_String_DB = "baseUrl";
+    public static final String Pref_String_DB = "baseUrl";
     private static final int SETTINGS_ACTIVITY = 123;
     private static final int CALL_ACTIVITY = 19;
     private static final int PERMISSIONS_REQUEST_OVERLAY = 206;
@@ -2059,7 +2059,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                         boolean logOutResponse = voidRespon.getStatus();
                         if (!logOutResponse) {
                             dialogLogin.cancel();
-                            Toast.makeText(LinphoneActivity.this, voidRespon.getMsg(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LinphoneActivity.this, getString(R.string.occured_error), Toast.LENGTH_SHORT).show();
                         } else {
 //                    try {
                             SharedPreferences.Editor autoLoginEditor = getApplicationContext().getSharedPreferences("AutoLogin", MODE_PRIVATE).edit();

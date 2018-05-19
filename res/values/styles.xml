@@ -18,7 +18,7 @@
 	<style name="NoTitle" parent="@style/Theme.AppCompat.Light.NoActionBar">
 		<item name="android:windowNoTitle">true</item>
 		<item name="android:windowActionBar">false</item>
-		<item name="android:windowFullscreen">true</item>
+		<item name="android:windowFullscreen">false</item>
 		<item name="android:windowContentOverlay">@null</item>
 	</style>
 	<style name="FullScreen" parent="android:Theme.Holo.Light.NoActionBar.Fullscreen">
