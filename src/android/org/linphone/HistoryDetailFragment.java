@@ -330,20 +330,20 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
             MyCallLogs.CallLog callLog = listCallogs.get(position);
             if (callLog.getStatus() == MyCallLogs.CallLog.CUOC_GOI_NHO) {
                 holder.tvDuration.setVisibility(View.GONE);
-                holder.tvType.setText("Cuộc gọi nhỡ");
+                holder.tvType.setText(getString(R.string.missedcall_status));
                 holder.imgType.setImageResource(R.drawable.my_missed_call);
             } else if (callLog.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DEN) {
-                holder.tvType.setText("Cuộc gọi đến");
+                holder.tvType.setText(getString(R.string.imcomingcall_status));
                 holder.imgType.setImageResource(R.drawable.my_incoming_call);
             } else if (callLog.getStatus() == MyCallLogs.CallLog.CUOC_GOI_DI) {
-                holder.tvType.setText("Cuộc gọi đi");
+                holder.tvType.setText(getString(R.string.outgoingcall_status));
                 holder.imgType.setImageResource(R.drawable.my_outgoing_call);
             } else if (callLog.getStatus() == MyCallLogs.CallLog.MAY_BAN) {
-                holder.tvType.setText("Máy bận");
+                holder.tvType.setText(getString(R.string.busycall_status));
                 holder.imgType.setImageResource(R.drawable.my_busy_call);
                 holder.tvDuration.setVisibility(View.GONE);
             } else if (callLog.getStatus() == MyCallLogs.CallLog.OFFLINE) {
-                holder.tvType.setText("Offline");
+                holder.tvType.setText(getString(R.string.offlinecall_status));
                 holder.imgType.setImageResource(R.drawable.offline_ext);
                 holder.tvDuration.setVisibility(View.GONE);
             }
@@ -360,9 +360,9 @@ public class HistoryDetailFragment extends Fragment implements OnClickListener {
             int second = Integer.parseInt(listStringDuration[2]);
             String duration;
             if (hours > 0) {
-                duration = hours + " giờ ";
+                duration = hours + getString(R.string.minutes);
             }
-            duration = minute + " phút " + second + " giây ";
+            duration = minute + " " + getString(R.string.minutes) + " " + second + " " + getString(R.string.second);
 
             holder.tvDuration.setText(duration);
             return view;

@@ -336,7 +336,7 @@ public class DialerFragment extends Fragment {
         instance = this;
 
         if (LinphoneActivity.isInstanciated()) {
-//			LinphoneActivity.instance().selectMenu(FragmentsAvailable.DIALER);
+            LinphoneActivity.instance().selectMenu(FragmentsAvailable.DIALER);
             LinphoneActivity.instance().updateDialerFragment(this);
             LinphoneActivity.instance().showStatusBar();
             LinphoneActivity.instance().hideTabBar(false);

@@ -69,8 +69,8 @@ public class Profile extends Fragment {
     public static final String Pref_Codec_DB = "codec";
     private static final int ENGLISH_SELECTED = 0;
     private static final int VIETNAMESE_SELECTED = 1;
-    private static final int G729_SELECTED = 0;
-    private static final int G711_SELECTED = 1;
+    private static final int G729_SELECTED = 1;
+    private static final int G711_SELECTED = 0;
     public static final String KEY_FUNC_URL = "AppLogOut.aspx?";
     private ProgressDialog dialogLogin;
     private String TAG = "Profile";
@@ -135,11 +135,11 @@ public class Profile extends Fragment {
             cskh = (TextView) view.findViewById(R.id.tv_cskh);
             website = (TextView) view.findViewById(R.id.tv_website);
             email = (TextView) view.findViewById(R.id.tv_email);
-            if (DbContext.getInstance().getAboutRespon(getActivity()).getData() == null) {
+//            if (DbContext.getInstance().getAboutRespon(getActivity()) == null) {
                 getAbout();
-            } else {
-                setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
-            }
+//            } else {
+//                setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
+//            }
 
 
         } catch (Exception e) {
@@ -212,14 +212,14 @@ public class Profile extends Fragment {
                     builder = new AlertDialog.Builder(getActivity());
                 }
                 try {
-                    builder.setTitle("Đăng xuất")
-                            .setMessage("Bạn có thật sự muốn đăng xuất ?")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    builder.setTitle(getString(R.string.dialog_logout_title))
+                            .setMessage(getString(R.string.dialog_logout_message_builder))
+                            .setPositiveButton(getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     logoutAct();
                                 }
                             })
-                            .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // do nothing
                                 }
@@ -245,7 +245,7 @@ public class Profile extends Fragment {
         ll5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] ITEMSCODECS = new String[]{"G729", "G711"};
+                String[] ITEMSCODECS = new String[]{"G711", "G729"};
                 showMaterialDialogListSingleChoiceCodec(getString(R.string.Codec), ITEMSCODECS);
             }
         });
@@ -256,6 +256,7 @@ public class Profile extends Fragment {
         try {
             if (aboutRespon.getData().getTenlienhe().length() != 0) {
                 tenlienhe.setText(aboutRespon.getData().getTenlienhe());
+                Log.d(TAG, "setDataNotEmpty: " + aboutRespon.getData().getTenlienhe());
                 tenlienhe.setVisibility(View.VISIBLE);
             } else tenlienhe.setVisibility(View.GONE);
         } catch (Exception e) {
@@ -334,7 +335,14 @@ public class Profile extends Fragment {
     }
 
     public String getURLAbout() {
-        String URL = "AppLienHe.aspx";
+        String URL;
+        final SharedPreferences languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE);
+        if (languagePrefs.getInt(Pref_Language_DB, ENGLISH_SELECTED) == VIETNAMESE_SELECTED) {
+            URL = "AppLienHe.aspx?lang=vi";
+        } else {
+            URL = "AppLienHe.aspx?lang=en";
+        }
+        Log.d(TAG, "getURLAbout: " + URL);
         return URL;
 
     }
@@ -381,11 +389,13 @@ public class Profile extends Fragment {
                         getActivity().getResources().updateConfiguration(config,
                                 getActivity().getResources().getDisplayMetrics());
 
-                        getActivity().recreate();
-                        LinphoneActivity.instance().newMessages.setVisibility(View.GONE);
+
+//                        LinphoneActivity.instance().newMessages.setVisibility(View.GONE);
                         SharedPreferences.Editor edit = languagePrefs.edit();
                         edit.putInt(Pref_Language_DB, languageSelected);
                         edit.commit();
+                        getActivity().recreate();
+//                        getAbout();
                     }
 
 
@@ -400,7 +410,7 @@ public class Profile extends Fragment {
 
     private void showMaterialDialogListSingleChoiceCodec(String title, String[] ITEMS) {
         final SharedPreferences codecPrefs = getActivity().getSharedPreferences(Pref_Codec_DB, getActivity().MODE_PRIVATE);
-        codecSelected = codecPrefs.getInt(Pref_Codec_DB, G729_SELECTED);
+        codecSelected = codecPrefs.getInt(Pref_Codec_DB, G711_SELECTED);
         new MaterialDialog.Builder(getActivity())
                 .title(title)
                 .message(null)
@@ -473,7 +483,7 @@ public class Profile extends Fragment {
                     @Override
                     public void onNegative(MaterialDialog dialog) {
                         super.onNegative(dialog);
-                        codecSelected = codecPrefs.getInt(Pref_Codec_DB, G729_SELECTED);
+                        codecSelected = codecPrefs.getInt(Pref_Codec_DB, G711_SELECTED);
                     }
                 })
                 .show();
@@ -483,11 +493,14 @@ public class Profile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        if (LinphoneActivity.isInstanciated()) {
+            LinphoneActivity.instance().selectMenu(FragmentsAvailable.CHAT);
+        }
     }
 
     public void getAbout() {
         try {
+
             Service userService = NetContext.instance.create(Service.class);
             userService.getAbout(getURLAbout()).enqueue(new Callback<AboutRespon>() {
                 @Override
@@ -497,7 +510,9 @@ public class Profile extends Fragment {
                     if (aboutRespon.isStatus()) {
                         try {
                             DbContext.getInstance().setAboutRespon(aboutRespon, getActivity());
-                            setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
+
+                            Log.d(TAG, "onResponse: " + DbContext.getInstance().getAboutRespon(getActivity()).getData().getDiachi());
+                            setDataNotEmpty(aboutRespon);
                         } catch (Exception e) {
                             Log.d(TAG, "Exception: " + e.toString());
                         }
@@ -544,6 +559,7 @@ public class Profile extends Fragment {
                             LinphonePreferences.instance().setAccountEnabled(0, false);
                             int accountNumber = LinphonePreferences.instance().getAccountCount();
                             while (accountNumber >= 0) {
+
                                 LinphonePreferences.instance().deleteAccount(accountNumber);
                                 accountNumber--;
                             }

@@ -106,6 +106,13 @@
     <string name="Vietnamese">Vietnamese</string>
     <string name="Language">Language</string>
     <string name="Codec">Codec</string>
+    <string name="imcomingcall_status">Cuộc gọi đến</string>
+    <string name="outgoingcall_status">Cuộc gọi đi</string>
+    <string name="busycall_status">Máy bận</string>
+    <string name="offlinecall_status">Offline</string>
+    <string name="missedcall_status">Cuộc gọi nhỡ</string>
+    <string name="minutes">phút</string>
+    <string name="second">giây</string>
 
     <!-- Common -->
     <string name="username">Username</string>

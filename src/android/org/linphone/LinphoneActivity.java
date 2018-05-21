@@ -376,7 +376,28 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         // chuyen den man hinh tin nhan khi co tin nhan moi
         moveWhenGotNewMessage(getIntent());
 
+        //set up default G711
+        final SharedPreferences codecPrefs = getSharedPreferences(Profile.Pref_Codec_DB, MODE_PRIVATE);
+        if (codecPrefs.getInt(Profile.Pref_Codec_DB, -1) == -1) {
+            LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
+            for (final PayloadType pt : lc.getAudioCodecs()) {
+                if (pt.getMime().equals("G729") || pt.getMime().equals("PCMU")) {
+                    try {
+                        lc.enablePayloadType(pt, false);
+                    } catch (LinphoneCoreException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (pt.getMime().equals("PCMA")) {
+                    try {
+                        lc.enablePayloadType(pt, true);
+                    } catch (LinphoneCoreException e) {
+                        e.printStackTrace();
+                    }
+                }
 
+            }
+        }
     }
 
 
