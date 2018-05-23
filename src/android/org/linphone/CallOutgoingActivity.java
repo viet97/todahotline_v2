@@ -151,7 +151,7 @@ public class CallOutgoingActivity extends LinphoneGenericActivity implements OnC
                         decline();
                     } else if (message != null) {
                         LinphoneAddress address = mCall.getRemoteAddress();
-                        displayCustomToast(address.getUserName() + getString(R.string.offline_ext_message), Toast.LENGTH_SHORT);
+                        displayCustomToast(address.getUserName() + " " + getString(R.string.offline_ext_message), Toast.LENGTH_SHORT);
 
                         addOutGoingLog(call, MyCallLogs.CallLog.OFFLINE);
                         decline();

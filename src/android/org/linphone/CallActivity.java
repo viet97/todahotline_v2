@@ -740,16 +740,18 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			goBackToDialer();
 		}
 		else if (id == R.id.pause) {
+            android.util.Log.d(TAG, "onClick: " + (LinphoneCall) v.getTag());
+//			if (LinphoneManager.getLc().getCurrentCall() != null) {
+            if (LinphoneManager.getLc().getCurrentCall() != null)
+                pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
+            else pauseOrResumeCall((LinphoneCall) v.getTag());
 
-			if (LinphoneManager.getLc().getCurrentCall() != null) {
-
-				pauseOrResumeCall(LinphoneManager.getLc().getCurrentCall());
-			} else {
-                // xoa di chu tam dung
-
-                pauseOrResumeCall((LinphoneCall) v.getTag());
-			}
-		}
+//			} else {
+//                // xoa di chu tam dung
+//
+//                pauseOrResumeCall((LinphoneCall) v.getTag());
+//			}
+        }
 		else if (id == R.id.hang_up) {
 			hangUp();
 		}
@@ -1476,7 +1478,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 	private boolean displayCallStatusIconAndReturnCallPaused(LinearLayout callView, LinphoneCall call) {
 		boolean isCallPaused, isInConference;
-		ImageView callState = (ImageView) callView.findViewById(R.id.call_pause);
+        ImageView callState = (ImageView) findViewById(R.id.pause);
+
 		callState.setTag(call);
 		callState.setOnClickListener(this);
 
@@ -1565,8 +1568,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 					index++;
 				} else {
 					if (call != LinphoneManager.getLc().getCurrentCall() && !call.isInConference()) {
-//						displayPausedCalls(resources, call, index);
-						index++;
+                        displayPausedCalls(resources, call, index);
+                        index++;
 					} else {
 						displayCurrentCall(call);
 					}
@@ -1754,12 +1757,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			// netowrk signal
 			String networkSignal = Connectivity.getNetworkSignal(this);
 			int colorText;
-			if (networkSignal.equals(Connectivity.WEAK)) {
-				colorText = Color.RED;
-			} else if (networkSignal.equals(Connectivity.NORMAL)) {
-				colorText = Color.YELLOW;
-			} else if (networkSignal.equals(Connectivity.GOOD)) {
-				colorText = Color.GREEN;
+            if (networkSignal.equals(getString(R.string.weak_network))) {
+                colorText = Color.RED;
+            } else if (networkSignal.equals(getString(R.string.normal_network))) {
+                colorText = Color.YELLOW;
+            } else if (networkSignal.equals(getString(R.string.good_network))) {
+                colorText = Color.GREEN;
 			} else {
 				colorText = Color.GREEN;
 			}

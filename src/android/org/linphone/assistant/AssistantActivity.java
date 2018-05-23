@@ -477,10 +477,6 @@ public class AssistantActivity extends Activity implements OnClickListener, Acti
             Toast.makeText(this, getString(R.string.wrong_verify_password),
                     Toast.LENGTH_SHORT).show();
             return false;
-        } else if (passveri.length() < 8) {
-            Toast.makeText(this, getString(R.string.atleast_8char_password),
-                    Toast.LENGTH_SHORT).show();
-            return false;
         } else if (passveri.contains(" ") || pass.contains(" ")) {
             Toast.makeText(this, getString(R.string.no_space_in_password),
                     Toast.LENGTH_SHORT).show();

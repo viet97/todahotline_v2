@@ -93,7 +93,9 @@
             android:layout_height="1dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/white"></LinearLayout>
+            android:background="@color/white">
+
+        </LinearLayout>
 
         <com.andexert.library.RippleView
             android:id="@+id/llprofile_changepass"
@@ -127,7 +129,9 @@
             android:layout_height="1dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/white"></LinearLayout>
+            android:background="@color/white">
+
+        </LinearLayout>
 
         <com.andexert.library.RippleView
             android:id="@+id/llprofile_logout"
@@ -203,6 +207,7 @@
         </LinearLayout>
 
         <com.andexert.library.RippleView
+            android:visibility="gone"
             android:id="@+id/ll_switch_codecs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

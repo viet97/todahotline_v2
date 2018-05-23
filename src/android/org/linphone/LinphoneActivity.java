@@ -110,6 +110,8 @@ import org.linphone.network.models.VoidRespon;
 import org.linphone.notice.DisplayNotice;
 import org.linphone.purchase.InAppPurchaseActivity;
 import org.linphone.ui.AddressText;
+import org.linphone.ui.DialogAction;
+import org.linphone.ui.MessageDialog;
 import org.linphone.ultils.ContactUltils;
 import org.linphone.xmlrpc.XmlRpcHelper;
 import org.linphone.xmlrpc.XmlRpcListenerBase;
@@ -126,6 +128,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -134,7 +137,7 @@ import retrofit2.Response;
 import static android.content.Intent.ACTION_MAIN;
 import static org.linphone.LinphoneActivity.ChatRoomContainer.createChatroomContainer;
 
-public class LinphoneActivity extends LinphoneGenericActivity implements OnClickListener, ContactPicked, ActivityCompat.OnRequestPermissionsResultCallback, Thread.UncaughtExceptionHandler {
+public class LinphoneActivity extends LinphoneGenericActivity implements OnClickListener, ContactPicked, ActivityCompat.OnRequestPermissionsResultCallback, Thread.UncaughtExceptionHandler, DialogAction {
     public static final String PREF_FIRST_LAUNCH = "pref_first_launch";
     public static final String KEY_FUNC_URL = "AppLogOut.aspx?";
     public static final String TAG = "LinphoneActivity";
@@ -397,6 +400,20 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 }
 
             }
+        }
+
+        // chinh ngon ngu lan dau vao app
+        SharedPreferences languagePrefs = getSharedPreferences(Profile.Pref_Language_DB, MODE_PRIVATE);
+        if (languagePrefs.getInt(Profile.Pref_Language_DB, -1) == -1) {
+            int languageSelected;
+            if (Locale.getDefault().getDisplayLanguage().equals("English")) {
+                languageSelected = Profile.ENGLISH_SELECTED;
+            } else {
+                languageSelected = Profile.VIETNAMESE_SELECTED;
+            }
+            SharedPreferences.Editor edit = languagePrefs.edit();
+            edit.putInt(Profile.Pref_Language_DB, languageSelected);
+            edit.commit();
         }
     }
 
@@ -999,6 +1016,16 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
         android.util.Log.d(TAG, "uncaughtException: ");
+    }
+
+    @Override
+    public void onPositive() {
+        logoutAct(true);
+    }
+
+    @Override
+    public void onNegative() {
+
     }
 
     static class ChatRoomContainer {
@@ -1679,6 +1706,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             android.util.Log.d(TAG, "Exception: " + e.toString());
         }
     }
+
     public void moveWhenGotNewMessage(Intent intent) {
         try {
             if (intent.getBooleanExtra(HAS_NEW_MESSAGE, false))
@@ -2153,28 +2181,33 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
             android.util.Log.d(TAG, "countcount: ");
             getFragmentManager().popBackStackImmediate();
         } else {
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(LinphoneActivity.this, android.R.style.Theme_Material_Dialog_Alert);
-            } else {
-                builder = new AlertDialog.Builder(LinphoneActivity.this);
-            }
-//            try {
-            builder.setTitle(getString(R.string.dialog_logout_title))
-                    .setMessage(getString(R.string.dialog_logout_message_builder))
-                    .setPositiveButton(getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            logoutAct(true);
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                        }
-                    })
-                    .setIcon(R.drawable.logout1)
-                    .show();
-            android.util.Log.d("LinphoneActivity", "onBackPressed: ");
+            MessageDialog messageDialog = new MessageDialog(this, getLayoutInflater());
+            messageDialog.setDialogAction(this);
+            messageDialog.setTitle(getString(R.string.dialog_logout_title));
+            messageDialog.setMessage(getString(R.string.dialog_logout_message_builder));
+            messageDialog.show();
+//            AlertDialog.Builder builder;
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                builder = new AlertDialog.Builder(LinphoneActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+//            } else {
+//                builder = new AlertDialog.Builder(LinphoneActivity.this);
+//            }
+////            try {
+//            builder.setTitle(getString(R.string.dialog_logout_title))
+//                    .setMessage(getString(R.string.dialog_logout_message_builder))
+//                    .setPositiveButton(getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            logoutAct(true);
+//                        }
+//                    })
+//                    .setNegativeButton(getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            // do nothing
+//                        }
+//                    })
+//                    .setIcon(R.drawable.logout1)
+//                    .show();
+//            android.util.Log.d("LinphoneActivity", "onBackPressed: ");
 //            } catch (Exception e) {
 //                android.util.Log.d("SipHome", "Exception: " + e);
 //            }

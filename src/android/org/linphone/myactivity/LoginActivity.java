@@ -387,7 +387,7 @@ public class LoginActivity extends Activity {
     private void showConfigDialog() {
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(LoginActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(LoginActivity.this, AlertDialog.THEME_HOLO_LIGHT);
         } else {
             builder = new AlertDialog.Builder(LoginActivity.this);
         }
@@ -395,7 +395,6 @@ public class LoginActivity extends Activity {
         View view = inflater.inflate(R.layout.fragment_config_dialog, null);
         builder.setView(view);
         et_config = (EditText) view.findViewById(R.id.et_config);
-
         et_config.setText(config.getString(PREF_URLCONFIG, DEFAULT_BASE));
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

@@ -32,7 +32,7 @@
     <string name="new_message_title"> New message</string>
     <string name="new_message_to_hint">To</string>
     <string name="new_message_title_hint">Subject</string>
-    <string name="new_message_content_hint">content</string>
+    <string name="new_message_content_hint">Content</string>
     <string name="new_message_attach_files">choose file</string>
     <string name="no_result_search">No result</string>
     <string name="all_calls">All</string>
@@ -76,7 +76,7 @@
     <string name="require_info">Content must not be empty</string>
     <string name="atleast_8char_password">Password must contain at least 8 letters </string>
     <string name="no_space_in_password">Password must not be blanked</string>
-    <string name="offline_ext_message">Cannot connect to server</string>
+    <string name="offline_ext_message">cannot connect to server</string>
     <string name="good_network">good</string>
     <string name="weak_network">bad</string>
     <string name="very_good_network">perfect</string>

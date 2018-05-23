@@ -27,44 +27,48 @@ public class ContactUltils {
     private String TAG = "ContactUltils";
 
     public String getContactName(final String phoneNumber, Context context) {
-        int permissionGranted = context.getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, context.getPackageName());
-        org.linphone.mediastream.Log.i("[Permission] " + Manifest.permission.WRITE_CONTACTS + " is " + (permissionGranted == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
+        try {
+            int permissionGranted = context.getPackageManager().checkPermission(Manifest.permission.WRITE_CONTACTS, context.getPackageName());
+            org.linphone.mediastream.Log.i("[Permission] " + Manifest.permission.WRITE_CONTACTS + " is " + (permissionGranted == PackageManager.PERMISSION_GRANTED ? "granted" : "denied"));
 
-        if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.WRITE_CONTACTS);
-            org.linphone.mediastream.Log.i("[Permission] Asking for " + Manifest.permission.WRITE_CONTACTS);
-            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_CONTACTS}, 0);
-        } else {
-            Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+            if (permissionGranted != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.WRITE_CONTACTS);
+                org.linphone.mediastream.Log.i("[Permission] Asking for " + Manifest.permission.WRITE_CONTACTS);
+                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_CONTACTS}, 0);
+            } else {
+                Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
-            String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+                String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
 
-            String contactName = null;
-            Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                String contactName = null;
+                Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
 
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    contactName = cursor.getString(0);
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        contactName = cursor.getString(0);
+                    }
+                    cursor.close();
                 }
-                cursor.close();
-            }
-            if (contactName == null) {
-                try {
-                    contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
-                } catch (Exception e) {
-                    Log.d(TAG, "Exception: " + e.toString());
-                }
+                if (contactName == null) {
+                    try {
+                        contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+                    } catch (Exception e) {
+                        Log.d(TAG, "Exception: " + e.toString());
+                    }
 
-            }
-            if (contactName == null) {
-                try {
-                    contactName = DbContext.getInstance().getListCusContactTodaName(context).get(phoneNumber);
-                } catch (Exception e) {
-                    Log.d(TAG, "Exception: " + e.toString());
                 }
+                if (contactName == null) {
+                    try {
+                        contactName = DbContext.getInstance().getListCusContactTodaName(context).get(phoneNumber);
+                    } catch (Exception e) {
+                        Log.d(TAG, "Exception: " + e.toString());
+                    }
+                }
+                if (contactName != null)
+                    return contactName;
             }
-            if (contactName != null)
-                return contactName;
+        } catch (Exception e) {
+            android.util.Log.d(TAG, "getContactName: ");
         }
         return phoneNumber;
     }

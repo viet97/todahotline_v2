@@ -533,21 +533,26 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
     }
 
     public String getContactName(final String phoneNumber, Context context) {
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-
-        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
-
         String contactName = null;
-        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        try {
+            Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                contactName = cursor.getString(0);
+            String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME};
+
+
+            Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    contactName = cursor.getString(0);
+                }
+                cursor.close();
             }
-            cursor.close();
-        }
-        if (contactName == null) {
-            contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+            if (contactName == null) {
+                contactName = DbContext.getInstance().getListContactTodaName(context).get(phoneNumber);
+            }
+        } catch (Exception e) {
+            return phoneNumber;
         }
 
         return contactName;

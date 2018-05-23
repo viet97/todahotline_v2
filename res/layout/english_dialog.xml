@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:padding="4dp"
+        android:id="@+id/img_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="top|right"
+        android:clickable="true"
+        android:src="@drawable/cancel_dialog" />
+
+    <TextView
+        android:layout_marginBottom="8dp"
+        android:textSize="20dp"
+        android:layout_marginLeft="4dp"
+        android:text="@string/Language"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent">
+
+        <RadioButton
+            android:id="@+id/english"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/EngLish"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/vietnamese"
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Vietnamese"
+            android:textColor="@color/black" />
+    </RadioGroup>
+</LinearLayout>

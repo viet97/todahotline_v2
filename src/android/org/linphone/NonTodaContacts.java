@@ -181,7 +181,7 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
             Log.d(TAG, "onCreateView: " + e);
         }
 
-        changeAdapter();
+        onRefresh();
 
     }
 
@@ -307,7 +307,9 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                     nonTodaContactsResponse = response.body();
 
                     try {
-                        refreshLayout.setRefreshing(false);
+                        if (refreshLayout.isRefreshing()) {
+                            refreshLayout.setRefreshing(false);
+                        }
                     } catch (Exception e) {
                         Log.d(TAG, "Exception: " + e.toString());
                     }
@@ -330,7 +332,9 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                 @Override
                 public void onFailure(Call<NonTodaContactsResponse> call, Throwable t) {
                     try {
-                        refreshLayout.setRefreshing(false);
+                        if (refreshLayout.isRefreshing()) {
+                            refreshLayout.setRefreshing(false);
+                        }
                         dialogSearch.cancel();
                     } catch (Exception e) {
                         Log.d(TAG, "Exception: " + e.toString());
@@ -340,6 +344,9 @@ public class NonTodaContacts extends Activity implements OnClickListener, OnItem
                 }
             });
         } catch (Exception e) {
+            if (refreshLayout.isRefreshing()) {
+                refreshLayout.setRefreshing(false);
+            }
             Log.d(TAG, "Exception: " + e);
         }
     }

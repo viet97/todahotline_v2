@@ -190,6 +190,18 @@
 						android:layout_alignParentBottom="true"
 						android:visibility="gone" />
 
+                    <TextView
+                        android:id="@+id/new_messages"
+                        android:background="@drawable/history_chat_indicator"
+                        style="@style/font18"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_margin="15dp"
+                        android:gravity="center"
+                        android:visibility="gone">
+
+                    </TextView>
+
 				</com.andexert.library.RippleView>
 
 				<com.andexert.library.RippleView

@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,14 +26,18 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.pepperonas.materialdialog.MaterialDialog;
+import com.rey.material.app.Dialog;
+import com.rey.material.widget.RadioButton;
 import com.rey.material.widget.Switch;
 
 import org.linphone.assistant.AssistantActivity;
@@ -47,6 +52,8 @@ import org.linphone.network.Service;
 import org.linphone.network.models.AboutRespon;
 import org.linphone.network.models.VoidRespon;
 import org.linphone.notice.DisplayNotice;
+import org.linphone.ui.DialogAction;
+import org.linphone.ui.MessageDialog;
 import org.linphone.ultils.StringUltils;
 
 import java.util.ArrayList;
@@ -67,8 +74,8 @@ public class Profile extends Fragment {
     private static final String Pref_String_DB = "baseUrl";
     public static final String Pref_Language_DB = "language";
     public static final String Pref_Codec_DB = "codec";
-    private static final int ENGLISH_SELECTED = 0;
-    private static final int VIETNAMESE_SELECTED = 1;
+    public static final int ENGLISH_SELECTED = 0;
+    public static final int VIETNAMESE_SELECTED = 1;
     private static final int G729_SELECTED = 1;
     private static final int G711_SELECTED = 0;
     public static final String KEY_FUNC_URL = "AppLogOut.aspx?";
@@ -205,33 +212,50 @@ public class Profile extends Fragment {
                 alphaAnimation.setFillAfter(true);
                 alphaAnimation.setDuration(10);//duration in millisecond
                 ll3.startAnimation(alphaAnimation);
-                AlertDialog.Builder builder;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
-                } else {
-                    builder = new AlertDialog.Builder(getActivity());
-                }
-                try {
-                    builder.setTitle(getString(R.string.dialog_logout_title))
-                            .setMessage(getString(R.string.dialog_logout_message_builder))
-                            .setPositiveButton(getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    logoutAct();
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .setIcon(R.drawable.logout1)
-                            .show();
-                    Log.d("LinphoneActivity", "onBackPressed: ");
-                } catch (Exception e) {
-                    Log.d("SipHome", "Exception: " + e);
-                }
+//                AlertDialog.Builder builder;
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+//                } else {
+//                    builder = new AlertDialog.Builder(getActivity());
+//                }
+//                try {
+//                    builder.setTitle(getString(R.string.dialog_logout_title))
+//                            .setMessage(getString(R.string.dialog_logout_message_builder))
+//                            .setPositiveButton(getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    logoutAct();
+//                                }
+//                            })
+//                            .setNegativeButton(getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    // do nothing
+//                                }
+//                            })
+//                            .setIcon(R.drawable.logout1)
+//                            .show();
+//                    Log.d("LinphoneActivity", "onBackPressed: ");
+//                } catch (Exception e) {
+//                    Log.d("SipHome", "Exception: " + e);
+//                }
+                MessageDialog messageDialog = new MessageDialog(getActivity(), getActivity().getLayoutInflater());
+                messageDialog.setDialogAction(new DialogAction() {
+                    @Override
+                    public void onPositive() {
+                        logoutAct();
+                    }
+
+                    @Override
+                    public void onNegative() {
+
+                    }
+                });
+                messageDialog.setTitle(getString(R.string.dialog_logout_title));
+                messageDialog.setMessage(getString(R.string.dialog_logout_message_builder));
+                messageDialog.show();
             }
-        });
+                               }
+
+        );
 
         ll4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -351,40 +375,39 @@ public class Profile extends Fragment {
         final SharedPreferences languagePrefs = getActivity().getSharedPreferences(Pref_Language_DB, getActivity().MODE_PRIVATE);
         languageSelected = languagePrefs.getInt(Pref_Language_DB, ENGLISH_SELECTED);
 
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
+        } else {
+            builder = new AlertDialog.Builder(getActivity());
+        }
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.english_dialog, null);
+        builder.setView(view);
+        final android.widget.RadioButton english = view.findViewById(R.id.english);
+        android.widget.RadioButton vietnamese = view.findViewById(R.id.vietnamese);
+        ImageView imageView = view.findViewById(R.id.img_close);
 
-        new MaterialDialog.Builder(getActivity())
-                .title(title)
-                .message(null)
-                .positiveText(getActivity().getString(R.string.confirm_dialog))
-                .negativeText(getActivity().getString(R.string.cancel_dialog))
-                .listItemsSingleSelection(false, ITEMS)
-                .selection(languageSelected)
-                .itemClickListener(new MaterialDialog.ItemClickListener() {
-                    @Override
-                    public void onClick(View v, int position, long id) {
-                        super.onClick(v, position, id);
-                        languageSelected = position;
-                    }
-                })
 
-                .buttonCallback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        Locale myLocale;
-                        if (languageSelected == ENGLISH_SELECTED) {
+        if (languageSelected == ENGLISH_SELECTED) {
+            english.setChecked(true);
+        } else {
+            vietnamese.setChecked(true);
+        }
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Locale myLocale;
+                if (english.isChecked()) {
+                    languageSelected = ENGLISH_SELECTED;
                             myLocale = new Locale("en");
                             //saveLocale(lang, activity);
-
-
                         } else {
+                    languageSelected = VIETNAMESE_SELECTED;
                             myLocale = new Locale("vi");
                             //saveLocale(lang, activity);
-
-
                         }
                         Locale.setDefault(myLocale);
-                        android.content.res.Configuration config = new android.content.res.Configuration();
+                Configuration config = new Configuration();
                         config.locale = myLocale;
                         getActivity().getResources().updateConfiguration(config,
                                 getActivity().getResources().getDisplayMetrics());
@@ -396,16 +419,79 @@ public class Profile extends Fragment {
                         edit.commit();
                         getActivity().recreate();
 //                        getAbout();
-                    }
 
+            }
+        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
 
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        super.onNegative(dialog);
-                        languageSelected = languagePrefs.getInt(Pref_Language_DB, ENGLISH_SELECTED);
                     }
-                })
-                .show();
+        });
+        final AlertDialog dialog = builder.show();
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    Log.d(TAG, "Exception: " + e.toString());
+
+                }
+            }
+        });
+//        new MaterialDialog.Builder(getActivity())
+//                .title(title)
+//                .message(null)
+//                .positiveText(getActivity().getString(R.string.confirm_dialog))
+//                .negativeText(getActivity().getString(R.string.cancel_dialog))
+//                .listItemsSingleSelection(false, ITEMS)
+//                .selection(languageSelected)
+//                .itemClickListener(new MaterialDialog.ItemClickListener() {
+//                    @Override
+//                    public void onClick(View v, int position, long id) {
+//                        super.onClick(v, position, id);
+//                        languageSelected = position;
+//                    }
+//                })
+//
+//                .buttonCallback(new MaterialDialog.ButtonCallback() {
+//                    @Override
+//                    public void onPositive(MaterialDialog dialog) {
+//                        super.onPositive(dialog);
+//                        Locale myLocale;
+//                        if (languageSelected == ENGLISH_SELECTED) {
+//                            myLocale = new Locale("en");
+//                            //saveLocale(lang, activity);
+//
+//
+//                        } else {
+//                            myLocale = new Locale("vi");
+//                            //saveLocale(lang, activity);
+//
+//
+//                        }
+//                        Locale.setDefault(myLocale);
+//                        android.content.res.Configuration config = new android.content.res.Configuration();
+//                        config.locale = myLocale;
+//                        getActivity().getResources().updateConfiguration(config,
+//                                getActivity().getResources().getDisplayMetrics());
+//
+//
+////                        LinphoneActivity.instance().newMessages.setVisibility(View.GONE);
+//                        SharedPreferences.Editor edit = languagePrefs.edit();
+//                        edit.putInt(Pref_Language_DB, languageSelected);
+//                        edit.commit();
+//                        getActivity().recreate();
+////                        getAbout();
+//                    }
+//
+//
+//                    @Override
+//                    public void onNegative(MaterialDialog dialog) {
+//                        super.onNegative(dialog);
+//                        languageSelected = languagePrefs.getInt(Pref_Language_DB, ENGLISH_SELECTED);
+//                    }
+//                })
+//                .show();
     }
 
     private void showMaterialDialogListSingleChoiceCodec(String title, String[] ITEMS) {
