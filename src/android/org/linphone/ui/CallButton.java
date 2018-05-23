@@ -43,7 +43,7 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 
 	private AddressText mAddress;
 	private String TAG="CallButton";
-
+	Context context;
 	public void setAddressWidget(AddressText a) { mAddress = a; }
 
 	public void setExternalClickListener(OnClickListener e) { setOnClickListener(e); }
@@ -52,6 +52,7 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 	public CallButton(Context context, AttributeSet attrs) {
 
 		super(context, attrs);
+		this.context = context;
 		setOnClickListener(this);
 	}
 
@@ -75,8 +76,8 @@ public class CallButton extends ImageView implements OnClickListener, AddressAwa
 			if (!LinphoneManager.getInstance().acceptCallIfIncomingPending()) {
 				Log.d(TAG, "onClick: 69");
 				if (add.getText().length() > 0) {
-					LinphoneManager.getInstance().newOutgoingCall(add);
-                    mAddress.setText("");
+					LinphoneManager.getInstance().newOutgoingCall(add, context);
+					mAddress.setText("");
                 } else {
 
 					if (LinphonePreferences.instance().isBisFeatureEnabled()) {

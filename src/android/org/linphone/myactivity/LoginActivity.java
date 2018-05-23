@@ -410,8 +410,19 @@ public class LoginActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
-                })
-                .show();
+                });
+        final AlertDialog dialog = builder.show();
+        ImageView img = view.findViewById(R.id.img_close);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    android.util.Log.d(TAG, "Exception: " + e.toString());
+                }
+            }
+        });
 
     }
 

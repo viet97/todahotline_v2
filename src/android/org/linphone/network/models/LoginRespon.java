@@ -110,6 +110,10 @@ public class LoginRespon {
         private String somayle;
         @SerializedName("chophepxemonoffext")
         private String chophepxemonoffext;
+        @SerializedName("ChoPhepGoiRa")
+        private int ChoPhepGoiRa;
+        @SerializedName("Codec")
+        private String Codec;
         @SerializedName("dsloaidanhba")
         private ArrayList<DSloaidanhba> dsloaidanhba = new ArrayList<>();
 
@@ -123,6 +127,22 @@ public class LoginRespon {
 
         public void setSoTinNhanChuaDoc(int soTinNhanChuaDoc) {
             SoTinNhanChuaDoc = soTinNhanChuaDoc;
+        }
+
+        public int getChoPhepGoiRa() {
+            return ChoPhepGoiRa;
+        }
+
+        public void setChoPhepGoiRa(int choPhepGoiRa) {
+            ChoPhepGoiRa = choPhepGoiRa;
+        }
+
+        public String getCodec() {
+            return Codec;
+        }
+
+        public void setCodec(String codec) {
+            Codec = codec;
         }
 
         public void setDsloaidanhba(ArrayList<Data.DSloaidanhba> dsloaidanhba) {

@@ -411,7 +411,7 @@ public class DialerFragment extends Fragment {
 
     public void newOutgoingCall(String numberOrSipAddress) {
         displayTextInAddressBar(numberOrSipAddress);
-        LinphoneManager.getInstance().newOutgoingCall(mAddress);
+        LinphoneManager.getInstance().newOutgoingCall(mAddress, getActivity());
     }
 
     public void newOutgoingCall(Intent intent) {
@@ -435,7 +435,7 @@ public class DialerFragment extends Fragment {
             mAddress.clearDisplayedName();
             intent.setData(null);
 
-            LinphoneManager.getInstance().newOutgoingCall(mAddress);
+            LinphoneManager.getInstance().newOutgoingCall(mAddress, getActivity());
         }
     }
 

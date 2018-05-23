@@ -52,7 +52,7 @@ import com.andexert.library.RippleView;
 public class Digit extends RippleView implements AddressAware {
 
 	private AddressText mAddress;
-
+	Context context;
 	private String TAG="DigitNumber";
 
 	public void setAddressWidget(AddressText address) {
@@ -93,6 +93,7 @@ public class Digit extends RippleView implements AddressAware {
 	public Digit(Context context, AttributeSet attrs, int style) {
 		super(context, attrs, style);
 		setLongClickable(true);
+		this.context = context;
 		android.util.Log.d(TAG, "Digit: 86");
 	}
 
@@ -106,6 +107,7 @@ public class Digit extends RippleView implements AddressAware {
 		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		int width = displayMetrics.widthPixels;
 		this.setPadding(width / 24, width / 24, width / 24, width / 24);
+		this.context = context;
 
 	}
 
@@ -113,6 +115,7 @@ public class Digit extends RippleView implements AddressAware {
 		super(context);
 		setLongClickable(true);
 		android.util.Log.d(TAG, "Digit: 98");
+		this.context = context;
 	}
 
 	private class DialKeyListener implements OnClickListener, OnTouchListener, OnLongClickListener {
@@ -239,7 +242,7 @@ public class Digit extends RippleView implements AddressAware {
 				mAddress.getEditableText().clear();
 				if(voiceMail != null){
 					mAddress.getEditableText().append(voiceMail);
-					LinphoneManager.getInstance().newOutgoingCall(mAddress);
+					LinphoneManager.getInstance().newOutgoingCall(mAddress, context);
 				}
 				return true;
 			}

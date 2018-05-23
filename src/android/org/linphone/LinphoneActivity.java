@@ -380,8 +380,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         moveWhenGotNewMessage(getIntent());
 
         //set up default G711
-        final SharedPreferences codecPrefs = getSharedPreferences(Profile.Pref_Codec_DB, MODE_PRIVATE);
-        if (codecPrefs.getInt(Profile.Pref_Codec_DB, -1) == -1) {
+        if (DbContext.getInstance().getLoginRespon(this).getData().getCodec().equals(getString(R.string.G711))) {
             LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
             for (final PayloadType pt : lc.getAudioCodecs()) {
                 if (pt.getMime().equals("G729") || pt.getMime().equals("PCMU")) {
@@ -394,6 +393,25 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
                 if (pt.getMime().equals("PCMA")) {
                     try {
                         lc.enablePayloadType(pt, true);
+                    } catch (LinphoneCoreException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        } else {
+            LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
+            for (final PayloadType pt : lc.getAudioCodecs()) {
+                if (pt.getMime().equals("G729") || pt.getMime().equals("PCMU")) {
+                    try {
+                        lc.enablePayloadType(pt, true);
+                    } catch (LinphoneCoreException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (pt.getMime().equals("PCMA")) {
+                    try {
+                        lc.enablePayloadType(pt, false);
                     } catch (LinphoneCoreException e) {
                         e.printStackTrace();
                     }
@@ -1206,7 +1224,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
         address.setDisplayedName(name);
         address.setText(number);
         android.util.Log.d(TAG, "setAddresGoToDialerAndCall: 1060" + number);
-        LinphoneManager.getInstance().newOutgoingCall(address);
+        LinphoneManager.getInstance().newOutgoingCall(address, this);
     }
 
     public void startIncallActivity(LinphoneCall currentCall) {
@@ -1599,6 +1617,7 @@ public class LinphoneActivity extends LinphoneGenericActivity implements OnClick
     @Override
     protected void onResume() {
         super.onResume();
+
         MyApplication.activityResumed();
         try {
             if (DbContext.getInstance().getLoginRespon(this).getData().getDsquyen().get(0).getIdcauhinh() != ONLY_TAKECALL) {

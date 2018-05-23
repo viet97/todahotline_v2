@@ -525,11 +525,14 @@ public class LinphoneManager implements LinphoneCoreListener, LinphoneChatMessag
         return mLPConfigXsd;
     }
 
-    public void newOutgoingCall(AddressType address) {
+    public void newOutgoingCall(AddressType address, Context context) {
         String to = address.getText().toString();
-        android.util.Log.d(TAG, "newOutgoingCall: " + to);
-        android.util.Log.d(TAG, "newOutgoingCall: " + address.getText().toString());
-        newOutgoingCall(to, address.getDisplayedName());
+
+        if (DbContext.getInstance().getLoginRespon(context).getData().getChoPhepGoiRa() == 0 && DbContext.getInstance().getListContactTodaName(context).get("804") == null) {
+            Toast.makeText(context, getString(R.string.no_contacts_match), Toast.LENGTH_SHORT).show();
+        } else {
+            newOutgoingCall(to, address.getDisplayedName());
+        }
     }
 
     public String getContactName(final String phoneNumber, Context context) {
