@@ -209,6 +209,15 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 					}
 					finish();
 					return;
+				} else {
+					if (state == State.CallEnd) {
+						try {
+							// sau khi ket thuc cuoc goi thi resume luon cuoc goi truoc
+							pause.performClick();
+						} catch (Exception e) {
+							android.util.Log.d(TAG, "Exception: " + e.toString());
+						}
+					}
 				}
 
 				if (state == State.IncomingReceived) {
@@ -397,6 +406,9 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
     }
 
     private void initUI() {
+		//moi lan vao man hinh goi la tat loa ngoai di
+		LinphoneManager.getLc().enableSpeaker(isSpeakerEnabled);
+
 		inflater = LayoutInflater.from(this);
 		container = (ViewGroup) findViewById(R.id.topLayout);
 		callsList = (LinearLayout) findViewById(R.id.calls_list);
@@ -754,6 +766,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
         }
 		else if (id == R.id.hang_up) {
 			hangUp();
+
 		}
 		else if (id == R.id.dialer) {
 			hideOrDisplayNumpad();
@@ -1010,8 +1023,8 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			if (isVideoEnabled(LinphoneManager.getLc().getCurrentCall())) {
 				isVideoCallPaused = true;
 			}
-            pause.setTag(call);
-            pause.setImageResource(R.drawable.my_play);
+//            pause.setTag(call);
+			pause.setImageResource(R.drawable.my_play);
 			llSignal.setVisibility(View.GONE);
 
 		} else if (call != null) {
@@ -1039,6 +1052,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 			lc.terminateConference();
 		} else {
 			lc.terminateAllCalls();
+		}
+		try {
+			// sau khi ket thuc cuoc goi thi resume luon cuoc goi truoc
+			pause.performClick();
+		} catch (Exception e) {
+			android.util.Log.d(TAG, "Exception: " + e.toString());
 		}
 	}
 
@@ -1467,6 +1486,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 	private void setContactInformation(TextView contactName, ImageView contactPicture,  LinphoneAddress lAddress) {
 		LinphoneContact lContact  = ContactsManager.getInstance().findContactFromAddress(lAddress);
+		android.util.Log.d(TAG, "setContactInformation: " + lAddress.getUserName());
 		if (lContact == null) {
 			contactName.setText(ContactUltils.instance.getContactName(lAddress.getUserName(), this));
 			contactPicture.setImageBitmap( BitmapFactory.decodeResource(LinphoneService.instance().getResources(), R.drawable.avatar));
@@ -1563,6 +1583,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 			boolean isConfPaused = false;
 			for (LinphoneCall call : LinphoneManager.getLc().getCalls()) {
+				android.util.Log.d(TAG, "refreshCallList: " + call.toString());
 				if (call.isInConference() && !isConferenceRunning) {
 					isConfPaused = true;
 					index++;
