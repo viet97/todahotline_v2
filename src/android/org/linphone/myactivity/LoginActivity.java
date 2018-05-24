@@ -396,7 +396,7 @@ public class LoginActivity extends Activity {
         builder.setView(view);
         et_config = (EditText) view.findViewById(R.id.et_config);
         et_config.setText(config.getString(PREF_URLCONFIG, DEFAULT_BASE));
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                     String urlConfig = "http://" + et_config.getText() + TODA;
                     NetContext.getInstance().setBASE_URL(urlConfig);
@@ -406,7 +406,7 @@ public class LoginActivity extends Activity {
 
             }
         })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }

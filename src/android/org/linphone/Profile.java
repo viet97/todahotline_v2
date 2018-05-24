@@ -143,7 +143,7 @@ public class Profile extends Fragment {
             website = (TextView) view.findViewById(R.id.tv_website);
             email = (TextView) view.findViewById(R.id.tv_email);
 //            if (DbContext.getInstance().getAboutRespon(getActivity()) == null) {
-                getAbout();
+            getAbout();
 //            } else {
 //                setDataNotEmpty(DbContext.getInstance().getAboutRespon(getActivity()));
 //            }
@@ -206,12 +206,12 @@ public class Profile extends Fragment {
             }
         });
         ll3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
-                alphaAnimation.setFillAfter(true);
-                alphaAnimation.setDuration(10);//duration in millisecond
-                ll3.startAnimation(alphaAnimation);
+                                   @Override
+                                   public void onClick(View view) {
+                                       AlphaAnimation alphaAnimation = new AlphaAnimation(0f, 1.0f);
+                                       alphaAnimation.setFillAfter(true);
+                                       alphaAnimation.setDuration(10);//duration in millisecond
+                                       ll3.startAnimation(alphaAnimation);
 //                AlertDialog.Builder builder;
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                    builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
@@ -237,22 +237,22 @@ public class Profile extends Fragment {
 //                } catch (Exception e) {
 //                    Log.d("SipHome", "Exception: " + e);
 //                }
-                MessageDialog messageDialog = new MessageDialog(getActivity(), getActivity().getLayoutInflater());
-                messageDialog.setDialogAction(new DialogAction() {
-                    @Override
-                    public void onPositive() {
-                        logoutAct();
-                    }
+                                       MessageDialog messageDialog = new MessageDialog(getActivity(), getActivity().getLayoutInflater());
+                                       messageDialog.setDialogAction(new DialogAction() {
+                                           @Override
+                                           public void onPositive() {
+                                               logoutAct();
+                                           }
 
-                    @Override
-                    public void onNegative() {
+                                           @Override
+                                           public void onNegative() {
 
-                    }
-                });
-                messageDialog.setTitle(getString(R.string.dialog_logout_title));
-                messageDialog.setMessage(getString(R.string.dialog_logout_message_builder));
-                messageDialog.show();
-            }
+                                           }
+                                       });
+                                       messageDialog.setTitle(getString(R.string.dialog_logout_title));
+                                       messageDialog.setMessage(getString(R.string.dialog_logout_message_builder));
+                                       messageDialog.show();
+                                   }
                                }
 
         );
@@ -394,37 +394,37 @@ public class Profile extends Fragment {
         } else {
             vietnamese.setChecked(true);
         }
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Locale myLocale;
                 if (english.isChecked()) {
                     languageSelected = ENGLISH_SELECTED;
-                            myLocale = new Locale("en");
-                            //saveLocale(lang, activity);
-                        } else {
+                    myLocale = new Locale("en");
+                    //saveLocale(lang, activity);
+                } else {
                     languageSelected = VIETNAMESE_SELECTED;
-                            myLocale = new Locale("vi");
-                            //saveLocale(lang, activity);
-                        }
-                        Locale.setDefault(myLocale);
+                    myLocale = new Locale("vi");
+                    //saveLocale(lang, activity);
+                }
+                Locale.setDefault(myLocale);
                 Configuration config = new Configuration();
-                        config.locale = myLocale;
-                        getActivity().getResources().updateConfiguration(config,
-                                getActivity().getResources().getDisplayMetrics());
+                config.locale = myLocale;
+                getActivity().getResources().updateConfiguration(config,
+                        getActivity().getResources().getDisplayMetrics());
 
 
 //                        LinphoneActivity.instance().newMessages.setVisibility(View.GONE);
-                        SharedPreferences.Editor edit = languagePrefs.edit();
-                        edit.putInt(Pref_Language_DB, languageSelected);
-                        edit.commit();
-                        getActivity().recreate();
+                SharedPreferences.Editor edit = languagePrefs.edit();
+                edit.putInt(Pref_Language_DB, languageSelected);
+                edit.commit();
+                getActivity().recreate();
 //                        getAbout();
 
             }
-        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+        }).setNegativeButton(getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
-                    }
+            }
         });
         final AlertDialog dialog = builder.show();
         imageView.setOnClickListener(new View.OnClickListener() {

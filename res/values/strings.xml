@@ -113,6 +113,7 @@
     <string name="missedcall_status">Cuộc gọi nhỡ</string>
     <string name="minutes">phút</string>
     <string name="second">giây</string>
+    <string name="hide">hide</string>
 
     <!-- Common -->
     <string name="username">Username</string>

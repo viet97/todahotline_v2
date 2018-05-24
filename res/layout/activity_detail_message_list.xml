@@ -145,7 +145,7 @@
         android:layout_below="@id/ll_title"
         android:layout_marginRight="16dp"
         android:layout_marginTop="12dp"
-        android:text="chọn tất cả"
+        android:text="@string/pick_all_cbx"
         android:textColor="@color/detail_message_cell_color"
         android:textSize="15sp"
         android:visibility="gone" />

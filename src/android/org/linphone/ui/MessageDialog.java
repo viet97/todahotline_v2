@@ -42,12 +42,12 @@ public class MessageDialog {
 
             View view = layoutInflater.inflate(R.layout.message_dialog, null);
             builder.setView(view);
-            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(context.getString(R.string.confirm_dialog), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialogAction.onPositive();
 
                 }
-            }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            }).setNegativeButton(context.getString(R.string.cancel_dialog), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialogAction.onNegative();
                 }

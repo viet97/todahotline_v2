@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.linphone.CallActivity;
 import org.linphone.R;
 
 import android.content.Context;
@@ -57,6 +58,9 @@ public class Numpad extends LinearLayout implements AddressAware {
         mPlayDtmf = 1 == a.getInt(org.linphone.R.styleable.Numpad_play_dtmf, 1);
         a.recycle();
         Log.d(TAG, "NumpadTablet: " + context.getResources().getBoolean(R.bool.isTablet));
+        if (CallActivity.isInstanciated()) {
+            LayoutInflater.from(context).inflate(R.layout.numpadd_incall, this);
+        } else
         if (context.getResources().getBoolean(R.bool.isTablet))
             LayoutInflater.from(context).inflate(R.layout.numpad_table, this);
         else
@@ -74,10 +78,8 @@ public class Numpad extends LinearLayout implements AddressAware {
     }
 
     public void setAddressWidget(AddressText address) {
-        Log.d(TAG, "setAddressWidget:75 " + retrieveChildren(this, AddressAware.class).size());
         for (AddressAware v : retrieveChildren(this, AddressAware.class)) {
             v.setAddressWidget(address);
-            android.util.Log.d(TAG, "setAddressWidget: 77" + address);
         }
     }
 

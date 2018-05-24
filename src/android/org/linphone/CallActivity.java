@@ -112,10 +112,10 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	private Handler mControlsHandler = new Handler();
 	private Runnable mControls;
 	private ImageView switchCamera;
-	public TextView missedChats, tvPause, tvSignal;
+	public TextView missedChats, tvPause, tvSignal, hideNumpad;
 	private RelativeLayout mActiveCallHeader, sideMenuContent, avatar_layout;
     public ImageView pause, hangUp, dialer, video, micro, speaker, options, addCall, transfer, conference, conferenceStatus, contactPicture;
-    private ImageView audioRoute, routeSpeaker, routeEarpiece, routeBluetooth, menu, chat;
+	private ImageView audioRoute, routeSpeaker, routeEarpiece, routeBluetooth, menu, chat, hangupNumpad;
 	private LinearLayout mNoCurrentCall, callInfo, mCallPaused;
 	private AddressText addressText;
 	private ProgressBar videoProgress;
@@ -193,15 +193,16 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 
 			@Override
 			public void callState(LinphoneCore lc, final LinphoneCall call, LinphoneCall.State state, String message) {
-                if (state == State.CallEnd) {
-                    android.util.Log.d(TAG, "callState: " + call.getDirection().toString().equals(CallDirection.Incoming));
-//                    if (call.getDirection().equals(CallDirection.Incoming)) {
-//                        addLog(call, MyCallLogs.CallLog.CUOC_GOI_DEN);
-//                    } else {
-//                        addLog(call, MyCallLogs.CallLog.CUOC_GOI_DI);
-//                    }
-                }
-                if (LinphoneManager.getLc().getCallsNb() == 0) {
+
+				if (state == State.CallEnd) {
+					try {
+						// sau khi ket thuc cuoc goi thi resume luon cuoc goi truoc
+						pause.performClick();
+					} catch (Exception e) {
+						android.util.Log.d(TAG, "Exception: " + e.toString());
+					}
+				}
+				if (LinphoneManager.getLc().getCallsNb() == 0) {
 
 					if (status != null) {
 						LinphoneService.instance().removeSasNotification();
@@ -209,18 +210,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 					}
 					finish();
 					return;
-				} else {
-					if (state == State.CallEnd) {
-						try {
-							// sau khi ket thuc cuoc goi thi resume luon cuoc goi truoc
-							pause.performClick();
-						} catch (Exception e) {
-							android.util.Log.d(TAG, "Exception: " + e.toString());
-						}
-					}
 				}
 
 				if (state == State.IncomingReceived) {
+					if (LinphoneManager.getLc().getCurrentCall() == null) {
+						pause.performClick();
+					}
 					startIncomingCallActivity();
 					return;
 				} else if (state == State.Paused || state == State.PausedByRemote ||  state == State.Pausing) {
@@ -445,7 +440,6 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		dialer.setOnClickListener(this);
 
 		numpad = (Numpad) findViewById(R.id.numpad);
-		numpad.getBackground().setAlpha(240);
 
 		addressText= findViewById(R.id.address_call);
 		addressText.addTextChangedListener(new TextWatcher() {
@@ -497,6 +491,12 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		conference = (ImageView) findViewById(R.id.conference);
 		conference.setEnabled(false);
 		conference.setOnClickListener(this);
+
+		hangupNumpad = findViewById(R.id.hang_up_numpad);
+		hideNumpad = findViewById(R.id.hide_numpad);
+
+		hangupNumpad.setOnClickListener(this);
+		hideNumpad.setOnClickListener(this);
 
 		try {
 			audioRoute = (ImageView) findViewById(R.id.audio_route);
@@ -750,6 +750,10 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		}
 		else if (id == R.id.add_call) {
 			goBackToDialer();
+		} else if (id == R.id.hang_up_numpad) {
+			hangUp();
+		} else if (id == R.id.hide_numpad) {
+			hideNumpad();
 		}
 		else if (id == R.id.pause) {
             android.util.Log.d(TAG, "onClick: " + (LinphoneCall) v.getTag());
@@ -1015,7 +1019,6 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	public void pauseOrResumeCall(LinphoneCall call) {
         // them chu tam  dung
         blinkPauseText();
-        android.util.Log.d(TAG, "pauseOrResumeCall: " + call);
 		LinphoneCore lc = LinphoneManager.getLc();
 		if (call != null && LinphoneManager.getLc().getCurrentCall() == call) {
 
@@ -1053,12 +1056,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 		} else {
 			lc.terminateAllCalls();
 		}
-		try {
-			// sau khi ket thuc cuoc goi thi resume luon cuoc goi truoc
-			pause.performClick();
-		} catch (Exception e) {
-			android.util.Log.d(TAG, "Exception: " + e.toString());
-		}
+
 	}
 
 	public void displayVideoCall(boolean display){
@@ -1225,6 +1223,7 @@ public class CallActivity extends LinphoneGenericActivity implements OnClickList
 	}
 
 	public void startIncomingCallActivity() {
+
 		startActivity(new Intent(this, CallIncomingActivity.class));
 	}
 
